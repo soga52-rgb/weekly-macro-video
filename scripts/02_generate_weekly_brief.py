@@ -33,7 +33,7 @@ from typing import Any, Dict, Tuple
 ROOT_DIR = Path(__file__).resolve().parents[1]
 OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
 PROMPT_PATH = ROOT_DIR / "prompts" / "weekly_brief_prompt_v1.txt"
-DEFAULT_MODEL = "gemini-3.1-flash-lite-preview"
+DEFAULT_MODEL = "gemini-3.1-flash-lite"
 
 
 def load_text(path: Path) -> str:
