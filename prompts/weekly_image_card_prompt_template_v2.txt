@@ -26,6 +26,9 @@ Visible text rules:
 - No dense report layout.
 - No tables.
 - Do not invent numbers or directions.
+- Use support, logic reference, and explanation only as background understanding.
+- Do not render support, logic reference, or explanation as visible paragraph text.
+- Only render headline, short labels, nodes, tags, and very short questions.
 """
 
 CARD_01_EXECUTIVE_SUMMARY = """
