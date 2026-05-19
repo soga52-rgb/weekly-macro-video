@@ -24,6 +24,7 @@ import json
 import mimetypes
 import os
 import time
+import socket
 import urllib.error
 import urllib.request
 from pathlib import Path
@@ -33,6 +34,7 @@ from typing import Any, Dict, List, Optional
 ROOT_DIR = Path(__file__).resolve().parents[1]
 OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
 DEFAULT_IMAGE_MODEL = "gemini-3.1-flash-image-preview"
+DEFAULT_IMAGE_TIMEOUT_SEC = 600
 
 
 def load_json(path: Path) -> Dict[str, Any]:
@@ -97,7 +99,7 @@ def extract_inline_image(api_response: Dict[str, Any]) -> Dict[str, Any]:
     raise RuntimeError(f"Gemini image response does not contain inline image data: {json.dumps(api_response, ensure_ascii=False)[:1200]}")
 
 
-def call_gemini_image(prompt: str, model: str, api_key: str, retries: int = 3, sleep_sec: float = 5.0) -> Dict[str, Any]:
+def call_gemini_image(prompt: str, model: str, api_key: str, timeout_sec: int, retries: int = 3, sleep_sec: float = 10.0) -> Dict[str, Any]:
     url = (
         "https://generativelanguage.googleapis.com/v1beta/models/"
         + urllib.parse.quote(model)
@@ -130,7 +132,7 @@ def call_gemini_image(prompt: str, model: str, api_key: str, retries: int = 3, s
     last_error = None
     for attempt in range(1, retries + 1):
         try:
-            with urllib.request.urlopen(request, timeout=180) as response:
+            with urllib.request.urlopen(request, timeout=timeout_sec) as response:
                 body = response.read().decode("utf-8")
                 return json.loads(body)
         except urllib.error.HTTPError as exc:
@@ -141,10 +143,10 @@ def call_gemini_image(prompt: str, model: str, api_key: str, retries: int = 3, s
                 time.sleep(sleep_sec * attempt)
                 continue
             raise last_error
-        except urllib.error.URLError as exc:
-            last_error = RuntimeError(f"Gemini image URLError: {exc}")
+        except (urllib.error.URLError, TimeoutError, socket.timeout) as exc:
+            last_error = RuntimeError(f"Gemini image connection/timeout error: {exc}")
             if attempt < retries:
-                print(f"[WARN] Gemini image attempt {attempt} failed with URLError, retrying...")
+                print(f"[WARN] Gemini image attempt {attempt} failed by timeout/network issue, retrying...")
                 time.sleep(sleep_sec * attempt)
                 continue
             raise last_error
@@ -190,6 +192,7 @@ def main() -> None:
         raise EnvironmentError("Missing GEMINI_API_KEY.")
 
     model = os.getenv("GEMINI_IMAGE_MODEL", DEFAULT_IMAGE_MODEL).strip() or DEFAULT_IMAGE_MODEL
+    timeout_sec = int(os.getenv("GEMINI_IMAGE_TIMEOUT_SEC", str(DEFAULT_IMAGE_TIMEOUT_SEC)))
     week_dir = Path(args.week_dir) if args.week_dir else find_latest_week_dir()
 
     cards = load_prompt_package(week_dir)
@@ -208,7 +211,8 @@ def main() -> None:
             raise ValueError(f"Empty prompt for {card_id}")
 
         print(f"[INFO] Generating {card_id} with model {model} ...")
-        api_response = call_gemini_image(prompt, model, api_key)
+        print(f"[INFO] Timeout: {timeout_sec} seconds")
+        api_response = call_gemini_image(prompt, model, api_key, timeout_sec=timeout_sec)
         image_info = extract_inline_image(api_response)
 
         mime_type = image_info["mime_type"]
