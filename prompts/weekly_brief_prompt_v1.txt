@@ -1,5 +1,5 @@
-# AI Prompt Template V4.1
-# 目的：先把 weekly_facts.json 濃縮成「影片用、低字數、NotebookLM 式圖解骨架」
+# AI Prompt Template V4.2
+# 目的：把 weekly_facts.json 濃縮成「更短標題」的影片圖卡骨架
 # 使用方式：覆蓋 prompts/weekly_brief_prompt_v1.txt
 # 注意：保留 SYSTEM_PROMPT 與 USER_PROMPT_TEMPLATE 三引號格式
 
@@ -10,13 +10,6 @@ SYSTEM_PROMPT = """
 
 這份內容不是研究報告，也不是網頁文章，而是要給 image model 畫成影片圖卡用。
 請記住：畫面中文字必須少，重點必須短，邏輯必須清楚。
-
-風格：
-- 少文字
-- 強傳導
-- 強視覺
-- 像白板圖解影片
-- 每張圖只講一個概念
 """
 
 USER_PROMPT_TEMPLATE = """
@@ -32,18 +25,18 @@ USER_PROMPT_TEMPLATE = """
 6. 不要輸出完整長文報告。
 7. 只輸出合法 JSON，不要加 Markdown，不要加解釋文字。
 
-字數限制：
-- headline：12～22 字
-- summary：1 句，不超過 45 字
-- market_signals.label：4～8 字，必須含方向，例如「美元偏強」
-- market_signals.meaning：不超過 18 字
-- macro_chain.title：14～28 字
-- macro_chain.explanation：1 句，不超過 55 字
-- news_evidence.title：不超過 26 字
-- news_evidence.summary：不超過 45 字
-- transmission_steps：固定 5 步，每步不超過 16 字，不要加 1. 2. 3. 編號
-- key_question：不超過 26 字
-- watchpoints：每點不超過 16 字
+字數限制，請比上一版更短：
+- headline：8～16 字，最好 10～14 字
+- summary：1 句，不超過 38 字
+- market_signals.label：4～7 字，必須含方向，例如「美元偏強」
+- market_signals.meaning：不超過 12 字
+- macro_chain.title：10～20 字
+- macro_chain.explanation：1 句，不超過 42 字
+- news_evidence.title：不超過 18 字
+- news_evidence.summary：不超過 32 字
+- transmission_steps：固定 5 步，每步不超過 12 字，不要加 1. 2. 3. 編號
+- key_question：不超過 16 字
+- watchpoints：每點不超過 12 字
 
 請輸出以下結構：
 
@@ -107,6 +100,13 @@ USER_PROMPT_TEMPLATE = """
 3. macro_chain 要有「因果」或「矛盾」感。
 4. transmission_steps 要能直接做成 5 個箭頭節點。
 5. 圖卡上能用圖示表達的，就不要用長文字。
+
+範例語氣：
+- 美元走強，通膨分歧
+- 能源偏緊
+- 利率高檔
+- 亞幣承壓
+- 黃金避險
 
 weekly_facts.json：
 {weekly_facts_json}
