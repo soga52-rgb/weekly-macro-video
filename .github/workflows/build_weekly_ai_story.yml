@@ -1,0 +1,52 @@
+name: Build Weekly AI Story
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-weekly-ai-story:
+    runs-on: ubuntu-latest
+
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      # Optional: change this to another available Gemini model if needed.
+      GEMINI_MODEL: gemini-2.5-flash
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Build weekly facts JSON
+        run: |
+          python scripts/01_build_weekly_facts.py
+
+      - name: Generate AI weekly story JSON
+        run: |
+          python scripts/02_generate_weekly_story.py
+
+      - name: Commit generated AI weekly story
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add output/weekly/
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Build AI weekly video story"
+            git push
+          fi
