@@ -1,0 +1,20 @@
+{
+  "main_theme": "先看走勢路徑，再檢查總經傳導是否成立。",
+  "inflation_expectation_direction": "分歧",
+  "transmission_verdict": "部分成立",
+  "event_highlight": "本週重點不是單一數據，而是能源、Fed 與需求訊號的拉扯。",
+  "event_groups": [
+    {
+      "group_name": "通膨與需求",
+      "items": ["油價走高", "部分需求數據降溫"]
+    },
+    {
+      "group_name": "利率與政策",
+      "items": ["Fed 官員維持謹慎", "公債供給壓力"]
+    },
+    {
+      "group_name": "能源與地緣",
+      "items": ["能源價格支撐通膨預期"]
+    }
+  ]
+}
