@@ -24,9 +24,18 @@
       "card_id": "card_03",
       "title": "Macro Chain",
       "model": "gemini-3.1-flash-image-preview",
-      "mime_type": "image/jpeg",
+      "mime_type": "existing",
       "output_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/image_cards/card_03.jpg",
       "prompt_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/image_prompts/card_03.txt",
+      "status": "skipped_existing"
+    },
+    {
+      "card_id": "card_04",
+      "title": "News Evidence",
+      "model": "gemini-3.1-flash-image-preview",
+      "mime_type": "image/jpeg",
+      "output_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/image_cards/card_04.jpg",
+      "prompt_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/image_prompts/card_04.txt",
       "status": "success"
     }
   ]
