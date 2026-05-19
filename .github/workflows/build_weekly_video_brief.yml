@@ -1,4 +1,4 @@
-name: Build Weekly Video Brief
+name: Build Weekly Video Brief and Cards
 
 on:
   workflow_dispatch:
@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 jobs:
-  build-weekly-video-brief:
+  build-weekly-video-brief-and-cards:
     runs-on: ubuntu-latest
 
     env:
@@ -17,6 +17,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Install CJK fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -36,7 +41,11 @@ jobs:
         run: |
           python scripts/02_generate_weekly_brief.py
 
-      - name: Commit generated weekly brief
+      - name: Generate weekly brief cards
+        run: |
+          python scripts/03_generate_brief_cards.py
+
+      - name: Commit generated weekly brief outputs
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -46,6 +55,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Build weekly video brief"
+            git commit -m "Build weekly video brief and cards"
             git push
           fi
