@@ -1,0 +1,62 @@
+Create a 16:9 NotebookLM-style whiteboard explainer image for a weekly macro video.
+
+Visual style:
+- off-white / white background
+- subtle light gray grid-paper texture
+- bold black hand-drawn line art
+- orange accent marks, arrows, labels, pins, circles
+- clean macro-finance explainer diagram
+- looks like a knowledge video card, not a corporate slide
+- use icons, causal arrows, simple doodles, flow paths, question marks, magnifying glass, warning tags
+- keep the composition airy and video-friendly
+
+Important:
+This image will be placed inside a video.
+Visible text must be very short, large, and readable.
+Do not create a dense report.
+Do not create tables.
+Do not use long paragraphs.
+Do not add unnecessary small text.
+
+Visible text rules:
+- Use Traditional Chinese only.
+- Maximum one main headline.
+- Use only short labels.
+- Each visible label should be under 12 Chinese characters when possible.
+- No paragraph-style text.
+- Do not invent new numbers.
+- Do not change asset directions.
+- If text is hard to fit, prioritize diagrams and icons over long words.
+- The image should communicate the logic visually, not by reading a lot of text.
+
+Card 04: News Evidence.
+
+Goal:
+Show the key evidence supporting the macro chain.
+
+Use content:
+- evidence_title: Fed官員維持謹慎與能源價格回升
+- evidence_summary: Fed官員對降息態度保守，疊加原油價格走高，強化市場對高利率環境的預期。
+
+Visual direction:
+Create a hand-drawn news clipping / evidence board.
+Use one "evidence" card, a pin, a small newspaper icon, and arrows pointing back to the macro chain.
+This should look like a research note pinned on a whiteboard.
+
+Visible text:
+- evidence title
+- one short evidence tag
+Do not include long article-like text.
+
+Avoid:
+- dense slide layout
+- table
+- small text
+- long paragraphs
+- too many numbers
+- photo-realistic finance screens
+- Bloomberg terminal style
+- stock chart dashboard
+- exact NotebookLM logo or Google branding
+- cluttered UI
+- random fake data

@@ -1,0 +1,63 @@
+Create a 16:9 NotebookLM-style whiteboard explainer image for a weekly macro video.
+
+Visual style:
+- off-white / white background
+- subtle light gray grid-paper texture
+- bold black hand-drawn line art
+- orange accent marks, arrows, labels, pins, circles
+- clean macro-finance explainer diagram
+- looks like a knowledge video card, not a corporate slide
+- use icons, causal arrows, simple doodles, flow paths, question marks, magnifying glass, warning tags
+- keep the composition airy and video-friendly
+
+Important:
+This image will be placed inside a video.
+Visible text must be very short, large, and readable.
+Do not create a dense report.
+Do not create tables.
+Do not use long paragraphs.
+Do not add unnecessary small text.
+
+Visible text rules:
+- Use Traditional Chinese only.
+- Maximum one main headline.
+- Use only short labels.
+- Each visible label should be under 12 Chinese characters when possible.
+- No paragraph-style text.
+- Do not invent new numbers.
+- Do not change asset directions.
+- If text is hard to fit, prioritize diagrams and icons over long words.
+- The image should communicate the logic visually, not by reading a lot of text.
+
+Card 01: Executive Summary.
+
+Goal:
+Create a strong opening card that shows the weekly macro theme.
+
+Use content:
+- headline: 美元強勢領跑，能源與Fed訊號拉扯下的市場分歧
+- short_summary: 本週油價與Fed謹慎態度支撐美元，但需求降溫使通膨預期分歧，導致黃金與利率走勢背離。
+- key_question: 通膨預期分歧下，美元強勢能否持續？
+
+Visual direction:
+A large central headline, with a hand-drawn macro puzzle / question mark / magnifying glass.
+Around it, show 2-3 small icons representing the week’s main tension.
+Use arrows or orange highlight marks to imply "market puzzle".
+
+Visible text:
+- headline only
+- optionally one short question label
+Do not place the full summary as paragraph text.
+
+Avoid:
+- dense slide layout
+- table
+- small text
+- long paragraphs
+- too many numbers
+- photo-realistic finance screens
+- Bloomberg terminal style
+- stock chart dashboard
+- exact NotebookLM logo or Google branding
+- cluttered UI
+- random fake data
