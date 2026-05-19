@@ -1,62 +1,45 @@
 Create a 16:9 NotebookLM-style whiteboard explainer image for a weekly macro video.
 
-Visual style:
-- off-white / white background
-- subtle light gray grid-paper texture
+Style:
+- off-white or white background
+- subtle light gray grid texture
 - bold black hand-drawn line art
-- orange accent marks, arrows, labels, pins, circles
+- orange accent arrows, circles, tags, pins
 - clean macro-finance explainer diagram
+- airy, video-friendly composition
 - looks like a knowledge video card, not a corporate slide
-- use icons, causal arrows, simple doodles, flow paths, question marks, magnifying glass, warning tags
-- keep the composition airy and video-friendly
-
-Important:
-This image will be placed inside a video.
-Visible text must be very short, large, and readable.
-Do not create a dense report.
-Do not create tables.
-Do not use long paragraphs.
-Do not add unnecessary small text.
 
 Visible text rules:
 - Use Traditional Chinese only.
-- Maximum one main headline.
+- Use one main headline.
 - Use only short labels.
-- Each visible label should be under 12 Chinese characters when possible.
-- No paragraph-style text.
-- Do not invent new numbers.
-- Do not change asset directions.
-- If text is hard to fit, prioritize diagrams and icons over long words.
-- The image should communicate the logic visually, not by reading a lot of text.
+- Keep visible text minimal, large, and readable.
+- No long paragraphs.
+- No dense report layout.
+- No tables.
+- Do not invent numbers or directions.
 
-Card 04: News Evidence.
+Card 04: News Evidence
 
-Goal:
-Show the key evidence supporting the macro chain.
+Evidence:
+Fed官員維持謹慎，能源價格反彈
 
-Use content:
-- evidence_title: Fed官員維持謹慎與能源價格回升
-- evidence_summary: Fed官員對降息態度保守，疊加原油價格走高，強化市場對高利率環境的預期。
+Support:
+Fed官員對降息保持保守，加上原油價格走高，市場重新評估通膨壓力。
 
-Visual direction:
-Create a hand-drawn news clipping / evidence board.
-Use one "evidence" card, a pin, a small newspaper icon, and arrows pointing back to the macro chain.
-This should look like a research note pinned on a whiteboard.
-
-Visible text:
-- evidence title
-- one short evidence tag
-Do not include long article-like text.
+Main visual:
+Create a whiteboard evidence card.
+Use a pinned news clipping or research-note style layout.
+Add one evidence tag and one simple arrow linking the evidence back to the macro chain.
 
 Avoid:
 - dense slide layout
 - table
-- small text
 - long paragraphs
-- too many numbers
-- photo-realistic finance screens
-- Bloomberg terminal style
-- stock chart dashboard
-- exact NotebookLM logo or Google branding
+- small unreadable text
 - cluttered UI
-- random fake data
+- stock dashboard style
+- Bloomberg terminal style
+- exact NotebookLM logo
+- Google branding
+- fake extra data

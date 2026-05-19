@@ -1,64 +1,47 @@
 Create a 16:9 NotebookLM-style whiteboard explainer image for a weekly macro video.
 
-Visual style:
-- off-white / white background
-- subtle light gray grid-paper texture
+Style:
+- off-white or white background
+- subtle light gray grid texture
 - bold black hand-drawn line art
-- orange accent marks, arrows, labels, pins, circles
+- orange accent arrows, circles, tags, pins
 - clean macro-finance explainer diagram
+- airy, video-friendly composition
 - looks like a knowledge video card, not a corporate slide
-- use icons, causal arrows, simple doodles, flow paths, question marks, magnifying glass, warning tags
-- keep the composition airy and video-friendly
-
-Important:
-This image will be placed inside a video.
-Visible text must be very short, large, and readable.
-Do not create a dense report.
-Do not create tables.
-Do not use long paragraphs.
-Do not add unnecessary small text.
 
 Visible text rules:
 - Use Traditional Chinese only.
-- Maximum one main headline.
+- Use one main headline.
 - Use only short labels.
-- Each visible label should be under 12 Chinese characters when possible.
-- No paragraph-style text.
-- Do not invent new numbers.
-- Do not change asset directions.
-- If text is hard to fit, prioritize diagrams and icons over long words.
-- The image should communicate the logic visually, not by reading a lot of text.
+- Keep visible text minimal, large, and readable.
+- No long paragraphs.
+- No dense report layout.
+- No tables.
+- Do not invent numbers or directions.
 
-Card 05: Five-step Transmission.
+Card 05: Five-step Transmission
 
-Goal:
-Show the week’s macro transmission as five visual steps.
-
-Use content:
+Use these five steps:
 1. 能源與Fed訊號偏緊
 2. 通膨預期呈現分歧
-3. 利率預期受到支撐
+3. 利率受多重因素支撐
 4. 美元指數順勢走強
-5. 亞洲貨幣承壓與金價背離
+5. 亞幣承壓但黃金避險
 
-Visual direction:
+Main visual:
 Create a five-node arrow chain.
-Each node should contain one short step.
-Use large numbers 1-5, orange arrows, and simple macro icons.
-This should be mostly visual flow.
-
-Do not add extra bullets.
-Do not add paragraph text.
+Use large step numbers 1-5.
+Each node should contain one short step only.
+Make this mostly a diagram, not a text card.
 
 Avoid:
 - dense slide layout
 - table
-- small text
 - long paragraphs
-- too many numbers
-- photo-realistic finance screens
-- Bloomberg terminal style
-- stock chart dashboard
-- exact NotebookLM logo or Google branding
+- small unreadable text
 - cluttered UI
-- random fake data
+- stock dashboard style
+- Bloomberg terminal style
+- exact NotebookLM logo
+- Google branding
+- fake extra data

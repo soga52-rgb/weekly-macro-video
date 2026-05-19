@@ -1,66 +1,51 @@
 Create a 16:9 NotebookLM-style whiteboard explainer image for a weekly macro video.
 
-Visual style:
-- off-white / white background
-- subtle light gray grid-paper texture
+Style:
+- off-white or white background
+- subtle light gray grid texture
 - bold black hand-drawn line art
-- orange accent marks, arrows, labels, pins, circles
+- orange accent arrows, circles, tags, pins
 - clean macro-finance explainer diagram
+- airy, video-friendly composition
 - looks like a knowledge video card, not a corporate slide
-- use icons, causal arrows, simple doodles, flow paths, question marks, magnifying glass, warning tags
-- keep the composition airy and video-friendly
-
-Important:
-This image will be placed inside a video.
-Visible text must be very short, large, and readable.
-Do not create a dense report.
-Do not create tables.
-Do not use long paragraphs.
-Do not add unnecessary small text.
 
 Visible text rules:
 - Use Traditional Chinese only.
-- Maximum one main headline.
+- Use one main headline.
 - Use only short labels.
-- Each visible label should be under 12 Chinese characters when possible.
-- No paragraph-style text.
-- Do not invent new numbers.
-- Do not change asset directions.
-- If text is hard to fit, prioritize diagrams and icons over long words.
-- The image should communicate the logic visually, not by reading a lot of text.
+- Keep visible text minimal, large, and readable.
+- No long paragraphs.
+- No dense report layout.
+- No tables.
+- Do not invent numbers or directions.
 
-Card 06: Next Week Watch.
+Card 06: Next Week Watch
 
-Goal:
-End the video with the key question and three watchpoints.
+Main question:
+通膨預期分歧下，利率與美元能否維持強勢？
 
-Use content:
-- key_question: 通膨預期分歧下，美元強勢能否持續？
-- headline: 關注通膨數據與利率走勢
-- watchpoints: - 通膨數據是否重新升溫
-- 美債殖利率高檔表現
+Watch theme:
+關注通膨數據與利率走勢
+
+Watchpoints:
+- 通膨數據是否重新升溫
+- 美債殖利率高檔震盪
 - 美元對亞幣壓抑程度
 
-Visual direction:
+Main visual:
 Create a radar / telescope / checklist style whiteboard card.
-Put the key question as the main focus.
-Show three short watchpoints as large labels around it.
-Use orange circles, arrows, and a light warning tag.
-
-Visible text:
-- key question
-- three short watchpoints
-No long explanations.
+Use the key question as the main focus.
+Show three short watchpoints around it as large labels.
+Add light orange emphasis marks.
 
 Avoid:
 - dense slide layout
 - table
-- small text
 - long paragraphs
-- too many numbers
-- photo-realistic finance screens
-- Bloomberg terminal style
-- stock chart dashboard
-- exact NotebookLM logo or Google branding
+- small unreadable text
 - cluttered UI
-- random fake data
+- stock dashboard style
+- Bloomberg terminal style
+- exact NotebookLM logo
+- Google branding
+- fake extra data

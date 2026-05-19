@@ -1,63 +1,48 @@
 Create a 16:9 NotebookLM-style whiteboard explainer image for a weekly macro video.
 
-Visual style:
-- off-white / white background
-- subtle light gray grid-paper texture
+Style:
+- off-white or white background
+- subtle light gray grid texture
 - bold black hand-drawn line art
-- orange accent marks, arrows, labels, pins, circles
+- orange accent arrows, circles, tags, pins
 - clean macro-finance explainer diagram
+- airy, video-friendly composition
 - looks like a knowledge video card, not a corporate slide
-- use icons, causal arrows, simple doodles, flow paths, question marks, magnifying glass, warning tags
-- keep the composition airy and video-friendly
-
-Important:
-This image will be placed inside a video.
-Visible text must be very short, large, and readable.
-Do not create a dense report.
-Do not create tables.
-Do not use long paragraphs.
-Do not add unnecessary small text.
 
 Visible text rules:
 - Use Traditional Chinese only.
-- Maximum one main headline.
+- Use one main headline.
 - Use only short labels.
-- Each visible label should be under 12 Chinese characters when possible.
-- No paragraph-style text.
-- Do not invent new numbers.
-- Do not change asset directions.
-- If text is hard to fit, prioritize diagrams and icons over long words.
-- The image should communicate the logic visually, not by reading a lot of text.
+- Keep visible text minimal, large, and readable.
+- No long paragraphs.
+- No dense report layout.
+- No tables.
+- Do not invent numbers or directions.
 
-Card 01: Executive Summary.
+Card 01: Executive Summary
 
-Goal:
-Create a strong opening card that shows the weekly macro theme.
+Theme:
+能源與Fed訊號拉扯，美元走強，黃金與利率出現背離
 
-Use content:
-- headline: 美元強勢領跑，能源與Fed訊號拉扯下的市場分歧
-- short_summary: 本週油價與Fed謹慎態度支撐美元，但需求降溫使通膨預期分歧，導致黃金與利率走勢背離。
-- key_question: 通膨預期分歧下，美元強勢能否持續？
+Support:
+本週總經傳導部分成立，能源推升通膨預期，但需求降溫限制升幅，導致資產反應分歧。
 
-Visual direction:
-A large central headline, with a hand-drawn macro puzzle / question mark / magnifying glass.
-Around it, show 2-3 small icons representing the week’s main tension.
-Use arrows or orange highlight marks to imply "market puzzle".
-
-Visible text:
-- headline only
-- optionally one short question label
-Do not place the full summary as paragraph text.
+Main visual:
+Create an opening whiteboard card.
+Use the headline as the main focus.
+Add a large question mark or magnifying glass.
+Show 2-3 macro icons around it to suggest the week's main tension.
+Optional small secondary label:
+通膨預期分歧下，利率與美元能否維持強勢？
 
 Avoid:
 - dense slide layout
 - table
-- small text
 - long paragraphs
-- too many numbers
-- photo-realistic finance screens
-- Bloomberg terminal style
-- stock chart dashboard
-- exact NotebookLM logo or Google branding
+- small unreadable text
 - cluttered UI
-- random fake data
+- stock dashboard style
+- Bloomberg terminal style
+- exact NotebookLM logo
+- Google branding
+- fake extra data
