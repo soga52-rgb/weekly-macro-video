@@ -9,7 +9,7 @@ permissions:
 jobs:
   build-weekly-image-cards:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
 
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -31,21 +31,9 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Build weekly facts JSON
-        run: |
-          python scripts/01_build_weekly_facts.py
-
-      - name: Generate weekly video brief
-        run: |
-          python scripts/02_generate_weekly_brief.py
-
-      - name: Generate weekly image prompts
-        run: |
-          python scripts/03_generate_image_prompts.py
-
       - name: Generate weekly image cards
         run: |
-          python scripts/04_generate_cards_with_image_model.py 
+          python scripts/04_generate_cards_with_image_model.py --limit 1 --no-fail
 
       - name: Commit generated image cards
         run: |
