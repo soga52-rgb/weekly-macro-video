@@ -1,0 +1,265 @@
+{
+  "week_meta": {
+    "week_start": "2026-05-15",
+    "week_end": "2026-05-21",
+    "week_label": "2026-05-15 - 2026-05-21",
+    "period_definition": "上週五收盤至本週四收盤"
+  },
+  "source_notes": {
+    "history_data": "data/history_data.json",
+    "news_narrative": "data/news_narrative.json",
+    "visual_note": "data/visual_note.json",
+    "market_snapshot": "data/market_snapshot.json",
+    "created_at": "2026-05-19T08:14:53"
+  },
+  "market_paths": [
+    {
+      "asset_name": "美國10年期公債殖利率",
+      "start_value": 4.42,
+      "end_value": 4.43,
+      "weekly_change": "1.0 bp",
+      "path_type": "先高後低",
+      "path_comment": "美國10年期公債殖利率：週初反應較強，後半週出現修正。",
+      "raw_values": [
+        4.42,
+        4.45,
+        4.49,
+        4.46,
+        4.43
+      ]
+    },
+    {
+      "asset_name": "美元指數",
+      "start_value": 104.2,
+      "end_value": 104.7,
+      "weekly_change": "+0.50",
+      "path_type": "一路走升",
+      "path_comment": "美元指數：整週方向偏強，代表市場定價持續累積。",
+      "raw_values": [
+        104.2,
+        104.35,
+        104.6,
+        104.55,
+        104.7
+      ]
+    },
+    {
+      "asset_name": "美元/台幣",
+      "start_value": 32.3,
+      "end_value": 32.45,
+      "weekly_change": "+0.15",
+      "path_type": "一路走升",
+      "path_comment": "美元/台幣：整週方向偏強，代表市場定價持續累積。",
+      "raw_values": [
+        32.3,
+        32.38,
+        32.42,
+        32.4,
+        32.45
+      ]
+    },
+    {
+      "asset_name": "美元/日圓",
+      "start_value": 155.2,
+      "end_value": 156.3,
+      "weekly_change": "+1.10",
+      "path_type": "一路走升",
+      "path_comment": "美元/日圓：整週方向偏強，代表市場定價持續累積。",
+      "raw_values": [
+        155.2,
+        155.6,
+        156.1,
+        155.8,
+        156.3
+      ]
+    },
+    {
+      "asset_name": "美元/人民幣",
+      "start_value": 7.22,
+      "end_value": 7.25,
+      "weekly_change": "+0.03",
+      "path_type": "一路走升",
+      "path_comment": "美元/人民幣：整週方向偏強，代表市場定價持續累積。",
+      "raw_values": [
+        7.22,
+        7.23,
+        7.24,
+        7.24,
+        7.25
+      ]
+    },
+    {
+      "asset_name": "黃金",
+      "start_value": 2380.0,
+      "end_value": 2405.0,
+      "weekly_change": "+25.00",
+      "path_type": "先低後高",
+      "path_comment": "黃金：週初偏弱，後半週重新定價走強。",
+      "raw_values": [
+        2380.0,
+        2372.0,
+        2365.0,
+        2388.0,
+        2405.0
+      ]
+    },
+    {
+      "asset_name": "原油",
+      "start_value": 78.5,
+      "end_value": 81.0,
+      "weekly_change": "+2.50",
+      "path_type": "一路走升",
+      "path_comment": "原油：整週方向偏強，代表市場定價持續累積。",
+      "raw_values": [
+        78.5,
+        79.2,
+        80.1,
+        79.8,
+        81.0
+      ]
+    }
+  ],
+  "weekly_events": [
+    {
+      "event_title": "能源價格走高",
+      "event_category": "能源",
+      "event_summary": "原油價格本週走高，市場重新評估能源對通膨的壓力。",
+      "macro_relevance": "油價上升可能推升 headline inflation，並影響通膨預期。",
+      "impact_direction": "推升通膨"
+    },
+    {
+      "event_title": "Fed 官員維持謹慎語氣",
+      "event_category": "Fed",
+      "event_summary": "Fed 官員對降息時點維持保守態度。",
+      "macro_relevance": "偏鷹訊號可能支撐利率與美元。",
+      "impact_direction": "推升利率"
+    },
+    {
+      "event_title": "部分需求數據降溫",
+      "event_category": "需求",
+      "event_summary": "部分消費或景氣數據顯示需求放緩。",
+      "macro_relevance": "需求放緩可能壓低通膨預期。",
+      "impact_direction": "壓低通膨"
+    }
+  ],
+  "inflation_factors": {
+    "upside_factors": [
+      "原油價格走高",
+      "Fed 對降息保持謹慎",
+      "關稅或供應鏈風險仍在"
+    ],
+    "downside_factors": [
+      "部分需求數據降溫",
+      "市場對成長放緩仍有疑慮"
+    ],
+    "mixed_factors": [
+      "美元走強一方面壓低進口價格，另一方面反映利率壓力"
+    ],
+    "initial_direction_from_source": "分歧",
+    "source_reasoning": "本週通膨預期呈現分歧，能源與政策因素偏向推升通膨，但需求數據降溫限制升溫幅度。"
+  },
+  "rate_factors": {
+    "inflation_driven": [
+      "油價走高",
+      "通膨預期未完全降溫"
+    ],
+    "non_inflation_driven": [
+      "Fed 官員偏謹慎",
+      "公債供給與期限溢酬壓力"
+    ],
+    "initial_main_driver_from_source": "混合因素",
+    "rate_vs_inflation_consistency_from_source": "部分符合"
+  },
+  "asset_reaction_facts": {
+    "rate_direction": "偏上",
+    "dollar_reaction": "走強",
+    "asia_fx_reaction": "承壓",
+    "gold_reaction": "走強",
+    "dollar_vs_rate_consistency_from_source": "符合",
+    "asia_fx_vs_dollar_consistency_from_source": "符合",
+    "gold_logic_from_source": "避險支撐 / 混合因素",
+    "oil_to_inflation_feedback": "油價走高可能回頭支撐通膨預期。"
+  },
+  "existing_human_or_system_notes": {
+    "main_theme": "先看走勢路徑，再檢查總經傳導是否成立。",
+    "main_market_path": "美元與亞洲貨幣方向較一致，黃金與利率邏輯出現部分背離。",
+    "most_important_asset_move": "美元指數走強",
+    "event_highlight": "本週重點不是單一數據，而是能源、Fed 與需求訊號的拉扯。",
+    "event_groups": [
+      {
+        "group_name": "通膨與需求",
+        "items": [
+          "油價走高",
+          "部分需求數據降溫"
+        ]
+      },
+      {
+        "group_name": "利率與政策",
+        "items": [
+          "Fed 官員維持謹慎",
+          "公債供給壓力"
+        ]
+      },
+      {
+        "group_name": "能源與地緣",
+        "items": [
+          "能源價格支撐通膨預期"
+        ]
+      }
+    ],
+    "main_conclusion": "本週總經傳導部分成立，利率與美元邏輯相對清楚，但黃金與通膨預期呈現分歧。",
+    "next_week_watchpoints": [
+      "通膨數據是否重新升溫",
+      "美國10年期公債殖利率是否延續高檔",
+      "美元走強是否繼續壓抑亞洲貨幣"
+    ],
+    "transmission_verdict_from_source": "部分成立",
+    "macro_chain_from_source": [
+      {
+        "step": "經濟數據與事件",
+        "direction": "分歧",
+        "comment": "能源與 Fed 訊號偏緊，但需求數據略有降溫。"
+      },
+      {
+        "step": "通膨預期",
+        "direction": "分歧",
+        "comment": "通膨沒有明顯單邊升溫。"
+      },
+      {
+        "step": "利率預期",
+        "direction": "偏上",
+        "comment": "利率受到通膨與非通膨因素共同支撐。"
+      },
+      {
+        "step": "美元指數",
+        "direction": "走強",
+        "comment": "美元大致符合利率支撐邏輯。"
+      },
+      {
+        "step": "亞洲貨幣 / 黃金",
+        "direction": "分歧",
+        "comment": "亞洲貨幣承壓，但黃金受到避險或其他因素支撐。"
+      }
+    ],
+    "key_supporting_points_from_source": [
+      "美元走強大致符合利率支撐邏輯",
+      "亞洲貨幣承壓符合美元走強方向"
+    ],
+    "divergence_points_from_source": [
+      "黃金未完全受到美元與利率壓抑",
+      "通膨預期與利率走勢不是完全單線傳導"
+    ]
+  },
+  "required_video_logic": {
+    "scene_order": [
+      "Scene 01：本週主要資產走勢路徑",
+      "Scene 02：本週經濟數據與事件",
+      "Scene 03：通膨預期方向",
+      "Scene 04：利率走勢與原因拆解",
+      "Scene 05：美元、亞洲貨幣與黃金反應",
+      "Scene 06：本週總經傳導判斷"
+    ],
+    "transition_style": "每段先提出問題，回答後在結尾拋出下一段問題。",
+    "core_chain": "本週主要資產走勢 → 經濟數據與事件 → 通膨預期 → 利率 → 美元 → 亞洲貨幣 / 黃金 / 原油 → 總經傳導判斷"
+  }
+}
