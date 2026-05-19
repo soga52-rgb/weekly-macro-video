@@ -12,7 +12,7 @@ jobs:
 
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      GEMINI_MODEL: gemini-3.1-flash-lite-preview
+      GEMINI_MODEL: gemini-3.1-flash-lite
 
     steps:
       - name: Checkout repository
