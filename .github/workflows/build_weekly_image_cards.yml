@@ -45,7 +45,7 @@ jobs:
 
       - name: Generate weekly image cards
         run: |
-          python scripts/04_generate_cards_with_image_model.py
+          python scripts/04_generate_cards_with_image_model.py --limit 1
 
       - name: Commit generated image cards
         run: |
