@@ -1,7 +1,10 @@
-# Weekly Image Card Prompt Template V3
-# 用途：把 weekly_video_brief.json 轉成更短、更像 image model 會用的影片圖卡 prompt
-# 使用方式：覆蓋 prompts/weekly_image_card_prompt_template_v2.txt
-# 核心原則：短、直接、視覺化、少規則、少文字
+# Weekly Image Card Prompt Template V4
+# 用途：把 weekly_video_brief.json 轉成 image model 用的 6 張影片圖卡 prompt
+# 核心修正：
+# 1. 防止中文斷字
+# 2. 要求主標更短
+# 3. support / logic reference 只供理解，不要變成可見段落文字
+# 4. 更適合放入影片，不做文字型簡報
 
 STYLE_BASE = """
 Create a 16:9 NotebookLM-style whiteboard explainer image for a weekly macro video.
@@ -19,8 +22,11 @@ Style:
 TEXT_RULES = """
 Visible text rules:
 - Use Traditional Chinese only.
-- Use one main headline.
-- Use only short labels.
+- Use one main headline only.
+- Keep the main headline short, centered, and readable.
+- Do not split Chinese words across lines.
+- If the supplied headline is too long, shorten it while preserving the meaning.
+- Use only short labels, nodes, tags, and very short questions.
 - Keep visible text minimal, large, and readable.
 - No long paragraphs.
 - No dense report layout.
@@ -28,7 +34,6 @@ Visible text rules:
 - Do not invent numbers or directions.
 - Use support, logic reference, and explanation only as background understanding.
 - Do not render support, logic reference, or explanation as visible paragraph text.
-- Only render headline, short labels, nodes, tags, and very short questions.
 """
 
 CARD_01_EXECUTIVE_SUMMARY = """
@@ -37,16 +42,24 @@ Card 01: Executive Summary
 Theme:
 {headline}
 
-Support:
+Support for understanding only:
 {summary}
 
 Main visual:
 Create an opening whiteboard card.
-Use the headline as the main focus.
+Use a short version of the theme as the main headline.
 Add a large question mark or magnifying glass.
 Show 2-3 macro icons around it to suggest the week's main tension.
-Optional small secondary label:
+Suggested visible icon labels:
+- 美元偏強
+- 利率高檔
+- 通膨分歧
+
+Optional short question tag:
 {key_question}
+
+Reminder:
+Do not render the support sentence as visible paragraph text.
 """
 
 CARD_02_MARKET_SIGNALS = """
@@ -63,6 +76,7 @@ Each block should include:
 - one very short meaning tag
 
 Keep spacing wide and clean.
+Do not add explanations beyond the three signals.
 """
 
 CARD_03_MACRO_CHAIN = """
@@ -71,17 +85,20 @@ Card 03: Macro Transmission Chain
 Theme:
 {macro_chain_title}
 
-Logic reference:
+Logic reference for understanding only:
 {macro_chain_explanation}
 
 Main visual:
 Create one macro transmission diagram with arrows.
 Use 4-6 short nodes.
 Suggested flow:
-driver → expectation → rate / dollar → FX / gold reaction
+能源/Fed → 通膨分歧 → 利率高檔 → 美元偏強 → 亞幣/黃金
 
 Add one orange tension marker at the most important conflict point.
 Use simple icons and short node labels only.
+
+Reminder:
+Do not render the logic reference as visible paragraph text.
 """
 
 CARD_04_NEWS_EVIDENCE = """
@@ -90,13 +107,17 @@ Card 04: News Evidence
 Evidence:
 {news_title}
 
-Support:
+Support for understanding only:
 {news_summary}
 
 Main visual:
 Create a whiteboard evidence card.
 Use a pinned news clipping or research-note style layout.
 Add one evidence tag and one simple arrow linking the evidence back to the macro chain.
+
+Reminder:
+Only render a short evidence title and one short tag.
+Do not render the support sentence as visible paragraph text.
 """
 
 CARD_05_TRANSMISSION_STEPS = """
@@ -110,6 +131,7 @@ Create a five-node arrow chain.
 Use large step numbers 1-5.
 Each node should contain one short step only.
 Make this mostly a diagram, not a text card.
+Do not add extra explanations.
 """
 
 CARD_06_NEXT_WEEK_WATCH = """
@@ -129,6 +151,7 @@ Create a radar / telescope / checklist style whiteboard card.
 Use the key question as the main focus.
 Show three short watchpoints around it as large labels.
 Add light orange emphasis marks.
+No long explanation text.
 """
 
 NEGATIVE_PROMPT = """
@@ -143,4 +166,6 @@ Avoid:
 - exact NotebookLM logo
 - Google branding
 - fake extra data
+- broken Chinese words
+- awkward Chinese line breaks
 """
