@@ -1,15 +1,4 @@
-# 請在 GitHub 建立這個檔案
-#
-# 檔案路徑：
-# .github/workflows/build_weekly_scene.yml
-#
-# 功能：
-# 1. 手動執行或每週五早上自動執行
-# 2. 安裝 Python 套件
-# 3. 執行 scripts/01_build_weekly_scene.py
-# 4. 將產出的 output/weekly/YYYY-MM-DD/weekly_video_scene.json 自動 commit 回 repo
-
-name: Build Weekly Video Scene JSON
+name: Build Weekly Video Scene JSON and Cards
 
 on:
   workflow_dispatch:
@@ -30,6 +19,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install CJK fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -44,7 +38,11 @@ jobs:
         run: |
           python scripts/01_build_weekly_scene.py
 
-      - name: Commit generated weekly scene JSON
+      - name: Generate weekly cards
+        run: |
+          python scripts/02_generate_cards.py
+
+      - name: Commit generated weekly outputs
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
@@ -54,6 +52,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Build weekly video scene JSON"
+            git commit -m "Build weekly video scene JSON and cards"
             git push
           fi
