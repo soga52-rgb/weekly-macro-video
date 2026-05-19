@@ -1,0 +1,15 @@
+{
+  "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21",
+  "model": "gemini-3.1-flash-image-preview",
+  "cards": [
+    {
+      "card_id": "card_01",
+      "title": "Executive Summary",
+      "model": "gemini-3.1-flash-image-preview",
+      "mime_type": "image/jpeg",
+      "output_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/image_cards/card_01.jpg",
+      "prompt_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/image_prompts/card_01.txt",
+      "status": "success"
+    }
+  ]
+}

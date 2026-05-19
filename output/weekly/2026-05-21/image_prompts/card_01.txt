@@ -25,10 +25,10 @@ Visible text rules:
 Card 01: Executive Summary
 
 Theme:
-美元強勢領跑，能源與Fed訊號拉扯通膨預期
+美元強勢領跑，能源與Fed訊號拉扯下的市場分歧
 
 Support:
-本週美元與原油同步走強，Fed維持謹慎態度，市場在通膨壓力與需求降溫間尋找平衡。
+本週美元受利率支撐走強，但油價與需求數據的矛盾導致通膨預期分歧。
 
 Main visual:
 Create an opening whiteboard card.
@@ -36,7 +36,7 @@ Use the headline as the main focus.
 Add a large question mark or magnifying glass.
 Show 2-3 macro icons around it to suggest the week's main tension.
 Optional small secondary label:
-通膨預期分歧下，高利率環境能否持續？
+通膨預期分歧下，美元強勢能否持續？
 
 Avoid:
 - dense slide layout

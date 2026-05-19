@@ -25,9 +25,9 @@ Visible text rules:
 Card 02: Market Signals
 
 Use these three signals:
-- 💵 美元指數走強｜反映利率壓力與避險需求
+- 💵 美元指數偏強｜受Fed謹慎態度與利率支撐
 - 🛢️ 原油價格走高｜推升通膨預期壓力
-- 🟡 黃金逆勢走強｜避險需求抵銷利率壓抑
+- 🟡 黃金逆勢走強｜避險需求抵銷利率壓力
 
 Main visual:
 Create three large signal blocks.

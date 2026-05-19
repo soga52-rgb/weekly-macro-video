@@ -27,9 +27,9 @@ Card 05: Five-step Transmission
 Use these five steps:
 1. 能源與Fed訊號偏緊
 2. 通膨預期呈現分歧
-3. 利率受到多重支撐
-4. 美元指數持續走強
-5. 亞幣承壓黃金避險
+3. 利率受多重因素支撐
+4. 美元指數順勢走強
+5. 亞幣承壓而黃金避險
 
 Main visual:
 Create a five-node arrow chain.

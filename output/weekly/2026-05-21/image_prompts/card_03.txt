@@ -25,10 +25,10 @@ Visible text rules:
 Card 03: Macro Transmission Chain
 
 Theme:
-能源與政策支撐利率，美元走強壓抑亞幣
+能源與政策支撐利率，需求降溫引發分歧
 
 Logic reference:
-油價與Fed謹慎態度支撐利率，推動美元走強，導致亞洲貨幣承壓，但黃金展現避險韌性。
+油價與Fed鷹派立場推升利率，但需求放緩限制了通膨預期的單邊上漲。
 
 Main visual:
 Create one macro transmission diagram with arrows.

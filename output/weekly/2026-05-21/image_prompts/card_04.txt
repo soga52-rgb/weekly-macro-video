@@ -25,10 +25,10 @@ Visible text rules:
 Card 04: News Evidence
 
 Evidence:
-能源價格與Fed謹慎態度主導市場
+能源價格與Fed官員言論主導市場
 
 Support:
-原油價格走高引發通膨擔憂，配合Fed官員保守降息立場，強化市場對高利率環境的定價。
+油價走高重燃通膨擔憂，Fed官員維持謹慎，市場重新定價降息時點。
 
 Main visual:
 Create a whiteboard evidence card.
