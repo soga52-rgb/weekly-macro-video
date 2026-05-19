@@ -18,14 +18,17 @@ Visible text rules:
 - No dense report layout.
 - No tables.
 - Do not invent numbers or directions.
+- Use support, logic reference, and explanation only as background understanding.
+- Do not render support, logic reference, or explanation as visible paragraph text.
+- Only render headline, short labels, nodes, tags, and very short questions.
 
 Card 03: Macro Transmission Chain
 
 Theme:
-能源與政策支撐利率，需求降溫形成拉扯
+能源與政策支撐利率，美元走強壓抑亞幣
 
 Logic reference:
-油價走高與Fed謹慎態度推升利率，但疲軟的需求數據限制了通膨預期的單邊升溫。
+油價與Fed謹慎態度支撐利率，推動美元走強，導致亞洲貨幣承壓，但黃金展現避險韌性。
 
 Main visual:
 Create one macro transmission diagram with arrows.

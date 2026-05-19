@@ -18,11 +18,14 @@ Visible text rules:
 - No dense report layout.
 - No tables.
 - Do not invent numbers or directions.
+- Use support, logic reference, and explanation only as background understanding.
+- Do not render support, logic reference, or explanation as visible paragraph text.
+- Only render headline, short labels, nodes, tags, and very short questions.
 
 Card 06: Next Week Watch
 
 Main question:
-通膨預期分歧下，利率與美元能否維持強勢？
+通膨預期分歧下，高利率環境能否持續？
 
 Watch theme:
 關注通膨數據與利率走勢

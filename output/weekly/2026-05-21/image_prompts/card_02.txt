@@ -18,13 +18,16 @@ Visible text rules:
 - No dense report layout.
 - No tables.
 - Do not invent numbers or directions.
+- Use support, logic reference, and explanation only as background understanding.
+- Do not render support, logic reference, or explanation as visible paragraph text.
+- Only render headline, short labels, nodes, tags, and very short questions.
 
 Card 02: Market Signals
 
 Use these three signals:
-- 💵 美元指數偏強｜受利率支撐，維持強勢格局
-- 🛢️ 原油價格走高｜能源價格反彈，支撐通膨預期
-- 🟡 黃金價格走強｜避險需求支撐，與利率走勢背離
+- 💵 美元指數走強｜反映利率壓力與避險需求
+- 🛢️ 原油價格走高｜推升通膨預期壓力
+- 🟡 黃金逆勢走強｜避險需求抵銷利率壓抑
 
 Main visual:
 Create three large signal blocks.

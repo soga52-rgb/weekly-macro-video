@@ -18,14 +18,17 @@ Visible text rules:
 - No dense report layout.
 - No tables.
 - Do not invent numbers or directions.
+- Use support, logic reference, and explanation only as background understanding.
+- Do not render support, logic reference, or explanation as visible paragraph text.
+- Only render headline, short labels, nodes, tags, and very short questions.
 
 Card 04: News Evidence
 
 Evidence:
-Fed官員維持謹慎，能源價格反彈
+能源價格與Fed謹慎態度主導市場
 
 Support:
-Fed官員對降息保持保守，加上原油價格走高，市場重新評估通膨壓力。
+原油價格走高引發通膨擔憂，配合Fed官員保守降息立場，強化市場對高利率環境的定價。
 
 Main visual:
 Create a whiteboard evidence card.

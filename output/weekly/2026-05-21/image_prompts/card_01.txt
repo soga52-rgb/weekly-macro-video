@@ -18,14 +18,17 @@ Visible text rules:
 - No dense report layout.
 - No tables.
 - Do not invent numbers or directions.
+- Use support, logic reference, and explanation only as background understanding.
+- Do not render support, logic reference, or explanation as visible paragraph text.
+- Only render headline, short labels, nodes, tags, and very short questions.
 
 Card 01: Executive Summary
 
 Theme:
-能源與Fed訊號拉扯，美元走強，黃金與利率出現背離
+美元強勢領跑，能源與Fed訊號拉扯通膨預期
 
 Support:
-本週總經傳導部分成立，能源推升通膨預期，但需求降溫限制升幅，導致資產反應分歧。
+本週美元與原油同步走強，Fed維持謹慎態度，市場在通膨壓力與需求降溫間尋找平衡。
 
 Main visual:
 Create an opening whiteboard card.
@@ -33,7 +36,7 @@ Use the headline as the main focus.
 Add a large question mark or magnifying glass.
 Show 2-3 macro icons around it to suggest the week's main tension.
 Optional small secondary label:
-通膨預期分歧下，利率與美元能否維持強勢？
+通膨預期分歧下，高利率環境能否持續？
 
 Avoid:
 - dense slide layout
