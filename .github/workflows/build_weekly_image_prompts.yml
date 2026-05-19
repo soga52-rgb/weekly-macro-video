@@ -1,0 +1,55 @@
+name: Build Weekly Image Prompts
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-weekly-image-prompts:
+    runs-on: ubuntu-latest
+
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_MODEL: gemini-3.1-flash-lite-preview
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Build weekly facts JSON
+        run: |
+          python scripts/01_build_weekly_facts.py
+
+      - name: Generate weekly video brief
+        run: |
+          python scripts/02_generate_weekly_brief.py
+
+      - name: Generate weekly image prompts
+        run: |
+          python scripts/03_generate_image_prompts.py
+
+      - name: Commit generated image prompts
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add output/weekly/
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Build weekly image prompts"
+            git push
+          fi
