@@ -1,13 +1,3 @@
-# 請在 GitHub 建立這個檔案
-
-檔案路徑：
-
-scripts/01_build_weekly_scene.py
-
-請把下方程式碼完整貼入該檔案，然後 Commit changes。
-
----
-
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
