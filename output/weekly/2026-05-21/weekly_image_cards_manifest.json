@@ -42,9 +42,18 @@
       "card_id": "card_05",
       "title": "Five-step Transmission",
       "model": "gemini-3.1-flash-image-preview",
-      "mime_type": "image/jpeg",
+      "mime_type": "existing",
       "output_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/image_cards/card_05.jpg",
       "prompt_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/image_prompts/card_05.txt",
+      "status": "skipped_existing"
+    },
+    {
+      "card_id": "card_06",
+      "title": "Next Week Watch",
+      "model": "gemini-3.1-flash-image-preview",
+      "mime_type": "image/jpeg",
+      "output_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/image_cards/card_06.jpg",
+      "prompt_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/image_prompts/card_06.txt",
       "status": "success"
     }
   ]
