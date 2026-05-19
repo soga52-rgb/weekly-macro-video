@@ -1,0 +1,16 @@
+{
+  "week_start": "2026-05-15",
+  "week_end": "2026-05-21",
+  "main_theme": "利率與美元偏強，但黃金反應顯示避險需求仍在。",
+  "main_market_path": "美元與亞洲貨幣方向較一致，黃金與利率邏輯出現部分背離。",
+  "most_important_asset_move": "美元指數走強",
+  "rate_direction": "偏上",
+  "dollar_direction": "走強",
+  "asia_fx_direction": "承壓",
+  "gold_direction": "走強",
+  "dollar_vs_rate_consistency": "符合",
+  "asia_fx_vs_dollar_consistency": "符合",
+  "gold_logic": "避險支撐 / 混合因素",
+  "oil_to_inflation_feedback": "油價走高可能回頭支撐通膨預期。",
+  "asset_reaction_highlight": "美元走強與亞洲貨幣承壓符合傳導邏輯，但黃金上漲顯示避險因素仍在。"
+}
