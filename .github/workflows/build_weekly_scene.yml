@@ -1,4 +1,4 @@
-name: Build Weekly Video Scene JSON and Cards
+name: Build Weekly Video Outputs
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 jobs:
-  build-weekly-scene:
+  build-weekly-video-outputs:
     runs-on: ubuntu-latest
 
     steps:
@@ -34,6 +34,10 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
+      - name: Build weekly facts JSON
+        run: |
+          python scripts/01_build_weekly_facts.py
+
       - name: Build weekly video scene JSON
         run: |
           python scripts/01_build_weekly_scene.py
@@ -52,6 +56,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Build weekly video scene JSON and cards"
+            git commit -m "Build weekly facts, scene JSON and cards"
             git push
           fi
