@@ -27,10 +27,10 @@ Visible text rules:
 Card 04: News Evidence
 
 Evidence:
-能源與Fed政策雙重影響
+Fed 官員維持謹慎態度
 
 Support for understanding only:
-油價走高推升通膨預期，Fed官員維持謹慎態度支撐利率。
+官員對降息時點保守，支撐美元與利率維持高檔。
 
 Main visual:
 Create a whiteboard evidence card.

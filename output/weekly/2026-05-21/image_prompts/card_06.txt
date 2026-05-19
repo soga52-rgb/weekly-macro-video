@@ -27,10 +27,10 @@ Visible text rules:
 Card 06: Next Week Watch
 
 Main question:
-通膨預期是否會隨油價重新升溫？
+通膨預期是否會重新升溫？
 
 Watch theme:
-關注通膨與利率走勢
+關注通膨數據與利率走勢
 
 Watchpoints:
 - 通膨數據是否升溫

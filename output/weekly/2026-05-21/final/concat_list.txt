@@ -1,0 +1,6 @@
+file '/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/video_work/scene_01.mp4'
+file '/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/video_work/scene_02.mp4'
+file '/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/video_work/scene_03.mp4'
+file '/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/video_work/scene_04.mp4'
+file '/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/video_work/scene_05.mp4'
+file '/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/video_work/scene_06.mp4'

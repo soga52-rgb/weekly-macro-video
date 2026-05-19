@@ -27,10 +27,10 @@ Visible text rules:
 Card 03: Macro Transmission Chain
 
 Theme:
-能源與政策拉扯，利率美元同步走高
+能源與政策拉扯，利率與美元同步走高
 
 Logic reference for understanding only:
-油價與Fed鷹派推升利率，美元隨之走強，但需求降溫使通膨預期分歧。
+油價與 Fed 鷹派訊號支撐利率，美元隨之走強，亞幣則面臨貶值壓力。
 
 Main visual:
 Create one macro transmission diagram with arrows.

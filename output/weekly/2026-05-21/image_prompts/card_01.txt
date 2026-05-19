@@ -27,10 +27,10 @@ Visible text rules:
 Card 01: Executive Summary
 
 Theme:
-美元強勢領漲，通膨與避險訊號分歧
+美元強勢走升，通膨與利率預期分歧
 
 Support for understanding only:
-能源與Fed鷹派支撐美元，但需求降溫與黃金避險使市場路徑分歧。
+能源價格推升通膨預期，Fed 態度謹慎支撐美元，市場呈現多空拉扯。
 
 Main visual:
 Create an opening whiteboard card.
@@ -43,7 +43,7 @@ Suggested visible icon labels:
 - 通膨分歧
 
 Optional short question tag:
-通膨預期是否會隨油價重新升溫？
+通膨預期是否會重新升溫？
 
 Reminder:
 Do not render the support sentence as visible paragraph text.
