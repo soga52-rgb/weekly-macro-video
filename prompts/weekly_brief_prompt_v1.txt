@@ -1,6 +1,6 @@
-# AI Prompt Template V4
-# 目的：先把大量 weekly_facts.json 濃縮成「NotebookLM 式影片內容骨架」
-# 使用方式：新增為 prompts/weekly_brief_prompt_v1.txt
+# AI Prompt Template V4.1
+# 目的：先把 weekly_facts.json 濃縮成「影片用、低字數、NotebookLM 式圖解骨架」
+# 使用方式：覆蓋 prompts/weekly_brief_prompt_v1.txt
 # 注意：保留 SYSTEM_PROMPT 與 USER_PROMPT_TEMPLATE 三引號格式
 
 SYSTEM_PROMPT = """
@@ -8,28 +8,42 @@ SYSTEM_PROMPT = """
 
 你的任務是把每週市場資料濃縮成一份非常精簡、適合 NotebookLM 式圖解影片使用的內容骨架。
 
-請記住：
-- 你不是要寫完整研究報告
-- 你不是要列出所有資料
-- 你要抓出一條最值得講的總經主線
-- 你要把複雜資料壓縮成：結論、訊號、傳導鏈、新聞佐證、步驟、下週觀察
+這份內容不是研究報告，也不是網頁文章，而是要給 image model 畫成影片圖卡用。
+請記住：畫面中文字必須少，重點必須短，邏輯必須清楚。
 
-風格要像總經解說影片的分鏡素材：
-少量文字、強邏輯、重傳導、容易圖像化。
+風格：
+- 少文字
+- 強傳導
+- 強視覺
+- 像白板圖解影片
+- 每張圖只講一個概念
 """
 
 USER_PROMPT_TEMPLATE = """
 以下是本週資料包 weekly_facts.json。請根據資料產生 weekly_video_brief.json。
 
-請嚴格遵守以下規則：
+請嚴格遵守：
 
 1. 不得捏造未提供的數字。
 2. 不得改寫資產實際方向。
-3. 若資料不足，請寫「資料不足，暫不判斷」。
+3. 若資料不足，請寫「資料不足」或「待觀察」。
 4. 使用繁體中文。
-5. 內容要簡潔，適合餵給 NotebookLM 式影片生成流程。
+5. 這是影片圖卡用，不是報告用；文字一定要短。
 6. 不要輸出完整長文報告。
 7. 只輸出合法 JSON，不要加 Markdown，不要加解釋文字。
+
+字數限制：
+- headline：12～22 字
+- summary：1 句，不超過 45 字
+- market_signals.label：4～8 字，必須含方向，例如「美元偏強」
+- market_signals.meaning：不超過 18 字
+- macro_chain.title：14～28 字
+- macro_chain.explanation：1 句，不超過 55 字
+- news_evidence.title：不超過 26 字
+- news_evidence.summary：不超過 45 字
+- transmission_steps：固定 5 步，每步不超過 16 字，不要加 1. 2. 3. 編號
+- key_question：不超過 26 字
+- watchpoints：每點不超過 16 字
 
 請輸出以下結構：
 
@@ -40,17 +54,17 @@ USER_PROMPT_TEMPLATE = """
   },
   "market_signals": [
     {
+      "icon": "💵",
+      "label": "",
+      "meaning": ""
+    },
+    {
       "icon": "🛢️",
       "label": "",
       "meaning": ""
     },
     {
-      "icon": "🏦",
-      "label": "",
-      "meaning": ""
-    },
-    {
-      "icon": "💵",
+      "icon": "🟡",
       "label": "",
       "meaning": ""
     }
@@ -83,54 +97,16 @@ USER_PROMPT_TEMPLATE = """
   "video_style_notes": {
     "visual_style": "NotebookLM 式白板圖解，白底淡灰格線、黑色粗線條、橘色重點標記、手繪感箭頭與圖示",
     "tone": "專業但容易理解",
-    "avoid": "避免塞太多數字；避免像表格報告；避免六段互不相干"
+    "avoid": "避免塞太多文字；避免像表格報告；避免把完整句子全部放到畫面"
   }
 }
 
-欄位說明：
-
-executive_summary.headline：
-請用一句話說明本週主線，例如「美元走強帶動亞洲貨幣承壓」。
-
-executive_summary.summary：
-請用 1～2 句補充主線，說明為什麼這是本週重點。
-
-market_signals：
-最多 3 個，每個是本週最重要的市場訊號。請挑最有傳導意義的，不要平均列所有資產。
-icon 可用：
-🛢️ 油價 / 能源
-🏦 利率 / 債券
-💵 美元
-🌏 亞洲貨幣
-🟡 黃金
-⚠️ 風險 / 背離
-📊 經濟數據
-
-macro_chain.title：
-請寫成一條有衝突或傳導感的主線，例如：
-「交叉訊號：油價走高，但通膨預期仍分歧」
-「美元走強，亞洲貨幣承壓，但黃金同步走強」
-
-macro_chain.explanation：
-請說明這條傳導鏈的邏輯，不超過 120 字。
-
-news_evidence：
-若資料中有明確新聞佐證，請填入；若沒有，請寫「資料不足，暫不判斷」。
-
-transmission_steps：
-請用 5 個短步驟說明總經傳導，每一步不超過 28 字。
-格式請像：
-1. 油價走高，推升通膨敏感度
-2. 需求降溫，壓抑通膨升溫
-3. 利率仍偏強，另有變數支撐
-4. 美元走強，亞洲貨幣承壓
-5. 黃金走強，顯示避險干擾
-
-key_question：
-請寫出整支影片最核心的問題。
-
-next_week_watch：
-請給下週要驗證的主線與 3 個觀察點。
+挑選邏輯：
+1. executive_summary 只保留本週最重要的一條主線。
+2. market_signals 只選 3 個最有傳導意義的訊號。
+3. macro_chain 要有「因果」或「矛盾」感。
+4. transmission_steps 要能直接做成 5 個箭頭節點。
+5. 圖卡上能用圖示表達的，就不要用長文字。
 
 weekly_facts.json：
 {weekly_facts_json}
