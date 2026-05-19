@@ -11,8 +11,11 @@ Style:
 
 Visible text rules:
 - Use Traditional Chinese only.
-- Use one main headline.
-- Use only short labels.
+- Use one main headline only.
+- Keep the main headline short, centered, and readable.
+- Do not split Chinese words across lines.
+- If the supplied headline is too long, shorten it while preserving the meaning.
+- Use only short labels, nodes, tags, and very short questions.
 - Keep visible text minimal, large, and readable.
 - No long paragraphs.
 - No dense report layout.
@@ -20,20 +23,23 @@ Visible text rules:
 - Do not invent numbers or directions.
 - Use support, logic reference, and explanation only as background understanding.
 - Do not render support, logic reference, or explanation as visible paragraph text.
-- Only render headline, short labels, nodes, tags, and very short questions.
 
 Card 04: News Evidence
 
 Evidence:
-能源價格與Fed官員言論主導市場
+能源與Fed政策雙重影響
 
-Support:
-油價走高重燃通膨擔憂，Fed官員維持謹慎，市場重新定價降息時點。
+Support for understanding only:
+油價走高推升通膨預期，Fed官員維持謹慎態度支撐利率。
 
 Main visual:
 Create a whiteboard evidence card.
 Use a pinned news clipping or research-note style layout.
 Add one evidence tag and one simple arrow linking the evidence back to the macro chain.
+
+Reminder:
+Only render a short evidence title and one short tag.
+Do not render the support sentence as visible paragraph text.
 
 Avoid:
 - dense slide layout
@@ -46,3 +52,5 @@ Avoid:
 - exact NotebookLM logo
 - Google branding
 - fake extra data
+- broken Chinese words
+- awkward Chinese line breaks

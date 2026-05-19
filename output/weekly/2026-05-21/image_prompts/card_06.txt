@@ -11,8 +11,11 @@ Style:
 
 Visible text rules:
 - Use Traditional Chinese only.
-- Use one main headline.
-- Use only short labels.
+- Use one main headline only.
+- Keep the main headline short, centered, and readable.
+- Do not split Chinese words across lines.
+- If the supplied headline is too long, shorten it while preserving the meaning.
+- Use only short labels, nodes, tags, and very short questions.
 - Keep visible text minimal, large, and readable.
 - No long paragraphs.
 - No dense report layout.
@@ -20,26 +23,26 @@ Visible text rules:
 - Do not invent numbers or directions.
 - Use support, logic reference, and explanation only as background understanding.
 - Do not render support, logic reference, or explanation as visible paragraph text.
-- Only render headline, short labels, nodes, tags, and very short questions.
 
 Card 06: Next Week Watch
 
 Main question:
-通膨預期分歧下，美元強勢能否持續？
+通膨預期是否會隨油價重新升溫？
 
 Watch theme:
-關注通膨數據與利率走勢的連動性
+關注通膨與利率走勢
 
 Watchpoints:
-- 通膨數據是否重新升溫
-- 美債殖利率高檔震盪
-- 美元對亞幣壓抑程度
+- 通膨數據是否升溫
+- 美債殖利率高檔
+- 亞幣貶值壓力
 
 Main visual:
 Create a radar / telescope / checklist style whiteboard card.
 Use the key question as the main focus.
 Show three short watchpoints around it as large labels.
 Add light orange emphasis marks.
+No long explanation text.
 
 Avoid:
 - dense slide layout
@@ -52,3 +55,5 @@ Avoid:
 - exact NotebookLM logo
 - Google branding
 - fake extra data
+- broken Chinese words
+- awkward Chinese line breaks

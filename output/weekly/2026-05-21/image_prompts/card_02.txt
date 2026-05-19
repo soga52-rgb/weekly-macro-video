@@ -11,8 +11,11 @@ Style:
 
 Visible text rules:
 - Use Traditional Chinese only.
-- Use one main headline.
-- Use only short labels.
+- Use one main headline only.
+- Keep the main headline short, centered, and readable.
+- Do not split Chinese words across lines.
+- If the supplied headline is too long, shorten it while preserving the meaning.
+- Use only short labels, nodes, tags, and very short questions.
 - Keep visible text minimal, large, and readable.
 - No long paragraphs.
 - No dense report layout.
@@ -20,14 +23,13 @@ Visible text rules:
 - Do not invent numbers or directions.
 - Use support, logic reference, and explanation only as background understanding.
 - Do not render support, logic reference, or explanation as visible paragraph text.
-- Only render headline, short labels, nodes, tags, and very short questions.
 
 Card 02: Market Signals
 
 Use these three signals:
-- 💵 美元指數偏強｜受Fed謹慎態度與利率支撐
-- 🛢️ 原油價格走高｜推升通膨預期壓力
-- 🟡 黃金逆勢走強｜避險需求抵銷利率壓力
+- 💵 美元指數走強｜受利率預期支撐
+- 🛢️ 原油價格走高｜推升通膨壓力
+- 🟡 黃金逆勢走強｜避險需求支撐
 
 Main visual:
 Create three large signal blocks.
@@ -37,6 +39,7 @@ Each block should include:
 - one very short meaning tag
 
 Keep spacing wide and clean.
+Do not add explanations beyond the three signals.
 
 Avoid:
 - dense slide layout
@@ -49,3 +52,5 @@ Avoid:
 - exact NotebookLM logo
 - Google branding
 - fake extra data
+- broken Chinese words
+- awkward Chinese line breaks

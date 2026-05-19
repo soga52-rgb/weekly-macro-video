@@ -11,8 +11,11 @@ Style:
 
 Visible text rules:
 - Use Traditional Chinese only.
-- Use one main headline.
-- Use only short labels.
+- Use one main headline only.
+- Keep the main headline short, centered, and readable.
+- Do not split Chinese words across lines.
+- If the supplied headline is too long, shorten it while preserving the meaning.
+- Use only short labels, nodes, tags, and very short questions.
 - Keep visible text minimal, large, and readable.
 - No long paragraphs.
 - No dense report layout.
@@ -20,24 +23,26 @@ Visible text rules:
 - Do not invent numbers or directions.
 - Use support, logic reference, and explanation only as background understanding.
 - Do not render support, logic reference, or explanation as visible paragraph text.
-- Only render headline, short labels, nodes, tags, and very short questions.
 
 Card 03: Macro Transmission Chain
 
 Theme:
-能源與政策支撐利率，需求降溫引發分歧
+能源與政策拉扯，利率美元同步走高
 
-Logic reference:
-油價與Fed鷹派立場推升利率，但需求放緩限制了通膨預期的單邊上漲。
+Logic reference for understanding only:
+油價與Fed鷹派推升利率，美元隨之走強，但需求降溫使通膨預期分歧。
 
 Main visual:
 Create one macro transmission diagram with arrows.
 Use 4-6 short nodes.
 Suggested flow:
-driver → expectation → rate / dollar → FX / gold reaction
+能源/Fed → 通膨分歧 → 利率高檔 → 美元偏強 → 亞幣/黃金
 
 Add one orange tension marker at the most important conflict point.
 Use simple icons and short node labels only.
+
+Reminder:
+Do not render the logic reference as visible paragraph text.
 
 Avoid:
 - dense slide layout
@@ -50,3 +55,5 @@ Avoid:
 - exact NotebookLM logo
 - Google branding
 - fake extra data
+- broken Chinese words
+- awkward Chinese line breaks

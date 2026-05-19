@@ -11,8 +11,11 @@ Style:
 
 Visible text rules:
 - Use Traditional Chinese only.
-- Use one main headline.
-- Use only short labels.
+- Use one main headline only.
+- Keep the main headline short, centered, and readable.
+- Do not split Chinese words across lines.
+- If the supplied headline is too long, shorten it while preserving the meaning.
+- Use only short labels, nodes, tags, and very short questions.
 - Keep visible text minimal, large, and readable.
 - No long paragraphs.
 - No dense report layout.
@@ -20,23 +23,30 @@ Visible text rules:
 - Do not invent numbers or directions.
 - Use support, logic reference, and explanation only as background understanding.
 - Do not render support, logic reference, or explanation as visible paragraph text.
-- Only render headline, short labels, nodes, tags, and very short questions.
 
 Card 01: Executive Summary
 
 Theme:
-美元強勢領跑，能源與Fed訊號拉扯下的市場分歧
+美元強勢領漲，通膨與避險訊號分歧
 
-Support:
-本週美元受利率支撐走強，但油價與需求數據的矛盾導致通膨預期分歧。
+Support for understanding only:
+能源與Fed鷹派支撐美元，但需求降溫與黃金避險使市場路徑分歧。
 
 Main visual:
 Create an opening whiteboard card.
-Use the headline as the main focus.
+Use a short version of the theme as the main headline.
 Add a large question mark or magnifying glass.
 Show 2-3 macro icons around it to suggest the week's main tension.
-Optional small secondary label:
-通膨預期分歧下，美元強勢能否持續？
+Suggested visible icon labels:
+- 美元偏強
+- 利率高檔
+- 通膨分歧
+
+Optional short question tag:
+通膨預期是否會隨油價重新升溫？
+
+Reminder:
+Do not render the support sentence as visible paragraph text.
 
 Avoid:
 - dense slide layout
@@ -49,3 +59,5 @@ Avoid:
 - exact NotebookLM logo
 - Google branding
 - fake extra data
+- broken Chinese words
+- awkward Chinese line breaks

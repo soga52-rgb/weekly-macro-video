@@ -11,8 +11,11 @@ Style:
 
 Visible text rules:
 - Use Traditional Chinese only.
-- Use one main headline.
-- Use only short labels.
+- Use one main headline only.
+- Keep the main headline short, centered, and readable.
+- Do not split Chinese words across lines.
+- If the supplied headline is too long, shorten it while preserving the meaning.
+- Use only short labels, nodes, tags, and very short questions.
 - Keep visible text minimal, large, and readable.
 - No long paragraphs.
 - No dense report layout.
@@ -20,7 +23,6 @@ Visible text rules:
 - Do not invent numbers or directions.
 - Use support, logic reference, and explanation only as background understanding.
 - Do not render support, logic reference, or explanation as visible paragraph text.
-- Only render headline, short labels, nodes, tags, and very short questions.
 
 Card 05: Five-step Transmission
 
@@ -28,14 +30,15 @@ Use these five steps:
 1. 能源與Fed訊號偏緊
 2. 通膨預期呈現分歧
 3. 利率受多重因素支撐
-4. 美元指數順勢走強
-5. 亞幣承壓而黃金避險
+4. 美元指數持續走強
+5. 亞幣承壓黃金避險
 
 Main visual:
 Create a five-node arrow chain.
 Use large step numbers 1-5.
 Each node should contain one short step only.
 Make this mostly a diagram, not a text card.
+Do not add extra explanations.
 
 Avoid:
 - dense slide layout
@@ -48,3 +51,5 @@ Avoid:
 - exact NotebookLM logo
 - Google branding
 - fake extra data
+- broken Chinese words
+- awkward Chinese line breaks
