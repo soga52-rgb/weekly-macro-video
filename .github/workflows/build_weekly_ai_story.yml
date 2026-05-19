@@ -1,4 +1,4 @@
-name: Build Weekly AI Story
+name: Build Weekly AI Story and Cards
 
 on:
   workflow_dispatch:
@@ -7,17 +7,21 @@ permissions:
   contents: write
 
 jobs:
-  build-weekly-ai-story:
+  build-weekly-ai-story-and-cards:
     runs-on: ubuntu-latest
 
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      # Optional: change this to another available Gemini model if needed.
-      GEMINI_MODEL: gemini-2.5-flash
+      GEMINI_MODEL: gemini-3.1-flash-lite-preview
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Install CJK fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -30,23 +34,22 @@ jobs:
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
       - name: Build weekly facts JSON
-        run: |
-          python scripts/01_build_weekly_facts.py
+        run: python scripts/01_build_weekly_facts.py
 
       - name: Generate AI weekly story JSON
-        run: |
-          python scripts/02_generate_weekly_story.py
+        run: python scripts/02_generate_weekly_story.py
 
-      - name: Commit generated AI weekly story
+      - name: Generate NotebookLM-style AI cards
+        run: python scripts/03_generate_ai_cards.py
+
+      - name: Commit generated AI weekly outputs
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-
           git add output/weekly/
-
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Build AI weekly video story"
+            git commit -m "Build AI weekly story and NotebookLM-style cards"
             git push
           fi
