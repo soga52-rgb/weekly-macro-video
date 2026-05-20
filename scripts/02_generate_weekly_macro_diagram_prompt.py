@@ -13,15 +13,14 @@ Output:
 - output/weekly/YYYY-MM-DD/weekly_macro_diagram_prompt.txt
 - output/weekly/YYYY-MM-DD/weekly_macro_diagram_source.json
 
-Purpose:
-- The first section of the weekly macro page is an image-based macro transmission diagram.
-- The diagram is not generated first. It summarizes sections 2~7:
-  Executive Summary, market signals, revision factors, news evidence, and next-week watch.
-- The image itself is generated later by gemini-3.1-flash-image-preview.
+Skip logic:
+- If weekly_macro_diagram.png already exists and FORCE_REBUILD_DIAGRAM is not true,
+  skip prompt generation. This avoids regenerating the diagram when only page CSS/HTML changes.
 """
 
 import argparse
 import json
+import os
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -54,6 +53,10 @@ def find_latest_week_dir() -> Path:
         raise FileNotFoundError("No weekly output folder found under output/weekly/")
     week_dirs.sort(key=lambda p: p.name, reverse=True)
     return week_dirs[0]
+
+
+def should_force_rebuild() -> bool:
+    return os.getenv("FORCE_REBUILD_DIAGRAM", "false").strip().lower() in {"1", "true", "yes", "y"}
 
 
 def as_list(value: Any) -> List[Any]:
@@ -123,29 +126,37 @@ def build_source_pack(forest: Dict[str, Any], news: Dict[str, Any]) -> Dict[str,
 
 
 def build_prompt(source: Dict[str, Any]) -> str:
-    # Use source information only as background; visible text must be short.
     return f"""Create a 16:9 NotebookLM-style whiteboard explainer image for a weekly macro summary webpage.
 
 Purpose:
 This image is the FIRST block of a weekly macro summary webpage.
-It should visually summarize the conclusions from the later webpage sections:
+It visually summarizes the conclusions from later sections:
 Executive Summary, market signals, revision factors, news evidence, and next-week watch.
 It is a visual macro transmission diagram, not a dense report.
 
 Important title rule:
 - Do NOT render a large headline inside the image.
-- The webpage already has the page title and section title.
-- The image should start directly with the diagram nodes, icons, arrows, and short labels.
+- The webpage already has the page title「本週總經摘要」and section title「總經傳導圖解」.
+- The image should start directly with diagram nodes, icons, arrows, and short labels.
 
 Style:
-- off-white or white background
-- subtle light gray grid texture
+- off-white / white background
+- subtle light gray grid-paper texture
 - bold black hand-drawn line art
-- orange accent arrows, circles, tags, pins
+- orange / warm amber accent arrows, circles, tags, pins, labels
 - clean macro-finance explainer diagram
-- airy, video-friendly composition
+- airy, readable composition
 - looks like a knowledge video card, not a corporate slide
 - use icons, causal arrows, simple doodles, flow paths, question marks, magnifying glass, warning tags
+
+Visual structure rules:
+- Upper main chain: 驅動因子 → 通膨 / 利率 → 美元 → 亞洲匯率 / 黃金
+- Lower secondary branch: 修正因子 → 房市疲軟 / 成長擔憂 / 美元短暫走弱
+- Right-side watch area: 下週驗證
+- Bottom evidence strip if space allows: 本週證據
+- Main chain must be visually dominant.
+- Revision factor is secondary and must not visually compete with the main chain.
+- Right-side watch area should contain only 2–3 short questions.
 
 Visible text rules:
 - Use Traditional Chinese only.
@@ -158,10 +169,6 @@ Visible text rules:
 - Do not invent numbers or directions.
 - Use the source content only as background understanding.
 - Do not render long explanations as visible paragraph text.
-
-Main concept:
-Create a weekly macro transmission diagram:
-drivers → inflation/rates → dollar → Asia FX / gold → revision factors → next week watch
 
 Source content:
 - Week range: {source.get("week_range")}
@@ -181,15 +188,20 @@ Source content:
 - News corrections: {json.dumps(source.get("news_corrections", []), ensure_ascii=False)}
 - Next week questions: {json.dumps(source.get("next_week_questions", []), ensure_ascii=False)}
 
-Suggested visible structure:
-- No large title inside the image.
-- Upper main chain: 驅動因子 → 通膨 / 利率 → 美元 → 亞洲匯率 / 黃金
-- Lower secondary branch: 修正因子 → 房市疲軟 / 成長擔憂 / 美元短暫走弱
-- Right-side watch area: 下週驗證
-- Bottom evidence strip if space allows: 本週證據
-- short nodes such as: 再通膨、油價高檔、通膨黏性、長債利率、美元偏強、亞幣承壓、黃金壓力、修正因子、下週驗證
-- one orange marker on the key correction or uncertainty point
-- do not include full source text
+Suggested visible labels:
+- 再通膨
+- 油價高檔
+- 通膨黏性
+- 長債利率
+- 高利率更久
+- 美元偏強
+- 亞幣承壓
+- 黃金壓力
+- 修正因子
+- 房市疲軟
+- 成長擔憂
+- 美元短弱
+- 下週驗證
 
 Avoid:
 - large title text inside the image
@@ -212,6 +224,12 @@ def main() -> None:
     args = parser.parse_args()
 
     week_dir = Path(args.week_dir) if args.week_dir else find_latest_week_dir()
+    image_path = week_dir / "weekly_macro_diagram.png"
+
+    if image_path.exists() and not should_force_rebuild():
+        print(f"[SKIP] weekly macro diagram already exists: {image_path}")
+        print("[SKIP] Set FORCE_REBUILD_DIAGRAM=true to regenerate prompt and image.")
+        return
 
     forest = load_json(week_dir / "weekly_forest_summary.json", {})
     news = load_json(week_dir / "weekly_news_context.json", {})
