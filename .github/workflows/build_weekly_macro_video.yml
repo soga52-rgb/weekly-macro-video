@@ -1,0 +1,76 @@
+name: Build Weekly Macro Video
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_rebuild_narration:
+        description: "Force rebuild weekly narration"
+        required: false
+        default: false
+        type: boolean
+      force_rebuild_tts:
+        description: "Force rebuild TTS audio"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  build-weekly-macro-video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_MODEL: gemini-3.1-flash-lite
+      GEMINI_TTS_MODEL: gemini-3.1-flash-tts-preview
+      GEMINI_TTS_VOICE: Kore
+      FORCE_REBUILD_NARRATION: ${{ inputs.force_rebuild_narration }}
+      FORCE_REBUILD_TTS: ${{ inputs.force_rebuild_tts }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-noto-cjk
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install pillow
+
+      - name: Generate weekly narration
+        run: |
+          python scripts/05_generate_weekly_narration_ai.py
+
+      - name: Generate TTS audio
+        run: |
+          python scripts/06_generate_weekly_tts.py
+
+      - name: Build weekly video
+        run: |
+          python scripts/07_build_weekly_video_ffmpeg.py
+
+      - name: Commit weekly video outputs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add output/weekly/
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Build weekly macro video"
+            git push
+          fi
