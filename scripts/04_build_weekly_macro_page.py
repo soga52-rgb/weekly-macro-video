@@ -133,6 +133,26 @@ def render_signal_cards(cards: List[Dict[str, str]]) -> str:
     )
 
 
+def build_asset_signal_map(forest: Dict[str, Any]) -> Dict[str, str]:
+    variables = forest.get("macro_variables") or {}
+    return {
+        "US10Y": str(variables.get("rate_view", "") or "").strip(),
+        "DXY": str(variables.get("dollar_fx_view", "") or "").strip(),
+        "Gold": str(variables.get("gold_view", "") or "").strip(),
+        "WTI": str(variables.get("energy_view", "") or "").strip(),
+        "Brent": str(variables.get("energy_view", "") or "").strip(),
+        "USDJPY": str(variables.get("asia_fx_view", "") or "").strip(),
+        "USDTWD": str(variables.get("asia_fx_view", "") or "").strip(),
+        "USDKRW": str(variables.get("asia_fx_view", "") or "").strip(),
+    }
+
+
+def source_label_from_market(market: Dict[str, Any]) -> str:
+    # The endpoint uses Yahoo numeric data; keep the page label clean and user-facing.
+    return "YAHOO財經"
+
+
+
 def render_news(news_context: Dict[str, Any]) -> str:
     top_news = news_context.get("top_news") or []
     if not top_news:
@@ -166,31 +186,44 @@ def fmt_number(value: float, unit: str = "") -> str:
     return f"{text} {unit}".strip()
 
 
-def sparkline_svg(values: List[float]) -> str:
-    if len(values) < 2:
-        return '<div class="chart-empty">資料點不足</div>'
+def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
+    if len(points_data) < 2:
+        return '<div class="chart-empty">資料不足</div>'
 
+    values = [float(p["value"]) for p in points_data]
     width = 260
     height = 72
     min_v = min(values)
     max_v = max(values)
     span = max(max_v - min_v, 1e-9)
 
-    points = []
-    for i, value in enumerate(values):
-        x = (i / (len(values) - 1)) * width
+    coords = []
+    dots = []
+    for i, point in enumerate(points_data):
+        value = float(point["value"])
+        date = str(point.get("date") or "")
+        x = (i / (len(points_data) - 1)) * width
         y = height - ((value - min_v) / span) * (height - 12) - 6
-        points.append(f"{x:.1f},{y:.1f}")
+        coords.append(f"{x:.1f},{y:.1f}")
+        dots.append(
+            f'<circle class="spark-dot" cx="{x:.1f}" cy="{y:.1f}" r="4">'
+            f'<title>{esc(date)}｜{esc(fmt_number(value, unit))}</title>'
+            f'</circle>'
+        )
 
     return f"""
-    <svg class="sparkline" viewBox="0 0 {width} {height}" preserveAspectRatio="none" aria-hidden="true">
-      <polyline points="{' '.join(points)}" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    <svg class="sparkline" viewBox="0 0 {width} {height}" preserveAspectRatio="none">
+      <polyline points="{' '.join(coords)}" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      {''.join(dots)}
     </svg>
     """
 
 
-def render_market_charts(market: Dict[str, Any]) -> str:
+def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any]) -> str:
     series = market.get("series") or []
+    signal_map = build_asset_signal_map(forest)
+    source_label = source_label_from_market(market)
+
     if not isinstance(series, list) or not series:
         return '<div class="muted-box">目前尚未匯入本週市場走勢資料。</div>'
 
@@ -230,22 +263,20 @@ def render_market_charts(market: Dict[str, Any]) -> str:
         direction_text = "上行" if direction == "up" else "下行" if direction == "down" else "持平"
         change_sign = "+" if change > 0 else ""
 
-        start_date = clean_points[0]["date"]
-        end_date = clean_points[-1]["date"]
+        asset_key = str(item.get("asset_key") or "")
+        signal_text = signal_map.get(asset_key, "")
 
         cards.append(f"""
         <div class="chart-card">
           <div class="chart-head">
-            <div>
-              <div class="chart-title">{esc(asset)}</div>
-              <div class="chart-range">{esc(start_date)} ～ {esc(end_date)}</div>
-            </div>
+            <div class="chart-title">{esc(asset)}</div>
             <div class="chart-direction {direction}">{esc(direction_text)}</div>
           </div>
           <div class="chart-latest">{esc(fmt_number(latest_value, unit))}</div>
           <div class="chart-change">{esc(change_sign)}{change:.3f}｜{change_sign}{pct:.2f}%</div>
-          {sparkline_svg(values)}
-          <div class="chart-meta">資料點：{len(clean_points)}</div>
+          {sparkline_svg(clean_points, unit)}
+          <div class="chart-signal">{esc(signal_text or "本週方向待觀察。")}</div>
+          <div class="chart-footer">來源：{esc(source_label)}</div>
         </div>
         """)
 
@@ -298,9 +329,8 @@ def build_html(week_dir: Path, forest: Dict[str, Any], news_context: Dict[str, A
         else '<div class="muted-box">總經傳導圖解尚未產生。</div>'
     )
 
-    signal_cards_html = render_signal_cards(build_signal_cards(forest))
     news_html = render_news(news_context)
-    charts_html = render_market_charts(market)
+    charts_html = render_market_charts(market, forest)
     scenes_html = render_scene_cards(forest)
 
     revision_items = render_list([
@@ -339,8 +369,8 @@ body {{
 .wrap {{ max-width:1180px; margin:0 auto; padding:34px 18px 64px; }}
 .header {{ display:flex; justify-content:space-between; gap:18px; align-items:flex-end; margin-bottom:22px; }}
 .kicker {{ color:#9a6200; font-weight:850; letter-spacing:.08em; font-size:13px; text-transform:uppercase; }}
-.title {{ font-size:36px; line-height:1.2; font-weight:900; margin:6px 0 10px; }}
-.subtitle {{ color:#4b5563; font-size:17px; max-width:820px; }}
+.title {{ font-size:42px; line-height:1.2; font-weight:900; margin:6px 0 10px; }}
+.subtitle {{ color:#4b5563; font-size:20px; max-width:820px; }}
 .meta {{ text-align:right; color:var(--muted); font-size:14px; white-space:nowrap; }}
 .section {{
   background:rgba(255,255,255,.78);
@@ -351,7 +381,7 @@ body {{
   margin:18px 0;
   backdrop-filter: blur(10px);
 }}
-.section h2 {{ margin:0 0 16px; font-size:24px; }}
+.section h2 {{ margin:0 0 18px; font-size:28px; }}
 .hero {{
   background:linear-gradient(135deg,#fff7dc 0%,#fffdf7 54%,#f8fafc 100%);
   border:1px solid #ead6a2;
@@ -364,8 +394,8 @@ body {{
   background:#fffdf7;
 }}
 .summary-grid {{ display:grid; grid-template-columns:1.1fr .9fr; gap:16px; }}
-.big-text {{ font-size:20px; font-weight:750; }}
-.question {{ background:#fff7ed; border:1px solid #fed7aa; border-radius:16px; padding:16px; color:#7c2d12; font-weight:800; }}
+.big-text {{ font-size:24px; font-weight:750; }}
+.question {{ font-size:18px; background:#fff7ed; border:1px solid #fed7aa; border-radius:16px; padding:16px; color:#7c2d12; font-weight:800; }}
 .signals,.charts {{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }}
 .signal-card,.slide-card,.news-card,.chart-card {{
   background:#fff;
@@ -387,14 +417,18 @@ ul {{ margin:0; padding-left:22px; }}
 .news-title {{ font-weight:900; margin-bottom:8px; }}
 .news-why {{ color:#4b5563; font-size:14px; }}
 .chart-head {{ display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }}
-.chart-title {{ font-weight:900; font-size:16px; }}
-.chart-range,.chart-meta,.chart-change {{ color:var(--muted); font-size:13px; }}
-.chart-latest {{ font-size:28px; font-weight:900; margin-top:10px; }}
+.chart-title {{ font-weight:900; font-size:20px; }}
+.chart-change {{ color:var(--muted); font-size:15px; }}
+.chart-latest {{ font-size:34px; font-weight:900; margin-top:10px; }}
 .chart-direction {{ font-size:13px; font-weight:900; border-radius:999px; padding:4px 10px; background:#f3f4f6; white-space:nowrap; }}
 .chart-direction.up {{ color:#b91c1c; background:#fee2e2; }}
 .chart-direction.down {{ color:#047857; background:#d1fae5; }}
 .chart-direction.flat {{ color:#4b5563; background:#f3f4f6; }}
-.sparkline {{ width:100%; height:72px; color:#334155; margin:10px 0 6px; }}
+.sparkline {{ width:100%; height:86px; color:#334155; margin:14px 0 8px; }}
+.spark-dot {{ fill:#fff; stroke:currentColor; stroke-width:2.5; cursor:pointer; }}
+.spark-dot:hover {{ fill:#f59e0b; }}
+.chart-signal {{ color:#374151; font-size:15px; margin-top:8px; min-height:42px; }}
+.chart-footer {{ border-top:1px solid var(--line); margin-top:12px; padding-top:10px; color:var(--muted); font-size:13px; }}
 .slides {{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }}
 .slide-id {{ color:#9a6200; font-size:12px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }}
 .slide-title {{ font-size:18px; font-weight:900; margin:4px 0; }}
@@ -406,7 +440,7 @@ ul {{ margin:0; padding-left:22px; }}
   .header,.summary-grid,.two-col {{ display:block; }}
   .meta {{ text-align:left; margin-top:10px; }}
   .signals,.slides,.news-grid,.charts {{ grid-template-columns:1fr; }}
-  .title {{ font-size:30px; }}
+  .title {{ font-size:34px; }}
 }}
 </style>
 </head>
@@ -430,7 +464,7 @@ ul {{ margin:0; padding-left:22px; }}
   </section>
 
   <section class="section">
-    <h2>Executive Summary</h2>
+    <h2>重點摘要</h2>
     <div class="summary-grid">
       <div class="big-text">{esc(headline)}</div>
       <div class="question">{esc(main_question)}</div>
@@ -439,8 +473,8 @@ ul {{ margin:0; padding-left:22px; }}
   </section>
 
   <section class="section">
-    <h2>本週市場訊號</h2>
-    <div class="signals">{signal_cards_html}</div>
+    <h2>本週市場訊號與走勢</h2>
+    <div class="charts">{charts_html}</div>
   </section>
 
   <section class="section">
@@ -451,11 +485,6 @@ ul {{ margin:0; padding-left:22px; }}
   <section class="section">
     <h2>本週新聞佐證</h2>
     <div class="news-grid">{news_html}</div>
-  </section>
-
-  <section class="section">
-    <h2>本週核心走勢圖</h2>
-    <div class="charts">{charts_html}</div>
   </section>
 
   <section class="section">
