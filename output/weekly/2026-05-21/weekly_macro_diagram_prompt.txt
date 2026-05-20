@@ -1,0 +1,69 @@
+Create a 16:9 NotebookLM-style whiteboard explainer image for a weekly macro summary webpage.
+
+Purpose:
+This image is the FIRST block of a weekly macro summary webpage.
+It should visually summarize the conclusions from the later webpage sections:
+Executive Summary, market signals, revision factors, news evidence, and next-week watch.
+It is a visual macro transmission diagram, not a dense report.
+
+Style:
+- off-white or white background
+- subtle light gray grid texture
+- bold black hand-drawn line art
+- orange accent arrows, circles, tags, pins
+- clean macro-finance explainer diagram
+- airy, video-friendly composition
+- looks like a knowledge video card, not a corporate slide
+- use icons, causal arrows, simple doodles, flow paths, question marks, magnifying glass, warning tags
+
+Visible text rules:
+- Use Traditional Chinese only.
+- Use one short main headline.
+- Use only short labels, nodes, tags, and very short questions.
+- Keep visible text minimal, large, and readable.
+- No long paragraphs.
+- No dense report layout.
+- No tables.
+- Do not invent numbers or directions.
+- Use the source content only as background understanding.
+- Do not render long explanations as visible paragraph text.
+
+Main concept:
+Create a weekly macro transmission diagram:
+drivers → inflation/rates → dollar → Asia FX / gold → revision factors → next week watch
+
+Source content:
+- Week range: 2026-05-15 ～ 2026-05-21
+- Weekly main theme: 再通膨預期與高利率維持更久（Higher for Longer）的定價體制。
+- One-sentence verdict: 市場正處於再通膨預期驅動的利率上行週期，儘管成長數據疲軟帶來短暫避險干擾，但高利率維持更久的敘事仍為核心主軸。
+- Main question: 市場對通膨黏性的定價是否已完全壓過對經濟成長放緩的擔憂？
+- Narrative arc: 本週市場由再通膨預期主導，推升美債殖利率並支撐美元。儘管房市數據疲軟曾引發短暫的成長擔憂與避險資金流動，但整體市場仍聚焦於利率路徑的重新定價，未見結構性轉向。
+- Story start: 再通膨預期重燃，推升美債殖利率，確立了高利率維持更久的市場基調。
+- Main drivers: ["再通膨預期導致長債殖利率飆升", "美元利差優勢持續壓抑非美貨幣", "油價維持高檔強化通膨黏性"]
+- Market transmission: 再通膨預期 -> 美債殖利率上行 -> 美元走強 -> 亞洲貨幣承壓與黃金機會成本增加。
+- Revision factor: 5月18日房市數據疲軟引發成長擔憂，導致美元短暫走弱，顯示成長放緩在特定情境下可作為修正因子，但未動搖整體利率主線。
+- Story end: 市場持續交易高利率環境，後續焦點轉向勞動力市場數據與長債殖利率的關鍵壓力點。
+- Macro variables: {"inflation": "通膨黏性預期持續，油價高檔提供支撐。", "rate": "市場對降息預期落空，長債殖利率飆升反映高利率維持更久。", "dollar_fx": "利差優勢支撐美元強勢，成長擔憂僅造成短暫修正。", "asia_fx": "普遍承壓，受美元強勢與利差擴大影響，待觀察央行干預。", "gold": "受高利率機會成本與強美元雙重壓制，避險需求僅在特定時點提供支撐。", "energy": "油價維持高檔，強化市場對通膨黏性的定價。"}
+- Evidence: ["30年期美債殖利率突破5.1%並持續上行", "美元指數強勢帶動亞幣貶值", "油價維持高檔強化通膨預期"]
+- News theme: 再通膨定價與成長放緩疑慮的拉鋸，長債殖利率飆升成為市場核心壓力源。
+- News confirming signals: ["美債殖利率全線飆升，確認市場對Fed降息預期落空的定價。", "油價維持高檔，持續強化通膨黏性預期。", "亞洲貨幣因美元利差優勢而普遍承壓。"]
+- News corrections: ["市場對美債殖利率的反應已從單純的通膨交易，轉向對「高利率新常態」的結構性擔憂，需關注5.5%是否成為下一個壓力點。"]
+- Next week questions: ["美債30年期殖利率是否挑戰5.5%關卡？", "勞動力市場數據是否確認成長降溫？", "亞洲央行是否採取干預措施以穩定匯率？"]
+
+Suggested visible structure:
+- headline: 本週總經傳導圖解
+- short nodes such as: 再通膨、長債利率、美元偏強、亞幣承壓、黃金壓力、修正因子、下週驗證
+- one orange marker on the key correction or uncertainty point
+- do not include full source text
+
+Avoid:
+- dense slide layout
+- table
+- long paragraphs
+- small unreadable text
+- cluttered UI
+- stock dashboard style
+- Bloomberg terminal style
+- exact NotebookLM logo
+- Google branding
+- fake extra data
