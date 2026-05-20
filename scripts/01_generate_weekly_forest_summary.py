@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Weekly Macro Video Engine - Forest Summary v3
+Weekly Macro Video Engine - Forest Summary Slide Mode v1
 
 Purpose:
 - Generate weekly_forest_summary.json from:
@@ -10,9 +10,10 @@ Purpose:
   2) weekly_news_context.md if available
 
 Design:
-- Daily summaries are the "trees".
-- Weekly news context is the correction layer.
-- Forest summary should combine both and avoid over-weighting a one-day divergence.
+- Do not force the model to search for divergence.
+- Ask for a six-slide macro theme analysis.
+- Require coherent story flow, consistent logic, and no invented data.
+- Let the model determine the main story from daily summaries + weekly news context.
 
 Input:
 - output/weekly/YYYY-MM-DD/weekly_source_text.md
@@ -26,6 +27,8 @@ Required env:
 
 Optional env:
 - GEMINI_MODEL, default: gemini-3.5-flash
+  To test Gemini 3.1 Flash Lite, set:
+  GEMINI_MODEL=gemini-3.1-flash-lite
 """
 
 import argparse
@@ -47,22 +50,19 @@ DEFAULT_MODEL = "gemini-3.5-flash"
 SYSTEM_PROMPT = """
 你是一位專業總經週報主編。
 
-你要讀取最近 3～5 天的「今日總經摘要」，並結合一週新聞補充，拉高視角歸納成「本週森林視角」。
-每日摘要是樹木，週報摘要是森林；新聞補充是校正層。
+你要讀取最近 3～5 天的「今日總經摘要」，並結合一週新聞補充，整理成一份「六張投影片式」的總經主軸分析。
+每日摘要是樹木，週報投影片是森林；新聞補充是校正層。
 
-你的任務不是寫吸睛標題，也不是逐日整理，而是做分析師式判讀：
-1. 找出本週真正主線。
-2. 找出反覆出現的市場訊號。
-3. 找出本週轉折點。
-4. 判斷通膨預期 → 利率 → 美元 → 亞洲貨幣 / 黃金 的傳導鏈是否成立。
-5. 找出哪些地方背離、哪些地方只是待觀察。
-6. 給出下週最重要的驗證問題。
+你的任務不是找最戲劇化的背離，也不是逐日整理，而是建立一條前後連貫、一致的市場故事線。
 
-判斷規則：
-- 週報主線必須優先依據多數觀察日與一週新聞補充。
-- 不得因單日背離就判定整週傳導鏈斷裂。
-- 若單日背離被新聞補充修正，請列為「短暫背離」或「待觀察」。
-- 若新聞補充顯示長天期殖利率、美元、亞幣、黃金大致符合傳導，overall_verdict 應偏向「成立」或「部分成立」。
+請做到：
+1. 找出本週最重要的總經主軸。
+2. 說明這條主軸如何從每日摘要與新聞補充中形成。
+3. 分析主要市場變數之間的關係：通膨預期、利率、美元、亞洲貨幣、黃金、能源。
+4. 若出現短暫分歧、修正訊號或待觀察因素，請自然放入故事線，不要刻意放大。
+5. 六張投影片之間要前後連貫，像一支完整週報影片，而不是六段分散摘要。
+6. 不要自行創造來源中沒有的數據、新聞或事件。
+7. 若資料不足，請明確寫「資料不足，待觀察」。
 
 語氣要求：
 - 專業、清楚、克制。
@@ -82,22 +82,22 @@ A. weekly_source_text.md：
 
 B. weekly_news_context.md：
 一週 Google News RSS 搜尋後，由 Gemini 整理的新聞補充，代表週報校正層。
-若 B 顯示一週新聞支撐某條主線，請不要因 A 中某一天的單日背離而改寫整週主線。
 
 請根據 A + B 產生 weekly_forest_summary.json。
 
 重要規則：
 1. 不要逐日照抄。
 2. 不要把單日摘要直接串起來。
-3. 要用「森林視角」歸納本週主線。
-4. 要說清楚「延續」、「轉折」、「短暫背離」、「待觀察」。
-5. 若資料只有 3 天，也可以產生週報初版，但要在 data_status_note 說明資料仍為 partial。
-6. 不要捏造來源中沒有的數字或新聞。
-7. 若是推論，請明確寫「可能」、「顯示」、「反映」、「待觀察」。
-8. 不要使用過度戲劇化語氣。
-9. 週報結論要像分析師週報，不要像媒體標題。
-10. image_card_brief 必須非常短，適合放入影片圖卡。
-11. 只輸出合法 JSON，不要加 Markdown，不要加解釋文字。
+3. 不要預設一定要找出背離或脫鉤。
+4. 請以「六張投影片式總經主軸分析」建立完整故事線。
+5. 六張投影片必須前後連貫、一致，不能各自分散。
+6. 若有短暫分歧或修正訊號，只需自然說明其在主線中的位置，不要將其升級為整週主軸。
+7. 不要捏造來源中沒有的數字或新聞。
+8. 若是推論，請明確寫「可能」、「顯示」、「反映」、「待觀察」。
+9. 不要使用過度戲劇化語氣。
+10. 週報結論要像分析師週報，不要像媒體標題。
+11. image_card_brief 必須非常短，適合放入影片圖卡。
+12. 只輸出合法 JSON，不要加 Markdown，不要加解釋文字。
 
 請輸出以下 JSON 結構：
 
@@ -112,26 +112,24 @@ B. weekly_news_context.md：
     "weekly_main_theme": "",
     "main_question": "",
     "one_sentence_verdict": "",
-    "overall_verdict": "成立 / 部分成立 / 背離 / 待觀察",
+    "overall_verdict": "成立 / 部分成立 / 分歧待觀察 / 待觀察",
     "narrative_arc": "",
     "why_it_matters": ""
   },
-  "signal_evolution": {
-    "repeated_signals": [],
-    "strengthening_signals": [],
-    "weakening_signals": [],
-    "turning_points": [],
-    "noise_or_one_day_signals": []
+  "macro_storyline": {
+    "story_start": "",
+    "main_drivers": [],
+    "market_transmission": "",
+    "revision_or_noise": "",
+    "story_end": ""
   },
-  "macro_transmission": {
-    "expected_chain": "通膨預期 → 利率 → 美元 → 亞洲貨幣 / 黃金",
-    "confirmed_links": [],
-    "broken_or_weakened_links": [],
-    "key_divergences": [],
+  "macro_variables": {
     "inflation_view": "",
     "rate_view": "",
     "dollar_fx_view": "",
-    "gold_view": ""
+    "asia_fx_view": "",
+    "gold_view": "",
+    "energy_view": ""
   },
   "evidence": {
     "most_important_evidence": [],
@@ -231,6 +229,8 @@ B. weekly_news_context.md：
 - suggested_video_title：專業、克制，不要驚嘆號，不要聳動。
 - scene_title：不超過 16 字。
 - scene_question：像主持人提問，但不要誇張。
+- 六張 scene 必須形成一條故事線：開場主題 → 主要驅動 → 市場傳導 → 修正因素 → 下週觀察。
+- 不必固定每張投影片名稱，請依來源內容自行安排。
 - image_card_brief.headline：8～16 字，適合圖卡。
 - image_card_brief.short_labels：每個 2～8 字。
 - visual_concept：可描述圖像，但不要放太多可見文字。
@@ -292,8 +292,8 @@ def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: 
         "systemInstruction": {"parts": [{"text": system_prompt}]},
         "contents": [{"role": "user", "parts": [{"text": user_prompt}]}],
         "generationConfig": {
-            "temperature": 0.2,
-            "topP": 0.85,
+            "temperature": 0.25,
+            "topP": 0.9,
             "responseMimeType": "application/json",
         },
     }
