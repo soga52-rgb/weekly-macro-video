@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Weekly Macro Video - Step 06
-Generate TTS audio for weekly narration using Gemini TTS.
+Generate TTS audio for host/analyst dialogue narration using Gemini TTS.
 
 Input:
 - output/weekly/YYYY-MM-DD/narration/weekly_narration.json
@@ -10,6 +10,15 @@ Input:
 Output:
 - output/weekly/YYYY-MM-DD/audio/scene_01.wav ... scene_06.wav
 - output/weekly/YYYY-MM-DD/audio/weekly_narration.wav
+
+Required env:
+- GEMINI_API_KEY
+
+Optional env:
+- GEMINI_TTS_MODEL, default: gemini-3.1-flash-tts-preview
+- GEMINI_TTS_HOST_VOICE, default: Kore
+- GEMINI_TTS_ANALYST_VOICE, default: Puck
+- FORCE_REBUILD_TTS, default: false
 """
 
 import argparse
@@ -24,11 +33,11 @@ import wave
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-
 ROOT_DIR = Path(__file__).resolve().parents[1]
 OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
 DEFAULT_TTS_MODEL = "gemini-3.1-flash-tts-preview"
-DEFAULT_TTS_VOICE = "Kore"
+DEFAULT_HOST_VOICE = "Kore"
+DEFAULT_ANALYST_VOICE = "Puck"
 
 
 def find_latest_week_dir() -> Path:
@@ -77,7 +86,7 @@ def find_inline_audio(api_response: Dict[str, Any]) -> Optional[Dict[str, str]]:
     return None
 
 
-def call_gemini_tts(text: str, model: str, voice: str, api_key: str) -> Dict[str, str]:
+def call_gemini_tts(text: str, model: str, voice: str, api_key: str, role_label: str) -> Dict[str, str]:
     endpoint = (
         "https://generativelanguage.googleapis.com/v1beta/models/"
         + urllib.parse.quote(model)
@@ -86,8 +95,9 @@ def call_gemini_tts(text: str, model: str, voice: str, api_key: str) -> Dict[str
     )
 
     prompt = (
-        "請用自然、穩定、專業的繁體中文財經週報語氣朗讀以下內容。"
-        "語速中等，段落之間略停頓，不要加入任何額外說明。\n\n"
+        f"請用自然、穩定、專業的繁體中文財經週報語氣朗讀以下{role_label}內容。"
+        "語速中等，段落之間略停頓，不要加入任何額外說明。"
+        "不要朗讀角色名稱。\\n\\n"
         + text
     )
 
@@ -133,20 +143,39 @@ def write_audio_file(path: Path, audio: Dict[str, str]) -> None:
     if "wav" in mime_type or raw[:4] == b"RIFF":
         path.write_bytes(raw)
     else:
-        # Gemini TTS preview may return raw PCM/L16.
         save_wav_from_pcm(path, raw, sample_rate=24000)
 
 
-def concat_wavs(audio_dir: Path, scene_paths: List[Path], out_path: Path) -> None:
-    concat_file = audio_dir / "tts_concat_list.txt"
+def concat_audio(audio_dir: Path, paths: List[Path], out_path: Path) -> None:
+    concat_file = audio_dir / f"{out_path.stem}_concat_list.txt"
     concat_file.write_text(
-        "\n".join(f"file '{p.resolve().as_posix()}'" for p in scene_paths),
+        "\n".join(f"file '{p.resolve().as_posix()}'" for p in paths),
         encoding="utf-8",
     )
     subprocess.run(
         ["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_file), "-c", "copy", str(out_path)],
         check=True,
     )
+
+
+def get_scene_dialogue(scene: Dict[str, Any]) -> List[Dict[str, str]]:
+    dialogue = scene.get("dialogue")
+    if isinstance(dialogue, list) and dialogue:
+        output = []
+        for turn in dialogue:
+            if not isinstance(turn, dict):
+                continue
+            speaker = str(turn.get("speaker") or "analyst").strip()
+            text = str(turn.get("text") or "").strip()
+            if speaker not in {"host", "analyst"}:
+                speaker = "analyst"
+            if text:
+                output.append({"speaker": speaker, "text": text})
+        if output:
+            return output
+
+    narration = str(scene.get("narration") or "").strip()
+    return [{"speaker": "analyst", "text": narration}] if narration else []
 
 
 def main() -> None:
@@ -159,7 +188,8 @@ def main() -> None:
         raise EnvironmentError("Missing GEMINI_API_KEY.")
 
     model = os.getenv("GEMINI_TTS_MODEL", DEFAULT_TTS_MODEL).strip() or DEFAULT_TTS_MODEL
-    voice = os.getenv("GEMINI_TTS_VOICE", DEFAULT_TTS_VOICE).strip() or DEFAULT_TTS_VOICE
+    host_voice = os.getenv("GEMINI_TTS_HOST_VOICE", DEFAULT_HOST_VOICE).strip() or DEFAULT_HOST_VOICE
+    analyst_voice = os.getenv("GEMINI_TTS_ANALYST_VOICE", DEFAULT_ANALYST_VOICE).strip() or DEFAULT_ANALYST_VOICE
 
     week_dir = Path(args.week_dir) if args.week_dir else find_latest_week_dir()
     narration = load_json(week_dir / "narration" / "weekly_narration.json")
@@ -174,27 +204,45 @@ def main() -> None:
     if not scenes:
         raise RuntimeError("weekly_narration.json has no scenes.")
 
-    scene_paths: List[Path] = []
-    print(f"[INFO] Generating TTS with model: {model}, voice: {voice}")
+    scene_audio_paths: List[Path] = []
+    print(f"[INFO] Generating dialogue TTS with model: {model}")
+    print(f"[INFO] host_voice={host_voice}, analyst_voice={analyst_voice}")
 
     for scene in scenes:
         scene_id = scene.get("scene_id")
-        text = str(scene.get("narration") or "").strip()
-        if not scene_id or not text:
+        if not scene_id:
             continue
 
-        out_path = audio_dir / f"{scene_id}.wav"
-        if out_path.exists() and not flag("FORCE_REBUILD_TTS"):
-            print(f"[SKIP] Scene audio exists: {out_path}")
-        else:
-            print(f"[INFO] Generating audio: {scene_id}")
-            write_audio_file(out_path, call_gemini_tts(text, model, voice, api_key))
-        scene_paths.append(out_path)
+        scene_turn_paths: List[Path] = []
+        turns = get_scene_dialogue(scene)
 
-    if not scene_paths:
+        for idx, turn in enumerate(turns, start=1):
+            speaker = turn["speaker"]
+            text = turn["text"]
+            voice = host_voice if speaker == "host" else analyst_voice
+            role_label = "主持人" if speaker == "host" else "分析師"
+
+            turn_path = audio_dir / "turns" / f"{scene_id}_{idx:02d}_{speaker}.wav"
+            if turn_path.exists() and not flag("FORCE_REBUILD_TTS"):
+                print(f"[SKIP] Turn audio exists: {turn_path}")
+            else:
+                print(f"[INFO] Generating {scene_id} turn {idx}: {speaker}")
+                audio = call_gemini_tts(text, model, voice, api_key, role_label)
+                write_audio_file(turn_path, audio)
+
+            scene_turn_paths.append(turn_path)
+
+        if not scene_turn_paths:
+            continue
+
+        scene_out = audio_dir / f"{scene_id}.wav"
+        concat_audio(audio_dir, scene_turn_paths, scene_out)
+        scene_audio_paths.append(scene_out)
+
+    if not scene_audio_paths:
         raise RuntimeError("No scene audio files generated.")
 
-    concat_wavs(audio_dir, scene_paths, full_audio)
+    concat_audio(audio_dir, scene_audio_paths, full_audio)
     print(f"[OK] Created {full_audio}")
 
 
