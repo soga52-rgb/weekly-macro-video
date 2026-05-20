@@ -542,11 +542,11 @@ body {{
 .spark-dot {{ fill:#fff; stroke:currentColor; stroke-width:2.6; cursor:pointer; opacity:.95; }}
 .spark-dot:hover {{ fill:var(--accent); stroke:var(--accent); }}
 .chart-signal {{ color:#374151; font-size:16px; margin-top:10px; min-height:48px; }}
-.market-section {
+.market-section {{
   position:relative;
   padding-bottom:54px;
-}
-.section-source {
+}}
+.section-source {{
   position:absolute;
   right:26px;
   bottom:18px;
@@ -557,7 +557,7 @@ body {{
   border:1px solid rgba(209,213,219,.55);
   border-radius:999px;
   padding:5px 11px;
-}
+}}
 .two-col {{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }}
 ul {{ margin:0; padding-left:22px; }}
 .section li {{
@@ -639,40 +639,40 @@ ul {{ margin:0; padding-left:22px; }}
 }}
 @media(max-width:760px) {{
   .header,.summary-grid,.two-col {{ display:block; }}
-  .meta {
+  .meta {{
     position:static !important;
     text-align:center !important;
     white-space:normal;
     margin-top:10px;
-  }
+  }}
   .charts,.slides,.news-grid {{ grid-template-columns:1fr; }}
   .title {{ font-size:34px; }}
   .subtitle {{ font-size:18px; }}
 }}
 
 /* V12 header/source placement overrides */
-.header {
+.header {{
   display:block !important;
   position:relative !important;
   width:100% !important;
   text-align:center !important;
   margin-left:auto !important;
   margin-right:auto !important;
-}
-.header-main {
+}}
+.header-main {{
   margin-left:auto !important;
   margin-right:auto !important;
   text-align:center !important;
-}
-.header .meta {
+}}
+.header .meta {{
   position:absolute !important;
   right:0 !important;
   bottom:10px !important;
   text-align:right !important;
-}
-.section-source {
+}}
+.section-source {{
   text-align:right;
-}
+}}
 
 </style>
 </head>
