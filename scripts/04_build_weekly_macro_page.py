@@ -123,33 +123,50 @@ def source_label_from_market(_: Dict[str, Any]) -> str:
 
 
 def classify_news_item(item: Dict[str, Any]) -> str:
-    text_blob = " ".join([
-        str(item.get("theme") or ""),
-        str(item.get("title") or ""),
-        str(item.get("why_it_matters") or ""),
-        str(item.get("source") or ""),
-    ]).lower()
+    title = str(item.get("title") or "").lower()
+    theme = str(item.get("theme") or "").lower()
+    why = str(item.get("why_it_matters") or "").lower()
+    source = str(item.get("source") or "").lower()
 
-    inflation_keywords = [
-        "通膨", "再通膨", "物價", "cpi", "ppi", "油價", "原油", "能源",
-        "inflation", "reflation", "oil", "energy", "wti", "brent"
+    # Title/theme should dominate classification. Otherwise a currency article that
+    # mentions yields in why_it_matters may be incorrectly moved into the rate bucket.
+    currency_keywords = [
+        "美元", "美元指數", "匯率", "亞幣", "新台幣", "台幣", "日圓", "韓元", "人民幣",
+        "dxy", "currency", "dollar", "yen", "twd", "krw", "cny", "fx"
     ]
     rate_keywords = [
         "利率", "殖利率", "美債", "公債", "fed", "聯準會", "升息", "降息",
         "債市", "長債", "yield", "treasury", "rate", "bond"
     ]
-    currency_keywords = [
-        "美元", "匯率", "亞幣", "新台幣", "台幣", "日圓", "韓元", "人民幣",
-        "dxy", "currency", "dollar", "yen", "twd", "krw", "cny"
+    inflation_keywords = [
+        "通膨", "再通膨", "物價", "cpi", "ppi", "油價", "原油", "能源",
+        "inflation", "reflation", "oil", "energy", "wti", "brent"
     ]
 
-    if any(keyword.lower() in text_blob for keyword in inflation_keywords):
-        return "通膨預期"
-    if any(keyword.lower() in text_blob for keyword in rate_keywords):
-        return "利率"
-    if any(keyword.lower() in text_blob for keyword in currency_keywords):
+    def hit(text: str, keywords: List[str]) -> bool:
+        return any(keyword.lower() in text for keyword in keywords)
+
+    title_theme = f"{title} {theme}"
+    all_text = f"{title} {theme} {why} {source}"
+
+    # Priority 1: title/theme direct signal.
+    # Example:「美元指數衝破99 新台幣連4貶」must stay in 貨幣,
+    # even if the explanation mentions 美債殖利率.
+    if hit(title_theme, currency_keywords):
         return "貨幣"
-    return "其他"
+    if hit(title_theme, rate_keywords):
+        return "利率"
+    if hit(title_theme, inflation_keywords):
+        return "通膨預期"
+
+    # Priority 2: fallback to full text.
+    scores = {
+        "通膨預期": sum(1 for keyword in inflation_keywords if keyword.lower() in all_text),
+        "利率": sum(1 for keyword in rate_keywords if keyword.lower() in all_text),
+        "貨幣": sum(1 for keyword in currency_keywords if keyword.lower() in all_text),
+    }
+    best_category = max(scores, key=scores.get)
+    return best_category if scores[best_category] > 0 else "其他"
 
 
 def render_news_card(item: Dict[str, Any]) -> str:
@@ -170,23 +187,55 @@ def render_news_card(item: Dict[str, Any]) -> str:
     """
 
 
-def render_news(news_context: Dict[str, Any]) -> str:
-    top_news = news_context.get("top_news") or []
-    if not top_news:
-        return '<div class="muted-box">本週新聞補充資料不足，待觀察。</div>'
+def dedupe_news_items(items: List[Dict[str, Any]], limit: int = 4) -> List[Dict[str, Any]]:
+    output = []
+    seen = set()
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        key = (item.get("title") or "", item.get("url") or "")
+        if key in seen:
+            continue
+        seen.add(key)
+        output.append(item)
+        if len(output) >= limit:
+            break
+    return output
 
-    groups = {
+
+def get_categorized_news(news_context: Dict[str, Any]) -> Dict[str, List[Dict[str, Any]]]:
+    categories = {
         "通膨預期": [],
         "利率": [],
         "貨幣": [],
         "其他": [],
     }
 
-    for item in top_news:
-        if not isinstance(item, dict):
-            continue
-        category = classify_news_item(item)
-        groups.setdefault(category, []).append(item)
+    direct_categories = news_context.get("news_categories")
+    if isinstance(direct_categories, dict):
+        for key in categories.keys():
+            categories[key] = dedupe_news_items(direct_categories.get(key) or [], 4)
+
+    # Fallback for older weekly_news_context.json:
+    # classify top_news only if the AI did not provide category buckets.
+    if not any(categories.values()):
+        top_news = news_context.get("top_news") or []
+        for item in top_news:
+            if not isinstance(item, dict):
+                continue
+            category = classify_news_item(item)
+            categories.setdefault(category, []).append(item)
+
+        for key in categories.keys():
+            categories[key] = dedupe_news_items(categories[key], 4)
+
+    return categories
+
+
+def render_news(news_context: Dict[str, Any]) -> str:
+    categories = get_categorized_news(news_context)
+    if not any(categories.values()):
+        return '<div class="muted-box">本週新聞補充資料不足，待觀察。</div>'
 
     category_descriptions = {
         "通膨預期": "油價、能源、物價與再通膨訊號",
@@ -197,7 +246,7 @@ def render_news(news_context: Dict[str, Any]) -> str:
 
     sections = []
     for category in ["通膨預期", "利率", "貨幣", "其他"]:
-        items = groups.get(category, [])
+        items = categories.get(category, [])
         if items:
             cards = "\n".join(render_news_card(item) for item in items[:4])
         else:
