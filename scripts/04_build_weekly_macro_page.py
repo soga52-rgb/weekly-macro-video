@@ -275,8 +275,6 @@ def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
 def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any]) -> str:
     series = market.get("series") or []
     signal_map = build_asset_signal_map(forest)
-    source_label = source_label_from_market(market)
-
     if not isinstance(series, list) or not series:
         return '<div class="muted-box">目前尚未匯入本週市場走勢資料。</div>'
 
@@ -339,7 +337,6 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any]) -> str:
           <div class="chart-change">{esc(change_sign)}{change:.3f}｜{change_sign}{pct:.2f}%</div>
           {sparkline_svg(clean_points, unit)}
           <div class="chart-signal">{esc(signal_text or "本週方向待觀察。")}</div>
-          <div class="chart-footer">來源：{esc(source_label)}</div>
         </div>
         """)
 
@@ -504,7 +501,7 @@ body {{
 }}
 .chart-card {{
   position:relative;
-  padding:18px 18px 54px;
+  padding:18px;
   overflow:hidden;
   min-width:0;
   border-top:4px solid rgba(245,158,11,.78);
@@ -545,20 +542,22 @@ body {{
 .spark-dot {{ fill:#fff; stroke:currentColor; stroke-width:2.6; cursor:pointer; opacity:.95; }}
 .spark-dot:hover {{ fill:var(--accent); stroke:var(--accent); }}
 .chart-signal {{ color:#374151; font-size:16px; margin-top:10px; min-height:48px; }}
-.chart-footer {{
+.market-section {
+  position:relative;
+  padding-bottom:54px;
+}
+.section-source {
   position:absolute;
-  right:18px;
-  bottom:14px;
-  border-top:0;
-  margin-top:0;
-  padding:4px 9px;
+  right:26px;
+  bottom:18px;
   color:var(--muted);
-  font-size:13px;
+  font-size:14px;
   white-space:nowrap;
   background:rgba(255,255,255,.72);
   border:1px solid rgba(209,213,219,.55);
   border-radius:999px;
-}}
+  padding:5px 11px;
+}
 .two-col {{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }}
 ul {{ margin:0; padding-left:22px; }}
 .section li {{
@@ -640,11 +639,41 @@ ul {{ margin:0; padding-left:22px; }}
 }}
 @media(max-width:760px) {{
   .header,.summary-grid,.two-col {{ display:block; }}
-  .meta {{ white-space:normal; margin-top:10px; }}
+  .meta {
+    position:static !important;
+    text-align:center !important;
+    white-space:normal;
+    margin-top:10px;
+  }
   .charts,.slides,.news-grid {{ grid-template-columns:1fr; }}
   .title {{ font-size:34px; }}
   .subtitle {{ font-size:18px; }}
 }}
+
+/* V12 header/source placement overrides */
+.header {
+  display:block !important;
+  position:relative !important;
+  width:100% !important;
+  text-align:center !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+.header-main {
+  margin-left:auto !important;
+  margin-right:auto !important;
+  text-align:center !important;
+}
+.header .meta {
+  position:absolute !important;
+  right:0 !important;
+  bottom:10px !important;
+  text-align:right !important;
+}
+.section-source {
+  text-align:right;
+}
+
 </style>
 </head>
 <body>
@@ -653,9 +682,9 @@ ul {{ margin:0; padding-left:22px; }}
     <div class="header-main">
       <div class="kicker">Weekly Macro Summary</div>
       <div class="title">{esc(title)}</div>
-      <div class="meta">
-        週期：{esc(week_label)}　｜　產生日期：{esc(generated_at)}
-      </div>
+    </div>
+    <div class="meta">
+      週期：{esc(week_label)}　｜　產生日期：{esc(generated_at)}
     </div>
   </header>
 
@@ -673,9 +702,10 @@ ul {{ margin:0; padding-left:22px; }}
     <p>{esc(summary.get("narrative_arc", ""))}</p>
   </section>
 
-  <section class="section section-market">
+  <section class="section section-market market-section">
     <h2>本週市場訊號與走勢</h2>
     <div class="charts">{charts_html}</div>
+    <div class="section-source">來源：YAHOO財經</div>
   </section>
 
   <section class="section section-watch">
