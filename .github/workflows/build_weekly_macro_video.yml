@@ -20,13 +20,14 @@ permissions:
 jobs:
   build-weekly-macro-video:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
 
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_MODEL: gemini-3.1-flash-lite
       GEMINI_TTS_MODEL: gemini-3.1-flash-tts-preview
-      GEMINI_TTS_VOICE: Kore
+      GEMINI_TTS_HOST_VOICE: Tom
+      GEMINI_TTS_ANALYST_VOICE: Miranda
       FORCE_REBUILD_NARRATION: ${{ inputs.force_rebuild_narration }}
       FORCE_REBUILD_TTS: ${{ inputs.force_rebuild_tts }}
 
