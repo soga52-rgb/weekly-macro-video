@@ -160,6 +160,16 @@ B. weekly_news_candidates：
 7. 不要使用過度戲劇化字眼；新聞原始標題可保留，但你的說明要克制。
 8. 只輸出合法 JSON，不要加 Markdown。
 
+新聞分類規則：
+- 請務必輸出 news_categories，分成「通膨預期」「利率」「貨幣」「其他」四類。
+- 每類最多放 4 則新聞，優先挑對本週主線最有佐證價值者。
+- 一則新聞只能放在一類，不要重複。
+- 分類以標題與新聞主題優先，why_it_matters 只作輔助。
+- 「油價、能源、CPI、PPI、物價、再通膨、通膨黏性」優先放「通膨預期」。
+- 「美債殖利率、長債、Fed、聯準會、升息、降息、利率路徑」優先放「利率」。
+- 「美元、DXY、新台幣、日圓、韓元、人民幣、亞幣、匯率」優先放「貨幣」。
+- 地緣政治若主要影響油價或能源，放「通膨預期」；若無法明確歸類，放「其他」。
+
 請輸出 JSON 結構：
 
 {
@@ -184,6 +194,48 @@ B. weekly_news_candidates：
   "contradicting_signals": [],
   "news_based_corrections": [],
   "watch_points": [],
+  "news_categories": {
+    "通膨預期": [
+      {
+        "title": "",
+        "source": "",
+        "url": "",
+        "published_at": "",
+        "theme": "inflation_energy",
+        "why_it_matters": ""
+      }
+    ],
+    "利率": [
+      {
+        "title": "",
+        "source": "",
+        "url": "",
+        "published_at": "",
+        "theme": "rates_bonds_fed",
+        "why_it_matters": ""
+      }
+    ],
+    "貨幣": [
+      {
+        "title": "",
+        "source": "",
+        "url": "",
+        "published_at": "",
+        "theme": "dollar_asia_fx",
+        "why_it_matters": ""
+      }
+    ],
+    "其他": [
+      {
+        "title": "",
+        "source": "",
+        "url": "",
+        "published_at": "",
+        "theme": "other_macro",
+        "why_it_matters": ""
+      }
+    ]
+  },
   "top_news": [
     {
       "title": "",
@@ -460,6 +512,52 @@ def build_news_context_markdown(context: Dict[str, Any]) -> str:
         lines.extend(["", "### 給 Forest Summary 的編輯提示", str(note)])
 
     return "\n".join(lines).strip() + "\n"
+
+
+
+def normalize_news_categories(context: Dict[str, Any]) -> Dict[str, Any]:
+    """Ensure categorized news fields exist and top_news has enough items."""
+    categories = context.get("news_categories")
+    if not isinstance(categories, dict):
+        context["news_categories"] = {
+            "通膨預期": [],
+            "利率": [],
+            "貨幣": [],
+            "其他": [],
+        }
+        categories = context["news_categories"]
+
+    for key in ["通膨預期", "利率", "貨幣", "其他"]:
+        if not isinstance(categories.get(key), list):
+            categories[key] = []
+        categories[key] = [item for item in categories[key] if isinstance(item, dict)][:4]
+
+    # Preserve top_news if present, but supplement it from category buckets.
+    top_news = context.get("top_news")
+    if not isinstance(top_news, list):
+        top_news = []
+
+    seen = set()
+    normalized_top = []
+    for item in top_news:
+        if not isinstance(item, dict):
+            continue
+        key = (item.get("title") or "", item.get("url") or "")
+        if key in seen:
+            continue
+        seen.add(key)
+        normalized_top.append(item)
+
+    for bucket in ["通膨預期", "利率", "貨幣", "其他"]:
+        for item in categories.get(bucket, []):
+            key = (item.get("title") or "", item.get("url") or "")
+            if key in seen:
+                continue
+            seen.add(key)
+            normalized_top.append(item)
+
+    context["top_news"] = normalized_top[:12]
+    return context
 
 
 def main() -> None:
