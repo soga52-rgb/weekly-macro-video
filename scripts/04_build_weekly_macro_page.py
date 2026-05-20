@@ -377,7 +377,7 @@ def build_html(week_dir: Path, forest: Dict[str, Any], news_context: Dict[str, A
         f"{get_nested(market, 'meta', 'range', 'start') or ''} ～ {get_nested(market, 'meta', 'range', 'end') or ''}".strip(" ～"),
         "資料週期待確認",
     )
-    generated_at = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
+    generated_at = datetime.utcnow().strftime("%Y-%m-%d")
 
     page_title = "本週總經摘要"
     title = page_title
@@ -394,7 +394,6 @@ def build_html(week_dir: Path, forest: Dict[str, Any], news_context: Dict[str, A
 
     news_html = render_news(news_context)
     charts_html = render_market_charts(market, forest)
-    scenes_html = render_scene_cards(forest)
 
     revision_items = render_list([
         first_non_empty(storyline.get("revision_or_noise"), ""),
@@ -431,8 +430,8 @@ def build_html(week_dir: Path, forest: Dict[str, Any], news_context: Dict[str, A
 body {{
   margin:0;
   background:
-    radial-gradient(circle at 12% 0%, rgba(255,216,130,.50) 0, rgba(255,216,130,0) 30%),
-    radial-gradient(circle at 90% 12%, rgba(234,240,247,.95) 0, rgba(234,240,247,0) 34%),
+    radial-gradient(circle at 50% 0%, rgba(255,216,130,.22) 0, rgba(255,216,130,0) 26%),
+    radial-gradient(circle at 90% 12%, rgba(234,240,247,.72) 0, rgba(234,240,247,0) 34%),
     linear-gradient(180deg,#fbfaf7 0%,#eef1f5 100%);
   color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
@@ -504,7 +503,8 @@ body {{
   -webkit-backdrop-filter: blur(14px);
 }}
 .chart-card {{
-  padding:18px;
+  position:relative;
+  padding:18px 18px 54px;
   overflow:hidden;
   min-width:0;
   border-top:4px solid rgba(245,158,11,.78);
@@ -545,7 +545,20 @@ body {{
 .spark-dot {{ fill:#fff; stroke:currentColor; stroke-width:2.6; cursor:pointer; opacity:.95; }}
 .spark-dot:hover {{ fill:var(--accent); stroke:var(--accent); }}
 .chart-signal {{ color:#374151; font-size:16px; margin-top:10px; min-height:48px; }}
-.chart-footer {{ border-top:1px solid var(--line); margin-top:12px; padding-top:10px; color:var(--muted); font-size:14px; }}
+.chart-footer {{
+  position:absolute;
+  right:18px;
+  bottom:14px;
+  border-top:0;
+  margin-top:0;
+  padding:4px 9px;
+  color:var(--muted);
+  font-size:13px;
+  white-space:nowrap;
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(209,213,219,.55);
+  border-radius:999px;
+}}
 .two-col {{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }}
 ul {{ margin:0; padding-left:22px; }}
 .section li {{
@@ -627,7 +640,7 @@ ul {{ margin:0; padding-left:22px; }}
 }}
 @media(max-width:760px) {{
   .header,.summary-grid,.two-col {{ display:block; }}
-  .meta {{ text-align:left; margin-top:10px; }}
+  .meta {{ white-space:normal; margin-top:10px; }}
   .charts,.slides,.news-grid {{ grid-template-columns:1fr; }}
   .title {{ font-size:34px; }}
   .subtitle {{ font-size:18px; }}
@@ -637,14 +650,12 @@ ul {{ margin:0; padding-left:22px; }}
 <body>
 <div class="wrap">
   <header class="header">
-    <div>
+    <div class="header-main">
       <div class="kicker">Weekly Macro Summary</div>
       <div class="title">{esc(title)}</div>
-      <div class="subtitle">{esc(verdict)}</div>
-    </div>
-    <div class="meta">
-      週期：{esc(week_label)}<br>
-      產生時間：{esc(generated_at)}
+      <div class="meta">
+        週期：{esc(week_label)}　｜　產生日期：{esc(generated_at)}
+      </div>
     </div>
   </header>
 
@@ -689,11 +700,6 @@ ul {{ margin:0; padding-left:22px; }}
         <ul>{evidence_items}</ul>
       </div>
     </div>
-  </section>
-
-  <section class="section">
-    <h2>週報影片 / 圖卡草稿</h2>
-    <div class="slides">{scenes_html}</div>
   </section>
 
   <div class="footer">
