@@ -13,7 +13,7 @@ jobs:
 
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      GEMINI_MODEL: gemini-3.1-flash-lite
+      GEMINI_MODEL: gemini-3.5-flash
       GEMINI_TTS_MODEL: gemini-3.1-flash-tts-preview
       GEMINI_TTS_VOICE: Kore
       WEEKLY_VIDEO_SPEED: "1.05"
