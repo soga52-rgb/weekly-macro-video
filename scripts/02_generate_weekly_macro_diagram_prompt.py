@@ -132,6 +132,11 @@ It should visually summarize the conclusions from the later webpage sections:
 Executive Summary, market signals, revision factors, news evidence, and next-week watch.
 It is a visual macro transmission diagram, not a dense report.
 
+Important title rule:
+- Do NOT render a large headline inside the image.
+- The webpage already has the page title and section title.
+- The image should start directly with the diagram nodes, icons, arrows, and short labels.
+
 Style:
 - off-white or white background
 - subtle light gray grid texture
@@ -144,7 +149,7 @@ Style:
 
 Visible text rules:
 - Use Traditional Chinese only.
-- Use one short main headline.
+- Do NOT include a large main headline inside the image.
 - Use only short labels, nodes, tags, and very short questions.
 - Keep visible text minimal, large, and readable.
 - No long paragraphs.
@@ -177,12 +182,17 @@ Source content:
 - Next week questions: {json.dumps(source.get("next_week_questions", []), ensure_ascii=False)}
 
 Suggested visible structure:
-- headline: 本週總經傳導圖解
-- short nodes such as: 再通膨、長債利率、美元偏強、亞幣承壓、黃金壓力、修正因子、下週驗證
+- No large title inside the image.
+- Upper main chain: 驅動因子 → 通膨 / 利率 → 美元 → 亞洲匯率 / 黃金
+- Lower secondary branch: 修正因子 → 房市疲軟 / 成長擔憂 / 美元短暫走弱
+- Right-side watch area: 下週驗證
+- Bottom evidence strip if space allows: 本週證據
+- short nodes such as: 再通膨、油價高檔、通膨黏性、長債利率、美元偏強、亞幣承壓、黃金壓力、修正因子、下週驗證
 - one orange marker on the key correction or uncertainty point
 - do not include full source text
 
 Avoid:
+- large title text inside the image
 - dense slide layout
 - table
 - long paragraphs
