@@ -27,8 +27,8 @@ body {
 .wrap { max-width:1180px; margin:0 auto; padding:34px 18px 64px; }
 .header { display:flex; justify-content:space-between; gap:18px; align-items:flex-end; margin-bottom:22px; }
 .kicker { color:#9a6200; font-weight:850; letter-spacing:.08em; font-size:13px; text-transform:uppercase; }
-.title { font-size:36px; line-height:1.2; font-weight:900; margin:6px 0 10px; }
-.subtitle { color:#4b5563; font-size:17px; max-width:820px; }
+.title { font-size:42px; line-height:1.2; font-weight:900; margin:6px 0 10px; }
+.subtitle { color:#4b5563; font-size:20px; max-width:820px; }
 .meta { text-align:right; color:var(--muted); font-size:14px; white-space:nowrap; }
 .section {
   background:rgba(255,255,255,.78);
@@ -39,7 +39,7 @@ body {
   margin:18px 0;
   backdrop-filter: blur(10px);
 }
-.section h2 { margin:0 0 16px; font-size:24px; }
+.section h2 { margin:0 0 18px; font-size:28px; }
 .hero {
   background:linear-gradient(135deg,#fff7dc 0%,#fffdf7 54%,#f8fafc 100%);
   border:1px solid #ead6a2;
@@ -52,8 +52,8 @@ body {
   background:#fffdf7;
 }
 .summary-grid { display:grid; grid-template-columns:1.1fr .9fr; gap:16px; }
-.big-text { font-size:20px; font-weight:750; }
-.question { background:#fff7ed; border:1px solid #fed7aa; border-radius:16px; padding:16px; color:#7c2d12; font-weight:800; }
+.big-text { font-size:24px; font-weight:750; }
+.question { font-size:18px; background:#fff7ed; border:1px solid #fed7aa; border-radius:16px; padding:16px; color:#7c2d12; font-weight:800; }
 .signals,.charts { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
 .signal-card,.slide-card,.news-card,.chart-card {
   background:#fff;
@@ -75,14 +75,18 @@ ul { margin:0; padding-left:22px; }
 .news-title { font-weight:900; margin-bottom:8px; }
 .news-why { color:#4b5563; font-size:14px; }
 .chart-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
-.chart-title { font-weight:900; font-size:16px; }
-.chart-range,.chart-meta,.chart-change { color:var(--muted); font-size:13px; }
-.chart-latest { font-size:28px; font-weight:900; margin-top:10px; }
+.chart-title { font-weight:900; font-size:20px; }
+.chart-change { color:var(--muted); font-size:15px; }
+.chart-latest { font-size:34px; font-weight:900; margin-top:10px; }
 .chart-direction { font-size:13px; font-weight:900; border-radius:999px; padding:4px 10px; background:#f3f4f6; white-space:nowrap; }
 .chart-direction.up { color:#b91c1c; background:#fee2e2; }
 .chart-direction.down { color:#047857; background:#d1fae5; }
 .chart-direction.flat { color:#4b5563; background:#f3f4f6; }
-.sparkline { width:100%; height:72px; color:#334155; margin:10px 0 6px; }
+.sparkline { width:100%; height:86px; color:#334155; margin:14px 0 8px; }
+.spark-dot { fill:#fff; stroke:currentColor; stroke-width:2.5; cursor:pointer; }
+.spark-dot:hover { fill:#f59e0b; }
+.chart-signal { color:#374151; font-size:15px; margin-top:8px; min-height:42px; }
+.chart-footer { border-top:1px solid var(--line); margin-top:12px; padding-top:10px; color:var(--muted); font-size:13px; }
 .slides { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
 .slide-id { color:#9a6200; font-size:12px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
 .slide-title { font-size:18px; font-weight:900; margin:4px 0; }
@@ -94,7 +98,7 @@ ul { margin:0; padding-left:22px; }
   .header,.summary-grid,.two-col { display:block; }
   .meta { text-align:left; margin-top:10px; }
   .signals,.slides,.news-grid,.charts { grid-template-columns:1fr; }
-  .title { font-size:30px; }
+  .title { font-size:34px; }
 }
 </style>
 </head>
@@ -104,11 +108,11 @@ ul { margin:0; padding-left:22px; }
     <div>
       <div class="kicker">Weekly Macro Summary</div>
       <div class="title">本週總經摘要</div>
-      <div class="subtitle">市場正從單純的「再通膨定價」轉向「通膨與成長放緩的雙重拉鋸」，長債殖利率的飆升已成為全球資產定價的關鍵錨點。</div>
+      <div class="subtitle">市場正全力交易高利率維持更久，成長放緩數據僅作為短暫修正因子，尚未扭轉債市拋售主軸。</div>
     </div>
     <div class="meta">
       週期：2026-05-15 至 2026-05-21<br>
-      產生時間：2026-05-20 08:09 UTC
+      產生時間：2026-05-20 08:24 UTC
     </div>
   </header>
 
@@ -118,238 +122,184 @@ ul { margin:0; padding-left:22px; }
   </section>
 
   <section class="section">
-    <h2>Executive Summary</h2>
+    <h2>重點摘要</h2>
     <div class="summary-grid">
-      <div class="big-text">再通膨預期與成長放緩擔憂的拉鋸，長債殖利率成為市場定價核心。</div>
-      <div class="question">長債殖利率飆升是否已封鎖降息空間，並將市場推向成長放緩的硬著陸風險？</div>
+      <div class="big-text">再通膨預期引發債市拋售，高利率維持更久敘事主導市場。</div>
+      <div class="question">市場對再通膨的定價是否已觸及金融穩定邊界？</div>
     </div>
-    <p>本週市場由對「再通膨」的強烈定價開場，隨後因房市數據疲軟引入「成長放緩」的修正因子，導致美元與殖利率出現短暫脫鉤，最終市場進入對高利率維持更久與經濟前景的重新評估階段。</p>
+    <p>本週市場由再通膨預期驅動，美債殖利率飆升成為核心，美元強勢壓抑亞幣與黃金；儘管房市數據疲軟曾引發短暫避險反彈，但整體敘事仍聚焦於利率路徑的重新定價。</p>
   </section>
 
   <section class="section">
-    <h2>本週市場訊號</h2>
-    <div class="signals">
-        <div class="signal-card">
-          <div class="signal-icon">🧭</div>
-          <div class="signal-label">通膨</div>
-          <div class="signal-text">再通膨預期持續，油價高檔與通膨黏性封鎖短期降息空間。</div>
+    <h2>本週市場訊號與走勢</h2>
+    <div class="charts">
+        <div class="chart-card">
+          <div class="chart-head">
+            <div class="chart-title">美國10年期公債殖利率</div>
+            <div class="chart-direction up">上行</div>
+          </div>
+          <div class="chart-latest">4.667 %</div>
+          <div class="chart-change">+0.072｜+1.57%</div>
+          
+    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none">
+      <polyline points="0.0,66.0 130.0,42.7 260.0,6.0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      <circle class="spark-dot" cx="0.0" cy="66.0" r="4"><title>2026-05-15｜4.595 %</title></circle><circle class="spark-dot" cx="130.0" cy="42.7" r="4"><title>2026-05-18｜4.623 %</title></circle><circle class="spark-dot" cx="260.0" cy="6.0" r="4"><title>2026-05-19｜4.667 %</title></circle>
+    </svg>
+    
+          <div class="chart-signal">市場已封鎖降息空間，甚至出現重新升息討論，長債殖利率持續飆升。</div>
+          <div class="chart-footer">來源：YAHOO財經</div>
         </div>
         
 
-        <div class="signal-card">
-          <div class="signal-icon">🏦</div>
-          <div class="signal-label">利率</div>
-          <div class="signal-text">長債殖利率飆升，市場共識轉向高利率維持更久。</div>
+        <div class="chart-card">
+          <div class="chart-head">
+            <div class="chart-title">美元指數</div>
+            <div class="chart-direction up">上行</div>
+          </div>
+          <div class="chart-latest">99.308</div>
+          <div class="chart-change">+0.038｜+0.04%</div>
+          
+    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none">
+      <polyline points="0.0,12.4 86.7,11.1 173.3,66.0 260.0,6.0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      <circle class="spark-dot" cx="0.0" cy="12.4" r="4"><title>2026-05-15｜99.270</title></circle><circle class="spark-dot" cx="86.7" cy="11.1" r="4"><title>2026-05-17｜99.278</title></circle><circle class="spark-dot" cx="173.3" cy="66.0" r="4"><title>2026-05-18｜98.954</title></circle><circle class="spark-dot" cx="260.0" cy="6.0" r="4"><title>2026-05-19｜99.308</title></circle>
+    </svg>
+    
+          <div class="chart-signal">利差優勢支撐美元強勢，雖曾因成長擔憂短暫回調，但趨勢未變。</div>
+          <div class="chart-footer">來源：YAHOO財經</div>
         </div>
         
 
-        <div class="signal-card">
-          <div class="signal-icon">💵</div>
-          <div class="signal-label">美元</div>
-          <div class="signal-text">利差優勢支撐美元，但受成長放緩擔憂影響，出現與殖利率脫鉤的波動。</div>
+        <div class="chart-card">
+          <div class="chart-head">
+            <div class="chart-title">黃金</div>
+            <div class="chart-direction down">下行</div>
+          </div>
+          <div class="chart-latest">4,480.9 USD/oz</div>
+          <div class="chart-change">-74.900｜-1.64%</div>
+          
+    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none">
+      <polyline points="0.0,19.3 86.7,21.2 173.3,6.0 260.0,66.0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      <circle class="spark-dot" cx="0.0" cy="19.3" r="4"><title>2026-05-15｜4,555.8 USD/oz</title></circle><circle class="spark-dot" cx="86.7" cy="21.2" r="4"><title>2026-05-17｜4,552.8 USD/oz</title></circle><circle class="spark-dot" cx="173.3" cy="6.0" r="4"><title>2026-05-18｜4,577.2 USD/oz</title></circle><circle class="spark-dot" cx="260.0" cy="66.0" r="4"><title>2026-05-19｜4,480.9 USD/oz</title></circle>
+    </svg>
+    
+          <div class="chart-signal">受高利率機會成本與強勢美元雙重壓制，避險需求僅在成長擔憂時短暫支撐。</div>
+          <div class="chart-footer">來源：YAHOO財經</div>
         </div>
         
 
-        <div class="signal-card">
-          <div class="signal-icon">🌏</div>
-          <div class="signal-label">亞幣</div>
-          <div class="signal-text">普遍承壓，反映強勢美元的利差傳導效應。</div>
+        <div class="chart-card">
+          <div class="chart-head">
+            <div class="chart-title">西德州原油</div>
+            <div class="chart-direction down">下行</div>
+          </div>
+          <div class="chart-latest">104.34 USD/bbl</div>
+          <div class="chart-change">-1.080｜-1.02%</div>
+          
+    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none">
+      <polyline points="0.0,6.0 86.7,66.0 173.3,64.7 260.0,26.6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      <circle class="spark-dot" cx="0.0" cy="6.0" r="4"><title>2026-05-15｜105.42 USD/bbl</title></circle><circle class="spark-dot" cx="86.7" cy="66.0" r="4"><title>2026-05-17｜102.27 USD/bbl</title></circle><circle class="spark-dot" cx="173.3" cy="64.7" r="4"><title>2026-05-18｜102.34 USD/bbl</title></circle><circle class="spark-dot" cx="260.0" cy="26.6" r="4"><title>2026-05-19｜104.34 USD/bbl</title></circle>
+    </svg>
+    
+          <div class="chart-signal">油價上行強化通膨預期，地緣政治因素增加波動。</div>
+          <div class="chart-footer">來源：YAHOO財經</div>
         </div>
         
 
-        <div class="signal-card">
-          <div class="signal-icon">🟡</div>
-          <div class="signal-label">黃金</div>
-          <div class="signal-text">受高利率機會成本壓抑，僅在避險情緒升溫時獲得支撐。</div>
+        <div class="chart-card">
+          <div class="chart-head">
+            <div class="chart-title">布蘭特原油</div>
+            <div class="chart-direction up">上行</div>
+          </div>
+          <div class="chart-latest">111.23 USD/bbl</div>
+          <div class="chart-change">+1.970｜+1.80%</div>
+          
+    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none">
+      <polyline points="0.0,59.2 86.7,26.5 173.3,66.0 260.0,6.0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      <circle class="spark-dot" cx="0.0" cy="59.2" r="4"><title>2026-05-15｜109.26 USD/bbl</title></circle><circle class="spark-dot" cx="86.7" cy="26.5" r="4"><title>2026-05-17｜110.47 USD/bbl</title></circle><circle class="spark-dot" cx="173.3" cy="66.0" r="4"><title>2026-05-18｜109.01 USD/bbl</title></circle><circle class="spark-dot" cx="260.0" cy="6.0" r="4"><title>2026-05-19｜111.23 USD/bbl</title></circle>
+    </svg>
+    
+          <div class="chart-signal">油價上行強化通膨預期，地緣政治因素增加波動。</div>
+          <div class="chart-footer">來源：YAHOO財經</div>
         </div>
         
 
-        <div class="signal-card">
-          <div class="signal-icon">🛢️</div>
-          <div class="signal-label">能源</div>
-          <div class="signal-text">受地緣政治與供應擔憂支撐，維持高檔並強化通膨預期。</div>
+        <div class="chart-card">
+          <div class="chart-head">
+            <div class="chart-title">美元／日圓</div>
+            <div class="chart-direction up">上行</div>
+          </div>
+          <div class="chart-latest">159.08 JPY</div>
+          <div class="chart-change">+0.349｜+0.22%</div>
+          
+    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none">
+      <polyline points="0.0,66.0 86.7,55.3 173.3,56.5 260.0,6.0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      <circle class="spark-dot" cx="0.0" cy="66.0" r="4"><title>2026-05-15｜158.73 JPY</title></circle><circle class="spark-dot" cx="86.7" cy="55.3" r="4"><title>2026-05-17｜158.79 JPY</title></circle><circle class="spark-dot" cx="173.3" cy="56.5" r="4"><title>2026-05-18｜158.79 JPY</title></circle><circle class="spark-dot" cx="260.0" cy="6.0" r="4"><title>2026-05-19｜159.08 JPY</title></circle>
+    </svg>
+    
+          <div class="chart-signal">受美元強勢與利差影響，普遍承壓，需觀察央行是否干預。</div>
+          <div class="chart-footer">來源：YAHOO財經</div>
+        </div>
+        
+
+        <div class="chart-card">
+          <div class="chart-head">
+            <div class="chart-title">美元／台幣</div>
+            <div class="chart-direction up">上行</div>
+          </div>
+          <div class="chart-latest">31.649 TWD</div>
+          <div class="chart-change">+0.089｜+0.28%</div>
+          
+    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none">
+      <polyline points="0.0,66.0 86.7,59.3 173.3,61.3 260.0,6.0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      <circle class="spark-dot" cx="0.0" cy="66.0" r="4"><title>2026-05-15｜31.560 TWD</title></circle><circle class="spark-dot" cx="86.7" cy="59.3" r="4"><title>2026-05-17｜31.570 TWD</title></circle><circle class="spark-dot" cx="173.3" cy="61.3" r="4"><title>2026-05-18｜31.567 TWD</title></circle><circle class="spark-dot" cx="260.0" cy="6.0" r="4"><title>2026-05-19｜31.649 TWD</title></circle>
+    </svg>
+    
+          <div class="chart-signal">受美元強勢與利差影響，普遍承壓，需觀察央行是否干預。</div>
+          <div class="chart-footer">來源：YAHOO財經</div>
+        </div>
+        
+
+        <div class="chart-card">
+          <div class="chart-head">
+            <div class="chart-title">美元／韓元</div>
+            <div class="chart-direction up">上行</div>
+          </div>
+          <div class="chart-latest">1,506.8 KRW</div>
+          <div class="chart-change">+9.060｜+0.60%</div>
+          
+    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none">
+      <polyline points="0.0,35.3 86.7,34.8 173.3,66.0 260.0,6.0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+      <circle class="spark-dot" cx="0.0" cy="35.3" r="4"><title>2026-05-15｜1,497.8 KRW</title></circle><circle class="spark-dot" cx="86.7" cy="34.8" r="4"><title>2026-05-17｜1,497.9 KRW</title></circle><circle class="spark-dot" cx="173.3" cy="66.0" r="4"><title>2026-05-18｜1,488.3 KRW</title></circle><circle class="spark-dot" cx="260.0" cy="6.0" r="4"><title>2026-05-19｜1,506.8 KRW</title></circle>
+    </svg>
+    
+          <div class="chart-signal">受美元強勢與利差影響，普遍承壓，需觀察央行是否干預。</div>
+          <div class="chart-footer">來源：YAHOO財經</div>
         </div>
         </div>
   </section>
 
   <section class="section">
     <h2>修正因子 / 待觀察</h2>
-    <ul><li>房市數據疲軟非單純雜訊，已轉變為影響美元走勢的關鍵變數，顯示市場對硬著陸風險的敏感度提升。</li>
-<li>Fed官員對殖利率飆升的明確政策轉向表態</li>
-<li>亞洲央行針對貨幣貶值的具體干預行動</li></ul>
+    <ul><li>5月18日房市數據疲軟引發成長放緩擔憂，導致美元短暫走弱，屬修正雜訊。</li>
+<li>勞動力市場數據是否惡化以確認衰退風險</li>
+<li>亞洲央行具體的干預行動</li></ul>
   </section>
 
   <section class="section">
     <h2>本週新聞佐證</h2>
     <div class="news-grid">
-        <a class="news-card" href="https://news.google.com/rss/articles/CBMiWkFVX3lxTFA5dFFsLXVVQ3RFajdmNXZVWHlLbUs3R2JRR3pkZGRxZ0NXTVlCSnl5QU9KY182LU5MVnRCOGUzQkRFSEdfRklOdkVlSGoxR0tFM1NnVk9mVHAtZw?oc=5" target="_blank" rel="noopener noreferrer">
+        <a class="news-card" href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE5QVDQ2aWhTNDBYTjVMLW1MVlVBLU5sQ1JPbFRKREl0Vk1yMFVCenkxUWJuamtLLXlVdVdmMkxLZHFUUWxjSFJZclg1dGo4Q0k?oc=5" target="_blank" rel="noopener noreferrer">
+          <div class="news-source">鉅亨網</div>
+          <div class="news-title">30年期美債殖利率衝破5.2%創19年新高！華爾街警告5.5%恐成下一目標</div>
+          <div class="news-why">反映債市拋售壓力已達極端水準，對全球資產定價構成壓力。</div>
+        </a>
+        
+
+        <a class="news-card" href="https://news.google.com/rss/articles/CBMiWkFVX3lxTE1KalF4bE9HRVhKWEFVa2RZam9BU1ZDS01BejZNV0RpZmZicmlyYVNTOVR0U0V3V0E0OWtkckRLVUZKd09iMUh4cVBTVzJTZWNKVkhuQld1NWtYUdIBX0FVX3lxTE5KTGpDUVduVi1oQVZoa3JabENaSW45VGRTWi1ISTJSQzlCdkJYU1psSmgyT0psbE5OcW9rVW9RS3BpYmN2ZEdwMDVLaXFhdE0tWWMwQjA4YUU1MXROektJ?oc=5" target="_blank" rel="noopener noreferrer">
           <div class="news-source">經濟日報</div>
-          <div class="news-title">美債殖利率逼近2007年高點 投資人擔心錯過高收益、又怕更大拋售</div>
-          <div class="news-why">明確指出長債殖利率已成為市場風險溢價的核心，反映投資人對高利率新常態的恐慌與定價。</div>
+          <div class="news-title">美元指數衝破99 新台幣連4貶、週線翻黑</div>
+          <div class="news-why">具體呈現美元強勢對亞洲貨幣的直接衝擊。</div>
         </a>
-        
-
-        <a class="news-card" href="https://news.google.com/rss/articles/CBMiT0FVX3lxTFBMYkowVTQ1U0dLOW4tVjl5dFRRR0hJbVNWLWY1bng5OVk4TFR3MXdLNFF2Wkp1NGRadDBvRjBySU4tWHRXa2xDajRlZGl2S3M?oc=5" target="_blank" rel="noopener noreferrer">
-          <div class="news-source">news.cnyes.com</div>
-          <div class="news-title">〈貴金屬盤後〉美元美債殖利率雙升 金價下挫逾1%</div>
-          <div class="news-why">驗證了總經傳導鏈中，高利率對黃金的壓抑作用，確認資產間的連動關係。</div>
-        </a>
-        </div>
-  </section>
-
-  <section class="section">
-    <h2>本週核心走勢圖</h2>
-    <div class="charts">
-        <div class="chart-card">
-          <div class="chart-head">
-            <div>
-              <div class="chart-title">美國10年期公債殖利率</div>
-              <div class="chart-range">2026-05-15 ～ 2026-05-19</div>
-            </div>
-            <div class="chart-direction up">上行</div>
-          </div>
-          <div class="chart-latest">4.667 %</div>
-          <div class="chart-change">+0.072｜+1.57%</div>
-          
-    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none" aria-hidden="true">
-      <polyline points="0.0,66.0 130.0,42.7 260.0,6.0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-    
-          <div class="chart-meta">資料點：3</div>
-        </div>
-        
-
-        <div class="chart-card">
-          <div class="chart-head">
-            <div>
-              <div class="chart-title">美元指數</div>
-              <div class="chart-range">2026-05-15 ～ 2026-05-19</div>
-            </div>
-            <div class="chart-direction up">上行</div>
-          </div>
-          <div class="chart-latest">99.308</div>
-          <div class="chart-change">+0.038｜+0.04%</div>
-          
-    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none" aria-hidden="true">
-      <polyline points="0.0,12.4 86.7,11.1 173.3,66.0 260.0,6.0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-    
-          <div class="chart-meta">資料點：4</div>
-        </div>
-        
-
-        <div class="chart-card">
-          <div class="chart-head">
-            <div>
-              <div class="chart-title">黃金</div>
-              <div class="chart-range">2026-05-15 ～ 2026-05-19</div>
-            </div>
-            <div class="chart-direction down">下行</div>
-          </div>
-          <div class="chart-latest">4,480.9 USD/oz</div>
-          <div class="chart-change">-74.900｜-1.64%</div>
-          
-    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none" aria-hidden="true">
-      <polyline points="0.0,19.3 86.7,21.2 173.3,6.0 260.0,66.0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-    
-          <div class="chart-meta">資料點：4</div>
-        </div>
-        
-
-        <div class="chart-card">
-          <div class="chart-head">
-            <div>
-              <div class="chart-title">西德州原油</div>
-              <div class="chart-range">2026-05-15 ～ 2026-05-19</div>
-            </div>
-            <div class="chart-direction down">下行</div>
-          </div>
-          <div class="chart-latest">104.34 USD/bbl</div>
-          <div class="chart-change">-1.080｜-1.02%</div>
-          
-    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none" aria-hidden="true">
-      <polyline points="0.0,6.0 86.7,66.0 173.3,64.7 260.0,26.6" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-    
-          <div class="chart-meta">資料點：4</div>
-        </div>
-        
-
-        <div class="chart-card">
-          <div class="chart-head">
-            <div>
-              <div class="chart-title">布蘭特原油</div>
-              <div class="chart-range">2026-05-15 ～ 2026-05-19</div>
-            </div>
-            <div class="chart-direction up">上行</div>
-          </div>
-          <div class="chart-latest">111.23 USD/bbl</div>
-          <div class="chart-change">+1.970｜+1.80%</div>
-          
-    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none" aria-hidden="true">
-      <polyline points="0.0,59.2 86.7,26.5 173.3,66.0 260.0,6.0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-    
-          <div class="chart-meta">資料點：4</div>
-        </div>
-        
-
-        <div class="chart-card">
-          <div class="chart-head">
-            <div>
-              <div class="chart-title">美元／日圓</div>
-              <div class="chart-range">2026-05-15 ～ 2026-05-19</div>
-            </div>
-            <div class="chart-direction up">上行</div>
-          </div>
-          <div class="chart-latest">159.08 JPY</div>
-          <div class="chart-change">+0.349｜+0.22%</div>
-          
-    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none" aria-hidden="true">
-      <polyline points="0.0,66.0 86.7,55.3 173.3,56.5 260.0,6.0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-    
-          <div class="chart-meta">資料點：4</div>
-        </div>
-        
-
-        <div class="chart-card">
-          <div class="chart-head">
-            <div>
-              <div class="chart-title">美元／台幣</div>
-              <div class="chart-range">2026-05-15 ～ 2026-05-19</div>
-            </div>
-            <div class="chart-direction up">上行</div>
-          </div>
-          <div class="chart-latest">31.649 TWD</div>
-          <div class="chart-change">+0.089｜+0.28%</div>
-          
-    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none" aria-hidden="true">
-      <polyline points="0.0,66.0 86.7,59.3 173.3,61.3 260.0,6.0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-    
-          <div class="chart-meta">資料點：4</div>
-        </div>
-        
-
-        <div class="chart-card">
-          <div class="chart-head">
-            <div>
-              <div class="chart-title">美元／韓元</div>
-              <div class="chart-range">2026-05-15 ～ 2026-05-19</div>
-            </div>
-            <div class="chart-direction up">上行</div>
-          </div>
-          <div class="chart-latest">1,506.8 KRW</div>
-          <div class="chart-change">+9.060｜+0.60%</div>
-          
-    <svg class="sparkline" viewBox="0 0 260 72" preserveAspectRatio="none" aria-hidden="true">
-      <polyline points="0.0,35.3 86.7,34.8 173.3,66.0 260.0,6.0" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-    </svg>
-    
-          <div class="chart-meta">資料點：4</div>
-        </div>
         </div>
   </section>
 
@@ -358,15 +308,15 @@ ul { margin:0; padding-left:22px; }
     <div class="two-col">
       <div>
         <h3>關鍵問題</h3>
-        <ul><li>美債30年期殖利率是否突破5.5%？</li>
-<li>勞動力市場數據是否確認經濟放緩？</li>
-<li>亞洲央行是否採取干預措施？</li></ul>
+        <ul><li>30年期美債殖利率是否測試5.5%關卡？</li>
+<li>勞動力市場數據是否會引發衰退擔憂？</li>
+<li>亞洲央行是否採取實質干預措施？</li></ul>
       </div>
       <div>
         <h3>主要佐證</h3>
-        <ul><li>30年期美債殖利率突破5.1%創下新高</li>
-<li>美國房市數據下滑顯示成長降溫風險</li>
-<li>美元指數與美債殖利率在週中出現脫鉤</li></ul>
+        <ul><li>30年期美債殖利率突破5.1%並逼近2007年高點</li>
+<li>美元指數一度衝破99關卡</li>
+<li>市場對Fed降息預期轉向，甚至討論升息</li></ul>
       </div>
     </div>
   </section>
@@ -376,49 +326,49 @@ ul { margin:0; padding-left:22px; }
     <div class="slides">
         <div class="slide-card">
           <div class="slide-id">scene_01</div>
-          <div class="slide-title">再通膨定價的開端</div>
-          <div class="slide-question">為何市場本週全力交易高利率？</div>
-          <div class="slide-point">再通膨預期與油價高檔，推升美債殖利率，封鎖降息空間。</div>
+          <div class="slide-title">再通膨預期重燃</div>
+          <div class="slide-question">為何市場定價出現劇烈轉向？</div>
+          <div class="slide-point">再通膨預期封鎖降息空間，長債殖利率飆升成為市場核心。</div>
         </div>
         
 
         <div class="slide-card">
           <div class="slide-id">scene_02</div>
-          <div class="slide-title">長債殖利率的衝擊</div>
-          <div class="slide-question">殖利率飆升如何影響全球？</div>
-          <div class="slide-point">30年期美債殖利率逼近2007年高點，重塑全球無風險利率基準。</div>
+          <div class="slide-title">債市拋售壓力</div>
+          <div class="slide-question">債市拋售是否已達極端？</div>
+          <div class="slide-point">30年期美債殖利率突破5.1%，華爾街關注5.5%心理關卡。</div>
         </div>
         
 
         <div class="slide-card">
           <div class="slide-id">scene_03</div>
-          <div class="slide-title">美元與亞幣的傳導</div>
-          <div class="slide-question">強勢美元如何壓抑非美資產？</div>
-          <div class="slide-point">利差優勢驅動美元走強，導致亞洲貨幣普遍承壓。</div>
+          <div class="slide-title">美元利差優勢</div>
+          <div class="slide-question">美元強勢如何影響全球？</div>
+          <div class="slide-point">利差優勢支撐美元，壓抑亞洲貨幣與黃金表現。</div>
         </div>
         
 
         <div class="slide-card">
           <div class="slide-id">scene_04</div>
-          <div class="slide-title">成長降溫的修正因子</div>
-          <div class="slide-question">房市數據為何成為關鍵變數？</div>
-          <div class="slide-point">房市疲軟引發成長放緩擔憂，美元避險屬性與利差驅動出現拉鋸。</div>
+          <div class="slide-title">成長放緩雜訊</div>
+          <div class="slide-question">房市數據是否改變主線？</div>
+          <div class="slide-point">房市數據疲軟僅為短暫修正因子，尚未扭轉高利率主線。</div>
         </div>
         
 
         <div class="slide-card">
           <div class="slide-id">scene_05</div>
-          <div class="slide-title">資產間的動態平衡</div>
-          <div class="slide-question">黃金與避險資產的反應？</div>
-          <div class="slide-point">高利率壓抑金價，但成長擔憂引發避險資金流入。</div>
+          <div class="slide-title">資產傳導鏈條</div>
+          <div class="slide-question">傳導鏈是否依然連貫？</div>
+          <div class="slide-point">通膨預期 -&gt; 利率上行 -&gt; 美元強勢，鏈條高度連貫。</div>
         </div>
         
 
         <div class="slide-card">
           <div class="slide-id">scene_06</div>
           <div class="slide-title">下週觀察重點</div>
-          <div class="slide-question">市場下一步如何定價？</div>
-          <div class="slide-point">聚焦勞動力數據與Fed政策路徑，驗證經濟是否硬著陸。</div>
+          <div class="slide-question">市場下一步將關注什麼？</div>
+          <div class="slide-point">關注債市拋售風險、勞動力市場數據及央行干預態度。</div>
         </div>
         </div>
   </section>
