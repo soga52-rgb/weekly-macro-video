@@ -169,7 +169,7 @@ Source content:
 - Market transmission: {source.get("market_transmission")}
 - Revision factor: {source.get("revision_or_noise")}
 - Story end: {source.get("story_end")}
-- Macro variables: {json.dumps(source.get("macro_variables", {{}}), ensure_ascii=False)}
+- Macro variables: {json.dumps(source.get("macro_variables", {}), ensure_ascii=False)}
 - Evidence: {json.dumps(source.get("evidence", []), ensure_ascii=False)}
 - News theme: {source.get("news_theme")}
 - News confirming signals: {json.dumps(source.get("news_confirming_signals", []), ensure_ascii=False)}
