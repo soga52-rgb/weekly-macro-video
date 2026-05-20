@@ -13,6 +13,7 @@ jobs:
 
     env:
       WEEKLY_SOURCE_URL: ${{ secrets.WEEKLY_SOURCE_URL }}
+      WEEKLY_MARKET_SERIES_URL: ${{ secrets.WEEKLY_MARKET_SERIES_URL }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_MODEL: gemini-3.1-flash-lite
       GEMINI_IMAGE_MODEL: gemini-3.1-flash-image-preview
@@ -30,6 +31,10 @@ jobs:
       - name: Fetch weekly source from Apps Script
         run: |
           python scripts/00_fetch_weekly_source_from_apps_script.py
+
+      - name: Fetch weekly market series from Apps Script
+        run: |
+          python scripts/00_fetch_weekly_market_series.py
 
       - name: Build weekly news context
         run: |
@@ -56,7 +61,7 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add data/weekly_video_source.json data/weekly_news_raw.json output/weekly/
+          git add data/weekly_video_source.json data/weekly_news_raw.json data/weekly_market_series.json output/weekly/
 
           if git diff --cached --quiet; then
             echo "No changes to commit."
