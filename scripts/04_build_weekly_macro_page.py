@@ -6,20 +6,19 @@ Weekly Macro Summary Page - Step 04
 Build weekly macro summary web page.
 
 Page order:
-1. Weekly macro transmission diagram image
+1. Macro transmission diagram image
 2. Executive Summary
 3. Weekly market signals
 4. Revision factors / watch items
 5. Weekly news evidence
-6. Next week watch
-7. Video / card draft
-
-Trend charts are intentionally not included in this first page version.
-They can be added later after confirming endpoint data format.
+6. Weekly core trend charts
+7. Next week watch
+8. Video / card draft
 """
 
 import json
 import html
+import math
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List
@@ -157,6 +156,102 @@ def render_news(news_context: Dict[str, Any]) -> str:
     return "\n".join(rows)
 
 
+def fmt_number(value: float, unit: str = "") -> str:
+    if abs(value) >= 1000:
+        text = f"{value:,.1f}"
+    elif abs(value) >= 100:
+        text = f"{value:.2f}"
+    else:
+        text = f"{value:.3f}"
+    return f"{text} {unit}".strip()
+
+
+def sparkline_svg(values: List[float]) -> str:
+    if len(values) < 2:
+        return '<div class="chart-empty">資料點不足</div>'
+
+    width = 260
+    height = 72
+    min_v = min(values)
+    max_v = max(values)
+    span = max(max_v - min_v, 1e-9)
+
+    points = []
+    for i, value in enumerate(values):
+        x = (i / (len(values) - 1)) * width
+        y = height - ((value - min_v) / span) * (height - 12) - 6
+        points.append(f"{x:.1f},{y:.1f}")
+
+    return f"""
+    <svg class="sparkline" viewBox="0 0 {width} {height}" preserveAspectRatio="none" aria-hidden="true">
+      <polyline points="{' '.join(points)}" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+    """
+
+
+def render_market_charts(market: Dict[str, Any]) -> str:
+    series = market.get("series") or []
+    if not isinstance(series, list) or not series:
+        return '<div class="muted-box">目前尚未匯入本週市場走勢資料。</div>'
+
+    preferred_order = ["US10Y", "DXY", "Gold", "WTI", "Brent", "USDJPY", "USDTWD", "USDKRW"]
+    series_sorted = sorted(
+        [s for s in series if isinstance(s, dict)],
+        key=lambda s: preferred_order.index(s.get("asset_key")) if s.get("asset_key") in preferred_order else 999
+    )
+
+    cards = []
+    for item in series_sorted[:8]:
+        asset = first_non_empty(item.get("asset"), item.get("asset_key"), "未命名資產")
+        unit = first_non_empty(item.get("unit"), "")
+        points = item.get("points") or []
+
+        clean_points = []
+        for point in points:
+            if not isinstance(point, dict):
+                continue
+            try:
+                value = float(point.get("value"))
+            except (TypeError, ValueError):
+                continue
+            if math.isfinite(value):
+                clean_points.append({"date": str(point.get("date") or ""), "value": value})
+
+        if not clean_points:
+            continue
+
+        values = [p["value"] for p in clean_points]
+        first_value = values[0]
+        latest_value = values[-1]
+        change = latest_value - first_value
+        pct = (change / first_value * 100) if first_value else 0.0
+
+        direction = "up" if change > 0 else "down" if change < 0 else "flat"
+        direction_text = "上行" if direction == "up" else "下行" if direction == "down" else "持平"
+        change_sign = "+" if change > 0 else ""
+
+        start_date = clean_points[0]["date"]
+        end_date = clean_points[-1]["date"]
+
+        cards.append(f"""
+        <div class="chart-card">
+          <div class="chart-head">
+            <div>
+              <div class="chart-title">{esc(asset)}</div>
+              <div class="chart-range">{esc(start_date)} ～ {esc(end_date)}</div>
+            </div>
+            <div class="chart-direction {direction}">{esc(direction_text)}</div>
+          </div>
+          <div class="chart-latest">{esc(fmt_number(latest_value, unit))}</div>
+          <div class="chart-change">{esc(change_sign)}{change:.3f}｜{change_sign}{pct:.2f}%</div>
+          {sparkline_svg(values)}
+          <div class="chart-meta">資料點：{len(clean_points)}</div>
+        </div>
+        """)
+
+    return "\n".join(cards) if cards else '<div class="muted-box">市場走勢資料格式無法繪圖。</div>'
+
+
 def render_scene_cards(forest: Dict[str, Any]) -> str:
     scenes = get_nested(forest, "video_planning", "six_scene_outline") or []
     if not scenes:
@@ -177,28 +272,35 @@ def render_scene_cards(forest: Dict[str, Any]) -> str:
     return "\n".join(cards)
 
 
-def build_html(week_dir: Path, forest: Dict[str, Any], news_context: Dict[str, Any]) -> str:
+def build_html(week_dir: Path, forest: Dict[str, Any], news_context: Dict[str, Any], market: Dict[str, Any]) -> str:
     summary = forest.get("forest_summary") or {}
     storyline = forest.get("macro_storyline") or {}
     evidence = forest.get("evidence") or {}
     video = forest.get("video_planning") or {}
 
-    week_label = first_non_empty(get_nested(forest, "meta", "week_range"), "資料週期待確認")
+    week_label = first_non_empty(
+        get_nested(forest, "meta", "week_range"),
+        f"{get_nested(market, 'meta', 'range', 'start') or ''} ～ {get_nested(market, 'meta', 'range', 'end') or ''}".strip(" ～"),
+        "資料週期待確認",
+    )
     generated_at = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
-    title = first_non_empty(video.get("suggested_video_title"), summary.get("weekly_main_theme"), "本週總經摘要")
-    headline = first_non_empty(summary.get("weekly_main_theme"), title)
+
+    page_title = "本週總經摘要"
+    title = page_title
+    headline = first_non_empty(summary.get("weekly_main_theme"), video.get("suggested_video_title"), page_title)
     verdict = first_non_empty(summary.get("one_sentence_verdict"), summary.get("narrative_arc"), "資料不足，待觀察")
     main_question = first_non_empty(summary.get("main_question"), "下週市場將驗證哪些總經訊號？")
 
     diagram_exists = (week_dir / "weekly_macro_diagram.png").exists()
     diagram_html = (
-        '<img class="diagram-img" src="weekly_macro_diagram.png" alt="本週總經傳導圖解">'
+        '<img class="diagram-img" src="weekly_macro_diagram.png" alt="總經傳導圖解">'
         if diagram_exists
-        else '<div class="muted-box">本週總經傳導圖解尚未產生。</div>'
+        else '<div class="muted-box">總經傳導圖解尚未產生。</div>'
     )
 
     signal_cards_html = render_signal_cards(build_signal_cards(forest))
     news_html = render_news(news_context)
+    charts_html = render_market_charts(market)
     scenes_html = render_scene_cards(forest)
 
     revision_items = render_list([
@@ -223,7 +325,6 @@ def build_html(week_dir: Path, forest: Dict[str, Any], news_context: Dict[str, A
   --muted:#6b7280;
   --line:#e5e0d5;
   --accent:#f59e0b;
-  --accent-soft:#fff3d1;
   --shadow:0 18px 45px rgba(31,41,55,.07);
   --radius:22px;
 }}
@@ -265,9 +366,9 @@ body {{
 .summary-grid {{ display:grid; grid-template-columns:1.1fr .9fr; gap:16px; }}
 .big-text {{ font-size:20px; font-weight:750; }}
 .question {{ background:#fff7ed; border:1px solid #fed7aa; border-radius:16px; padding:16px; color:#7c2d12; font-weight:800; }}
-.signals {{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }}
-.signal-card,.slide-card,.news-card {{
-  background:var(--card);
+.signals,.charts {{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }}
+.signal-card,.slide-card,.news-card,.chart-card {{
+  background:#fff;
   border:1px solid var(--line);
   border-radius:18px;
   padding:16px;
@@ -285,6 +386,15 @@ ul {{ margin:0; padding-left:22px; }}
 .news-source {{ color:#9a6200; font-size:13px; font-weight:850; margin-bottom:6px; }}
 .news-title {{ font-weight:900; margin-bottom:8px; }}
 .news-why {{ color:#4b5563; font-size:14px; }}
+.chart-head {{ display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }}
+.chart-title {{ font-weight:900; font-size:16px; }}
+.chart-range,.chart-meta,.chart-change {{ color:var(--muted); font-size:13px; }}
+.chart-latest {{ font-size:28px; font-weight:900; margin-top:10px; }}
+.chart-direction {{ font-size:13px; font-weight:900; border-radius:999px; padding:4px 10px; background:#f3f4f6; white-space:nowrap; }}
+.chart-direction.up {{ color:#b91c1c; background:#fee2e2; }}
+.chart-direction.down {{ color:#047857; background:#d1fae5; }}
+.chart-direction.flat {{ color:#4b5563; background:#f3f4f6; }}
+.sparkline {{ width:100%; height:72px; color:#334155; margin:10px 0 6px; }}
 .slides {{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }}
 .slide-id {{ color:#9a6200; font-size:12px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }}
 .slide-title {{ font-size:18px; font-weight:900; margin:4px 0; }}
@@ -295,7 +405,7 @@ ul {{ margin:0; padding-left:22px; }}
 @media(max-width:900px) {{
   .header,.summary-grid,.two-col {{ display:block; }}
   .meta {{ text-align:left; margin-top:10px; }}
-  .signals,.slides,.news-grid {{ grid-template-columns:1fr; }}
+  .signals,.slides,.news-grid,.charts {{ grid-template-columns:1fr; }}
   .title {{ font-size:30px; }}
 }}
 </style>
@@ -315,7 +425,7 @@ ul {{ margin:0; padding-left:22px; }}
   </header>
 
   <section class="section hero">
-    <h2>本週總經傳導圖解</h2>
+    <h2>總經傳導圖解</h2>
     {diagram_html}
   </section>
 
@@ -344,6 +454,11 @@ ul {{ margin:0; padding-left:22px; }}
   </section>
 
   <section class="section">
+    <h2>本週核心走勢圖</h2>
+    <div class="charts">{charts_html}</div>
+  </section>
+
+  <section class="section">
     <h2>下週觀察</h2>
     <div class="two-col">
       <div>
@@ -363,7 +478,7 @@ ul {{ margin:0; padding-left:22px; }}
   </section>
 
   <div class="footer">
-    本頁由 weekly_forest_summary.json、weekly_news_context.json 與 weekly_macro_diagram.png 自動產生。內容為總經資訊整理，不構成投資建議。
+    本頁由 weekly_forest_summary.json、weekly_news_context.json、weekly_market_series.json 與 weekly_macro_diagram.png 自動產生。內容為總經資訊整理，不構成投資建議。
   </div>
 </div>
 </body>
@@ -381,11 +496,12 @@ def main() -> None:
 
     forest = load_json(week_dir / "weekly_forest_summary.json", {})
     news_context = load_json(week_dir / "weekly_news_context.json", {})
+    market = load_json(week_dir / "weekly_market_series.json", {})
 
     if not forest:
         raise FileNotFoundError(f"Missing or empty weekly_forest_summary.json in {week_dir}")
 
-    html_text = build_html(week_dir, forest, news_context)
+    html_text = build_html(week_dir, forest, news_context, market)
     out_path = week_dir / "index.html"
     save_text(out_path, html_text)
 
