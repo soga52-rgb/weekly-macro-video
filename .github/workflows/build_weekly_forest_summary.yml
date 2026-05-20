@@ -9,12 +9,13 @@ permissions:
 jobs:
   build-weekly-forest-summary:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
 
     env:
       WEEKLY_SOURCE_URL: ${{ secrets.WEEKLY_SOURCE_URL }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_MODEL: gemini-3.5-flash
+      WEEKLY_NEWS_MAX_ITEMS: "30"
 
     steps:
       - name: Checkout repository
@@ -29,6 +30,10 @@ jobs:
         run: |
           python scripts/00_fetch_weekly_source_from_apps_script.py
 
+      - name: Build weekly news context
+        run: |
+          python scripts/00_fetch_weekly_news_context.py
+
       - name: Generate weekly forest summary
         run: |
           python scripts/01_generate_weekly_forest_summary.py
@@ -38,7 +43,7 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add data/weekly_video_source.json output/weekly/
+          git add data/weekly_video_source.json data/weekly_news_raw.json output/weekly/
 
           if git diff --cached --quiet; then
             echo "No changes to commit."
