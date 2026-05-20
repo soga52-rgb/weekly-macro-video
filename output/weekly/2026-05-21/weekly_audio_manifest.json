@@ -3,44 +3,56 @@
     {
       "scene_id": "scene_01",
       "text_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/narration/scene_01.txt",
-      "audio_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/scene_01.mp3",
-      "engine": "gTTS",
-      "lang": "zh-tw"
+      "audio_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/scene_01.wav",
+      "engine": "Gemini TTS",
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Kore",
+      "status": "success"
     },
     {
       "scene_id": "scene_02",
       "text_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/narration/scene_02.txt",
-      "audio_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/scene_02.mp3",
-      "engine": "gTTS",
-      "lang": "zh-tw"
+      "audio_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/scene_02.wav",
+      "engine": "Gemini TTS",
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Kore",
+      "status": "success"
     },
     {
       "scene_id": "scene_03",
       "text_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/narration/scene_03.txt",
-      "audio_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/scene_03.mp3",
-      "engine": "gTTS",
-      "lang": "zh-tw"
+      "audio_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/scene_03.wav",
+      "engine": "Gemini TTS",
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Kore",
+      "status": "success"
     },
     {
       "scene_id": "scene_04",
       "text_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/narration/scene_04.txt",
-      "audio_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/scene_04.mp3",
-      "engine": "gTTS",
-      "lang": "zh-tw"
+      "audio_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/scene_04.wav",
+      "engine": "Gemini TTS",
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Kore",
+      "status": "success"
     },
     {
       "scene_id": "scene_05",
       "text_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/narration/scene_05.txt",
-      "audio_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/scene_05.mp3",
-      "engine": "gTTS",
-      "lang": "zh-tw"
+      "audio_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/scene_05.wav",
+      "engine": "Gemini TTS",
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Kore",
+      "status": "success"
     },
     {
       "scene_id": "scene_06",
       "text_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/narration/scene_06.txt",
-      "audio_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/scene_06.mp3",
-      "engine": "gTTS",
-      "lang": "zh-tw"
+      "audio_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/scene_06.wav",
+      "engine": "Gemini TTS",
+      "model": "gemini-3.1-flash-tts-preview",
+      "voice": "Kore",
+      "status": "success"
     }
   ]
 }
