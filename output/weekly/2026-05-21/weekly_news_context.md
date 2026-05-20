@@ -1,43 +1,43 @@
 ## 本週新聞補充
 
 ### 新聞主線
-再通膨與高利率維持更久（Higher for Longer）敘事主導，美債殖利率飆升壓抑非美資產，唯週後期成長放緩疑慮引發短暫脫鉤
+再通膨預期與高利率常態化主導市場，成長放緩疑慮引發資產短暫背離
 
 ### 新聞與每日摘要的關係
 支持
 
 ### 主要總經驅動
-- 再通膨預期與高利率維持更久｜徹底封鎖短期降息空間，推升美債殖利率並壓抑科技股與黃金｜信心：高
-  - 30年期美債殖利率衝破5.1%創下新高
-  - 市場甚至開始定價聯聯準會（Fed）重新轉向升息的可能性
-- 地緣政治與能源價格上行｜強化市場對通膨黏性的預期，加劇債市拋售潮｜信心：高
-  - 荷姆茲海峽重開無望、美伊關係惡化，油價衝破110美元警戒線
-- 經濟成長放緩疑慮｜作為修正因子，在週後期引發市場對經濟硬著陸的擔憂，導致美元與利率走勢脫鉤｜信心：中
-  - 房市數據下滑（如每日摘要Day 2、Day 3所述）
+- 長天期美債殖利率大幅上行反映再通膨定價｜封鎖降息空間，債市面臨拋售壓力，全球風險資產承壓。｜信心：高
+  - 美30年期公債殖利率破5%創19年新高 通膨警報再響
+  - 30年期殖利率連三日站上5% 債市押注Fed或重新轉向升息
+- 強勢美元與利差優勢壓制非美貨幣及黃金｜亞洲貨幣普遍承壓，黃金因持有機會成本上升與強勢美元雙重打擊而下跌。｜信心：高
+  - 美元指數衝破99 新台幣連4貶、週線翻黑
+  - 〈貴金屬盤後〉美元美債殖利率雙升 金價下挫逾1%
+- 地緣政治與能源價格上行強化通膨黏性｜供應端壓力推升通膨預期，延後聯準會降息時程。｜信心：中
+  - 油價衝破110美元 2檔原油ETF應聲暴漲
+  - 川普對伊朗失去耐心 美伊關係又惡化 油價飆逾3%
 
 ### 支撐訊號
-- 30年期美債殖利率突破5.1%創下新高，美債市場遭遇投降式拋售
-- 美元指數衝破99關卡，利差優勢顯著
-- 新台幣連4貶、失守31.5元關卡，日圓及韓元等亞洲貨幣同步承壓
-- 黃金因美元與美債殖利率雙升，單週下跌逾2%
+- 30年期美債殖利率突破5%至5.18%區間，顯示市場對高利率維持更久的預期高度一致。
+- 美元指數突破99關卡，新台幣、日圓等亞洲貨幣同步走弱，驗證高利率至美元再至亞幣的傳導鏈。
+- 黃金價格在美元與殖利率雙升期間單週下跌逾2%，符合高利率環境對無息資產的壓制邏輯。
 
 ### 修正或背離訊號
-- 5月18日（Day 3）出現『殖利率與美元脫鉤』：美債殖利率持續上行至4.62%，但美元指數因房市數據疲軟、成長放緩疑慮而走弱至98.95，黃金與亞幣因避險需求反彈
-- 小摩報告指出黃金牛市未結束，年底看6000美元，與短期高利率壓抑金價的邏輯存在中長線背離
+- 房市數據疲軟引發成長放緩疑慮，在後期導致美元指數回落至98.95，與持續上行的美債殖利率出現短暫背離。
 
 ### 新聞校正
-- 房市數據降溫引發成長放緩疑慮，成為壓低美元的修正因子，使美元未能受惠於利率上行，利差優勢被成長前景擔憂抵銷
+- 修正了單純因利差推升美元的單一因果關係。後期美元走弱顯示，當市場對經濟硬著陸的擔憂超越通膨擔憂時，美元的利差優勢可能被成長前景的疑慮所抵銷。
 
 ### 下週觀察
-- 美國勞動力市場數據與後續PMI，驗證成長降溫是否持續並確認硬著陸風險
-- 聯準會會議紀要及官員對30年期美債殖利率衝破5.1%的表態，是否修正高利率維持更久的定價
-- 亞洲央行（如日本央行、台灣央行）是否針對貨幣貶值進行實質干預
-- 油價是否持續站穩110美元警戒線，加劇再通膨風險
+- 美國後續就業與PMI數據是否進一步確認經濟成長放緩。
+- 聯準會官員對於30年期美債殖利率突破5%的態度，是否釋放重新升息或維持高利率更久的政策指引。
+- 亞洲央行（特別是日本與台灣）是否針對貨幣持續貶值採取實質干預措施。
 
 ### 代表新聞
-- news.cnyes.com｜債市崩潰！30年期美債殖利率衝破5.1% 刷2025年來新高｜確立債市拋售潮與高利率新常態，徹底封鎖短期降息空間，並對全球資產定價造成衝擊。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTE5uQm9Zb0xTY0sxNmNoNHVEU0xVUlg1MUlVZXNZLTFFMlBrRUtHYldUc3ptVkZsN0tIOVRHRWJITUJBYWVVSlkybUNYMy1zbUU?oc=5
-- news.cnyes.com｜〈焦點股〉荷姆茲海峽重開無望？油價衝破110美元 2檔原油ETF應聲暴漲｜地緣政治導致能源價格飆升，是推動再通膨預期與債市拋售的核心燃料。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTFB3a1pWbXV2LWVsRGl3bjFsenl4cmJIUEhKZ2E0Nld0SERyaElZcnJGckhYYnZXREw3VTI4OWFjSWpydllnSUljR0hlWUVVSVE?oc=5
-- 經濟日報｜美元指數衝破99 新台幣連4貶、週線翻黑｜證實強勢美元對亞洲貨幣的實質壓抑，利差優勢導致資金持續流出非美資產。｜https://news.google.com/rss/articles/CBMiWkFVX3lxTE1KalF4bE9HRVhKWEFVa2RZam9BU1ZDS01BejZNV0RpZmZicmlyYVNTOVR0U0V3V0E0OWtkckRLVUZKd09iMUh4cVBTVzJTZWNKVkhuQld1NWtYUdIBX0FVX3lxTE5KTGpDUVduVi1oQVZoa3JabENaSW45VGRTWi1ISTJSQzlCdkJYU1psSmgyT0psbE5OcW9rVW9RS3BpYmN2ZEdwMDVLaXFhdE0tWWMwQjA4YUU1MXROektJ?oc=5
+- 經濟日報｜美30年期公債殖利率破5%創19年新高 通膨警報再響｜確認了長天期美債殖利率突破關鍵心理關卡，奠定整週再通膨定價與高利率維持更久的市場主線。｜https://news.google.com/rss/articles/CBMiWkFVX3lxTE1UX0VrUUpzbm4yZnpVdTJSUHJVMHA4MV9VS0pKakZ3eWVCdXVzVTM4NkhobDR4NGZ2NE53RERodUV3aVZUUGxRdFpUd3B3VFVXVDhxVlpRS1RFQdIBX0FVX3lxTFBIcXhXa2d2WXVtekt4RE1WcWEzdFZpLS1NaHpuSEFVUDFLazg2SVZveGlDZ1VkbnZFUDRLWWU3eDctdDBBaWVSYTFiV3YzQVJFbWdyR1R5ZG0tM0xUaWFn?oc=5
+- 經濟日報｜美元指數衝破99 新台幣連4貶、週線翻黑｜證實美元利差優勢對亞洲貨幣造成的實質匯兌壓力，新台幣與日圓等非美貨幣走勢與主線高度一致。｜https://news.google.com/rss/articles/CBMiWkFVX3lxTE1KalF4bE9HRVhKWEFVa2RZam9BU1ZDS01BejZNV0RpZmZicmlyYVNTOVR0U0V3V0E0OWtkckRLVUZKd09iMUh4cVBTVzJTZWNKVkhuQld1NWtYUdIBX0FVX3lxTE5KTGpDUVduVi1oQVZoa3JabENaSW45VGRTWi1ISTJSQzlCdkJYU1psSmgyT0psbE5OcW9rVW9RS3BpYmN2ZEdwMDVLaXFhdE0tWWMwQjA4YUU1MXROektJ?oc=5
+- 鉅亨網｜〈貴金屬盤後〉金價一周跌逾2% 美債殖利率在通膨升溫疑慮中上揚｜反映黃金在再通膨與高利率環境下的雙重壓力，體現無息資產在利差擴大時的機會成本劣勢。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTFByVEVQQmN1UmkxdVE4MXh6ZG9tWnhlOGM0OVRxcWdSbVNyM1hiTmZBSmpfOElnMEN2MnRKYWZYUlViN2drVUJVWnpiZVhISlE?oc=5
+- 鉅亨網｜〈焦點股〉荷姆茲海峽重開無望？油價衝破110美元 2檔原油ETF應聲暴漲｜地緣政治導致的能源價格上行，是支撐再通膨預期與美債殖利率居高不下的關鍵實體經濟驅動因子。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTFB3a1pWbXV2LWVsRGl3bjFsenl4cmJIUEhKZ2E0Nld0SERyaElZcnJGckhYYnZXREw3VTI4OWFjSWpydllnSUljR0hlWUVVSVE?oc=5
 
 ### 給 Forest Summary 的編輯提示
-本週市場核心在於『再通膨定價』。30年期美債殖利率衝破5.1%創下新高，加上地緣政治推升油價至110美元，使市場甚至開始定價Fed重新升息的可能性。雖然週後期房市疲軟帶來成長放緩疑慮，導致美元與殖利率短暫脫鉤、亞幣與黃金反彈，但這僅屬修正因子，並未動搖高利率維持更久的宏觀主線。下週應密切關注Fed會議紀要與就業數據，以驗證成長放緩是否會進一步削弱美元的利差優勢。
+本週市場的核心衝突在於「通膨黏性」與「成長放緩」的拉鋸。前半週市場全力交易再通膨，美債殖利率與美元共振走強，壓制亞幣與黃金；後半週房市數據疲軟成為關鍵修正因子，引發市場對硬著陸的擔憂，導致「殖利率上行、美元走弱、黃金反彈」的背離表現。這顯示高利率維持更久的敘事雖未動搖，但市場對經濟增長承壓的敏感度已顯著提高。
