@@ -7,13 +7,18 @@ Build weekly macro summary web page.
 
 Page order:
 1. Macro transmission diagram image
-2. Executive Summary
-3. Weekly market signals
-4. Revision factors / watch items
-5. Weekly news evidence
-6. Weekly core trend charts
-7. Next week watch
-8. Video / card draft
+2. 重點摘要
+3. 本週市場訊號與走勢
+4. 修正因子 / 待觀察
+5. 本週新聞佐證
+6. 下週觀察
+7. 週報影片 / 圖卡草稿
+
+Design:
+- Unified Apple/iOS widget-inspired glassmorphism style.
+- Warm neutral palette: off-white, white, deep gray, amber accent.
+- News evidence grouped into: 通膨預期 / 利率 / 貨幣 / 其他.
+- Market signals and trend charts merged into one card section.
 """
 
 import json
@@ -99,40 +104,6 @@ def render_list(items: Any, empty: str = "資料不足，待觀察") -> str:
     return "\n".join(rows)
 
 
-def build_signal_cards(forest: Dict[str, Any]) -> List[Dict[str, str]]:
-    variables = forest.get("macro_variables") or {}
-    mapping = [
-        ("通膨", "inflation_view", "🧭"),
-        ("利率", "rate_view", "🏦"),
-        ("美元", "dollar_fx_view", "💵"),
-        ("亞幣", "asia_fx_view", "🌏"),
-        ("黃金", "gold_view", "🟡"),
-        ("能源", "energy_view", "🛢️"),
-    ]
-
-    cards = []
-    for label, key, icon in mapping:
-        cards.append({
-            "label": label,
-            "icon": icon,
-            "text": str(variables.get(key, "") or "資料不足，待觀察").strip(),
-        })
-    return cards
-
-
-def render_signal_cards(cards: List[Dict[str, str]]) -> str:
-    return "\n".join(
-        f"""
-        <div class="signal-card">
-          <div class="signal-icon">{esc(card['icon'])}</div>
-          <div class="signal-label">{esc(card['label'])}</div>
-          <div class="signal-text">{esc(card['text'])}</div>
-        </div>
-        """
-        for card in cards
-    )
-
-
 def build_asset_signal_map(forest: Dict[str, Any]) -> Dict[str, str]:
     variables = forest.get("macro_variables") or {}
     return {
@@ -147,10 +118,56 @@ def build_asset_signal_map(forest: Dict[str, Any]) -> Dict[str, str]:
     }
 
 
-def source_label_from_market(market: Dict[str, Any]) -> str:
-    # The endpoint uses Yahoo numeric data; keep the page label clean and user-facing.
+def source_label_from_market(_: Dict[str, Any]) -> str:
     return "YAHOO財經"
 
+
+def classify_news_item(item: Dict[str, Any]) -> str:
+    text_blob = " ".join([
+        str(item.get("theme") or ""),
+        str(item.get("title") or ""),
+        str(item.get("why_it_matters") or ""),
+        str(item.get("source") or ""),
+    ]).lower()
+
+    inflation_keywords = [
+        "通膨", "再通膨", "物價", "cpi", "ppi", "油價", "原油", "能源",
+        "inflation", "reflation", "oil", "energy", "wti", "brent"
+    ]
+    rate_keywords = [
+        "利率", "殖利率", "美債", "公債", "fed", "聯準會", "升息", "降息",
+        "債市", "長債", "yield", "treasury", "rate", "bond"
+    ]
+    currency_keywords = [
+        "美元", "匯率", "亞幣", "新台幣", "台幣", "日圓", "韓元", "人民幣",
+        "dxy", "currency", "dollar", "yen", "twd", "krw", "cny"
+    ]
+
+    if any(keyword.lower() in text_blob for keyword in inflation_keywords):
+        return "通膨預期"
+    if any(keyword.lower() in text_blob for keyword in rate_keywords):
+        return "利率"
+    if any(keyword.lower() in text_blob for keyword in currency_keywords):
+        return "貨幣"
+    return "其他"
+
+
+def render_news_card(item: Dict[str, Any]) -> str:
+    title = first_non_empty(item.get("title"), "未命名新聞")
+    source = first_non_empty(item.get("source"), "News")
+    why = first_non_empty(item.get("why_it_matters"), item.get("theme"), "")
+    url = first_non_empty(item.get("url"), "#")
+
+    return f"""
+    <a class="news-mini-card" href="{esc(url)}" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">{esc(source)}</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">{esc(title)}</div>
+      <div class="news-why">{esc(why)}</div>
+    </a>
+    """
 
 
 def render_news(news_context: Dict[str, Any]) -> str:
@@ -158,22 +175,47 @@ def render_news(news_context: Dict[str, Any]) -> str:
     if not top_news:
         return '<div class="muted-box">本週新聞補充資料不足，待觀察。</div>'
 
-    rows = []
-    for item in top_news[:5]:
+    groups = {
+        "通膨預期": [],
+        "利率": [],
+        "貨幣": [],
+        "其他": [],
+    }
+
+    for item in top_news:
         if not isinstance(item, dict):
             continue
-        title = first_non_empty(item.get("title"), "未命名新聞")
-        source = first_non_empty(item.get("source"), "News")
-        why = first_non_empty(item.get("why_it_matters"), item.get("theme"), "")
-        url = first_non_empty(item.get("url"), "#")
-        rows.append(f"""
-        <a class="news-card" href="{esc(url)}" target="_blank" rel="noopener noreferrer">
-          <div class="news-source">{esc(source)}</div>
-          <div class="news-title">{esc(title)}</div>
-          <div class="news-why">{esc(why)}</div>
-        </a>
+        category = classify_news_item(item)
+        groups.setdefault(category, []).append(item)
+
+    category_descriptions = {
+        "通膨預期": "油價、能源、物價與再通膨訊號",
+        "利率": "美債殖利率、Fed 與高利率定價",
+        "貨幣": "美元、亞洲貨幣與資金流向壓力",
+        "其他": "補充其他可能影響主線的事件",
+    }
+
+    sections = []
+    for category in ["通膨預期", "利率", "貨幣", "其他"]:
+        items = groups.get(category, [])
+        if items:
+            cards = "\n".join(render_news_card(item) for item in items[:4])
+        else:
+            cards = '<div class="muted-box compact">本週暫無明確新聞佐證。</div>'
+
+        sections.append(f"""
+        <div class="news-category">
+          <div class="news-category-head">
+            <div class="category-pill">{esc(category)}</div>
+            <div class="news-category-desc">{esc(category_descriptions[category])}</div>
+          </div>
+          <div class="news-category-cards">
+            {cards}
+          </div>
+        </div>
         """)
-    return "\n".join(rows)
+
+    return "\n".join(sections)
 
 
 def fmt_number(value: float, unit: str = "") -> str:
@@ -191,8 +233,14 @@ def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
         return '<div class="chart-empty">資料不足</div>'
 
     values = [float(p["value"]) for p in points_data]
-    width = 260
-    height = 72
+
+    width = 280
+    height = 92
+    pad_x = 14
+    pad_y = 14
+    chart_w = width - pad_x * 2
+    chart_h = height - pad_y * 2
+
     min_v = min(values)
     max_v = max(values)
     span = max(max_v - min_v, 1e-9)
@@ -202,20 +250,25 @@ def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
     for i, point in enumerate(points_data):
         value = float(point["value"])
         date = str(point.get("date") or "")
-        x = (i / (len(points_data) - 1)) * width
-        y = height - ((value - min_v) / span) * (height - 12) - 6
+
+        x = pad_x + (i / (len(points_data) - 1)) * chart_w
+        y = pad_y + (1 - ((value - min_v) / span)) * chart_h
+
         coords.append(f"{x:.1f},{y:.1f}")
         dots.append(
-            f'<circle class="spark-dot" cx="{x:.1f}" cy="{y:.1f}" r="4">'
+            f'<g class="spark-node">'
+            f'<circle class="spark-dot" cx="{x:.1f}" cy="{y:.1f}" r="4.2"></circle>'
             f'<title>{esc(date)}｜{esc(fmt_number(value, unit))}</title>'
-            f'</circle>'
+            f'</g>'
         )
 
     return f"""
-    <svg class="sparkline" viewBox="0 0 {width} {height}" preserveAspectRatio="none">
-      <polyline points="{' '.join(coords)}" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-      {''.join(dots)}
-    </svg>
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 {width} {height}" preserveAspectRatio="none">
+        <polyline points="{' '.join(coords)}" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+        {''.join(dots)}
+      </svg>
+    </div>
     """
 
 
@@ -265,11 +318,21 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any]) -> str:
 
         asset_key = str(item.get("asset_key") or "")
         signal_text = signal_map.get(asset_key, "")
+        asset_theme = {
+            "US10Y": "rate",
+            "DXY": "dollar",
+            "Gold": "gold",
+            "WTI": "energy",
+            "Brent": "energy",
+            "USDJPY": "fx",
+            "USDTWD": "fx",
+            "USDKRW": "fx",
+        }.get(asset_key, "neutral")
 
         cards.append(f"""
-        <div class="chart-card">
+        <div class="chart-card chart-theme-{asset_theme}">
           <div class="chart-head">
-            <div class="chart-title">{esc(asset)}</div>
+            <div class="asset-pill">{esc(asset)}</div>
             <div class="chart-direction {direction}">{esc(direction_text)}</div>
           </div>
           <div class="chart-latest">{esc(fmt_number(latest_value, unit))}</div>
@@ -350,97 +413,224 @@ def build_html(week_dir: Path, forest: Dict[str, Any], news_context: Dict[str, A
 :root {{
   --bg:#f7f7f4;
   --paper:#fffdf7;
-  --card:#ffffff;
-  --ink:#1f2937;
-  --muted:#6b7280;
-  --line:#e5e0d5;
+  --glass:rgba(255,255,255,.62);
+  --glass-strong:rgba(255,255,255,.78);
+  --ink:#111827;
+  --navy:#0f2a44;
+  --navy-soft:#eaf0f7;
+  --muted:#64748b;
+  --line:rgba(209,213,219,.72);
   --accent:#f59e0b;
-  --shadow:0 18px 45px rgba(31,41,55,.07);
-  --radius:22px;
+  --accent-dark:#8a4b08;
+  --accent-soft:#fff3d1;
+  --shadow:0 18px 45px rgba(31,41,55,.075);
+  --soft-shadow:0 10px 26px rgba(31,41,55,.055);
+  --radius:24px;
 }}
 * {{ box-sizing:border-box; }}
 body {{
   margin:0;
-  background:radial-gradient(circle at top left,#fff7df 0,#f7f7f4 34%,#f4f5f7 100%);
+  background:
+    radial-gradient(circle at 12% 0%, rgba(255,216,130,.50) 0, rgba(255,216,130,0) 30%),
+    radial-gradient(circle at 90% 12%, rgba(234,240,247,.95) 0, rgba(234,240,247,0) 34%),
+    linear-gradient(180deg,#fbfaf7 0%,#eef1f5 100%);
   color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
   line-height:1.65;
 }}
-.wrap {{ max-width:1180px; margin:0 auto; padding:34px 18px 64px; }}
-.header {{ display:flex; justify-content:space-between; gap:18px; align-items:flex-end; margin-bottom:22px; }}
+.wrap {{ max-width:1180px; margin:0 auto; padding:38px 18px 72px; }}
+.header {{ display:flex; justify-content:space-between; gap:18px; align-items:flex-end; margin-bottom:24px; }}
 .kicker {{ color:#9a6200; font-weight:850; letter-spacing:.08em; font-size:13px; text-transform:uppercase; }}
-.title {{ font-size:42px; line-height:1.2; font-weight:900; margin:6px 0 10px; }}
-.subtitle {{ color:#4b5563; font-size:20px; max-width:820px; }}
+.title {{ color:var(--navy); font-size:42px; line-height:1.2; font-weight:900; margin:6px 0 10px; }}
+.subtitle {{ color:#4b5563; font-size:20px; max-width:840px; }}
 .meta {{ text-align:right; color:var(--muted); font-size:14px; white-space:nowrap; }}
 .section {{
-  background:rgba(255,255,255,.78);
-  border:1px solid var(--line);
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,.68);
   border-radius:var(--radius);
   box-shadow:var(--shadow);
-  padding:24px;
-  margin:18px 0;
-  backdrop-filter: blur(10px);
+  padding:26px;
+  margin:20px 0;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }}
-.section h2 {{ margin:0 0 18px; font-size:28px; }}
+.section h2 {{
+  color:var(--navy);
+  margin:0 0 18px;
+  font-size:28px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}}
+.section h2::before {{
+  content:"";
+  width:10px;
+  height:28px;
+  border-radius:999px;
+  background:var(--accent);
+  display:inline-block;
+}}
 .hero {{
-  background:linear-gradient(135deg,#fff7dc 0%,#fffdf7 54%,#f8fafc 100%);
-  border:1px solid #ead6a2;
+  background:linear-gradient(135deg,rgba(255,247,220,.82) 0%,rgba(255,255,255,.72) 58%,rgba(248,250,252,.72) 100%);
+  border:1px solid rgba(234,214,162,.72);
 }}
 .diagram-img {{
   width:100%;
   display:block;
-  border-radius:20px;
-  border:1px solid #eadfbf;
+  border-radius:22px;
+  border:1px solid rgba(234,223,191,.8);
   background:#fffdf7;
+  box-shadow:var(--soft-shadow);
 }}
 .summary-grid {{ display:grid; grid-template-columns:1.1fr .9fr; gap:16px; }}
-.big-text {{ font-size:24px; font-weight:750; }}
-.question {{ font-size:18px; background:#fff7ed; border:1px solid #fed7aa; border-radius:16px; padding:16px; color:#7c2d12; font-weight:800; }}
-.signals,.charts {{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }}
-.signal-card,.slide-card,.news-card,.chart-card {{
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:16px;
-  text-decoration:none;
-  color:inherit;
+.big-text {{ font-size:24px; font-weight:800; }}
+.question {{
+  font-size:18px;
+  background:linear-gradient(135deg,rgba(255,243,209,.88) 0%,rgba(255,250,240,.86) 100%);
+  border:1px solid rgba(243,210,139,.72);
+  border-radius:20px;
+  padding:18px;
+  color:#7c2d12;
+  font-weight:900;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.5);
 }}
-.signal-icon {{ font-size:26px; }}
-.signal-label {{ font-weight:900; font-size:18px; margin:4px 0; }}
-.signal-text {{ color:#4b5563; font-size:14px; }}
+.charts {{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }}
+.chart-card,.slide-card,.news-category,.news-mini-card {{
+  background:var(--glass-strong);
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:24px;
+  box-shadow:var(--soft-shadow);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}}
+.chart-card {{
+  padding:18px;
+  overflow:hidden;
+  min-width:0;
+  border-top:4px solid rgba(245,158,11,.78);
+  background:linear-gradient(180deg,rgba(250,252,255,.90) 0%,rgba(255,255,255,.78) 38%);
+}}
+.chart-head {{ display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:8px; }}
+.asset-pill {{
+  color:var(--navy);
+  display:inline-flex;
+  align-items:center;
+  min-height:34px;
+  padding:5px 12px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:17px;
+  border:1px solid rgba(234,223,191,.9);
+  background:rgba(255,247,237,.86);
+  color:var(--accent-dark);
+  gap:8px;
+}}
+.asset-pill::before {{
+  content:"";
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:var(--accent);
+  display:inline-block;
+}}
+.chart-latest {{ color:var(--navy); font-size:34px; font-weight:850; margin-top:8px; line-height:1.15; letter-spacing:.01em; }}
+.chart-change {{ color:var(--muted); font-size:15px; margin-top:4px; }}
+.chart-direction {{ font-size:14px; font-weight:900; border-radius:999px; padding:4px 12px; background:#f3f4f6; white-space:nowrap; border:1px solid transparent; }}
+.chart-direction.up {{ color:#7c2d12; background:#fff3d1; border-color:#f3d28b; }}
+.chart-direction.down {{ color:#374151; background:#f3f4f6; border-color:#e5e7eb; }}
+.chart-direction.flat {{ color:#4b5563; background:#f3f4f6; border-color:#e5e7eb; }}
+.gf-chart-wrap {{ width:100%; margin:16px 0 10px; overflow:hidden; border-radius:16px; }}
+.sparkline {{ width:100%; height:96px; display:block; color:#334155; }}
+.spark-node {{ pointer-events:auto; }}
+.spark-dot {{ fill:#fff; stroke:currentColor; stroke-width:2.6; cursor:pointer; opacity:.95; }}
+.spark-dot:hover {{ fill:var(--accent); stroke:var(--accent); }}
+.chart-signal {{ color:#374151; font-size:16px; margin-top:10px; min-height:48px; }}
+.chart-footer {{ border-top:1px solid var(--line); margin-top:12px; padding-top:10px; color:var(--muted); font-size:14px; }}
 .two-col {{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }}
 ul {{ margin:0; padding-left:22px; }}
-.news-grid {{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }}
-.news-card {{ display:block; transition:.15s ease; }}
-.news-card:hover {{ transform:translateY(-2px); box-shadow:0 12px 30px rgba(31,41,55,.09); }}
-.news-source {{ color:#9a6200; font-size:13px; font-weight:850; margin-bottom:6px; }}
-.news-title {{ font-weight:900; margin-bottom:8px; }}
-.news-why {{ color:#4b5563; font-size:14px; }}
-.chart-head {{ display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }}
-.chart-title {{ font-weight:900; font-size:20px; }}
-.chart-change {{ color:var(--muted); font-size:15px; }}
-.chart-latest {{ font-size:34px; font-weight:900; margin-top:10px; }}
-.chart-direction {{ font-size:13px; font-weight:900; border-radius:999px; padding:4px 10px; background:#f3f4f6; white-space:nowrap; }}
-.chart-direction.up {{ color:#b91c1c; background:#fee2e2; }}
-.chart-direction.down {{ color:#047857; background:#d1fae5; }}
-.chart-direction.flat {{ color:#4b5563; background:#f3f4f6; }}
-.sparkline {{ width:100%; height:86px; color:#334155; margin:14px 0 8px; }}
-.spark-dot {{ fill:#fff; stroke:currentColor; stroke-width:2.5; cursor:pointer; }}
-.spark-dot:hover {{ fill:#f59e0b; }}
-.chart-signal {{ color:#374151; font-size:15px; margin-top:8px; min-height:42px; }}
-.chart-footer {{ border-top:1px solid var(--line); margin-top:12px; padding-top:10px; color:var(--muted); font-size:13px; }}
+.section li {{
+  margin:8px 0;
+  padding:9px 11px;
+  background:rgba(255,250,240,.62);
+  border:1px solid rgba(231,196,106,.35);
+  border-radius:13px;
+}}
+.news-grid {{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }}
+.news-category {{ padding:16px; background:rgba(255,255,255,.56); }}
+.news-category-head {{ margin-bottom:12px; }}
+.category-pill {{
+  color:var(--navy);
+  display:inline-flex;
+  align-items:center;
+  padding:6px 13px;
+  border-radius:999px;
+  background:rgba(255,243,209,.9);
+  border:1px solid rgba(243,210,139,.75);
+  color:var(--accent-dark);
+  font-size:18px;
+  font-weight:900;
+}}
+.news-category-desc {{ color:var(--muted); font-size:14px; margin-top:8px; }}
+.news-category-cards {{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}}
+.news-mini-card {{
+  display:block;
+  position:relative;
+  min-height:148px;
+  padding:14px;
+  text-decoration:none;
+  color:inherit;
+  transition:.16s ease;
+}}
+.news-mini-card:hover {{
+  transform:translateY(-2px);
+  box-shadow:0 14px 30px rgba(31,41,55,.10);
+}}
+.news-mini-top {{ display:flex; justify-content:space-between; gap:8px; align-items:center; margin-bottom:8px; }}
+.news-source {{ color:#9a6200; font-size:13px; font-weight:850; }}
+.open-mark {{ color:#9a6200; font-size:15px; font-weight:900; opacity:.75; }}
+.news-title {{
+  color:var(--navy);
+  font-size:16px;
+  font-weight:900;
+  line-height:1.38;
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}}
+.news-why {{
+  color:#4b5563;
+  font-size:13.5px;
+  line-height:1.45;
+  margin-top:8px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}}
+.muted-box {{ background:rgba(249,250,251,.72); border:1px dashed #d1d5db; color:#6b7280; border-radius:16px; padding:16px; }}
+.muted-box.compact {{ padding:12px; font-size:14px; }}
 .slides {{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }}
+.slide-card {{ padding:16px; text-decoration:none; color:inherit; }}
 .slide-id {{ color:#9a6200; font-size:12px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }}
 .slide-title {{ font-size:18px; font-weight:900; margin:4px 0; }}
 .slide-question {{ color:#7c2d12; font-weight:800; font-size:14px; margin-bottom:8px; }}
 .slide-point {{ color:#4b5563; font-size:14px; }}
-.muted-box {{ background:#f9fafb; border:1px dashed #d1d5db; color:#6b7280; border-radius:16px; padding:16px; }}
 .footer {{ color:var(--muted); font-size:13px; padding:20px 2px; }}
-@media(max-width:900px) {{
+@media(max-width:1000px) {{
+  .charts,.slides {{ grid-template-columns:repeat(2,minmax(0,1fr)); }}
+  .news-category-cards {{ grid-template-columns:1fr; }}
+}}
+@media(max-width:760px) {{
   .header,.summary-grid,.two-col {{ display:block; }}
   .meta {{ text-align:left; margin-top:10px; }}
-  .signals,.slides,.news-grid,.charts {{ grid-template-columns:1fr; }}
+  .charts,.slides,.news-grid {{ grid-template-columns:1fr; }}
   .title {{ font-size:34px; }}
+  .subtitle {{ font-size:18px; }}
 }}
 </style>
 </head>
@@ -463,7 +653,7 @@ ul {{ margin:0; padding-left:22px; }}
     {diagram_html}
   </section>
 
-  <section class="section">
+  <section class="section section-highlight">
     <h2>重點摘要</h2>
     <div class="summary-grid">
       <div class="big-text">{esc(headline)}</div>
@@ -472,22 +662,22 @@ ul {{ margin:0; padding-left:22px; }}
     <p>{esc(summary.get("narrative_arc", ""))}</p>
   </section>
 
-  <section class="section">
+  <section class="section section-market">
     <h2>本週市場訊號與走勢</h2>
     <div class="charts">{charts_html}</div>
   </section>
 
-  <section class="section">
+  <section class="section section-watch">
     <h2>修正因子 / 待觀察</h2>
     <ul>{revision_items}</ul>
   </section>
 
-  <section class="section">
+  <section class="section section-news">
     <h2>本週新聞佐證</h2>
     <div class="news-grid">{news_html}</div>
   </section>
 
-  <section class="section">
+  <section class="section section-next">
     <h2>下週觀察</h2>
     <div class="two-col">
       <div>
