@@ -44,6 +44,22 @@ DEFAULT_TTS_FALLBACK_MODELS = [
 DEFAULT_HOST_VOICE = "Tom"
 DEFAULT_ANALYST_VOICE = "Miranda"
 
+# Gemini TTS supports only fixed prebuilt voice names.
+# Map user-facing aliases Tom / Miranda to supported Gemini voices.
+VOICE_ALIASES = {
+    "tom": "puck",
+    "miranda": "kore",
+}
+
+SUPPORTED_VOICES = {
+    "achernar", "achird", "algenib", "algieba", "alnilam", "aoede",
+    "autonoe", "callirrhoe", "charon", "despina", "enceladus",
+    "erinome", "fenrir", "gacrux", "iapetus", "kore", "laomedeia",
+    "leda", "orus", "puck", "pulcherrima", "rasalgethi", "sadachbia",
+    "sadaltager", "schedar", "sulafat", "umbriel", "vindemiatrix",
+    "zephyr", "zubenelgenubi",
+}
+
 
 def find_latest_week_dir() -> Path:
     week_dirs = [p for p in OUTPUT_WEEKLY_DIR.iterdir() if p.is_dir()]
@@ -90,6 +106,22 @@ def find_inline_audio(api_response: Dict[str, Any]) -> Optional[Dict[str, str]]:
                 }
     return None
 
+
+
+
+def normalize_voice_name(name: str, role: str) -> str:
+    raw = (name or "").strip()
+    key = raw.lower()
+
+    mapped = VOICE_ALIASES.get(key, key)
+    if mapped in SUPPORTED_VOICES:
+        if mapped != key:
+            print(f"[INFO] Voice alias mapped: {role} {raw} -> {mapped}")
+        return mapped
+
+    fallback = "puck" if role == "host" else "kore"
+    print(f"[WARN] Unsupported Gemini TTS voice '{raw}' for {role}. Using fallback: {fallback}")
+    return fallback
 
 
 def get_tts_model_candidates() -> List[str]:
