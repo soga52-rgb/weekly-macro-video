@@ -100,7 +100,7 @@ body {
 }
 .chart-card {
   position:relative;
-  padding:18px 18px 54px;
+  padding:18px;
   overflow:hidden;
   min-width:0;
   border-top:4px solid rgba(245,158,11,.78);
@@ -141,19 +141,21 @@ body {
 .spark-dot { fill:#fff; stroke:currentColor; stroke-width:2.6; cursor:pointer; opacity:.95; }
 .spark-dot:hover { fill:var(--accent); stroke:var(--accent); }
 .chart-signal { color:#374151; font-size:16px; margin-top:10px; min-height:48px; }
-.chart-footer {
+.market-section {
+  position:relative;
+  padding-bottom:54px;
+}
+.section-source {
   position:absolute;
-  right:18px;
-  bottom:14px;
-  border-top:0;
-  margin-top:0;
-  padding:4px 9px;
+  right:26px;
+  bottom:18px;
   color:var(--muted);
-  font-size:13px;
+  font-size:14px;
   white-space:nowrap;
   background:rgba(255,255,255,.72);
   border:1px solid rgba(209,213,219,.55);
   border-radius:999px;
+  padding:5px 11px;
 }
 .two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
 ul { margin:0; padding-left:22px; }
@@ -236,11 +238,41 @@ ul { margin:0; padding-left:22px; }
 }
 @media(max-width:760px) {
   .header,.summary-grid,.two-col { display:block; }
-  .meta { white-space:normal; margin-top:10px; }
+  .meta {
+    position:static !important;
+    text-align:center !important;
+    white-space:normal;
+    margin-top:10px;
+  }
   .charts,.slides,.news-grid { grid-template-columns:1fr; }
   .title { font-size:34px; }
   .subtitle { font-size:18px; }
 }
+
+/* V12 header/source placement overrides */
+.header {
+  display:block !important;
+  position:relative !important;
+  width:100% !important;
+  text-align:center !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+.header-main {
+  margin-left:auto !important;
+  margin-right:auto !important;
+  text-align:center !important;
+}
+.header .meta {
+  position:absolute !important;
+  right:0 !important;
+  bottom:10px !important;
+  text-align:right !important;
+}
+.section-source {
+  text-align:right;
+}
+
 </style>
 </head>
 <body>
@@ -249,9 +281,9 @@ ul { margin:0; padding-left:22px; }
     <div class="header-main">
       <div class="kicker">Weekly Macro Summary</div>
       <div class="title">本週總經摘要</div>
-      <div class="meta">
-        週期：2026-05-15 至 2026-05-21　｜　產生日期：2026-05-20
-      </div>
+    </div>
+    <div class="meta">
+      週期：2026-05-15 至 2026-05-21　｜　產生日期：2026-05-20
     </div>
   </header>
 
@@ -263,13 +295,13 @@ ul { margin:0; padding-left:22px; }
   <section class="section section-highlight">
     <h2>重點摘要</h2>
     <div class="summary-grid">
-      <div class="big-text">再通膨預期與高利率維持更久敘事下的全球資產重估。</div>
-      <div class="question">市場對通膨黏性的定價是否已完全封鎖降息空間，並引發債市結構性拋售？</div>
+      <div class="big-text">再通膨定價主導市場，高利率環境引發資產重估。</div>
+      <div class="question">市場對『高利率維持更久』的定價，是否會因成長降溫擔憂而轉向流動性風險？</div>
     </div>
-    <p>本週市場由再通膨預期主導，美債殖利率飆升確立了高利率維持更久的定價。週中房市數據疲軟雖引發成長放緩疑慮，導致美元與殖利率短暫脫鉤，但隨後市場回歸利率主導邏輯，整體資產傳導鏈條未發生結構性改變。</p>
+    <p>本週市場由再通膨預期定價開啟，美債殖利率飆升帶動美元走強與亞幣承壓；週中雖因房市數據疲軟出現成長擔憂，導致美元與殖利率短暫脫鉤，但整體高利率敘事未被動搖。</p>
   </section>
 
-  <section class="section section-market">
+  <section class="section section-market market-section">
     <h2>本週市場訊號與走勢</h2>
     <div class="charts">
         <div class="chart-card chart-theme-rate">
@@ -287,8 +319,7 @@ ul { margin:0; padding-left:22px; }
       </svg>
     </div>
     
-          <div class="chart-signal">長債殖利率持續攀升，市場正對高利率環境進行結構性重估。</div>
-          <div class="chart-footer">來源：YAHOO財經</div>
+          <div class="chart-signal">市場已放棄短期降息預期，長債殖利率飆升反映高利率維持更久。</div>
         </div>
         
 
@@ -307,8 +338,7 @@ ul { margin:0; padding-left:22px; }
       </svg>
     </div>
     
-          <div class="chart-signal">受利差優勢支撐，整體維持強勢，僅在成長擔憂時出現短暫回調。</div>
-          <div class="chart-footer">來源：YAHOO財經</div>
+          <div class="chart-signal">利差優勢支撐美元強勢，但在成長擔憂下出現短暫避險屬性背離。</div>
         </div>
         
 
@@ -327,8 +357,7 @@ ul { margin:0; padding-left:22px; }
       </svg>
     </div>
     
-          <div class="chart-signal">受高利率機會成本與強勢美元雙重壓制，呈現負相關走勢。</div>
-          <div class="chart-footer">來源：YAHOO財經</div>
+          <div class="chart-signal">受高利率機會成本壓抑，僅在成長擔憂引發避險時出現反彈。</div>
         </div>
         
 
@@ -347,8 +376,7 @@ ul { margin:0; padding-left:22px; }
       </svg>
     </div>
     
-          <div class="chart-signal">地緣政治緊張強化通膨預期，油價波動成為通膨黏性的修正因子。</div>
-          <div class="chart-footer">來源：YAHOO財經</div>
+          <div class="chart-signal">油價高檔震盪，持續強化市場對通膨的預期。</div>
         </div>
         
 
@@ -367,8 +395,7 @@ ul { margin:0; padding-left:22px; }
       </svg>
     </div>
     
-          <div class="chart-signal">地緣政治緊張強化通膨預期，油價波動成為通膨黏性的修正因子。</div>
-          <div class="chart-footer">來源：YAHOO財經</div>
+          <div class="chart-signal">油價高檔震盪，持續強化市場對通膨的預期。</div>
         </div>
         
 
@@ -387,8 +414,7 @@ ul { margin:0; padding-left:22px; }
       </svg>
     </div>
     
-          <div class="chart-signal">普遍承壓，反映美元利差優勢帶來的資金外流壓力。</div>
-          <div class="chart-footer">來源：YAHOO財經</div>
+          <div class="chart-signal">受美元強勢與利差擴大影響，普遍承壓，需觀察央行干預動作。</div>
         </div>
         
 
@@ -407,8 +433,7 @@ ul { margin:0; padding-left:22px; }
       </svg>
     </div>
     
-          <div class="chart-signal">普遍承壓，反映美元利差優勢帶來的資金外流壓力。</div>
-          <div class="chart-footer">來源：YAHOO財經</div>
+          <div class="chart-signal">受美元強勢與利差擴大影響，普遍承壓，需觀察央行干預動作。</div>
         </div>
         
 
@@ -427,17 +452,17 @@ ul { margin:0; padding-left:22px; }
       </svg>
     </div>
     
-          <div class="chart-signal">普遍承壓，反映美元利差優勢帶來的資金外流壓力。</div>
-          <div class="chart-footer">來源：YAHOO財經</div>
+          <div class="chart-signal">受美元強勢與利差擴大影響，普遍承壓，需觀察央行干預動作。</div>
         </div>
         </div>
+    <div class="section-source">來源：YAHOO財經</div>
   </section>
 
   <section class="section section-watch">
     <h2>修正因子 / 待觀察</h2>
-    <ul><li>週中房市數據疲軟曾引發成長降溫擔憂，導致美元避險屬性短暫失效，資金流向非美貨幣，此為市場對經濟硬著陸的潛在修正訊號。</li>
-<li>Fed官員對近期殖利率飆升的具體政策態度</li>
-<li>亞洲央行針對貨幣貶值的具體干預行動</li></ul>
+    <ul><li>5/18房市數據疲軟引發成長擔憂，導致美元與殖利率出現短暫脫鉤，避險資金流向黃金與非美貨幣。</li>
+<li>勞動力市場數據是否出現實質惡化</li>
+<li>亞洲央行針對貨幣貶值的具體干預規模</li></ul>
   </section>
 
   <section class="section section-news">
@@ -467,7 +492,17 @@ ul { margin:0; padding-left:22px; }
         <span class="open-mark">↗</span>
       </div>
       <div class="news-title">30年期美債殖利率衝破5.2%創19年新高！華爾街警告5.5%恐成下一目標</div>
-      <div class="news-why">確認了債市拋售的嚴重性，並為高利率維持更久提供了具體的市場定價依據。</div>
+      <div class="news-why">反映市場對高利率維持更久敘事的極致定價，是本週資產重估的核心驅動力。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiWkFVX3lxTE1KalF4bE9HRVhKWEFVa2RZam9BU1ZDS01BejZNV0RpZmZicmlyYVNTOVR0U0V3V0E0OWtkckRLVUZKd09iMUh4cVBTVzJTZWNKVkhuQld1NWtYUdIBX0FVX3lxTE5KTGpDUVduVi1oQVZoa3JabENaSW45VGRTWi1ISTJSQzlCdkJYU1psSmgyT0psbE5OcW9rVW9RS3BpYmN2ZEdwMDVLaXFhdE0tWWMwQjA4YUU1MXROektJ?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">經濟日報</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">美元指數衝破99 新台幣連4貶、週線翻黑</div>
+      <div class="news-why">具體呈現了美債殖利率上行對亞洲貨幣的直接傳導效應。</div>
     </a>
     
           </div>
@@ -480,16 +515,7 @@ ul { margin:0; padding-left:22px; }
             <div class="news-category-desc">美元、亞洲貨幣與資金流向壓力</div>
           </div>
           <div class="news-category-cards">
-            
-    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiWkFVX3lxTE1KalF4bE9HRVhKWEFVa2RZam9BU1ZDS01BejZNV0RpZmZicmlyYVNTOVR0U0V3V0E0OWtkckRLVUZKd09iMUh4cVBTVzJTZWNKVkhuQld1NWtYUdIBX0FVX3lxTE5KTGpDUVduVi1oQVZoa3JabENaSW45VGRTWi1ISTJSQzlCdkJYU1psSmgyT0psbE5OcW9rVW9RS3BpYmN2ZEdwMDVLaXFhdE0tWWMwQjA4YUU1MXROektJ?oc=5" target="_blank" rel="noopener noreferrer">
-      <div class="news-mini-top">
-        <span class="news-source">經濟日報</span>
-        <span class="open-mark">↗</span>
-      </div>
-      <div class="news-title">美元指數衝破99 新台幣連4貶、週線翻黑</div>
-      <div class="news-why">具體反映了美元利差優勢對亞洲貨幣的直接壓抑效果。</div>
-    </a>
-    
+            <div class="muted-box compact">本週暫無明確新聞佐證。</div>
           </div>
         </div>
         
@@ -511,15 +537,15 @@ ul { margin:0; padding-left:22px; }
     <div class="two-col">
       <div>
         <h3>關鍵問題</h3>
-        <ul><li>美債長天期殖利率是否挑戰5.5%關卡？</li>
-<li>Fed官員對殖利率飆升的政策態度為何？</li>
-<li>亞洲央行是否會針對貨幣貶值採取干預？</li></ul>
+        <ul><li>美債殖利率是否會進一步挑戰5.5%關卡？</li>
+<li>美國勞動力市場數據是否會確認成長降溫敘事？</li>
+<li>亞洲央行是否會針對貨幣貶值採取干預行動？</li></ul>
       </div>
       <div>
         <h3>主要佐證</h3>
-        <ul><li>30年期美債殖利率突破5.1%-5.2%創多年新高</li>
-<li>美元指數與美債殖利率的高度連動性</li>
-<li>亞洲貨幣（台幣、日圓）隨美元走強而同步承壓</li></ul>
+        <ul><li>30年期美債殖利率突破5.1%至5.2%區間</li>
+<li>美元指數一度衝破99關卡</li>
+<li>美國房市數據下滑顯示成長降溫風險</li></ul>
       </div>
     </div>
   </section>

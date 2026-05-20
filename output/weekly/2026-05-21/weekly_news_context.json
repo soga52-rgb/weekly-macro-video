@@ -4,10 +4,11 @@
     "week_range": "2026-05-15 至 2026-05-21",
     "sources_used": [
       "經濟日報",
-      "news.cnyes.com"
+      "news.cnyes.com",
+      "鉅亨號"
     ],
-    "candidate_count": 32,
-    "data_quality_note": "新聞來源高度集中於美債殖利率飆升與再通膨預期，與每日摘要的市場主線高度吻合。"
+    "candidate_count": 30,
+    "data_quality_note": "新聞候選高度集中於美債殖利率飆升與再通膨敘事，與每日摘要主線吻合度極高。"
   },
   "weekly_news_theme": "再通膨定價與高利率維持更久敘事下的全球資產重估",
   "news_fit_to_daily_summaries": "支持",
@@ -15,37 +16,37 @@
     {
       "driver": "再通膨預期與長債殖利率飆升",
       "evidence": [
-        "30年期美債殖利率突破5.1%-5.2%創下多年新高",
-        "市場對Fed降息預期降溫，高利率環境成為新常態"
+        "30年期美債殖利率突破5.1%至5.2%，創2007年以來新高",
+        "市場對通膨黏性的定價導致降息預期持續延後"
       ],
-      "impact": "推升無風險利率，壓抑風險資產估值，並強化美元利差優勢。",
+      "impact": "推升無風險利率，壓抑風險資產估值，並強化美元利差優勢",
       "confidence": "高"
     },
     {
-      "driver": "地緣政治與能源價格波動",
+      "driver": "成長降溫疑慮與避險情緒",
       "evidence": [
-        "美伊關係緊張導致油價震盪，強化通膨黏性預期",
-        "市場緊盯川習會後續關稅與貿易政策影響"
+        "美國房市數據下滑引發硬著陸擔憂",
+        "避險資金在特定時點（如5/18）流向黃金與非美貨幣"
       ],
-      "impact": "作為通膨預期的修正因子，增加市場波動性。",
+      "impact": "作為修正因子，在通膨主線中製造短期波動與美元走勢背離",
       "confidence": "中"
     }
   ],
   "confirming_signals": [
-    "美債殖利率持續攀升，確認市場對『高利率維持更久』的定價共識。",
-    "美元指數強勢與亞洲貨幣（台幣、日圓）承壓的連鎖反應，符合利差驅動的傳導鏈。",
-    "黃金受美元與高利率雙重壓制，呈現明顯的負相關走勢。"
+    "美債殖利率持續攀升，確認市場已放棄短期降息預期",
+    "美元指數強勢與亞洲貨幣（台幣、日圓）貶值壓力同步，反映利差擴大效應",
+    "油價維持高檔震盪，持續為通膨預期提供支撐"
   ],
   "contradicting_signals": [
-    "房市數據疲軟引發的成長降溫擔憂，曾短暫導致美元避險屬性失效，資金轉向非美貨幣避險，顯示市場對經濟硬著陸的潛在恐慌。"
+    "5/18 美元指數走弱，顯示市場對經濟成長放緩的擔憂暫時抵銷了利差優勢"
   ],
   "news_based_corrections": [
-    "市場對成長放緩的擔憂（如房市數據）在週中曾短暫抵銷利差優勢，修正了美元單邊強勢的預期，但未改變長線利率主導的格局。"
+    "市場對美債殖利率的恐慌情緒（如專家警告5.5%目標）可能導致市場波動加劇，需留意是否引發流動性風險而非僅是利率定價調整"
   ],
   "watch_points": [
-    "美債長天期殖利率是否進一步挑戰5.5%關卡，以及期限溢價的擴大效應。",
-    "Fed官員對近期殖利率飆升的政策態度，是否會引發對縮表進程的重新評估。",
-    "亞洲央行針對貨幣貶值的干預力道，以及地緣政治對能源價格的持續影響。"
+    "美債殖利率是否出現失控性拋售（如突破5.5%），進而引發金融市場流動性壓力",
+    "美國勞動力市場數據是否出現惡化，以確認成長降溫敘事是否轉為衰退定價",
+    "亞洲央行針對貨幣貶值的干預動作，以及地緣政治（如美伊關係）對油價的邊際影響"
   ],
   "top_news": [
     {
@@ -54,7 +55,7 @@
       "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5QVDQ2aWhTNDBYTjVMLW1MVlVBLU5sQ1JPbFRKREl0Vk1yMFVCenkxUWJuamtLLXlVdVdmMkxLZHFUUWxjSFJZclg1dGo4Q0k?oc=5",
       "published_at": "2026-05-20 06:20:03 UTC",
       "theme": "long_bond_yields",
-      "why_it_matters": "確認了債市拋售的嚴重性，並為高利率維持更久提供了具體的市場定價依據。"
+      "why_it_matters": "反映市場對高利率維持更久敘事的極致定價，是本週資產重估的核心驅動力。"
     },
     {
       "title": "美元指數衝破99 新台幣連4貶、週線翻黑",
@@ -62,8 +63,8 @@
       "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1KalF4bE9HRVhKWEFVa2RZam9BU1ZDS01BejZNV0RpZmZicmlyYVNTOVR0U0V3V0E0OWtkckRLVUZKd09iMUh4cVBTVzJTZWNKVkhuQld1NWtYUdIBX0FVX3lxTE5KTGpDUVduVi1oQVZoa3JabENaSW45VGRTWi1ISTJSQzlCdkJYU1psSmgyT0psbE5OcW9rVW9RS3BpYmN2ZEdwMDVLaXFhdE0tWWMwQjA4YUU1MXROektJ?oc=5",
       "published_at": "2026-05-15 10:37:00 UTC",
       "theme": "dollar_asia_fx",
-      "why_it_matters": "具體反映了美元利差優勢對亞洲貨幣的直接壓抑效果。"
+      "why_it_matters": "具體呈現了美債殖利率上行對亞洲貨幣的直接傳導效應。"
     }
   ],
-  "editor_note_for_forest_summary": "本週市場主線由『再通膨預期』與『高利率維持更久』牢牢掌控。債市拋售潮不僅是單日現象，已演變為殖利率曲線的結構性重估。儘管週中出現成長降溫的擔憂，導致美元與殖利率出現短暫脫鉤，但整體傳導鏈（利率上行→美元強勢→亞幣/黃金承壓）依然穩固。下週重點在於觀察債市是否會因殖利率過高而引發更廣泛的金融市場流動性風險。"
+  "editor_note_for_forest_summary": "本週市場主線明確，即「再通膨定價」驅動美債殖利率上行，進而壓抑風險資產。然而，房市數據疲軟作為修正因子，在週中引發了成長擔憂，導致美元與殖利率出現短暫脫鉤。整體而言，市場仍處於對高利率環境的適應期，需密切關注殖利率上行是否會從「通膨定價」轉變為「流動性恐慌」。"
 }
