@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Weekly Macro Video - Step 05
-Generate 6-scene weekly macro narration with Gemini.
+Weekly Macro Video - Step 05 V6
+Generate host/analyst dialogue narration for:
+Macro transmission diagram + Evidence Panel video.
 """
 
 import argparse
@@ -13,7 +14,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
@@ -79,7 +80,7 @@ def call_gemini(prompt: str, model: str, api_key: str) -> str:
     payload = {
         "contents": [{"role": "user", "parts": [{"text": prompt}]}],
         "generationConfig": {
-            "temperature": 0.35,
+            "temperature": 0.32,
             "responseMimeType": "application/json",
         },
     }
@@ -100,72 +101,147 @@ def call_gemini(prompt: str, model: str, api_key: str) -> str:
 
     data = json.loads(raw)
     parts = (((data.get("candidates") or [{}])[0].get("content") or {}).get("parts") or [])
-    text = "\n".join(p.get("text", "") for p in parts if isinstance(p, dict)).strip()
-    if not text:
+    output = "\n".join(p.get("text", "") for p in parts if isinstance(p, dict)).strip()
+    if not output:
         raise RuntimeError(f"Empty Gemini output. Preview: {raw[:1000]}")
-    return text
+    return output
 
 
 def build_prompt(forest: Dict[str, Any], news: Dict[str, Any], market: Dict[str, Any]) -> str:
     return f"""
-你是一位專業總經週報影片主編與旁白撰稿人。
+你是一位專業總經週報影片主編、總經分析師與財經節目編劇。
 
 任務：
 根據 weekly_forest_summary、weekly_news_context、weekly_market_series，
-產生一支 6～8 分鐘「週報影片」旁白稿。
+產生一支 8～10 分鐘「主持人 Tom + 分析師 Miranda」雙人對談式週報影片旁白與分鏡。
+影片畫面採用：
+1. 左側主畫面：同一張「總經傳導圖解」貫穿全片，使用 spotlight 聚焦不同區塊。
+2. 右側 Evidence Panel：顯示對應走勢圖、新聞卡與短重點。
 
-定位：
-每日總經摘要是「樹木」，週報影片是「森林」。
-影片不是逐日整理，不是唸網頁，也不是解釋圖片怎麼生成。
-影片要像總經分析師導讀週報：先講本週主線，再講傳導，再用數據與新聞驗證，最後提出下週觀察。
-
-語氣：
-專業、克制、條理清楚。
-避免：崩潰、狂歡、恐慌、徹底、全面、暴衝、反撲、史詩級。
-若因果關係不是資料明確支持，請用：可能、顯示、反映、待觀察、尚未推翻主線。
+核心原則：
+- 總經傳導圖解是主角，不是其中一張插圖。
+- 每段都要沿著「走勢圖變化 → 新聞原因 → 市場解讀 → 回到傳導鏈」。
+- 旁白不能只是照畫面文字唸。
+- 主持人 Tom 負責開場、提問、轉場。
+- 分析師 Miranda 負責用走勢圖 + 新聞內容 + 總經傳導鏈進行分析。
+- 新聞是校正層，不是逐篇摘要；請挑出能解釋該段走勢的新聞。
+- 畫面文字很少，完整分析放在 dialogue 裡。
 
 影片固定 6 段：
-scene_01：開場，本週總經主線
-scene_02：總經傳導圖解
-scene_03：市場訊號與走勢
-scene_04：修正因子 / 待觀察
-scene_05：新聞佐證
-scene_06：下週觀察
+scene_01：全圖開場。本週傳導鏈與核心數據變化。
+scene_02：通膨預期。用 WTI / Brent 走勢 + 通膨/能源新聞說明再通膨起點。
+scene_03：利率。用 US10Y 走勢 + Fed/長債/利率新聞說明核心變數。
+scene_04：美元與亞洲貨幣。用 DXY、USDJPY、USDTWD、USDKRW 走勢 + 貨幣新聞說明外溢。
+scene_05：黃金。用 Gold 走勢 + 黃金/避險/利率新聞檢查傳導鏈。
+scene_06：傳導鏈強弱與下週觀察。總結主線是否成立、修正因子與下週驗證。
+
+spotlight_target 可用值：
+- overview
+- drivers
+- yields
+- dollar_fx
+- gold_risk
+- next_watch
+
+evidence_assets 可用值：
+- US10Y
+- DXY
+- Gold
+- WTI
+- Brent
+- USDJPY
+- USDTWD
+- USDKRW
+
+evidence_news_category 可用值：
+- 通膨預期
+- 利率
+- 貨幣
+- 其他
+
+建議對應：
+scene_01：spotlight overview，assets US10Y/DXY/Gold，news 其他
+scene_02：spotlight drivers，assets WTI/Brent，news 通膨預期
+scene_03：spotlight yields，assets US10Y，news 利率
+scene_04：spotlight dollar_fx，assets DXY/USDJPY/USDTWD/USDKRW，news 貨幣
+scene_05：spotlight gold_risk，assets Gold，news 其他
+scene_06：spotlight next_watch，assets US10Y/DXY/Gold，news 其他
+
+語氣：
+- 專業、克制、條理清楚。
+- 不要像媒體標題或自媒體旁白。
+- 避免：崩潰、狂歡、恐慌、徹底、全面、暴衝、反撲、史詩級。
+- 若因果關係不是資料明確支持，請用：可能、顯示、反映、待觀察、尚未推翻主線。
+- 若提到匯率貶值可能支撐出口，必須補充：實際效果仍取決於外需、進口成本與產業結構，不可過度推論。
 
 長度：
-全片約 6～8 分鐘。
-每段約 350～600 個中文字。
-句子要適合 TTS 朗讀，不要太長。
+- 全片約 8～10 分鐘。
+- 每段 dialogue 合計約 450～750 個中文字。
+- 每段至少 2 輪對話：主持人 → 分析師；必要時可再一輪主持人追問 → 分析師補充。
+- 句子適合 TTS 朗讀，不要過長。
+
+畫面文字規則：
+- on_screen_title 是短標題。
+- on_screen_bullets 只放 3～5 個短重點，每點不超過 14 個中文字。
+- evidence_panel_title 是右側證據面板標題，例如「原油與通膨證據」。
+- 不要把完整旁白塞進畫面。
 
 只輸出合法 JSON，不要 Markdown。
 JSON 結構：
 {{
   "meta": {{
-    "version": "weekly_narration_v1",
-    "target_duration_minutes": "6-8",
-    "tone": "professional_macro_analyst"
+    "version": "weekly_narration_v6_evidence_panel",
+    "target_duration_minutes": "8-10",
+    "tone": "tom_host_miranda_analyst"
   }},
   "scenes": [
     {{
       "scene_id": "scene_01",
       "scene_title": "",
-      "narration": "",
+      "on_screen_title": "",
+      "on_screen_bullets": ["", "", ""],
+      "spotlight_target": "overview",
+      "evidence_panel_title": "",
+      "evidence_assets": ["US10Y", "DXY"],
+      "evidence_news_category": "其他",
       "visual_direction": "",
-      "estimated_seconds": 60
+      "dialogue": [
+        {{"speaker": "host", "text": ""}},
+        {{"speaker": "analyst", "text": ""}}
+      ],
+      "narration": "",
+      "estimated_seconds": 80
     }}
   ],
   "full_narration": ""
 }}
 
+注意：
+- narration 欄位請把 dialogue 內容合併成可讀文字，格式包含「主持人：」「分析師：」。
+- dialogue 仍必須保留，供 TTS 依不同聲線生成。
+- 每段分析一定要引用走勢圖與新聞內容，不要只講抽象概念。
+
 weekly_forest_summary:
 {compact_json(forest, 20000)}
 
 weekly_news_context:
-{compact_json(news, 16000)}
+{compact_json(news, 18000)}
 
 weekly_market_series:
-{compact_json(market, 12000)}
+{compact_json(market, 14000)}
 """
+
+
+def flatten_dialogue(dialogue: List[Dict[str, str]]) -> str:
+    lines = []
+    for turn in dialogue:
+        speaker = str(turn.get("speaker") or "").strip()
+        text = str(turn.get("text") or "").strip()
+        if not text:
+            continue
+        label = "主持人" if speaker == "host" else "分析師" if speaker == "analyst" else speaker
+        lines.append(f"{label}：{text}")
+    return "\n".join(lines)
 
 
 def validate(data: Dict[str, Any]) -> Dict[str, Any]:
@@ -173,26 +249,83 @@ def validate(data: Dict[str, Any]) -> Dict[str, Any]:
     if not isinstance(scenes, list) or len(scenes) < 6:
         raise RuntimeError("Narration JSON must contain at least 6 scenes.")
 
+    default_scene_config = [
+        ("overview", ["US10Y", "DXY", "Gold"], "其他"),
+        ("drivers", ["WTI", "Brent"], "通膨預期"),
+        ("yields", ["US10Y"], "利率"),
+        ("dollar_fx", ["DXY", "USDJPY", "USDTWD", "USDKRW"], "貨幣"),
+        ("gold_risk", ["Gold"], "其他"),
+        ("next_watch", ["US10Y", "DXY", "Gold"], "其他"),
+    ]
+    valid_assets = {"US10Y", "DXY", "Gold", "WTI", "Brent", "USDJPY", "USDTWD", "USDKRW"}
+    valid_categories = {"通膨預期", "利率", "貨幣", "其他"}
+
     output = []
     for i, scene in enumerate(scenes[:6], start=1):
+        default_spotlight, default_assets, default_category = default_scene_config[i - 1]
         scene_id = str(scene.get("scene_id") or f"scene_{i:02d}")
         title = str(scene.get("scene_title") or f"Scene {i}").strip()
+        on_screen_title = str(scene.get("on_screen_title") or title).strip()
+
+        bullets = scene.get("on_screen_bullets") or []
+        if not isinstance(bullets, list):
+            bullets = []
+        bullets = [str(x).strip() for x in bullets if str(x).strip()][:5]
+        if not bullets:
+            bullets = [on_screen_title]
+
+        evidence_assets = scene.get("evidence_assets") or default_assets
+        if not isinstance(evidence_assets, list):
+            evidence_assets = default_assets
+        evidence_assets = [str(x).strip() for x in evidence_assets if str(x).strip() in valid_assets]
+        if not evidence_assets:
+            evidence_assets = default_assets
+
+        news_category = str(scene.get("evidence_news_category") or default_category).strip()
+        if news_category not in valid_categories:
+            news_category = default_category
+
+        dialogue = scene.get("dialogue") or []
+        if not isinstance(dialogue, list):
+            dialogue = []
+
+        cleaned_dialogue = []
+        for turn in dialogue:
+            if not isinstance(turn, dict):
+                continue
+            speaker = str(turn.get("speaker") or "").strip()
+            text = str(turn.get("text") or "").strip()
+            if speaker not in {"host", "analyst"}:
+                speaker = "analyst"
+            if text:
+                cleaned_dialogue.append({"speaker": speaker, "text": text})
+
         narration = str(scene.get("narration") or "").strip()
-        visual = str(scene.get("visual_direction") or "").strip()
-        seconds = int(scene.get("estimated_seconds") or 60)
+        if not narration and cleaned_dialogue:
+            narration = flatten_dialogue(cleaned_dialogue)
         if not narration:
-            raise RuntimeError(f"{scene_id} narration is empty.")
+            raise RuntimeError(f"{scene_id} narration/dialogue is empty.")
+        if not cleaned_dialogue:
+            cleaned_dialogue = [{"speaker": "analyst", "text": narration}]
+
         output.append({
             "scene_id": scene_id,
             "scene_title": title,
+            "on_screen_title": on_screen_title,
+            "on_screen_bullets": bullets,
+            "spotlight_target": str(scene.get("spotlight_target") or default_spotlight).strip(),
+            "evidence_panel_title": str(scene.get("evidence_panel_title") or "證據面板").strip(),
+            "evidence_assets": evidence_assets,
+            "evidence_news_category": news_category,
+            "visual_direction": str(scene.get("visual_direction") or "").strip(),
+            "dialogue": cleaned_dialogue,
             "narration": narration,
-            "visual_direction": visual,
-            "estimated_seconds": seconds,
+            "estimated_seconds": int(scene.get("estimated_seconds") or 80),
         })
 
     full = "\n\n".join(f"{s['scene_title']}\n{s['narration']}" for s in output)
     return {
-        "meta": data.get("meta") or {"version": "weekly_narration_v1"},
+        "meta": data.get("meta") or {"version": "weekly_narration_v6_evidence_panel"},
         "scenes": output,
         "full_narration": data.get("full_narration") or full,
     }
@@ -223,13 +356,12 @@ def main() -> None:
     if not forest:
         raise FileNotFoundError(f"Missing weekly_forest_summary.json in {week_dir}")
 
-    print(f"[INFO] Generating weekly narration with model: {model}")
+    print(f"[INFO] Generating V6 evidence-panel dialogue narration with model: {model}")
     raw = call_gemini(build_prompt(forest, news, market), model, api_key)
     data = validate(extract_json(raw))
 
     save_json(out_json, data)
     save_text(narration_dir / "weekly_narration_full.txt", data["full_narration"])
-
     for scene in data["scenes"]:
         save_text(narration_dir / f"{scene['scene_id']}.txt", scene["narration"])
 
