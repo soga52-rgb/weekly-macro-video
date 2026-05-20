@@ -1,43 +1,37 @@
 ## 本週新聞補充
 
 ### 新聞主線
-再通膨預期與高利率常態化主導市場，成長放緩疑慮引發資產短暫背離
+再通膨預期與成長放緩疑慮的拉鋸，導致美債殖利率衝高與市場定價體制的震盪。
 
 ### 新聞與每日摘要的關係
 支持
 
 ### 主要總經驅動
-- 長天期美債殖利率大幅上行反映再通膨定價｜封鎖降息空間，債市面臨拋售壓力，全球風險資產承壓。｜信心：高
-  - 美30年期公債殖利率破5%創19年新高 通膨警報再響
-  - 30年期殖利率連三日站上5% 債市押注Fed或重新轉向升息
-- 強勢美元與利差優勢壓制非美貨幣及黃金｜亞洲貨幣普遍承壓，黃金因持有機會成本上升與強勢美元雙重打擊而下跌。｜信心：高
-  - 美元指數衝破99 新台幣連4貶、週線翻黑
-  - 〈貴金屬盤後〉美元美債殖利率雙升 金價下挫逾1%
-- 地緣政治與能源價格上行強化通膨黏性｜供應端壓力推升通膨預期，延後聯準會降息時程。｜信心：中
-  - 油價衝破110美元 2檔原油ETF應聲暴漲
-  - 川普對伊朗失去耐心 美伊關係又惡化 油價飆逾3%
+- 再通膨預期與長債殖利率｜推升長天期美債殖利率，對風險資產與黃金構成壓力｜信心：高
+  - 30年期美債殖利率突破5.1%，創2007年以來新高
+  - 市場對Fed降息預期轉趨保守，甚至出現重新升息的討論
+- 成長放緩修正因子｜在特定時點削弱美元的避險與利差支撐，引發資金流向非美資產｜信心：中
+  - 美國房市數據疲軟
+  - 市場對經濟硬著陸的擔憂開始抵銷利差優勢
 
 ### 支撐訊號
-- 30年期美債殖利率突破5%至5.18%區間，顯示市場對高利率維持更久的預期高度一致。
-- 美元指數突破99關卡，新台幣、日圓等亞洲貨幣同步走弱，驗證高利率至美元再至亞幣的傳導鏈。
-- 黃金價格在美元與殖利率雙升期間單週下跌逾2%，符合高利率環境對無息資產的壓制邏輯。
+- 美債殖利率全線飆升，確認市場正重新定價高利率維持更久（Higher for Longer）的環境
+- 油價上行與地緣政治風險（如美伊關係）持續強化通膨預期
 
 ### 修正或背離訊號
-- 房市數據疲軟引發成長放緩疑慮，在後期導致美元指數回落至98.95，與持續上行的美債殖利率出現短暫背離。
+- 房市數據疲軟引發的成長擔憂，導致美元在5月18日出現與美債殖利率脫鉤的走勢
 
 ### 新聞校正
-- 修正了單純因利差推升美元的單一因果關係。後期美元走弱顯示，當市場對經濟硬著陸的擔憂超越通膨擔憂時，美元的利差優勢可能被成長前景的疑慮所抵銷。
+- 市場對Fed政策的預期已從單純的「延後降息」轉向「重新升息」的風險討論，這修正了先前僅認為降息空間被封鎖的判斷
 
 ### 下週觀察
-- 美國後續就業與PMI數據是否進一步確認經濟成長放緩。
-- 聯準會官員對於30年期美債殖利率突破5%的態度，是否釋放重新升息或維持高利率更久的政策指引。
-- 亞洲央行（特別是日本與台灣）是否針對貨幣持續貶值採取實質干預措施。
+- 美債殖利率是否會進一步挑戰5.5%的技術關卡，以及其對股市的溢出效應
+- 亞洲央行對於貨幣貶值的干預力度與政策反應
+- 美國勞動力市場數據是否會確認成長降溫敘事，進而改變美元的避險屬性
 
 ### 代表新聞
-- 經濟日報｜美30年期公債殖利率破5%創19年新高 通膨警報再響｜確認了長天期美債殖利率突破關鍵心理關卡，奠定整週再通膨定價與高利率維持更久的市場主線。｜https://news.google.com/rss/articles/CBMiWkFVX3lxTE1UX0VrUUpzbm4yZnpVdTJSUHJVMHA4MV9VS0pKakZ3eWVCdXVzVTM4NkhobDR4NGZ2NE53RERodUV3aVZUUGxRdFpUd3B3VFVXVDhxVlpRS1RFQdIBX0FVX3lxTFBIcXhXa2d2WXVtekt4RE1WcWEzdFZpLS1NaHpuSEFVUDFLazg2SVZveGlDZ1VkbnZFUDRLWWU3eDctdDBBaWVSYTFiV3YzQVJFbWdyR1R5ZG0tM0xUaWFn?oc=5
-- 經濟日報｜美元指數衝破99 新台幣連4貶、週線翻黑｜證實美元利差優勢對亞洲貨幣造成的實質匯兌壓力，新台幣與日圓等非美貨幣走勢與主線高度一致。｜https://news.google.com/rss/articles/CBMiWkFVX3lxTE1KalF4bE9HRVhKWEFVa2RZam9BU1ZDS01BejZNV0RpZmZicmlyYVNTOVR0U0V3V0E0OWtkckRLVUZKd09iMUh4cVBTVzJTZWNKVkhuQld1NWtYUdIBX0FVX3lxTE5KTGpDUVduVi1oQVZoa3JabENaSW45VGRTWi1ISTJSQzlCdkJYU1psSmgyT0psbE5OcW9rVW9RS3BpYmN2ZEdwMDVLaXFhdE0tWWMwQjA4YUU1MXROektJ?oc=5
-- 鉅亨網｜〈貴金屬盤後〉金價一周跌逾2% 美債殖利率在通膨升溫疑慮中上揚｜反映黃金在再通膨與高利率環境下的雙重壓力，體現無息資產在利差擴大時的機會成本劣勢。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTFByVEVQQmN1UmkxdVE4MXh6ZG9tWnhlOGM0OVRxcWdSbVNyM1hiTmZBSmpfOElnMEN2MnRKYWZYUlViN2drVUJVWnpiZVhISlE?oc=5
-- 鉅亨網｜〈焦點股〉荷姆茲海峽重開無望？油價衝破110美元 2檔原油ETF應聲暴漲｜地緣政治導致的能源價格上行，是支撐再通膨預期與美債殖利率居高不下的關鍵實體經濟驅動因子。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTFB3a1pWbXV2LWVsRGl3bjFsenl4cmJIUEhKZ2E0Nld0SERyaElZcnJGckhYYnZXREw3VTI4OWFjSWpydllnSUljR0hlWUVVSVE?oc=5
+- 鉅亨網｜美債避險神話動搖？美國30年期殖利率衝上5.18% 創2007年來新高｜反映市場對長天期美債的拋售壓力，是再通膨定價的核心指標。｜https://news.google.com/rss/articles/CBMiS0FVX3lxTE1USER3OG1RY3BReDNtQXRDclp0U3dUZXhMRkZGVUJaRU1yQ245M2FDVU5scV91Q1NOWGpMRkxVUUJpNGU5QlNXc0RDUQ?oc=5
+- 鉅亨網｜〈能源盤後〉川普對伊朗失去耐心 美伊關係又惡化 油價飆逾3% 布蘭特站上109美元｜地緣政治風險推升油價，直接支撐通膨預期，進而影響利率定價。｜https://news.google.com/rss/articles/CBMiS0FVX3lxTFBLTl8tcWIwbEhOMjJBQnJNdnJhUWxLVTg2RFBJblNmcHpiNF9nYXNVNGlSWUlLSGE0czNScW9RaW5neElsZDJ3SFhJMA?oc=5
 
 ### 給 Forest Summary 的編輯提示
-本週市場的核心衝突在於「通膨黏性」與「成長放緩」的拉鋸。前半週市場全力交易再通膨，美債殖利率與美元共振走強，壓制亞幣與黃金；後半週房市數據疲軟成為關鍵修正因子，引發市場對硬著陸的擔憂，導致「殖利率上行、美元走弱、黃金反彈」的背離表現。這顯示高利率維持更久的敘事雖未動搖，但市場對經濟增長承壓的敏感度已顯著提高。
+本週市場主線由「再通膨定價」主導，美債殖利率飆升是核心驅動力。然而，房市數據疲軟帶來的成長降溫擔憂，已成為不可忽視的修正因子，導致美元在週中出現短暫的避險屬性失效。下週需密切關注殖利率是否會進一步衝擊股市，以及勞動力市場數據是否會加劇經濟放緩的預期。

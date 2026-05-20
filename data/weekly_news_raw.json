@@ -15,29 +15,11 @@
   "items": [
     {
       "theme": "long_bond_yields",
-      "query": "美債 殖利率 20年期 30年期 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "美30年期公債殖利率破5%創19年新高 通膨警報再響 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1UX0VrUUpzbm4yZnpVdTJSUHJVMHA4MV9VS0pKakZ3eWVCdXVzVTM4NkhobDR4NGZ2NE53RERodUV3aVZUUGxRdFpUd3B3VFVXVDhxVlpRS1RFQdIBX0FVX3lxTFBIcXhXa2d2WXVtekt4RE1WcWEzdFZpLS1NaHpuSEFVUDFLazg2SVZveGlDZ1VkbnZFUDRLWWU3eDctdDBBaWVSYTFiV3YzQVJFbWdyR1R5ZG0tM0xUaWFn?oc=5",
-      "published_at": "2026-05-14 05:54:18 UTC",
-      "score": 11
-    },
-    {
-      "theme": "long_bond_yields",
       "query": "美債 長天期 殖利率 期限溢價 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
       "title": "美債殖利率逼近2007年高點 投資人擔心錯過高收益、又怕更大拋售 | 國際焦點 | 國際 - 經濟日報",
       "source": "經濟日報",
       "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFA5dFFsLXVVQ3RFajdmNXZVWHlLbUs3R2JRR3pkZGRxZ0NXTVlCSnl5QU9KY182LU5MVnRCOGUzQkRFSEdfRklOdkVlSGoxR0tFM1NnVk9mVHAtZw?oc=5",
       "published_at": "2026-05-19 13:42:17 UTC",
-      "score": 11
-    },
-    {
-      "theme": "fed_policy",
-      "query": "Fed 降息 縮表 美債 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "美債殖利率揚 Fed難降息 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9lOEFuaUtWRDFzc01GQ1drWmo0TEN0WFJ1ZUh6bllDRWNLMWJPMk10OFJ1dlRnbGItVmpLLUlhMHExVkJEclYwYTZnSHFhdXlUQUtQaXBjNGlzQdIBX0FVX3lxTE9tRDFrNEdJVFJ1TzQxUjVQbmptdEJ1bk9FTFJnWmxHRGRILVlwUTU5dlI4bDZRMTBkOUJqWW1BRFE2RnRzQ3h6d2tWNk1XaWhsNnY1VXZWUDI5YzRnalNZ?oc=5",
-      "published_at": "2026-05-15 16:20:26 UTC",
       "score": 11
     },
     {
@@ -117,8 +99,17 @@
       "query": "美債 殖利率 20年期 30年期 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
       "title": "美債避險神話動搖？美國30年期殖利率衝上5.18% 創2007年來新高 - news.cnyes.com",
       "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFB4bnU5ck9YT1l2V1EydTVCR0pZd3hEZXhsTDJqSjlRTUI5dk8zYzZ4aEhJWU5USTV2bF91eDdpUlhtaVpTUUdrdVR2dF9OUkE?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1USER3OG1RY3BReDNtQXRDclp0U3dUZXhMRkZGVUJaRU1yQ245M2FDVU5scV91Q1NOWGpMRkxVUUJpNGU5QlNXc0RDUQ?oc=5",
       "published_at": "2026-05-19 14:10:09 UTC",
+      "score": 8
+    },
+    {
+      "theme": "long_bond_yields",
+      "query": "美債 殖利率 20年期 30年期 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "美債殖利率進入「危險區」？策略師警告恐衝擊股市 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1QWjh6YUJGRlZDeHg3NUFaVWlyNU00Z1JYZnVNR2xQN0lZOERERTVFUUFkbEpobWYyODhyUzVha3Z3cjJpbll1a3A3cw?oc=5",
+      "published_at": "2026-05-20 04:30:06 UTC",
       "score": 8
     },
     {
@@ -272,6 +263,15 @@
       "source": "news.cnyes.com",
       "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1SRlk4SmlmNzBkbm9KNDJkVUNTcnF6c3paYk9fRUFVLV9ISDlRdl93RjJYejQ3U3JxWHY1clpVZjB5WDdUX2xvN3BPQ2FuN1E?oc=5",
       "published_at": "2026-05-19 21:38:58 UTC",
+      "score": 6
+    },
+    {
+      "theme": "energy_inflation",
+      "query": "WTI Brent 原油 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "川普再嗆伊朗、通膨陰影籠罩！比特幣跌破 7.7 萬美元，幣市再度陷入「恐慌」 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1UaWdXUS1Ed0UxdUNwOUtzZXN3UEREcmpROTZ6VERTYXlJQ3RHNnJWS2U4M2VzT3JUZENNb3ozV1g5a2RtdmFsOHd0RERJc2xpR0dz?oc=5",
+      "published_at": "2026-05-18 08:57:08 UTC",
       "score": 6
     },
     {
