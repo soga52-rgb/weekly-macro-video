@@ -35,9 +35,14 @@ from typing import Any, Dict, List, Optional
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
-DEFAULT_TTS_MODEL = "gemini-3.1-flash-tts-preview"
-DEFAULT_HOST_VOICE = "Kore"
-DEFAULT_ANALYST_VOICE = "Puck"
+DEFAULT_TTS_MODEL = "gemini-2.5-flash-preview-tts"
+DEFAULT_TTS_FALLBACK_MODELS = [
+    "gemini-2.5-flash-preview-tts",
+    "gemini-2.5-pro-preview-tts",
+    "gemini-3.1-flash-tts-preview",
+]
+DEFAULT_HOST_VOICE = "Tom"
+DEFAULT_ANALYST_VOICE = "Miranda"
 
 
 def find_latest_week_dir() -> Path:
@@ -84,6 +89,21 @@ def find_inline_audio(api_response: Dict[str, Any]) -> Optional[Dict[str, str]]:
                     "data": data,
                 }
     return None
+
+
+
+def get_tts_model_candidates() -> List[str]:
+    raw = os.getenv("GEMINI_TTS_MODEL", "").strip()
+    if raw:
+        candidates = [item.strip() for item in raw.split(",") if item.strip()]
+    else:
+        candidates = list(DEFAULT_TTS_FALLBACK_MODELS)
+
+    for item in DEFAULT_TTS_FALLBACK_MODELS:
+        if item not in candidates:
+            candidates.append(item)
+
+    return candidates
 
 
 def call_gemini_tts(text: str, model: str, voice: str, api_key: str, role_label: str) -> Dict[str, str]:
@@ -187,7 +207,7 @@ def main() -> None:
     if not api_key:
         raise EnvironmentError("Missing GEMINI_API_KEY.")
 
-    model = os.getenv("GEMINI_TTS_MODEL", DEFAULT_TTS_MODEL).strip() or DEFAULT_TTS_MODEL
+    tts_models = get_tts_model_candidates()
     host_voice = os.getenv("GEMINI_TTS_HOST_VOICE", DEFAULT_HOST_VOICE).strip() or DEFAULT_HOST_VOICE
     analyst_voice = os.getenv("GEMINI_TTS_ANALYST_VOICE", DEFAULT_ANALYST_VOICE).strip() or DEFAULT_ANALYST_VOICE
 
@@ -205,7 +225,7 @@ def main() -> None:
         raise RuntimeError("weekly_narration.json has no scenes.")
 
     scene_audio_paths: List[Path] = []
-    print(f"[INFO] Generating dialogue TTS with model: {model}")
+    print(f"[INFO] Generating dialogue TTS with model candidates: {', '.join(tts_models)}")
     print(f"[INFO] host_voice={host_voice}, analyst_voice={analyst_voice}")
 
     for scene in scenes:
@@ -227,8 +247,23 @@ def main() -> None:
                 print(f"[SKIP] Turn audio exists: {turn_path}")
             else:
                 print(f"[INFO] Generating {scene_id} turn {idx}: {speaker}")
-                audio = call_gemini_tts(text, model, voice, api_key, role_label)
-                write_audio_file(turn_path, audio)
+                last_error = None
+                for model in tts_models:
+                    try:
+                        print(f"[INFO] Trying TTS model: {model}")
+                        audio = call_gemini_tts(text, model, voice, api_key, role_label)
+                        write_audio_file(turn_path, audio)
+                        last_error = None
+                        break
+                    except RuntimeError as exc:
+                        last_error = exc
+                        message = str(exc)
+                        if "HTTPError 404" in message or "NOT_FOUND" in message:
+                            print(f"[WARN] TTS model not available: {model}. Trying next fallback model.")
+                            continue
+                        raise
+                if last_error is not None:
+                    raise last_error
 
             scene_turn_paths.append(turn_path)
 
