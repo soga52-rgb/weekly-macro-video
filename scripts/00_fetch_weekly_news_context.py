@@ -2,20 +2,18 @@
 # -*- coding: utf-8 -*-
 
 """
-Weekly Macro Video Engine - Weekly News Context
-Fetch one-week macro news context from Google News RSS and summarize it with Gemini.
+Weekly Macro Video Engine - Weekly News Context v3
 
 Purpose:
-- Add a dynamic weekly news layer for weekly macro video.
-- Do not hard-code weekly themes such as Warsh / geopolitics / US-China.
-- Let weekly news search provide current macro context for forest summary.
-- First version excludes Reuters and CNBC by user preference.
+- Build a dynamic one-week macro news context for weekly video generation.
+- Search Google News RSS for the same weekly window used by weekly_video_source.
+- Preferred sources: UDN / Cnyes / MarketWatch / Investing.
+- Reuters and CNBC are excluded in this version.
+- Output is used as a correction layer for weekly_forest_summary.
 
 Input:
-- output/weekly/YYYY-MM-DD/weekly_source_text.md
-  Used only to infer week range and macro themes.
 - data/weekly_video_source.json
-  Used to infer week range when available.
+- output/weekly/YYYY-MM-DD/weekly_source_text.md
 
 Output:
 - data/weekly_news_raw.json
@@ -41,9 +39,9 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from datetime import datetime, timezone
+from datetime import timezone
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Tuple
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -53,20 +51,91 @@ OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
 DEFAULT_MODEL = "gemini-3.5-flash"
 DEFAULT_MAX_ITEMS = 30
 
+SOURCE_FILTERS = [
+    "site:udn.com",
+    "site:cnyes.com",
+    "site:marketwatch.com",
+    "site:investing.com",
+]
+
+NEWS_QUERY_GROUPS = [
+    {
+        "theme": "long_bond_yields",
+        "queries": [
+            "美債 殖利率 20年期 30年期",
+            "美債 長天期 殖利率 期限溢價",
+            "Treasury yields 30-year 20-year inflation premium",
+        ],
+    },
+    {
+        "theme": "fed_policy",
+        "queries": [
+            "Fed 降息 縮表 美債 殖利率",
+            "聯準會 高利率 維持更久 殖利率",
+            "Federal Reserve rate cut balance sheet Treasury yields",
+        ],
+    },
+    {
+        "theme": "dollar_asia_fx",
+        "queries": [
+            "美元指數 亞洲貨幣 台幣 日圓",
+            "美元 亞幣 承壓 台幣 日圓 韓元",
+            "dollar index Asia currencies yen Taiwan dollar",
+        ],
+    },
+    {
+        "theme": "gold",
+        "queries": [
+            "黃金 美元 利率 避險 通膨",
+            "金價 美債殖利率 美元 避險",
+            "gold dollar yields safe haven inflation",
+        ],
+    },
+    {
+        "theme": "energy_inflation",
+        "queries": [
+            "油價 原油 通膨 預期 地緣政治",
+            "WTI Brent 原油 通膨 Fed",
+            "oil prices inflation expectations geopolitical risk",
+        ],
+    },
+    {
+        "theme": "geopolitics",
+        "queries": [
+            "美伊 伊朗 地緣政治 油價 通膨",
+            "中東 地緣政治 原油 通膨",
+            "Iran Middle East oil inflation geopolitical risk",
+        ],
+    },
+    {
+        "theme": "us_china_trade",
+        "queries": [
+            "美中 會談 關稅 貿易 市場",
+            "美中 關稅 貿易談判 美元",
+            "US China talks tariff trade markets",
+        ],
+    },
+]
 
 SYSTEM_PROMPT = """
 你是一位專業總經週報新聞編輯。
 
 你的任務是把一週內的新聞候選整理成「週報影片用新聞脈絡」。
-請注意：
-1. 你不是要摘要每一則新聞。
-2. 你要判斷哪些新聞支撐週報主線，哪些是修正因子，哪些只是待觀察。
-3. 不要捏造新聞候選中沒有的資訊。
-4. 如果新聞佐證不足，請明確寫「資料不足，待觀察」。
-5. 語氣要像分析師週報，不要像自媒體標題。
-6. 使用繁體中文。
-"""
+你不是要逐篇摘要新聞，而是要判斷：
+1. 哪些新聞支撐週報主線。
+2. 哪些新聞是修正因子。
+3. 哪些新聞只是單日雜訊或待觀察。
+4. 新聞是否能修正 daily summaries 的單日背離判斷。
 
+語氣要求：
+- 專業、克制、分析師週報風格。
+- 不要像媒體標題或自媒體旁白。
+- 原始新聞標題可以保留，但你自己的判斷文字不要使用過度戲劇化字眼。
+- 避免：崩潰、狂歡、恐慌、徹底、全面、飆升、暴衝、導火線、反撲。
+- 若因果關係不是新聞明確支持，請用「可能」、「顯示」、「反映」、「待觀察」。
+
+請使用繁體中文。
+"""
 
 USER_PROMPT_TEMPLATE = """
 以下有兩份資料：
@@ -75,7 +144,9 @@ A. weekly_source_text.md：
 這是最近 3～5 天每日總經摘要整合而成的週報來源。
 
 B. weekly_news_candidates：
-這是一週內由 Google News RSS 搜尋出的新聞候選，來源優先包含聯合新聞網、鉅亨網，也可包含 MarketWatch / Investing 等白名單來源。
+這是一週內由 Google News RSS 搜尋出的新聞候選。
+來源優先包含聯合新聞網、鉅亨網，也可包含 MarketWatch / Investing 等白名單來源。
+本版本不使用 Reuters 與 CNBC。
 
 請根據兩者，輸出 weekly_news_context.json。
 
@@ -83,10 +154,10 @@ B. weekly_news_candidates：
 1. 不要逐篇摘要新聞。
 2. 請判斷新聞是否支持 weekly_source_text 的市場主線。
 3. 請特別檢查：通膨預期、Fed政策、長天期美債殖利率、美元、亞洲貨幣、黃金、能源、地緣政治、美中關係。
-4. 若新聞支持「高利率 → 美元 → 亞幣 / 黃金」傳導，請明確列入 confirming_signals。
+4. 若新聞支持「高利率 → 美元 → 亞幣 / 黃金」傳導，請列入 confirming_signals。
 5. 若新聞顯示單日背離或修正因子，請列入 contradicting_signals 或 news_based_corrections。
 6. 若只有單一新聞或佐證不足，請標示為「待觀察」，不要改寫整週主線。
-7. 不要使用過度戲劇化字眼。
+7. 不要使用過度戲劇化字眼；新聞原始標題可保留，但你的說明要克制。
 8. 只輸出合法 JSON，不要加 Markdown。
 
 請輸出 JSON 結構：
@@ -134,77 +205,8 @@ weekly_news_candidates:
 """
 
 
-NEWS_QUERY_GROUPS = [
-    {
-        "theme": "long_bond_yields",
-        "queries": [
-            '美債 殖利率 20年期 30年期',
-            '美債 長天期 殖利率 期限溢價',
-            'Treasury yields 30-year 20-year inflation premium',
-        ],
-    },
-    {
-        "theme": "fed_policy",
-        "queries": [
-            'Fed 降息 縮表 美債 殖利率',
-            '聯準會 高利率 維持更久 殖利率',
-            'Federal Reserve rate cut balance sheet Treasury yields',
-        ],
-    },
-    {
-        "theme": "dollar_asia_fx",
-        "queries": [
-            '美元指數 亞洲貨幣 台幣 日圓',
-            '美元 亞幣 承壓 台幣 日圓 韓元',
-            'dollar index Asia currencies yen Taiwan dollar',
-        ],
-    },
-    {
-        "theme": "gold",
-        "queries": [
-            '黃金 美元 利率 避險 通膨',
-            '金價 美債殖利率 美元 避險',
-            'gold dollar yields safe haven inflation',
-        ],
-    },
-    {
-        "theme": "energy_inflation",
-        "queries": [
-            '油價 原油 通膨 預期 地緣政治',
-            'WTI Brent 原油 通膨 Fed',
-            'oil prices inflation expectations geopolitical risk',
-        ],
-    },
-    {
-        "theme": "geopolitics",
-        "queries": [
-            '美伊 伊朗 地緣政治 油價 通膨',
-            '中東 地緣政治 原油 通膨',
-            'Iran Middle East oil inflation geopolitical risk',
-        ],
-    },
-    {
-        "theme": "us_china_trade",
-        "queries": [
-            '美中 會談 關稅 貿易 市場',
-            '美中 關稅 貿易談判 美元',
-            'US China talks tariff trade markets',
-        ],
-    },
-]
-
-SOURCE_FILTERS = [
-    "site:udn.com",
-    "site:cnyes.com",
-    "site:marketwatch.com",
-    "site:investing.com",
-]
-
-
 def load_text(path: Path) -> str:
-    if not path.exists():
-        return ""
-    return path.read_text(encoding="utf-8")
+    return path.read_text(encoding="utf-8") if path.exists() else ""
 
 
 def load_json(path: Path) -> Dict[str, Any]:
@@ -242,6 +244,16 @@ def infer_week_range(week_dir: Path) -> Tuple[str, str, str]:
     return start, end, label
 
 
+def build_queries() -> List[Tuple[str, str]]:
+    source_clause = "(" + " OR ".join(SOURCE_FILTERS) + ")"
+    output = []
+    for group in NEWS_QUERY_GROUPS:
+        theme = group["theme"]
+        for q in group["queries"]:
+            output.append((theme, f"{q} {source_clause} when:7d"))
+    return output
+
+
 def google_news_rss_url(query: str) -> str:
     encoded = urllib.parse.quote(query)
     return f"https://news.google.com/rss/search?q={encoded}&hl=zh-TW&gl=TW&ceid=TW:zh-Hant"
@@ -260,15 +272,12 @@ def parse_pubdate(pubdate: str) -> str:
 
 
 def clean_title(title: str) -> str:
-    text = html.unescape(title or "").strip()
-    # Google News titles often append " - Source"
-    return re.sub(r"\s+", " ", text)
+    return re.sub(r"\s+", " ", html.unescape(title or "").strip())
 
 
 def fetch_rss_items(query: str, theme: str, max_items: int = 8) -> List[Dict[str, Any]]:
-    url = google_news_rss_url(query)
     request = urllib.request.Request(
-        url,
+        google_news_rss_url(query),
         headers={
             "User-Agent": "weekly-macro-video-news-context/1.0",
             "Accept": "application/rss+xml, application/xml, text/xml",
@@ -295,25 +304,17 @@ def fetch_rss_items(query: str, theme: str, max_items: int = 8) -> List[Dict[str
         return items
 
     for item in channel.findall("item")[:max_items]:
-        title = clean_title(item.findtext("title", ""))
-        link = item.findtext("link", "") or ""
-        pub_date_raw = item.findtext("pubDate", "") or ""
         source_el = item.find("source")
-        source = source_el.text if source_el is not None and source_el.text else ""
-
-        if not title or not link:
-            continue
-
         items.append({
             "theme": theme,
             "query": query,
-            "title": title,
-            "source": source,
-            "url": link,
-            "published_at": parse_pubdate(pub_date_raw),
+            "title": clean_title(item.findtext("title", "")),
+            "source": source_el.text if source_el is not None and source_el.text else "",
+            "url": item.findtext("link", "") or "",
+            "published_at": parse_pubdate(item.findtext("pubDate", "") or ""),
         })
 
-    return items
+    return [x for x in items if x["title"] and x["url"]]
 
 
 def score_item(item: Dict[str, Any]) -> int:
@@ -330,7 +331,7 @@ def score_item(item: Dict[str, Any]) -> int:
         if kw.lower() in text:
             score += 2
 
-    preferred_sources = ["聯合", "鉅亨", "Reuters", "CNBC", "MarketWatch", "Investing"]
+    preferred_sources = ["聯合", "經濟日報", "鉅亨", "MarketWatch", "Investing"]
     for src in preferred_sources:
         if src.lower() in text:
             score += 3
@@ -347,26 +348,12 @@ def dedupe_and_rank(items: List[Dict[str, Any]], max_items: int) -> List[Dict[st
         if not key or key in seen:
             continue
         seen.add(key)
-
         item = dict(item)
         item["score"] = score_item(item)
         deduped.append(item)
 
     deduped.sort(key=lambda x: x.get("score", 0), reverse=True)
     return deduped[:max_items]
-
-
-def build_queries() -> List[Tuple[str, str]]:
-    output = []
-    source_clause = "(" + " OR ".join(SOURCE_FILTERS) + ")"
-
-    for group in NEWS_QUERY_GROUPS:
-        theme = group["theme"]
-        for q in group["queries"]:
-            full_query = f"{q} {source_clause} when:7d"
-            output.append((theme, full_query))
-
-    return output
 
 
 def extract_json_from_text(text: str) -> Dict[str, Any]:
@@ -378,7 +365,6 @@ def extract_json_from_text(text: str) -> Dict[str, Any]:
 
     start = cleaned.find("{")
     end = cleaned.rfind("}")
-
     if start == -1 or end == -1 or end <= start:
         raise ValueError("Gemini response does not contain a valid JSON object.")
 
@@ -394,20 +380,13 @@ def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: 
     )
 
     payload = {
-        "systemInstruction": {
-            "parts": [{"text": system_prompt}]
-        },
-        "contents": [
-            {
-                "role": "user",
-                "parts": [{"text": user_prompt}]
-            }
-        ],
+        "systemInstruction": {"parts": [{"text": system_prompt}]},
+        "contents": [{"role": "user", "parts": [{"text": user_prompt}]}],
         "generationConfig": {
             "temperature": 0.2,
             "topP": 0.85,
-            "responseMimeType": "application/json"
-        }
+            "responseMimeType": "application/json",
+        },
     }
 
     request = urllib.request.Request(
@@ -438,7 +417,7 @@ def build_news_context_markdown(context: Dict[str, Any]) -> str:
     lines = [
         "## 本週新聞補充",
         "",
-        f"### 新聞主線",
+        "### 新聞主線",
         str(context.get("weekly_news_theme", "資料不足，待觀察")),
         "",
         "### 新聞與每日摘要的關係",
@@ -451,8 +430,7 @@ def build_news_context_markdown(context: Dict[str, Any]) -> str:
         if not isinstance(driver, dict):
             continue
         lines.append(f"- {driver.get('driver', '')}｜{driver.get('impact', '')}｜信心：{driver.get('confidence', '')}")
-        evidence = driver.get("evidence", [])
-        for ev in evidence if isinstance(evidence, list) else []:
+        for ev in driver.get("evidence", []) if isinstance(driver.get("evidence", []), list) else []:
             lines.append(f"  - {ev}")
 
     def add_list(title: str, items: Any) -> None:
@@ -472,9 +450,8 @@ def build_news_context_markdown(context: Dict[str, Any]) -> str:
     top_news = context.get("top_news", []) or []
     if top_news:
         for news in top_news:
-            if not isinstance(news, dict):
-                continue
-            lines.append(f"- {news.get('source','')}｜{news.get('title','')}｜{news.get('why_it_matters','')}｜{news.get('url','')}")
+            if isinstance(news, dict):
+                lines.append(f"- {news.get('source','')}｜{news.get('title','')}｜{news.get('why_it_matters','')}｜{news.get('url','')}")
     else:
         lines.append("- 資料不足，待觀察")
 
@@ -499,10 +476,12 @@ def main() -> None:
     week_dir = Path(args.week_dir) if args.week_dir else find_latest_week_dir()
 
     weekly_source_text = load_text(week_dir / "weekly_source_text.md")
-    start, end, week_label = infer_week_range(week_dir)
+    _, _, week_label = infer_week_range(week_dir)
 
     all_items: List[Dict[str, Any]] = []
-    for theme, query in build_queries():
+    queries = build_queries()
+
+    for theme, query in queries:
         print(f"[INFO] Fetching news: {theme} | {query}")
         all_items.extend(fetch_rss_items(query, theme=theme, max_items=6))
         time.sleep(0.5)
@@ -513,7 +492,7 @@ def main() -> None:
         "meta": {
             "source": "Google News RSS",
             "week_range": week_label,
-            "query_count": len(build_queries()),
+            "query_count": len(queries),
             "raw_count": len(all_items),
             "ranked_count": len(ranked),
             "sources_preferred": SOURCE_FILTERS,
@@ -526,17 +505,14 @@ def main() -> None:
     print(f"[OK] Saved {DATA_DIR / 'weekly_news_raw.json'}")
 
     user_prompt = USER_PROMPT_TEMPLATE.replace(
-        "{weekly_source_text}",
-        weekly_source_text,
+        "{weekly_source_text}", weekly_source_text
     ).replace(
-        "{weekly_news_candidates}",
-        json.dumps(ranked, ensure_ascii=False, indent=2),
+        "{weekly_news_candidates}", json.dumps(ranked, ensure_ascii=False, indent=2)
     )
 
     print(f"[INFO] Generating weekly news context with model: {model}")
     context = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
 
-    # Ensure minimal meta completeness.
     context.setdefault("meta", {})
     context["meta"]["source"] = "Google News RSS"
     context["meta"]["week_range"] = context["meta"].get("week_range") or week_label
