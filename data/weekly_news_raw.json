@@ -24,6 +24,15 @@
     },
     {
       "theme": "fed_policy",
+      "query": "Fed 降息 縮表 美債 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "美債殖利率揚 Fed難降息 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9lOEFuaUtWRDFzc01GQ1drWmo0TEN0WFJ1ZUh6bllDRWNLMWJPMk10OFJ1dlRnbGItVmpLLUlhMHExVkJEclYwYTZnSHFhdXlUQUtQaXBjNGlzQdIBX0FVX3lxTE9tRDFrNEdJVFJ1TzQxUjVQbmptdEJ1bk9FTFJnWmxHRGRILVlwUTU5dlI4bDZRMTBkOUJqWW1BRFE2RnRzQ3h6d2tWNk1XaWhsNnY1VXZWUDI5YzRnalNZ?oc=5",
+      "published_at": "2026-05-15 16:20:26 UTC",
+      "score": 11
+    },
+    {
+      "theme": "fed_policy",
       "query": "聯準會 高利率 維持更久 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
       "title": "美股漲勢降溫油價與美債殖利率攀升拖累科技股 - news.cnyes.com",
       "source": "news.cnyes.com",
@@ -123,15 +132,6 @@
     },
     {
       "theme": "fed_policy",
-      "query": "Fed 降息 縮表 美債 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "債市給的下馬威？美債殖利率全線飆升 華許上任首日降息選項恐遭封殺 - news.cnyes.com",
-      "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE85dnFrZVlYVkpRcHl6clpxeHBMT0ljNlhNLVBBb1BKcU1oYWhZTFZORTdoRUZuT2hjYTlRSDF0NFE0TldpRi1ibmtUdF9Zb0k?oc=5",
-      "published_at": "2026-05-15 04:40:03 UTC",
-      "score": 8
-    },
-    {
-      "theme": "fed_policy",
       "query": "聯準會 高利率 維持更久 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
       "title": "金價大跌2%！美元、油價齊飆升，市場認為高利率不會降 - news.cnyes.com",
       "source": "news.cnyes.com",
@@ -149,30 +149,12 @@
       "score": 7
     },
     {
-      "theme": "dollar_asia_fx",
-      "query": "美元指數 亞洲貨幣 台幣 日圓 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "川習會登場觀望濃 新台幣連3貶、成交量萎縮 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBSWXA3bDB2ZXFLVjhlSHJKMlJMaFZ0dVRvellhd2pKeXRWRTIxelFFaWhIWFExQkQ5clh6MFFDUEk2Vy1RWTU0ZzIzdURwOW1VdXk1VVdGQWFlUdIBX0FVX3lxTE1xMnBlTUtBSEhNc0YwTXVjY09qZHVBOXgzNEl5TjFKOHJQbFdYSWZuWlJPQ1FVU0xxMU9fdHRYRURiZUFpWkpSTVoxTS05UUFrOXZReGVWYUlhaGpyNEI4?oc=5",
-      "published_at": "2026-05-14 10:12:57 UTC",
-      "score": 7
-    },
-    {
       "theme": "long_bond_yields",
       "query": "美債 殖利率 20年期 30年期 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
       "title": "日本30年債殖利率飆破4% 創26年新高 股匯同步重挫 再現「三殺」 - news.cnyes.com",
       "source": "news.cnyes.com",
       "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1uQWxoaEpmU1Z5Vldqd0I1WmNhRExkSkU5TkM2MVRTR3prSzZzQ1ZKaDZmM0NLdDRjTm41bHlONGtKNzNFMmhLU3FfMUVDdms?oc=5",
       "published_at": "2026-05-16 01:00:57 UTC",
-      "score": 6
-    },
-    {
-      "theme": "fed_policy",
-      "query": "Fed 降息 縮表 美債 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "30年期殖利率連三日站上5% 債市押注Fed或重新轉向升息 - news.cnyes.com",
-      "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE01UkRScXp0WUtMZW90RzFwTUNsOW1MY3ZhNjV1YkJneEc5MUpDQmtWX2dFdjFJN1VXTXFJQmF3R2xMQUs0ZU9OUnd0RUxFN0k?oc=5",
-      "published_at": "2026-05-15 00:40:03 UTC",
       "score": 6
     },
     {
@@ -282,6 +264,24 @@
       "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBrcnlxQ0lkdGZFZVYwdTdTR0lYRkFTdktOVGFvTC1tMmJkQmZ0Z19hRmlncHkxNkF5a2hHdTZEc1pEWkdWbGh6RlhxeGd0bDdyQUpmZDFIZWtxUdIBX0FVX3lxTE4zUmItVHVyd25qNzAzRHVTNXNuVE85UjFpOFpwSFRYbzMxa2I3VkJZS1BSaE1ob1Y0Nk9McXpLU0E0NVc5N21rUHc1M3hQT1BuNkJMTU5RNlZ4d0xjdUhR?oc=5",
       "published_at": "2026-05-14 17:04:42 UTC",
       "score": 5
+    },
+    {
+      "theme": "long_bond_yields",
+      "query": "美債 長天期 殖利率 期限溢價 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "伊朗、利率成市場最大風險！高盛：市場已透支2027年樂觀預期 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9Gd2MwNkFySzRwVDVBN3JEeUFNRnNrVnpvSy02a3FQdm1BUzVfZkNyRzNIUFJzOXRNMEJDWEFxUTN5NWpCbzR0TjM4YkhtWUU?oc=5",
+      "published_at": "2026-05-16 08:51:11 UTC",
+      "score": 4
+    },
+    {
+      "theme": "fed_policy",
+      "query": "Fed 降息 縮表 美債 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "華許接掌Fed恐成牛市終結者？縮表與高利率風暴衝擊美股估值 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5FLVNwTXJ5MkpjSW01azlZZkpXcWxPV1UzUHVsYWpMQ0dYMVpIS0J5Nndyby02dXY5ZC1MQ1JyY2NvcFU2NUNRbkVSSFAtN00?oc=5",
+      "published_at": "2026-05-18 02:56:10 UTC",
+      "score": 4
     }
   ]
 }
