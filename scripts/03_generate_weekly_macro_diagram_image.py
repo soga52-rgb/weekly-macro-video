@@ -16,6 +16,11 @@ Required env:
 
 Optional env:
 - GEMINI_IMAGE_MODEL, default: gemini-3.1-flash-image-preview
+- FORCE_REBUILD_DIAGRAM, default: false
+
+Skip logic:
+- If weekly_macro_diagram.png already exists and FORCE_REBUILD_DIAGRAM is not true,
+  skip image generation. This avoids repeated image-model calls when only page CSS/HTML changes.
 """
 
 import argparse
@@ -40,6 +45,10 @@ def find_latest_week_dir() -> Path:
         raise FileNotFoundError("No weekly output folder found under output/weekly/")
     week_dirs.sort(key=lambda p: p.name, reverse=True)
     return week_dirs[0]
+
+
+def should_force_rebuild() -> bool:
+    return os.getenv("FORCE_REBUILD_DIAGRAM", "false").strip().lower() in {"1", "true", "yes", "y"}
 
 
 def load_text(path: Path) -> str:
@@ -132,12 +141,17 @@ def main() -> None:
     model = os.getenv("GEMINI_IMAGE_MODEL", DEFAULT_IMAGE_MODEL).strip() or DEFAULT_IMAGE_MODEL
     week_dir = Path(args.week_dir) if args.week_dir else find_latest_week_dir()
 
+    out_path = week_dir / "weekly_macro_diagram.png"
+    if out_path.exists() and not should_force_rebuild():
+        print(f"[SKIP] Diagram image already exists: {out_path}")
+        print("[SKIP] Set FORCE_REBUILD_DIAGRAM=true to regenerate image.")
+        return
+
     prompt = load_text(week_dir / "weekly_macro_diagram_prompt.txt")
 
     print(f"[INFO] Generating weekly macro diagram image with model: {model}")
     image_bytes = call_gemini_image(prompt, model, api_key)
 
-    out_path = week_dir / "weekly_macro_diagram.png"
     save_binary(out_path, image_bytes)
 
     print(f"[OK] Created {out_path}")
