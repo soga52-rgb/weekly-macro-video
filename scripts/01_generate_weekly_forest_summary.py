@@ -265,6 +265,13 @@ def find_latest_week_dir() -> Path:
 
 
 def extract_json_from_text(text: str) -> Dict[str, Any]:
+    """
+    Extract the first valid JSON object from Gemini output.
+
+    Gemini Lite may occasionally return a valid JSON object followed by
+    extra text or another partial object. Using rfind("}") can include
+    that extra content and cause: JSONDecodeError: Extra data.
+    """
     cleaned = text.strip()
 
     if cleaned.startswith("```"):
@@ -272,12 +279,19 @@ def extract_json_from_text(text: str) -> Dict[str, Any]:
         cleaned = re.sub(r"```$", "", cleaned).strip()
 
     start = cleaned.find("{")
-    end = cleaned.rfind("}")
+    if start == -1:
+        preview = cleaned[:1000]
+        raise ValueError(f"Gemini response does not contain a JSON object. Preview: {preview}")
 
-    if start == -1 or end == -1 or end <= start:
-        raise ValueError("Gemini response does not contain a valid JSON object.")
-
-    return json.loads(cleaned[start:end + 1])
+    decoder = json.JSONDecoder()
+    try:
+        obj, _ = decoder.raw_decode(cleaned[start:])
+        if not isinstance(obj, dict):
+            raise ValueError("Gemini JSON root is not an object.")
+        return obj
+    except json.JSONDecodeError as exc:
+        preview = cleaned[:2000]
+        raise ValueError(f"Unable to parse Gemini JSON. Error: {exc}. Preview: {preview}") from exc
 
 
 def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: str) -> Dict[str, Any]:
