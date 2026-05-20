@@ -149,6 +149,15 @@
       "score": 7
     },
     {
+      "theme": "dollar_asia_fx",
+      "query": "美元 亞幣 承壓 台幣 日圓 韓元 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "川習會登場觀望濃 新台幣連3貶、成交量萎縮 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBSWXA3bDB2ZXFLVjhlSHJKMlJMaFZ0dVRvellhd2pKeXRWRTIxelFFaWhIWFExQkQ5clh6MFFDUEk2Vy1RWTU0ZzIzdURwOW1VdXk1VVdGQWFlUdIBX0FVX3lxTE1xMnBlTUtBSEhNc0YwTXVjY09qZHVBOXgzNEl5TjFKOHJQbFdYSWZuWlJPQ1FVU0xxMU9fdHRYRURiZUFpWkpSTVoxTS05UUFrOXZReGVWYUlhaGpyNEI4?oc=5",
+      "published_at": "2026-05-14 10:12:57 UTC",
+      "score": 7
+    },
+    {
       "theme": "long_bond_yields",
       "query": "美債 殖利率 20年期 30年期 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
       "title": "日本30年債殖利率飆破4% 創26年新高 股匯同步重挫 再現「三殺」 - news.cnyes.com",
@@ -273,15 +282,6 @@
       "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBrcnlxQ0lkdGZFZVYwdTdTR0lYRkFTdktOVGFvTC1tMmJkQmZ0Z19hRmlncHkxNkF5a2hHdTZEc1pEWkdWbGh6RlhxeGd0bDdyQUpmZDFIZWtxUdIBX0FVX3lxTE4zUmItVHVyd25qNzAzRHVTNXNuVE85UjFpOFpwSFRYbzMxa2I3VkJZS1BSaE1ob1Y0Nk9McXpLU0E0NVc5N21rUHc1M3hQT1BuNkJMTU5RNlZ4d0xjdUhR?oc=5",
       "published_at": "2026-05-14 17:04:42 UTC",
       "score": 5
-    },
-    {
-      "theme": "fed_policy",
-      "query": "Fed 降息 縮表 美債 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "華許接掌Fed恐成牛市終結者？縮表與高利率風暴衝擊美股估值 - news.cnyes.com",
-      "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5FLVNwTXJ5MkpjSW01azlZZkpXcWxPV1UzUHVsYWpMQ0dYMVpIS0J5Nndyby02dXY5ZC1MQ1JyY2NvcFU2NUNRbkVSSFAtN00?oc=5",
-      "published_at": "2026-05-18 02:56:10 UTC",
-      "score": 4
     }
   ]
 }
