@@ -13,6 +13,9 @@ on:
         required: false
         default: 'true'
 
+permissions:
+  contents: write
+
 env:
   IMAGE_MODEL: gemini-3.1-flash-image-preview
   IMAGE_MODEL_FALLBACKS: gemini-2.5-flash-image
@@ -24,6 +27,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -45,6 +50,15 @@ jobs:
         run: |
           python scripts/08_build_weekly_slide_images.py
 
+      - name: Commit generated slide images
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add output/weekly/**/slides/*.png output/weekly/**/weekly_slide_images_manifest.json output/weekly/**/slides_manifest.json || true
+          git diff --cached --quiet && echo "No slide image changes to commit." && exit 0
+          git commit -m "build: weekly slide images with image model"
+          git push
+
       - name: Upload slide artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -52,4 +66,5 @@ jobs:
           path: |
             output/weekly/*/slides/*.png
             output/weekly/*/weekly_slide_images_manifest.json
+            output/weekly/*/slides_manifest.json
           if-no-files-found: warn
