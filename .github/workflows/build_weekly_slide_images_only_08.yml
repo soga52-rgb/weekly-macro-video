@@ -1,0 +1,51 @@
+name: Build Weekly Slide Images (08 only)
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_date:
+        description: '週報資料夾日期（例如 2026-05-21；留空則由腳本自行判斷）'
+        required: false
+        default: ''
+      force_rebuild_slides:
+        description: '是否強制重建 scene_01 ~ scene_06 圖檔'
+        required: false
+        type: choice
+        options:
+          - 'false'
+          - 'true'
+        default: 'true'
+
+jobs:
+  build-weekly-slide-images:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pillow requests
+
+      - name: Build weekly slide images
+        env:
+          WEEK_DATE: ${{ github.event.inputs.week_date }}
+          FORCE_REBUILD_SLIDES: ${{ github.event.inputs.force_rebuild_slides }}
+        run: |
+          python scripts/08_build_weekly_slide_images.py
+
+      - name: Commit generated slide images
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add output/weekly/**/slides/*.png output/weekly/**/slides/*.json || true
+          git diff --cached --quiet && echo "No slide image changes to commit." && exit 0
+          git commit -m "build: weekly slide images (08 only)"
+          git push
