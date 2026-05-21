@@ -1,13 +1,43 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Weekly Macro Video - Step 05 V6
-Generate host/analyst dialogue narration for:
-Macro transmission diagram + Evidence Panel video.
+Weekly Macro Video - Step 05 V7
+Generate host/analyst dialogue narration with multimodal visual context.
+
+What changed in V7:
+- Gemini no longer receives only JSON text.
+- It also receives:
+  1) weekly_macro_diagram.png
+  2) a screenshot of index.html as market/news visual evidence context
+- This helps Gemini write a video script that follows the actual visual layout,
+  instead of producing a generic macro narration.
+
+Input:
+- output/weekly/YYYY-MM-DD/weekly_forest_summary.json
+- output/weekly/YYYY-MM-DD/weekly_news_context.json
+- output/weekly/YYYY-MM-DD/weekly_market_series.json
+- output/weekly/YYYY-MM-DD/weekly_macro_diagram.png
+- output/weekly/YYYY-MM-DD/index.html
+
+Output:
+- output/weekly/YYYY-MM-DD/narration/weekly_narration.json
+- output/weekly/YYYY-MM-DD/narration/weekly_narration_full.txt
+- output/weekly/YYYY-MM-DD/narration/scene_01.txt ... scene_06.txt
+- output/weekly/YYYY-MM-DD/visual_context/weekly_page_snapshot.jpg
+
+Required env:
+- GEMINI_API_KEY
+
+Optional env:
+- GEMINI_MODEL, default model candidates:
+  gemini-2.5-pro, gemini-3.1-flash-lite, gemini-2.5-flash
+- FORCE_REBUILD_NARRATION, default false
 """
 
 import argparse
+import base64
 import json
+import mimetypes
 import os
 import re
 import time
@@ -15,14 +45,16 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
+
+from PIL import Image
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
-DEFAULT_GEMINI_MODEL = "gemini-3.1-flash-lite"
+
 DEFAULT_GEMINI_FALLBACK_MODELS = [
+    "gemini-2.5-pro",
     "gemini-3.1-flash-lite",
-    "gemini-2.5-flash-lite",
     "gemini-2.5-flash",
 ]
 
@@ -75,7 +107,6 @@ def extract_json(text: str) -> Dict[str, Any]:
         return json.loads(match.group(0))
 
 
-
 def get_model_candidates() -> List[str]:
     raw = os.getenv("GEMINI_MODEL", "").strip()
     if raw:
@@ -90,107 +121,126 @@ def get_model_candidates() -> List[str]:
     return candidates
 
 
-def call_gemini_once(prompt: str, model: str, api_key: str) -> str:
-    endpoint = (
-        "https://generativelanguage.googleapis.com/v1beta/models/"
-        + urllib.parse.quote(model)
-        + ":generateContent?key="
-        + urllib.parse.quote(api_key)
-    )
+def resize_image_for_api(src: Path, dst: Path, max_width: int = 1600, quality: int = 82) -> Path:
+    """Resize/compress screenshot to keep API payload stable."""
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    with Image.open(src) as img:
+        img = img.convert("RGB")
+        if img.width > max_width:
+            new_height = int(img.height * max_width / img.width)
+            img = img.resize((max_width, new_height), Image.LANCZOS)
+        img.save(dst, format="JPEG", quality=quality, optimize=True)
+    return dst
 
-    payload = {
-        "contents": [{"role": "user", "parts": [{"text": prompt}]}],
-        "generationConfig": {
-            "temperature": 0.32,
-            "responseMimeType": "application/json",
-        },
-    }
 
-    req = urllib.request.Request(
-        endpoint,
-        data=json.dumps(payload).encode("utf-8"),
-        headers={"Content-Type": "application/json"},
-        method="POST",
-    )
+def capture_index_snapshot(week_dir: Path) -> Optional[Path]:
+    """Render local index.html into a visual context screenshot for Gemini."""
+    index_html = week_dir / "index.html"
+    if not index_html.exists():
+        print(f"[WARN] index.html not found, skip page snapshot: {index_html}")
+        return None
+
+    out_dir = week_dir / "visual_context"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    raw_png = out_dir / "weekly_page_snapshot_raw.png"
+    final_jpg = out_dir / "weekly_page_snapshot.jpg"
 
     try:
-        with urllib.request.urlopen(req, timeout=240) as resp:
-            raw = resp.read().decode("utf-8")
-    except urllib.error.HTTPError as exc:
-        detail = exc.read().decode("utf-8", errors="replace")
-        raise RuntimeError(f"Gemini HTTPError {exc.code}: {detail}") from exc
+        from playwright.sync_api import sync_playwright
+    except Exception as exc:
+        print(f"[WARN] Playwright not available, skip page snapshot. {exc}")
+        return None
 
-    data = json.loads(raw)
-    parts = (((data.get("candidates") or [{}])[0].get("content") or {}).get("parts") or [])
-    output = "\n".join(p.get("text", "") for p in parts if isinstance(p, dict)).strip()
-    if not output:
-        raise RuntimeError(f"Empty Gemini output. Preview: {raw[:1000]}")
-    return output
+    url = index_html.resolve().as_uri()
+
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch(headless=True)
+            page = browser.new_page(viewport={"width": 1920, "height": 2200}, device_scale_factor=1)
+            page.goto(url, wait_until="load", timeout=60000)
+            page.wait_for_timeout(1500)
+            page.screenshot(path=str(raw_png), full_page=True)
+            browser.close()
+
+        resize_image_for_api(raw_png, final_jpg, max_width=1600, quality=78)
+        print(f"[INFO] Created visual context snapshot: {final_jpg}")
+        return final_jpg
+
+    except Exception as exc:
+        print(f"[WARN] Failed to capture index snapshot, skip page snapshot. {exc}")
+        return None
 
 
-def call_gemini_with_retry(prompt: str, model_candidates: List[str], api_key: str) -> str:
-    retryable_markers = [
-        "HTTPError 429",
-        "HTTPError 500",
-        "HTTPError 502",
-        "HTTPError 503",
-        "HTTPError 504",
-        "UNAVAILABLE",
-        "RESOURCE_EXHAUSTED",
+def image_to_inline_part(path: Path, fallback_mime: str = "image/png") -> Dict[str, Any]:
+    mime_type = mimetypes.guess_type(path.name)[0] or fallback_mime
+    data = base64.b64encode(path.read_bytes()).decode("utf-8")
+    return {
+        "inlineData": {
+            "mimeType": mime_type,
+            "data": data,
+        }
+    }
+
+
+def clean_dialogue_text(text: str) -> str:
+    """Remove accidental role/name prefixes from model dialogue text."""
+    cleaned = str(text or "").strip()
+    patterns = [
+        r"^(主持人|分析師)\s*[:：]\s*",
+        r"^(Tom|Miranda|Kore|Puck|puck|kore)\s*[,，:：]\s*",
+        r"^(主持人|分析師)\s*(Tom|Miranda|Kore|Puck|puck|kore)?\s*[,，:：]\s*",
     ]
 
-    last_error = None
+    for _ in range(3):
+        before = cleaned
+        for pattern in patterns:
+            cleaned = re.sub(pattern, "", cleaned, flags=re.IGNORECASE).strip()
+        if cleaned == before:
+            break
 
-    for model in model_candidates:
-        print(f"[INFO] Trying Gemini narration model: {model}")
-
-        for attempt in range(1, 5):
-            try:
-                return call_gemini_once(prompt, model, api_key)
-            except RuntimeError as exc:
-                last_error = exc
-                message = str(exc)
-                is_retryable = any(marker in message for marker in retryable_markers)
-
-                if not is_retryable:
-                    raise
-
-                wait_seconds = min(75, 10 * attempt * attempt)
-                print(
-                    f"[WARN] Gemini narration request failed on {model}, "
-                    f"attempt {attempt}/4. Waiting {wait_seconds}s. Error: {message[:300]}"
-                )
-
-                if attempt < 4:
-                    time.sleep(wait_seconds)
-
-        print(f"[WARN] Model still unavailable after retries: {model}. Trying next model candidate.")
-
-    if last_error is not None:
-        raise last_error
-
-    raise RuntimeError("No Gemini model candidate was available.")
+    return cleaned
 
 
-def build_prompt(forest: Dict[str, Any], news: Dict[str, Any], market: Dict[str, Any]) -> str:
-    return f"""
+def flatten_dialogue(dialogue: List[Dict[str, str]]) -> str:
+    lines = []
+    for turn in dialogue:
+        speaker = str(turn.get("speaker") or "").strip()
+        text = clean_dialogue_text(str(turn.get("text") or "").strip())
+        if not text:
+            continue
+        label = "主持人" if speaker == "host" else "分析師" if speaker == "analyst" else speaker
+        lines.append(f"{label}：{text}")
+    return "\n".join(lines)
+
+
+def build_system_instruction() -> str:
+    return """
 你是一位專業總經週報影片主編、總經分析師與財經節目編劇。
 
-任務：
-根據 weekly_forest_summary、weekly_news_context、weekly_market_series，
-產生一支 8～10 分鐘「主持人 Tom + 分析師 Miranda」雙人對談式週報影片旁白與分鏡。
-影片畫面採用：
-1. 左側主畫面：同一張「總經傳導圖解」貫穿全片，使用 spotlight 聚焦不同區塊。
-2. 右側 Evidence Panel：顯示對應走勢圖、新聞卡與短重點。
+你正在替一支 8～10 分鐘的總經週報影片撰寫分鏡與雙人對談旁白。
+請嚴格遵守：
+1. 總經傳導圖解是全片主角，不是插圖。
+2. 市場訊號與新聞佐證頁是證據面板，用來輔助驗證圖解。
+3. 每段旁白必須沿著：
+   走勢圖變化 → 新聞原因 → 市場解讀 → 回到傳導鏈。
+4. 不要寫一般總經摘要；要寫「導讀畫面」的影片腳本。
+5. 主持人角色固定是 host，負責開場、提問、轉場。
+6. 分析師角色固定是 analyst，負責解釋走勢圖、新聞與傳導鏈。
+7. dialogue[].text 內禁止出現 Tom、Miranda、主持人、分析師等人名或角色前綴。
+8. 畫面文字必須短，完整分析放在 dialogue。
+9. 語氣專業、克制、條理清楚，不要聳動。
+10. 如果提到匯率貶值有助出口，必須補充實際效果仍取決於外需、進口成本與產業結構。
 
-核心原則：
-- 總經傳導圖解是主角，不是其中一張插圖。
-- 每段都要沿著「走勢圖變化 → 新聞原因 → 市場解讀 → 回到傳導鏈」。
-- 旁白不能只是照畫面文字唸。
-- 主持人 Tom 負責開場、提問、轉場。
-- 分析師 Miranda 負責用走勢圖 + 新聞內容 + 總經傳導鏈進行分析。
-- 新聞是校正層，不是逐篇摘要；請挑出能解釋該段走勢的新聞。
-- 畫面文字很少，完整分析放在 dialogue 裡。
+你會看到兩張圖片：
+- 圖片一：總經傳導圖解，是影片主地圖。
+- 圖片二：本週市場訊號與新聞佐證頁，是走勢圖與新聞證據來源。
+請在腳本中使用「左側」、「順著箭頭」、「圖解下方」、「右側證據面板」等空間引導語，但不要過度描述圖片外觀。
+"""
+
+
+def build_user_prompt(forest: Dict[str, Any], news: Dict[str, Any], market: Dict[str, Any]) -> str:
+    return f"""
+請根據隨附的兩張圖片與下列 JSON 資料，產生 V7 多模態版 weekly_narration.json。
 
 影片固定 6 段：
 scene_01：全圖開場。本週傳導鏈與核心數據變化。
@@ -232,32 +282,31 @@ scene_04：spotlight dollar_fx，assets DXY/USDJPY/USDTWD/USDKRW，news 貨幣
 scene_05：spotlight gold_risk，assets Gold，news 其他
 scene_06：spotlight next_watch，assets US10Y/DXY/Gold，news 其他
 
-語氣：
-- 專業、克制、條理清楚。
-- 不要像媒體標題或自媒體旁白。
-- 避免：崩潰、狂歡、恐慌、徹底、全面、暴衝、反撲、史詩級。
-- 若因果關係不是資料明確支持，請用：可能、顯示、反映、待觀察、尚未推翻主線。
-- 若提到匯率貶值可能支撐出口，必須補充：實際效果仍取決於外需、進口成本與產業結構，不可過度推論。
+對白風格範例，請模仿這種「主持人提問、分析師用走勢圖與新聞回答、再回到圖解」的節奏：
+[
+  {{
+    "speaker": "host",
+    "text": "我們先看本週總經傳導圖解。圖解下方的本週證據顯示，長債殖利率、美元與黃金都出現關鍵變化。這條傳導鏈目前走到什麼階段？"
+  }},
+  {{
+    "speaker": "analyst",
+    "text": "從右側證據面板的走勢來看，利率端仍是本週最關鍵的變數。長債殖利率走高，搭配新聞面對高利率維持更久的討論，說明市場正在重新定價資金成本。這也就是圖解中從再通膨預期傳到利率，再傳到美元的主線。"
+  }}
+]
 
-長度：
-- 全片約 8～10 分鐘。
-- 每段 dialogue 合計約 450～750 個中文字。
-- 每段至少 2 輪對話：主持人 → 分析師；必要時可再一輪主持人追問 → 分析師補充。
-- 句子適合 TTS 朗讀，不要過長。
+輸出規則：
+- 只輸出合法 JSON，不要 Markdown。
+- 每段 dialogue 合計約 550～850 個中文字。
+- 每段至少 host → analyst → host 或 host → analyst 兩輪。
+- narration 欄位請把 dialogue 合併成可讀文字，格式包含「主持人：」「分析師：」。
+- dialogue 仍必須保留，供 TTS 分聲線使用。
 
-畫面文字規則：
-- on_screen_title 是短標題。
-- on_screen_bullets 只放 3～5 個短重點，每點不超過 14 個中文字。
-- evidence_panel_title 是右側證據面板標題，例如「原油與通膨證據」。
-- 不要把完整旁白塞進畫面。
-
-只輸出合法 JSON，不要 Markdown。
 JSON 結構：
 {{
   "meta": {{
-    "version": "weekly_narration_v6_evidence_panel",
+    "version": "weekly_narration_v7_multimodal_visual_context",
     "target_duration_minutes": "8-10",
-    "tone": "tom_host_miranda_analyst"
+    "tone": "visual_guided_host_analyst_dialogue"
   }},
   "scenes": [
     {{
@@ -275,38 +324,124 @@ JSON 結構：
         {{"speaker": "analyst", "text": ""}}
       ],
       "narration": "",
-      "estimated_seconds": 80
+      "estimated_seconds": 90
     }}
   ],
   "full_narration": ""
 }}
 
-注意：
-- narration 欄位請把 dialogue 內容合併成可讀文字，格式包含「主持人：」「分析師：」。
-- dialogue 仍必須保留，供 TTS 依不同聲線生成。
-- 每段分析一定要引用走勢圖與新聞內容，不要只講抽象概念。
-
 weekly_forest_summary:
-{compact_json(forest, 20000)}
+{compact_json(forest, 18000)}
 
 weekly_news_context:
-{compact_json(news, 18000)}
+{compact_json(news, 16000)}
 
 weekly_market_series:
-{compact_json(market, 14000)}
+{compact_json(market, 12000)}
 """
 
 
-def flatten_dialogue(dialogue: List[Dict[str, str]]) -> str:
-    lines = []
-    for turn in dialogue:
-        speaker = str(turn.get("speaker") or "").strip()
-        text = str(turn.get("text") or "").strip()
-        if not text:
-            continue
-        label = "主持人" if speaker == "host" else "分析師" if speaker == "analyst" else speaker
-        lines.append(f"{label}：{text}")
-    return "\n".join(lines)
+def call_gemini_once(
+    user_prompt: str,
+    image_parts: List[Dict[str, Any]],
+    model: str,
+    api_key: str,
+) -> str:
+    endpoint = (
+        "https://generativelanguage.googleapis.com/v1beta/models/"
+        + urllib.parse.quote(model)
+        + ":generateContent?key="
+        + urllib.parse.quote(api_key)
+    )
+
+    parts: List[Dict[str, Any]] = [{"text": user_prompt}]
+    parts.extend(image_parts)
+
+    payload = {
+        "system_instruction": {
+            "parts": [{"text": build_system_instruction()}]
+        },
+        "contents": [
+            {
+                "role": "user",
+                "parts": parts,
+            }
+        ],
+        "generationConfig": {
+            "temperature": 0.65,
+            "responseMimeType": "application/json",
+        },
+    }
+
+    req = urllib.request.Request(
+        endpoint,
+        data=json.dumps(payload).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=300) as resp:
+            raw = resp.read().decode("utf-8")
+    except urllib.error.HTTPError as exc:
+        detail = exc.read().decode("utf-8", errors="replace")
+        raise RuntimeError(f"Gemini HTTPError {exc.code}: {detail}") from exc
+
+    data = json.loads(raw)
+    parts_out = (((data.get("candidates") or [{}])[0].get("content") or {}).get("parts") or [])
+    output = "\n".join(p.get("text", "") for p in parts_out if isinstance(p, dict)).strip()
+    if not output:
+        raise RuntimeError(f"Empty Gemini output. Preview: {raw[:1000]}")
+    return output
+
+
+def call_gemini_with_retry(
+    user_prompt: str,
+    image_parts: List[Dict[str, Any]],
+    model_candidates: List[str],
+    api_key: str,
+) -> str:
+    retryable_markers = [
+        "HTTPError 429",
+        "HTTPError 500",
+        "HTTPError 502",
+        "HTTPError 503",
+        "HTTPError 504",
+        "UNAVAILABLE",
+        "RESOURCE_EXHAUSTED",
+    ]
+
+    last_error = None
+
+    for model in model_candidates:
+        print(f"[INFO] Trying Gemini multimodal narration model: {model}")
+
+        for attempt in range(1, 5):
+            try:
+                return call_gemini_once(user_prompt, image_parts, model, api_key)
+            except RuntimeError as exc:
+                last_error = exc
+                message = str(exc)
+                is_retryable = any(marker in message for marker in retryable_markers)
+
+                if not is_retryable:
+                    raise
+
+                wait_seconds = min(75, 10 * attempt * attempt)
+                print(
+                    f"[WARN] Gemini narration request failed on {model}, "
+                    f"attempt {attempt}/4. Waiting {wait_seconds}s. Error: {message[:300]}"
+                )
+
+                if attempt < 4:
+                    time.sleep(wait_seconds)
+
+        print(f"[WARN] Model still unavailable after retries: {model}. Trying next model candidate.")
+
+    if last_error is not None:
+        raise last_error
+
+    raise RuntimeError("No Gemini model candidate was available.")
 
 
 def validate(data: Dict[str, Any]) -> Dict[str, Any]:
@@ -324,10 +459,12 @@ def validate(data: Dict[str, Any]) -> Dict[str, Any]:
     ]
     valid_assets = {"US10Y", "DXY", "Gold", "WTI", "Brent", "USDJPY", "USDTWD", "USDKRW"}
     valid_categories = {"通膨預期", "利率", "貨幣", "其他"}
+    valid_spotlights = {"overview", "drivers", "yields", "dollar_fx", "gold_risk", "next_watch"}
 
     output = []
     for i, scene in enumerate(scenes[:6], start=1):
         default_spotlight, default_assets, default_category = default_scene_config[i - 1]
+
         scene_id = str(scene.get("scene_id") or f"scene_{i:02d}")
         title = str(scene.get("scene_title") or f"Scene {i}").strip()
         on_screen_title = str(scene.get("on_screen_title") or title).strip()
@@ -338,6 +475,10 @@ def validate(data: Dict[str, Any]) -> Dict[str, Any]:
         bullets = [str(x).strip() for x in bullets if str(x).strip()][:5]
         if not bullets:
             bullets = [on_screen_title]
+
+        spotlight = str(scene.get("spotlight_target") or default_spotlight).strip()
+        if spotlight not in valid_spotlights:
+            spotlight = default_spotlight
 
         evidence_assets = scene.get("evidence_assets") or default_assets
         if not isinstance(evidence_assets, list):
@@ -359,7 +500,7 @@ def validate(data: Dict[str, Any]) -> Dict[str, Any]:
             if not isinstance(turn, dict):
                 continue
             speaker = str(turn.get("speaker") or "").strip()
-            text = str(turn.get("text") or "").strip()
+            text = clean_dialogue_text(str(turn.get("text") or "").strip())
             if speaker not in {"host", "analyst"}:
                 speaker = "analyst"
             if text:
@@ -368,29 +509,31 @@ def validate(data: Dict[str, Any]) -> Dict[str, Any]:
         narration = str(scene.get("narration") or "").strip()
         if not narration and cleaned_dialogue:
             narration = flatten_dialogue(cleaned_dialogue)
+
         if not narration:
             raise RuntimeError(f"{scene_id} narration/dialogue is empty.")
+
         if not cleaned_dialogue:
-            cleaned_dialogue = [{"speaker": "analyst", "text": narration}]
+            cleaned_dialogue = [{"speaker": "analyst", "text": clean_dialogue_text(narration)}]
 
         output.append({
             "scene_id": scene_id,
             "scene_title": title,
             "on_screen_title": on_screen_title,
             "on_screen_bullets": bullets,
-            "spotlight_target": str(scene.get("spotlight_target") or default_spotlight).strip(),
+            "spotlight_target": spotlight,
             "evidence_panel_title": str(scene.get("evidence_panel_title") or "證據面板").strip(),
             "evidence_assets": evidence_assets,
             "evidence_news_category": news_category,
             "visual_direction": str(scene.get("visual_direction") or "").strip(),
             "dialogue": cleaned_dialogue,
-            "narration": narration,
-            "estimated_seconds": int(scene.get("estimated_seconds") or 80),
+            "narration": flatten_dialogue(cleaned_dialogue),
+            "estimated_seconds": int(scene.get("estimated_seconds") or 90),
         })
 
     full = "\n\n".join(f"{s['scene_title']}\n{s['narration']}" for s in output)
     return {
-        "meta": data.get("meta") or {"version": "weekly_narration_v6_evidence_panel"},
+        "meta": data.get("meta") or {"version": "weekly_narration_v7_multimodal_visual_context"},
         "scenes": output,
         "full_narration": data.get("full_narration") or full,
     }
@@ -421,12 +564,31 @@ def main() -> None:
     if not forest:
         raise FileNotFoundError(f"Missing weekly_forest_summary.json in {week_dir}")
 
-    print(f"[INFO] Generating V6 evidence-panel dialogue narration with model candidates: {', '.join(model_candidates)}")
-    raw = call_gemini_with_retry(build_prompt(forest, news, market), model_candidates, api_key)
+    image_parts: List[Dict[str, Any]] = []
+    diagram_path = week_dir / "weekly_macro_diagram.png"
+    if diagram_path.exists():
+        print(f"[INFO] Attach macro diagram image: {diagram_path}")
+        image_parts.append(image_to_inline_part(diagram_path, "image/png"))
+    else:
+        print(f"[WARN] weekly_macro_diagram.png not found: {diagram_path}")
+
+    snapshot_path = capture_index_snapshot(week_dir)
+    if snapshot_path and snapshot_path.exists():
+        print(f"[INFO] Attach page snapshot image: {snapshot_path}")
+        image_parts.append(image_to_inline_part(snapshot_path, "image/jpeg"))
+
+    if not image_parts:
+        print("[WARN] No visual context images attached. Narration will be text-only.")
+
+    user_prompt = build_user_prompt(forest, news, market)
+
+    print(f"[INFO] Generating V7 multimodal visual-context narration with model candidates: {', '.join(model_candidates)}")
+    raw = call_gemini_with_retry(user_prompt, image_parts, model_candidates, api_key)
     data = validate(extract_json(raw))
 
     save_json(out_json, data)
     save_text(narration_dir / "weekly_narration_full.txt", data["full_narration"])
+
     for scene in data["scenes"]:
         save_text(narration_dir / f"{scene['scene_id']}.txt", scene["narration"])
 
