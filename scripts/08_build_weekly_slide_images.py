@@ -7,6 +7,7 @@ import base64
 import urllib.request
 import urllib.error
 import shutil
+import time
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any, Optional
@@ -21,6 +22,8 @@ IMAGE_MODEL_FALLBACKS = [
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
 FORCE_REBUILD_SLIDES = os.getenv("FORCE_REBUILD_SLIDES", "false").lower() == "true"
 REQUEST_TIMEOUT = int(os.getenv("GEMINI_TIMEOUT_SECONDS", "300"))
+MAX_IMAGE_RETRIES = int(os.getenv("MAX_IMAGE_RETRIES", "3"))
+RETRY_SLEEP_SECONDS = int(os.getenv("IMAGE_RETRY_SLEEP_SECONDS", "20"))
 
 SCENE_IMAGE_NAMES = {
     "scene_01": "scene_01.png",
@@ -367,6 +370,7 @@ def call_gemini_image(prompt: str, api_key: str, model_candidates: List[str], re
         if encoded:
             ref_parts.append({"inlineData": encoded})
 
+    last_error = ""
     for model in model_candidates:
         url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
         payload = {
@@ -379,31 +383,73 @@ def call_gemini_image(prompt: str, api_key: str, model_candidates: List[str], re
             },
         }
         data = json.dumps(payload).encode("utf-8")
-        req = urllib.request.Request(
-            url,
-            data=data,
-            headers={"Content-Type": "application/json"},
-            method="POST",
-        )
-        try:
-            with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
-                raw = resp.read()
-            res = json.loads(raw.decode("utf-8"))
-            candidates = res.get("candidates", []) or []
-            for cand in candidates:
-                content = cand.get("content", {}) or {}
-                for part in content.get("parts", []) or []:
-                    inline = part.get("inlineData") or part.get("inline_data")
-                    if inline and inline.get("data"):
-                        return base64.b64decode(inline["data"])
-            raise RuntimeError(f"{model} returned no image data")
-        except urllib.error.HTTPError as exc:
-            detail = exc.read().decode("utf-8", errors="ignore")
-            print(f"[WARN] image model failed: {model} / HTTP {exc.code} / {detail[:300]}")
-        except Exception as exc:
-            print(f"[WARN] image model failed: {model} / {exc}")
-    raise RuntimeError("All image model candidates failed")
 
+        for attempt in range(1, MAX_IMAGE_RETRIES + 1):
+            req = urllib.request.Request(
+                url,
+                data=data,
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            try:
+                print(f"[INFO] image model call: model={model}, attempt={attempt}/{MAX_IMAGE_RETRIES}")
+                with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
+                    raw = resp.read()
+                res = json.loads(raw.decode("utf-8"))
+                candidates = res.get("candidates", []) or []
+                for cand in candidates:
+                    content = cand.get("content", {}) or {}
+                    for part in content.get("parts", []) or []:
+                        inline = part.get("inlineData") or part.get("inline_data")
+                        if inline and inline.get("data"):
+                            return base64.b64decode(inline["data"])
+                last_error = f"{model} returned no image data"
+                print(f"[WARN] {last_error}")
+            except urllib.error.HTTPError as exc:
+                detail = exc.read().decode("utf-8", errors="ignore")
+                last_error = f"{model} / HTTP {exc.code} / {detail[:300]}"
+                print(f"[WARN] image model failed: {last_error}")
+            except Exception as exc:
+                last_error = f"{model} / {exc}"
+                print(f"[WARN] image model failed: {last_error}")
+
+            if attempt < MAX_IMAGE_RETRIES:
+                time.sleep(RETRY_SLEEP_SECONDS)
+
+    raise RuntimeError(f"All image model candidates failed. Last error: {last_error}")
+
+
+def copy_fallback_image(output_path: Path, diagram_path: Optional[Path], scene_id: str, reason: str) -> None:
+    """
+    Keep workflow alive when Gemini image generation has temporary 5xx errors.
+    Priority:
+    1. keep existing scene image if it already exists
+    2. copy weekly_macro_diagram.png as a placeholder image
+    This prevents one temporary image-model failure from aborting all generated slides.
+    """
+    if output_path.exists():
+        print(f"[WARN] keep existing {scene_id}: {output_path} / reason={reason}")
+        return
+    if diagram_path and diagram_path.exists():
+        shutil.copy2(diagram_path, output_path)
+        print(f"[WARN] fallback copied diagram to {output_path} / reason={reason}")
+        return
+    raise RuntimeError(f"{scene_id} failed and no fallback image is available: {reason}")
+
+
+def generate_image_or_fallback(prompt: str, output_path: Path, model_candidates: List[str], reference_images: List[Path], scene_id: str, diagram_path: Optional[Path]) -> bool:
+    try:
+        image_bytes = call_gemini_image(
+            prompt=prompt,
+            api_key=GEMINI_API_KEY,
+            model_candidates=model_candidates,
+            reference_images=reference_images,
+        )
+        write_slide(output_path, image_bytes)
+        return True
+    except Exception as exc:
+        copy_fallback_image(output_path, diagram_path, scene_id, str(exc))
+        return False
 
 def write_slide(output_path: Path, image_bytes: bytes) -> None:
     output_path.write_bytes(image_bytes)
@@ -464,28 +510,32 @@ def main() -> None:
     for scene_id in ["scene_02", "scene_03", "scene_04", "scene_05"]:
         output_path = slides_dir / SCENE_IMAGE_NAMES[scene_id]
         prompt = build_scene_prompt(scene_id, brief)
+        generated_ok = True
         if FORCE_REBUILD_SLIDES or not output_path.exists():
-            image_bytes = call_gemini_image(
+            generated_ok = generate_image_or_fallback(
                 prompt=prompt,
-                api_key=GEMINI_API_KEY,
+                output_path=output_path,
                 model_candidates=model_candidates,
                 reference_images=[diagram_path] if diagram_path.exists() else [],
+                scene_id=scene_id,
+                diagram_path=diagram_path,
             )
-            write_slide(output_path, image_bytes)
-        records.append({"scene_id": scene_id, "path": str(output_path.name), "mode": "image_model", "prompt_excerpt": prompt[:200]})
+        records.append({"scene_id": scene_id, "path": str(output_path.name), "mode": "image_model", "generated_ok": generated_ok, "prompt_excerpt": prompt[:200]})
 
     # Scene 06: full-page next-week watch slide.
     scene_06_output = slides_dir / SCENE_IMAGE_NAMES["scene_06"]
     prompt = build_scene_prompt("scene_06", brief)
+    generated_ok = True
     if FORCE_REBUILD_SLIDES or not scene_06_output.exists():
-        image_bytes = call_gemini_image(
+        generated_ok = generate_image_or_fallback(
             prompt=prompt,
-            api_key=GEMINI_API_KEY,
+            output_path=scene_06_output,
             model_candidates=model_candidates,
             reference_images=[],
+            scene_id="scene_06",
+            diagram_path=diagram_path if diagram_path.exists() else None,
         )
-        write_slide(scene_06_output, image_bytes)
-    records.append({"scene_id": "scene_06", "path": str(scene_06_output.name), "mode": "image_model", "prompt_excerpt": prompt[:200]})
+    records.append({"scene_id": "scene_06", "path": str(scene_06_output.name), "mode": "image_model", "generated_ok": generated_ok, "prompt_excerpt": prompt[:200]})
 
     save_manifest(week_dir, records)
     print(f"[DONE] weekly slide images ready: {slides_dir}")
