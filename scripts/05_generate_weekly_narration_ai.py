@@ -226,7 +226,8 @@ def build_system_instruction() -> str:
 4. 不要寫一般總經摘要；要寫「導讀畫面」的影片腳本。
 5. 主持人角色固定是 host，負責開場、提問、轉場。
 6. 分析師角色固定是 analyst，負責解釋走勢圖、新聞與傳導鏈。
-7. dialogue[].text 內禁止出現 Tom、Miranda、主持人、分析師等人名或角色前綴。
+7. dialogue[].text 開頭禁止出現 Tom、Miranda、主持人、分析師等角色前綴。
+   但允許在自然對話中短暫稱呼對方，例如「Miranda，從這個訊號來看...」或「Tom 你好」。
 8. 畫面文字必須短，完整分析放在 dialogue。
 9. 語氣專業、克制、條理清楚，不要聳動。
 10. 如果提到匯率貶值有助出口，必須補充實際效果仍取決於外需、進口成本與產業結構。
@@ -282,15 +283,19 @@ scene_04：spotlight dollar_fx，assets DXY/USDJPY/USDTWD/USDKRW，news 貨幣
 scene_05：spotlight gold_risk，assets Gold，news 其他
 scene_06：spotlight next_watch，assets US10Y/DXY/Gold，news 其他
 
-對白風格範例，請模仿這種「主持人提問、分析師用走勢圖與新聞回答、再回到圖解」的節奏：
+對白風格與 JSON 格式範例（請務必模仿此口語化、有互動感的語氣，並填入 dialogue 陣列中）：
 [
   {{
     "speaker": "host",
-    "text": "我們先看本週總經傳導圖解。圖解下方的本週證據顯示，長債殖利率、美元與黃金都出現關鍵變化。這條傳導鏈目前走到什麼階段？"
+    "text": "各位投資朋友大家好，歡迎收看本週的總經週報。這週我們觀察到的最重要證據，就是圖解下方的30年期美債殖利率突破了 5.1%。Miranda，從這個訊號來看，目前這條傳導鏈走到什麼階段了？"
   }},
   {{
     "speaker": "analyst",
-    "text": "從右側證據面板的走勢來看，利率端仍是本週最關鍵的變數。長債殖利率走高，搭配新聞面對高利率維持更久的討論，說明市場正在重新定價資金成本。這也就是圖解中從再通膨預期傳到利率，再傳到美元的主線。"
+    "text": "Tom 你好。這反映出一個明確的總經路徑：市場正在重新定價「高利率將維持更久」的新常態。我們順著畫面左側的走勢圖可以看到，這股壓力正直接衝擊貨幣市場的定價。"
+  }},
+  {{
+    "speaker": "host",
+    "text": "也就是說，目前市場的主要定價邏輯，完全扣合我們圖解上半部的這條路徑囉？"
   }}
 ]
 
@@ -304,7 +309,7 @@ scene_06：spotlight next_watch，assets US10Y/DXY/Gold，news 其他
 JSON 結構：
 {{
   "meta": {{
-    "version": "weekly_narration_v7_multimodal_visual_context",
+    "version": "weekly_narration_v7_multimodal_visual_context_fewshot",
     "target_duration_minutes": "8-10",
     "tone": "visual_guided_host_analyst_dialogue"
   }},
@@ -533,7 +538,7 @@ def validate(data: Dict[str, Any]) -> Dict[str, Any]:
 
     full = "\n\n".join(f"{s['scene_title']}\n{s['narration']}" for s in output)
     return {
-        "meta": data.get("meta") or {"version": "weekly_narration_v7_multimodal_visual_context"},
+        "meta": data.get("meta") or {"version": "weekly_narration_v7_multimodal_visual_context_fewshot"},
         "scenes": output,
         "full_narration": data.get("full_narration") or full,
     }
