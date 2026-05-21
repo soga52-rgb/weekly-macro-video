@@ -1,10 +1,57 @@
+Create one 16:9 static slide image for a weekly macro video.
+
+This slide must be based on the following Pro-generated scene plan. Keep the narrative and visual logic, but simplify the image into a clean NotebookLM-style whiteboard card.
+
+[Scene title]
+修正訊號：房市數據引發成長擔憂
+
+[Scene purpose]
+引入本週的修正因子，解釋為何市場並非單向交易通膨，成長擔憂的角色。
+
+[Narrative focus]
+疲軟的房市數據如何短暫地挑戰了『強勢美元』的敘事，引發市場對經濟硬著陸的疑慮。
+
+[Visual direction]
+將疲軟的數據圖表與美元指數的短暫波動並陳，視覺化呈現『修正因子』的影響。
+
+[Original image prompt from Pro]
 A 16:9 NotebookLM-style whiteboard image. On the left, a simple hand-drawn bar chart labeled '美國房市數據' shows declining bars. An orange question mark icon is drawn above it. A dashed arrow points from this chart to the right, where a line graph of the '美元指數 (DXY)' shows a brief, noticeable dip, circled in orange with the label '短暫回調'. The background is beige with a light gray grid.
 
-請使用 NotebookLM / 白板筆記風格：
-米白底、淺灰網格、黑色手繪線條、橘色重點、少量海軍藍。
-單頁只講一件事，少字、強視覺、弱邊框。
-不要顯示 scene 編號、目前焦點、工程標籤。
-不要把旁白逐字稿塞滿畫面。
-數字要大，單位要小。
-繁體中文。
-16:9 靜態圖卡。
+[Suggested on-screen text, use only if helpful and keep minimal]
+{
+  "headline": "成長的烏雲",
+  "key_numbers": [],
+  "short_bullets": [
+    "美國房市數據疲軟",
+    "引發經濟『硬著陸』擔憂",
+    "美元利差優勢一度被避險情緒抵銷"
+  ],
+  "news_lines": []
+}
+
+Production instructions:
+Use this exact visual direction:
+- 16:9 static infographic card.
+- NotebookLM / whiteboard notebook style.
+- off-white / beige background with subtle light-gray grid paper texture.
+- black hand-drawn sketch lines.
+- orange highlights, arrows, circles, underlines, question marks, pins, tags.
+- small amount of navy-blue text.
+- airy layout, weak or no heavy borders.
+- not a corporate dashboard, not a screenshot, not a dense report page.
+- one scene = one idea only.
+- minimal Traditional Chinese text.
+- do not show scene number, "目前焦點", engineering labels, prompt labels, or metadata.
+- do not paste narration text.
+- do not create long paragraphs.
+- if showing numbers, make numbers large and units small.
+- if using charts, use them as simple visual metaphors, not exact financial charts unless exact data is provided.
+- prefer clean visual metaphor + 1 headline + up to 3 short labels.
+- all visible Chinese must be Traditional Chinese.
+
+Important:
+- The image should feel like the successful clean whiteboard cards: simple metaphor, clear arrows, readable short Traditional Chinese labels.
+- Do not create a complex infographic with too many words.
+- Do not invent extra market facts.
+- If the scene includes a relationship, show it with one simple visual metaphor such as: arrow flow, seesaw, checklist, line chart, bar chart, or pressure/weight metaphor.
+- Do not include raw JSON or English descriptions in the image.
