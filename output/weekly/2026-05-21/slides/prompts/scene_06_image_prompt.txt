@@ -1,10 +1,57 @@
-A 16:9 NotebookLM-style whiteboard image. A simple checklist layout with the headline '下週觀察重點'. There are two items. The first has an icon of a rising trend line and text: '30年期美債殖利率 vs 5.5% 關卡?'. The second has an icon of a briefcase and text: '勞動力市場數據 → 硬著陸風險?'. A hand-drawn magnifying glass is inspecting the second item. Beige gridded background, clean and forward-looking.
+Create one 16:9 static slide image for a weekly macro video.
 
-請使用 NotebookLM / 白板筆記風格：
-米白底、淺灰網格、黑色手繪線條、橘色重點、少量海軍藍。
-單頁只講一件事，少字、強視覺、弱邊框。
-不要顯示 scene 編號、目前焦點、工程標籤。
-不要把旁白逐字稿塞滿畫面。
-數字要大，單位要小。
-繁體中文。
-16:9 靜態圖卡。
+This slide must be based on the following Pro-generated scene plan. Keep the narrative and visual logic, but simplify the image into a clean NotebookLM-style whiteboard card.
+
+[Scene title]
+展望：下週關鍵驗證點
+
+[Scene purpose]
+收斂本週觀察，並提出下週需要關注的關鍵數據與事件，以判斷本週建立的『高利率vs.成長擔憂』敘事將如何延續或轉變。
+
+[Narrative focus]
+將本週的傳導鏈與結論，收斂至下週的具體觀察指標上。
+
+[Visual direction]
+畫面呈現一個手繪的放大鏡，鏡片中是下週的日曆或清單。清單上有兩個重點項目，第一個是『30年債息 vs 5.5%?』，第二個是代表就業的公事包圖示，標示『勞動力數據』。整體視覺簡潔，聚焦在未來需要驗證的關鍵問題上。
+
+[Original image prompt from Pro]
+Create a 16:9 NotebookLM-style whiteboard image. On the left, a large, hand-drawn magnifying glass. Inside the lens of the magnifying glass, there is a simple checklist with two items. The first item is text: '30年債息 vs 5.5%?'. The second item is a simple icon of a briefcase, labeled '勞動力數據'. The overall feeling is one of forward-looking analysis. Style: off-white background, gray grid, black lines, orange highlights for the question mark and checklist ticks.
+
+[Suggested on-screen text, use only if helpful and keep minimal]
+{
+  "headline": "下週觀察重點",
+  "key_numbers": [],
+  "short_bullets": [
+    "30年期美債殖利率是否挑戰5.5%？",
+    "勞動力市場數據是否確認硬著陸風險？",
+    "亞洲央行是否出手干預匯市？"
+  ],
+  "news_lines": []
+}
+
+Production instructions:
+Use this exact visual direction:
+- 16:9 static infographic card.
+- NotebookLM / whiteboard notebook style.
+- off-white / beige background with subtle light-gray grid paper texture.
+- black hand-drawn sketch lines.
+- orange highlights, arrows, circles, underlines, question marks, pins, tags.
+- small amount of navy-blue text.
+- airy layout, weak or no heavy borders.
+- not a corporate dashboard, not a screenshot, not a dense report page.
+- one scene = one idea only.
+- minimal Traditional Chinese text.
+- do not show scene number, "目前焦點", engineering labels, prompt labels, or metadata.
+- do not paste narration text.
+- do not create long paragraphs.
+- if showing numbers, make numbers large and units small.
+- if using charts, use them as simple visual metaphors, not exact financial charts unless exact data is provided.
+- prefer clean visual metaphor + 1 headline + up to 3 short labels.
+- all visible Chinese must be Traditional Chinese.
+
+Important:
+- The image should feel like the successful clean whiteboard cards: simple metaphor, clear arrows, readable short Traditional Chinese labels.
+- Do not create a complex infographic with too many words.
+- Do not invent extra market facts.
+- If the scene includes a relationship, show it with one simple visual metaphor such as: arrow flow, seesaw, checklist, line chart, bar chart, or pressure/weight metaphor.
+- Do not include raw JSON or English descriptions in the image.

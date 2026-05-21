@@ -3,30 +3,32 @@ Create one 16:9 static slide image for a weekly macro video.
 This slide must be based on the following Pro-generated scene plan. Keep the narrative and visual logic, but simplify the image into a clean NotebookLM-style whiteboard card.
 
 [Scene title]
-修正訊號：房市數據引發成長擔憂
+修正：成長放緩的擔憂浮現
 
 [Scene purpose]
-引入本週的修正因子，解釋為何市場並非單向交易通膨，成長擔憂的角色。
+介紹本週的修正因子，說明疲軟的美國房市數據如何引發市場對經濟成長放緩的擔憂，並短暫地壓抑了美元的強勢，顯示市場定價不再只由單一利率因素主導。
 
 [Narrative focus]
-疲軟的房市數據如何短暫地挑戰了『強勢美元』的敘事，引發市場對經濟硬著陸的疑慮。
+解釋『成長放緩擔憂』如何成為修正『高利率→強美元』主線敘事的關鍵變數。
 
 [Visual direction]
-將疲軟的數據圖表與美元指數的短暫波動並陳，視覺化呈現『修正因子』的影響。
+畫面呈現一條向上的主趨勢線，標示為『美元走勢』。中間一個手繪的房子圖示，帶有向下的裂縫與箭頭，旁邊標示『房市數據疲軟』，從這個圖示發出一條橘色的波浪線，衝擊並造成主趨勢線出現一個短暫的凹陷，凹陷處標示『成長擔憂』。視覺上要清晰表達一個修正力量如何干擾主趨勢。
 
 [Original image prompt from Pro]
-A 16:9 NotebookLM-style whiteboard image. On the left, a simple hand-drawn bar chart labeled '美國房市數據' shows declining bars. An orange question mark icon is drawn above it. A dashed arrow points from this chart to the right, where a line graph of the '美元指數 (DXY)' shows a brief, noticeable dip, circled in orange with the label '短暫回調'. The background is beige with a light gray grid.
+Create a 16:9 NotebookLM-style whiteboard image. A main, hand-drawn black trend line moves upwards from left to right, labeled '美元主趨勢'. In the middle of the screen, a simple drawing of a house with a crack and a downward orange arrow is shown, labeled '房市疲軟'. From this house icon, an orange wavy arrow strikes the main trend line, causing a visible dip or interruption. At the point of the dip, add a text label '成長擔憂浮現'. Style: off-white background, gray grid, black lines, orange highlights.
 
 [Suggested on-screen text, use only if helpful and keep minimal]
 {
-  "headline": "成長的烏雲",
+  "headline": "成長擔憂 修正美元",
   "key_numbers": [],
   "short_bullets": [
     "美國房市數據疲軟",
-    "引發經濟『硬著陸』擔憂",
-    "美元利差優勢一度被避險情緒抵銷"
+    "引發經濟硬著陸疑慮",
+    "美元強勢主線遭遇短暫逆風"
   ],
-  "news_lines": []
+  "news_lines": [
+    "房市數據疲軟引發成長擔憂，美元短暫走弱"
+  ]
 }
 
 Production instructions:

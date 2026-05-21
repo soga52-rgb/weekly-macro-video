@@ -1,10 +1,65 @@
-A 16:9 NotebookLM-style whiteboard image. A hand-drawn black line chart shows the US 30-year Treasury yield over time. The line dramatically breaks through a dashed orange horizontal line labeled '5.2%'. Next to the breakout point, an orange tag says '19年新高'. The overall style is clean, with a beige gridded background, using black, orange, and navy blue as main colors. Minimal text, strong visual impact.
+Create one 16:9 static slide image for a weekly macro video.
 
-請使用 NotebookLM / 白板筆記風格：
-米白底、淺灰網格、黑色手繪線條、橘色重點、少量海軍藍。
-單頁只講一件事，少字、強視覺、弱邊框。
-不要顯示 scene 編號、目前焦點、工程標籤。
-不要把旁白逐字稿塞滿畫面。
-數字要大，單位要小。
-繁體中文。
-16:9 靜態圖卡。
+This slide must be based on the following Pro-generated scene plan. Keep the narrative and visual logic, but simplify the image into a clean NotebookLM-style whiteboard card.
+
+[Scene title]
+起點：再通膨預期與殖利率飆升
+
+[Scene purpose]
+解釋本週傳導鏈的起點，說明油價如何強化再通膨預期，並直接推動30年期美債殖利率創下19年新高。
+
+[Narrative focus]
+建立『再通膨預期 → 長債殖利率飆升』的因果關係，確立『高利率維持更久』的宏觀敘事。
+
+[Visual direction]
+畫面呈現一個因果鏈：左邊是油桶圖示與上升的箭頭，標示『能源價格』；中間一個大的右向箭頭，標示『強化通膨預期』；右邊是一個急遽攀升的殖利率曲線圖，標示『30年債息 > 5.2%』。整體視覺強調從能源到利率的直接驅動關係。
+
+[Original image prompt from Pro]
+Create a 16:9 NotebookLM-style whiteboard image. On the left, a hand-drawn oil barrel icon with an orange upward arrow labeled '能源價格'. A large black arrow points right, labeled '再通膨預期'. On the right, a stark, hand-drawn chart shows a bond yield curve sharply breaking a historical high, with a large orange tag '30年債息 > 5.2% (19年新高)'. The style is off-white background, gray grid, black lines, orange highlights, minimal text.
+
+[Suggested on-screen text, use only if helpful and keep minimal]
+{
+  "headline": "高利率新常態",
+  "key_numbers": [
+    {
+      "label": "30Y Treasury Yield",
+      "value": ">5.2%",
+      "unit": ""
+    }
+  ],
+  "short_bullets": [
+    "能源價格強化通膨預期",
+    "長債殖利率創19年新高",
+    "市場定價『高利率維持更久』"
+  ],
+  "news_lines": [
+    "30年期美債殖利率衝破5.2%創19年新高"
+  ]
+}
+
+Production instructions:
+Use this exact visual direction:
+- 16:9 static infographic card.
+- NotebookLM / whiteboard notebook style.
+- off-white / beige background with subtle light-gray grid paper texture.
+- black hand-drawn sketch lines.
+- orange highlights, arrows, circles, underlines, question marks, pins, tags.
+- small amount of navy-blue text.
+- airy layout, weak or no heavy borders.
+- not a corporate dashboard, not a screenshot, not a dense report page.
+- one scene = one idea only.
+- minimal Traditional Chinese text.
+- do not show scene number, "目前焦點", engineering labels, prompt labels, or metadata.
+- do not paste narration text.
+- do not create long paragraphs.
+- if showing numbers, make numbers large and units small.
+- if using charts, use them as simple visual metaphors, not exact financial charts unless exact data is provided.
+- prefer clean visual metaphor + 1 headline + up to 3 short labels.
+- all visible Chinese must be Traditional Chinese.
+
+Important:
+- The image should feel like the successful clean whiteboard cards: simple metaphor, clear arrows, readable short Traditional Chinese labels.
+- Do not create a complex infographic with too many words.
+- Do not invent extra market facts.
+- If the scene includes a relationship, show it with one simple visual metaphor such as: arrow flow, seesaw, checklist, line chart, bar chart, or pressure/weight metaphor.
+- Do not include raw JSON or English descriptions in the image.

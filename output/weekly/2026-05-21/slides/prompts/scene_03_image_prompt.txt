@@ -1,10 +1,65 @@
-A 16:9 NotebookLM-style whiteboard image. A simple flow diagram. On the left, a node labeled '美債殖利率' with an upward orange arrow. An arrow points to the center node labeled '美元指數 (DXY)', also with an upward orange arrow. From the DXY node, two arrows point to the right, towards nodes labeled '日圓 (JPY)' and '新台幣 (TWD)', both with downward navy blue arrows. The style is hand-drawn, on a beige gridded background.
+Create one 16:9 static slide image for a weekly macro video.
 
-請使用 NotebookLM / 白板筆記風格：
-米白底、淺灰網格、黑色手繪線條、橘色重點、少量海軍藍。
-單頁只講一件事，少字、強視覺、弱邊框。
-不要顯示 scene 編號、目前焦點、工程標籤。
-不要把旁白逐字稿塞滿畫面。
-數字要大，單位要小。
-繁體中文。
-16:9 靜態圖卡。
+This slide must be based on the following Pro-generated scene plan. Keep the narrative and visual logic, but simplify the image into a clean NotebookLM-style whiteboard card.
+
+[Scene title]
+傳導：強勢美元與承壓的亞洲貨幣
+
+[Scene purpose]
+展示利率如何傳導至外匯市場，解釋美債的高殖利率如何擴大利差優勢，支撐美元走強，並對亞洲貨幣（如日圓、台幣）造成貶值壓力。
+
+[Narrative focus]
+建立『長債殖利率 → 美元利差優勢 → 亞洲貨幣貶值』的傳導路徑。
+
+[Visual direction]
+畫面中央是一個強壯的美元符號『$』圖示，周圍有向上箭頭。從這個中心圖示，分岔出數條指向右下方、較弱的箭頭，分別指向日圓『¥』和台幣『NT$』的圖示，這些貨幣圖示旁有向下的趨勢線。整體視覺呈現美元的向心力與對外圍貨幣的壓力。
+
+[Original image prompt from Pro]
+Create a 16:9 NotebookLM-style whiteboard image. In the center, a large, bold, hand-drawn dollar sign '$' icon with orange upward arrows around it, labeled '美元利差優勢'. From this central icon, two black arrows point outwards and downwards. One arrow points to a Japanese Yen '¥' icon, the other to a New Taiwan Dollar 'NT$' icon. Both the Yen and NTD icons have small, orange downward trend lines next to them, labeled '亞幣承壓'. Style: off-white background, gray grid, black lines, orange highlights.
+
+[Suggested on-screen text, use only if helpful and keep minimal]
+{
+  "headline": "利差擴大 美元吸金",
+  "key_numbers": [
+    {
+      "label": "DXY",
+      "value": ">99",
+      "unit": ""
+    }
+  ],
+  "short_bullets": [
+    "高殖利率支撐美元",
+    "日圓、台幣等亞幣普遍承壓",
+    "市場關注亞洲央行干預動向"
+  ],
+  "news_lines": [
+    "美元指數衝破99 新台幣連4貶"
+  ]
+}
+
+Production instructions:
+Use this exact visual direction:
+- 16:9 static infographic card.
+- NotebookLM / whiteboard notebook style.
+- off-white / beige background with subtle light-gray grid paper texture.
+- black hand-drawn sketch lines.
+- orange highlights, arrows, circles, underlines, question marks, pins, tags.
+- small amount of navy-blue text.
+- airy layout, weak or no heavy borders.
+- not a corporate dashboard, not a screenshot, not a dense report page.
+- one scene = one idea only.
+- minimal Traditional Chinese text.
+- do not show scene number, "目前焦點", engineering labels, prompt labels, or metadata.
+- do not paste narration text.
+- do not create long paragraphs.
+- if showing numbers, make numbers large and units small.
+- if using charts, use them as simple visual metaphors, not exact financial charts unless exact data is provided.
+- prefer clean visual metaphor + 1 headline + up to 3 short labels.
+- all visible Chinese must be Traditional Chinese.
+
+Important:
+- The image should feel like the successful clean whiteboard cards: simple metaphor, clear arrows, readable short Traditional Chinese labels.
+- Do not create a complex infographic with too many words.
+- Do not invent extra market facts.
+- If the scene includes a relationship, show it with one simple visual metaphor such as: arrow flow, seesaw, checklist, line chart, bar chart, or pressure/weight metaphor.
+- Do not include raw JSON or English descriptions in the image.
