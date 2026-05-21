@@ -1,628 +1,494 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Weekly Macro Video - Step 08 (V3 Notebook Single Visual)
+# Save as: scripts/08_build_weekly_slide_images.py
 
-Design goals from latest discussion:
-- Scene 01: full-page weekly macro diagram
-- Scene 02~05: NO minimap, NO frame-heavy layout, NO observation bullets
-- Scene 02~05: only show the key visual(s) needed for that scene
-- bottom area shows asset mini-cards + related news links
-- Scene 06: full-page next-week watch page with ultra-minimal icons/text
-- all panels use soft paper blocks without visible borders
-- data cards emphasize the number; units stay very small
-
-Replace:
-- scripts/08_build_weekly_slide_images.py
-"""
-
+import os
+import re
 import json
-import math
+import base64
+import urllib.request
+import urllib.error
+import shutil
+from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Dict, List, Any, Optional
 
-from PIL import Image, ImageDraw, ImageFont, ImageFilter
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT_ROOT = ROOT / "output" / "weekly"
 
-ROOT_DIR = Path(__file__).resolve().parents[1]
-OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
+IMAGE_MODEL = os.getenv("IMAGE_MODEL", "gemini-3.1-flash-image-preview")
+IMAGE_MODEL_FALLBACKS = [
+    s.strip() for s in os.getenv("IMAGE_MODEL_FALLBACKS", "gemini-2.5-flash-image").split(",") if s.strip()
+]
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+FORCE_REBUILD_SLIDES = os.getenv("FORCE_REBUILD_SLIDES", "false").lower() == "true"
+REQUEST_TIMEOUT = int(os.getenv("GEMINI_TIMEOUT_SECONDS", "300"))
 
-CANVAS_W = 1920
-CANVAS_H = 1080
-BG = (251, 250, 247)
-GRID = (238, 234, 227)
-TEXT = (33, 41, 56)
-SUBTEXT = (89, 102, 123)
-MUTED = (138, 149, 165)
-ORANGE = (239, 138, 37)
-NAVY = (42, 58, 81)
-RED = (222, 86, 64)
-WHITE = (255, 255, 255)
-
-MARGIN_X = 72
-MARGIN_TOP = 58
-TITLE_Y = 48
-
-DIAGRAM_PRESETS: Dict[str, List[Tuple[float, float, float, float]]] = {
-    # only the essential visual pieces, not whole panels
-    "scene_02": [
-        (0.02, 0.48, 0.16, 0.80),  # 再通膨預期
-        (0.16, 0.48, 0.30, 0.80),  # 油價高檔
-    ],
-    "scene_03": [
-        (0.30, 0.48, 0.44, 0.80),  # 通膨黏性
-        (0.44, 0.48, 0.59, 0.80),  # 長債利率飆升
-    ],
-    "scene_04": [
-        (0.58, 0.48, 0.71, 0.80),  # 美元偏強
-        (0.72, 0.48, 0.85, 0.80),  # 亞幣承壓
-    ],
-    "scene_05": [
-        (0.84, 0.48, 0.96, 0.80),  # 黃金壓力
-        (0.27, 0.72, 0.54, 0.96),  # 修正因子
-        (0.55, 0.76, 0.73, 0.90),  # 美元短暫走弱
-    ],
-}
-
-SCENE_CONFIG = {
-    "scene_02": {
-        "title": "起點：能源價格推升通膨預期",
-        "assets": ["WTI", "Brent"],
-        "news_category": "通膨預期",
-        "news_keywords": ["油價", "原油", "能源", "通膨", "再通膨", "物價"],
-        "news_heading": "通膨預期",
-    },
-    "scene_03": {
-        "title": "利率：長債殖利率重新定價",
-        "assets": ["US10Y"],
-        "news_category": "利率",
-        "news_keywords": ["殖利率", "美債", "利率", "Fed", "升息", "降息"],
-        "news_heading": "利率",
-    },
-    "scene_04": {
-        "title": "美元與亞洲貨幣：利差壓力外溢",
-        "assets": ["DXY", "USDJPY", "USDTWD", "USDKRW"],
-        "news_category": "貨幣",
-        "news_keywords": ["美元", "亞幣", "日圓", "台幣", "韓元", "匯率", "央行干預"],
-        "news_heading": "貨幣",
-    },
-    "scene_05": {
-        "title": "黃金與修正因子：高利率下的避險拉鋸",
-        "assets": ["Gold", "DXY"],
-        "news_category": "其他",
-        "news_keywords": ["黃金", "避險", "房市", "成長", "修正", "衰退", "美元"],
-        "news_heading": "黃金／修正因子",
-    },
+SCENE_IMAGE_NAMES = {
+    "scene_01": "scene_01.png",
+    "scene_02": "scene_02.png",
+    "scene_03": "scene_03.png",
+    "scene_04": "scene_04.png",
+    "scene_05": "scene_05.png",
+    "scene_06": "scene_06.png",
 }
 
 ASSET_LABELS = {
-    "US10Y": "美債10Y",
+    "US10Y": "美國10年期公債殖利率",
     "DXY": "美元指數",
     "Gold": "黃金",
-    "WTI": "WTI",
-    "Brent": "Brent",
+    "WTI": "西德州原油",
+    "Brent": "布蘭特原油",
     "USDJPY": "美元／日圓",
     "USDTWD": "美元／台幣",
     "USDKRW": "美元／韓元",
 }
 
-ASSET_UNITS = {
-    "US10Y": "%",
-    "DXY": "",
-    "Gold": "USD/oz",
-    "WTI": "USD/bbl",
-    "Brent": "USD/bbl",
-    "USDJPY": "JPY",
-    "USDTWD": "TWD",
-    "USDKRW": "KRW",
+UNIT_SHORT = {
+    "%": "%",
+    "USD/bbl": "USD/bbl",
+    "USD/oz": "USD/oz",
+    "JPY": "JPY",
+    "TWD": "TWD",
+    "KRW": "KRW",
+    "": "",
 }
 
+NOTEBOOK_STYLE = """
+Design a static 16:9 slide in a NotebookLM-style whiteboard note aesthetic.
+Visual style requirements:
+- off-white / white background
+- very subtle light gray grid texture
+- black hand-drawn linework
+- orange accent marks, circles, arrows, pins, highlights
+- a small amount of navy-blue text or data emphasis
+- airy layout, weak borders, no thick boxes, almost transparent panels
+- elegant note-card feeling, like a clean visual explainer page
+- no clutter, no dashboard feel, no Bloomberg terminal style
+- visible text must be Traditional Chinese only
+- use very little text; keep it short and highly readable
+- numbers should be large, units very small
+- the slide is visual guidance only; narration is the main body
+""".strip()
 
-def find_latest_week_dir() -> Path:
-    week_dirs = [p for p in OUTPUT_WEEKLY_DIR.iterdir() if p.is_dir()]
-    if not week_dirs:
-        raise FileNotFoundError("No weekly output folder found under output/weekly/")
-    week_dirs.sort(key=lambda p: p.name, reverse=True)
-    return week_dirs[0]
 
-
-def load_json(path: Path, default: Any = None) -> Any:
+def read_json(path: Path) -> Dict[str, Any]:
     if not path.exists():
-        return default
-    with path.open("r", encoding="utf-8") as f:
-        return json.load(f)
-
-
-def find_json(week_dir: Path, filename: str) -> Dict[str, Any]:
-    for path in [week_dir / filename, week_dir / "data" / filename, week_dir / "final" / filename]:
-        if path.exists():
-            return load_json(path, {})
-    return {}
+        return {}
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 def ensure_dir(path: Path) -> None:
     path.mkdir(parents=True, exist_ok=True)
 
 
-def find_font_path(bold: bool = False) -> str:
-    candidates = []
-    if bold:
-        candidates.extend([
-            "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
-            "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
-            "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
-            "C:/Windows/Fonts/msjhbd.ttc",
-        ])
-    candidates.extend([
-        "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
-        "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
-        "C:/Windows/Fonts/msjh.ttc",
-        "/System/Library/Fonts/PingFang.ttc",
-    ])
-    for fp in candidates:
-        if Path(fp).exists():
-            return fp
-    return ""
+def parse_week_end(meta: Dict[str, Any]) -> str:
+    week_range = str(meta.get("week_range", "")).strip()
+    m = re.search(r"(\d{4}-\d{2}-\d{2}).*?(\d{4}-\d{2}-\d{2})", week_range)
+    if m:
+        return m.group(2)
+    env_week = os.getenv("WEEK_END_DATE", "").strip()
+    if env_week:
+        return env_week
+    return datetime.utcnow().strftime("%Y-%m-%d")
 
 
-FONT_REG_PATH = find_font_path(False)
-FONT_BOLD_PATH = find_font_path(True)
+def load_week_context(week_dir: Path) -> Dict[str, Any]:
+    forest = read_json(week_dir / "weekly_forest_summary.json")
+    news = read_json(week_dir / "weekly_news_context.json")
+    market = read_json(week_dir / "weekly_market_series.json")
+    narration = read_json(week_dir / "weekly_narration.json")
+    plan = read_json(week_dir / "weekly_slide_plan.json")
+    return {
+        "forest": forest,
+        "news": news,
+        "market": market,
+        "narration": narration,
+        "plan": plan,
+    }
 
 
-def font(size: int, bold: bool = False):
-    fp = FONT_BOLD_PATH if bold and FONT_BOLD_PATH else FONT_REG_PATH
-    if fp:
-        try:
-            return ImageFont.truetype(fp, size=size)
-        except Exception:
-            pass
-    return ImageFont.load_default()
-
-
-FONT_H1 = font(44, True)
-FONT_H2 = font(28, True)
-FONT_H3 = font(22, True)
-FONT_BODY = font(21, False)
-FONT_SMALL = font(18, False)
-FONT_XS = font(14, False)
-FONT_LINK = font(16, False)
-FONT_NUM_BIG = font(56, True)
-FONT_NUM_MID = font(48, True)
-FONT_UNIT = font(13, False)
-FONT_WATCH_BIG = font(34, True)
-FONT_WATCH_SMALL = font(22, False)
-FONT_SYMBOL = font(54, True)
-
-
-def make_canvas() -> Image.Image:
-    img = Image.new("RGB", (CANVAS_W, CANVAS_H), BG)
-    draw = ImageDraw.Draw(img)
-    step = 28
-    for x in range(0, CANVAS_W, step):
-        draw.line((x, 0, x, CANVAS_H), fill=GRID, width=1)
-    for y in range(0, CANVAS_H, step):
-        draw.line((0, y, CANVAS_W, y), fill=GRID, width=1)
-    return img
-
-
-def text_size(draw: ImageDraw.ImageDraw, text: str, fnt) -> Tuple[int, int]:
-    if not text:
-        return 0, 0
-    box = draw.textbbox((0, 0), text, font=fnt)
-    return box[2] - box[0], box[3] - box[1]
-
-
-def wrap_text(draw: ImageDraw.ImageDraw, text: str, fnt, max_width: int) -> List[str]:
-    text = str(text or "").strip()
-    if not text:
-        return []
-    lines: List[str] = []
-    current = ""
-    for ch in text:
-        trial = current + ch
-        w, _ = text_size(draw, trial, fnt)
-        if w <= max_width or not current:
-            current = trial
-        else:
-            lines.append(current)
-            current = ch
-    if current:
-        lines.append(current)
-    return lines
-
-
-def draw_wrapped(draw: ImageDraw.ImageDraw, text: str, x: int, y: int, fnt, fill, max_width: int, line_gap: int = 7, max_lines: Optional[int] = None) -> int:
-    lines = wrap_text(draw, text, fnt, max_width)
-    if max_lines is not None:
-        lines = lines[:max_lines]
-    cur_y = y
-    for line in lines:
-        draw.text((x, cur_y), line, font=fnt, fill=fill)
-        _, h = text_size(draw, line, fnt)
-        cur_y += h + line_gap
-    return cur_y
-
-
-def draw_soft_paper_bg(base: Image.Image, box: Tuple[int, int, int, int], alpha: int = 168, radius: int = 28) -> None:
-    overlay = Image.new("RGBA", base.size, (0, 0, 0, 0))
-    od = ImageDraw.Draw(overlay)
-    od.rounded_rectangle(box, radius=radius, fill=(255, 255, 255, alpha))
-    overlay = overlay.filter(ImageFilter.GaussianBlur(0.4))
-    base.alpha_composite(overlay)
-
-
-def fit_contain(image: Image.Image, target_size: Tuple[int, int]) -> Image.Image:
-    tw, th = target_size
-    iw, ih = image.size
-    ratio = min(tw / iw, th / ih)
-    nw, nh = max(1, int(iw * ratio)), max(1, int(ih * ratio))
-    img = image.resize((nw, nh), Image.LANCZOS)
-    bg = Image.new("RGBA", target_size, (0, 0, 0, 0))
-    bg.alpha_composite(img.convert("RGBA"), ((tw - nw) // 2, (th - nh) // 2))
-    return bg
-
-
-def normalize_asset_series(market: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
-    result = {}
-    series = market.get("series") if isinstance(market, dict) else []
-    if not isinstance(series, list):
-        return result
-    for item in series:
-        if not isinstance(item, dict):
-            continue
-        key = str(item.get("asset_key") or item.get("key") or "").strip()
+def market_series_map(market: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    result: Dict[str, Dict[str, Any]] = {}
+    for item in market.get("series", []) or []:
+        key = item.get("asset_key")
         if key:
             result[key] = item
     return result
 
 
-def get_points(item: Dict[str, Any]) -> List[float]:
-    candidates = [item.get("points"), item.get("values"), item.get("series"), item.get("data")]
-    for arr in candidates:
-        if isinstance(arr, list):
-            vals = []
-            for x in arr:
-                if isinstance(x, dict):
-                    v = x.get("value", x.get("close", x.get("price")))
-                else:
-                    v = x
-                try:
-                    if v is not None:
-                        vals.append(float(v))
-                except Exception:
-                    pass
-            if vals:
-                return vals
-    return []
-
-
-def latest_and_prev(item: Dict[str, Any]) -> Tuple[Optional[float], Optional[float]]:
-    pts = get_points(item)
-    if not pts:
-        return None, None
-    return pts[-1], (pts[-2] if len(pts) >= 2 else None)
-
-
-def format_value(value: Optional[float], key: str) -> str:
-    if value is None:
-        return "--"
-    if key in ("USDTWD", "USDJPY"):
-        return f"{value:,.2f}"
-    if key == "USDKRW":
-        return f"{value:,.1f}"
-    if key in ("US10Y", "DXY"):
-        return f"{value:.3f}"
-    if key in ("WTI", "Brent", "Gold"):
-        return f"{value:,.1f}"
-    return f"{value:,.2f}"
-
-
-def format_delta(latest: Optional[float], prev: Optional[float]) -> str:
-    if latest is None or prev is None:
+def latest_asset_text(series_item: Dict[str, Any]) -> str:
+    points = series_item.get("points", []) or []
+    if not points:
         return ""
-    diff = latest - prev
-    sign = "+" if diff > 0 else ""
-    return f"{sign}{diff:.2f}"
+    last = points[-1]
+    value = last.get("value")
+    unit = UNIT_SHORT.get(series_item.get("unit", ""), series_item.get("unit", ""))
+    if value is None:
+        return ""
+    if isinstance(value, (int, float)):
+        if abs(value) >= 100:
+            number = f"{value:,.1f}"
+        elif abs(value) >= 10:
+            number = f"{value:,.2f}"
+        else:
+            number = f"{value:,.3f}".rstrip("0").rstrip(".")
+    else:
+        number = str(value)
+    return f"{number} {unit}".strip()
 
 
-def draw_sparkline(draw: ImageDraw.ImageDraw, points: List[float], box: Tuple[int, int, int, int]) -> None:
-    x1, y1, x2, y2 = box
-    if len(points) < 2:
-        draw.line((x1, (y1 + y2) // 2, x2, (y1 + y2) // 2), fill=NAVY, width=3)
-        return
-    lo, hi = min(points), max(points)
-    if math.isclose(lo, hi):
-        hi = lo + 1
-    coords = []
-    for i, v in enumerate(points):
-        x = x1 + int(i * (x2 - x1) / (len(points) - 1))
-        y = y2 - int((v - lo) * (y2 - y1) / (hi - lo))
-        coords.append((x, y))
-    draw.line(coords, fill=NAVY, width=3)
-    for x, y in coords:
-        draw.ellipse((x - 4, y - 4, x + 4, y + 4), fill=ORANGE)
-
-
-def flatten_news(news: Dict[str, Any]) -> List[Dict[str, Any]]:
-    result: List[Dict[str, Any]] = []
-    for key in ("top_news", "items", "news", "articles"):
-        arr = news.get(key)
-        if isinstance(arr, list):
-            result.extend([x for x in arr if isinstance(x, dict)])
-    for key in ("categories", "news_by_category", "classified", "by_category"):
-        obj = news.get(key)
-        if isinstance(obj, dict):
-            for cat, arr in obj.items():
-                if isinstance(arr, list):
-                    for item in arr:
-                        if isinstance(item, dict):
-                            item2 = dict(item)
-                            item2.setdefault("category", cat)
-                            result.append(item2)
-    seen = set()
-    out = []
-    for item in result:
-        title = str(item.get("title") or item.get("headline") or "").strip()
-        if not title:
+def latest_asset_block(series_map: Dict[str, Dict[str, Any]], asset_keys: List[str]) -> List[Dict[str, str]]:
+    blocks = []
+    for key in asset_keys:
+        item = series_map.get(key)
+        if not item:
             continue
-        key = title[:80]
-        if key in seen:
-            continue
-        seen.add(key)
-        out.append(item)
-    return out
+        blocks.append({
+            "key": key,
+            "label": ASSET_LABELS.get(key, key),
+            "value": latest_asset_text(item),
+        })
+    return blocks
 
 
-def search_news(news: Dict[str, Any], category: str, keywords: List[str], limit: int = 2) -> List[Dict[str, Any]]:
-    items = flatten_news(news)
-    ranked = []
+def pick_news_lines(news: Dict[str, Any], keywords: List[str], limit: int = 2) -> List[str]:
+    candidates = []
+    for item in news.get("top_news", []) or []:
+        title = str(item.get("title", "")).strip()
+        source = str(item.get("source", "")).strip()
+        theme = str(item.get("theme", "")).strip().lower()
+        hay = f"{title} {source} {theme}".lower()
+        score = sum(1 for kw in keywords if kw.lower() in hay)
+        if score > 0:
+            candidates.append((score, f"{source}｜{title}" if source else title))
+    if not candidates:
+        for item in (news.get("top_news", []) or [])[:limit]:
+            title = str(item.get("title", "")).strip()
+            source = str(item.get("source", "")).strip()
+            if title:
+                candidates.append((0, f"{source}｜{title}" if source else title))
+    return [t for _, t in sorted(candidates, key=lambda x: x[0], reverse=True)[:limit]]
+
+
+def short_points_from_text(items: List[str], limit: int = 3, max_len: int = 28) -> List[str]:
+    output = []
     for item in items:
-        blob = " ".join([
-            str(item.get("title") or item.get("headline") or ""),
-            str(item.get("summary") or item.get("description") or item.get("why_it_matters") or item.get("reason") or ""),
-            str(item.get("theme") or item.get("category") or item.get("macro_category") or ""),
-        ])
-        cat_text = str(item.get("category") or item.get("macro_category") or item.get("theme") or "")
-        score = (4 if category and category in cat_text else 0) + sum(1 for kw in keywords if kw.lower() in blob.lower())
-        ranked.append((score, item))
-    ranked.sort(key=lambda x: x[0], reverse=True)
-    selected = [item for score, item in ranked if score > 0][:limit]
-    return selected if selected else items[:limit]
+        if not item:
+            continue
+        text = re.sub(r"\s+", " ", str(item)).strip()
+        text = text.replace("。", "")
+        text = text.replace("；", "，")
+        if len(text) > max_len:
+            text = text[:max_len].rstrip("，, ") + "…"
+        output.append(text)
+        if len(output) >= limit:
+            break
+    return output
 
 
-def draw_main_title(draw: ImageDraw.ImageDraw, title: str) -> None:
-    draw.text((MARGIN_X, TITLE_Y), title, font=FONT_H1, fill=TEXT)
+def get_visual_brief(context: Dict[str, Any]) -> Dict[str, Any]:
+    forest = context["forest"]
+    news = context["news"]
+    market = context["market"]
+    narration = context["narration"]
+    plan = context.get("plan") or {}
+    series_map = market_series_map(market)
+
+    forest_summary = forest.get("forest_summary", {}) or {}
+    macro_storyline = forest.get("macro_storyline", {}) or {}
+    macro_vars = forest.get("macro_variables", {}) or {}
+    evidence = forest.get("evidence", {}) or {}
+    video_planning = forest.get("video_planning", {}) or {}
+
+    scene_dialogues = {}
+    for scene in narration.get("scenes", []) or []:
+        scene_dialogues[scene.get("scene_id")] = scene
+
+    default_plan = {
+        "scene_02": {
+            "headline": "油價高檔 → 通膨黏性",
+            "topic": "通膨預期 / 原油",
+            "main_visual": "只畫油價與通膨的單一主視覺：油桶 / 火焰 / CPI 上升箭頭 / 再通膨標記。不要畫完整流程圖。",
+            "assets": ["WTI", "Brent"],
+            "points": short_points_from_text([
+                macro_vars.get("energy_view", ""),
+                forest_summary.get("one_sentence_verdict", ""),
+                (news.get("macro_drivers", [{}])[0] or {}).get("impact", ""),
+            ]),
+            "news_lines": pick_news_lines(news, ["油", "原油", "通膨", "energy", "inflation"]),
+            "reference_scene": scene_dialogues.get("scene_02", {}),
+        },
+        "scene_03": {
+            "headline": "長債利率重新定價",
+            "topic": "利率 / 美債殖利率",
+            "main_visual": "只畫利率與殖利率上行的主視覺：債券殖利率曲線、上升箭頭、Higher for Longer 標記。不要畫其他主題。",
+            "assets": ["US10Y"],
+            "points": short_points_from_text([
+                macro_vars.get("rate_view", ""),
+                *(evidence.get("most_important_evidence", []) or []),
+            ]),
+            "news_lines": pick_news_lines(news, ["殖利率", "美債", "利率", "bond", "yield", "rate"]),
+            "reference_scene": scene_dialogues.get("scene_03", {}),
+        },
+        "scene_04": {
+            "headline": "強美元外溢至亞洲貨幣",
+            "topic": "美元 / 亞洲貨幣",
+            "main_visual": "只畫美元與亞洲貨幣的主視覺：DXY 向上、日圓/台幣/韓元承壓箭頭。不要畫完整流程圖。",
+            "assets": ["DXY", "USDJPY", "USDTWD", "USDKRW"],
+            "points": short_points_from_text([
+                macro_vars.get("dollar_fx_view", ""),
+                macro_vars.get("asia_fx_view", ""),
+                "觀察亞洲央行是否干預",
+            ]),
+            "news_lines": pick_news_lines(news, ["美元", "亞幣", "日圓", "台幣", "韓元", "currency", "fx"]),
+            "reference_scene": scene_dialogues.get("scene_04", {}),
+        },
+        "scene_05": {
+            "headline": "黃金壓力與修正因子",
+            "topic": "黃金 / 修正因子",
+            "main_visual": "只畫黃金與修正因子的單一主視覺：金條、避險符號、房市疲軟 / 成長擔憂的小標記。不要畫完整流程圖。",
+            "assets": ["Gold", "DXY"],
+            "points": short_points_from_text([
+                macro_vars.get("gold_view", ""),
+                macro_storyline.get("revision_or_noise", ""),
+                "成長放緩是否升級為主導因子",
+            ]),
+            "news_lines": pick_news_lines(news, ["黃金", "房市", "成長", "gold", "housing", "slowdown"]),
+            "reference_scene": scene_dialogues.get("scene_05", {}),
+        },
+    }
+
+    for sid, conf in (plan.get("scenes", {}) or {}).items():
+        if sid in default_plan:
+            default_plan[sid].update(conf)
+
+    week_range = forest.get("meta", {}).get("week_range") or news.get("meta", {}).get("week_range") or ""
+    next_questions = (video_planning.get("next_week_questions") or [])[:5]
+    if not next_questions:
+        next_questions = (forest.get("evidence", {}).get("watch_items_from_daily_summaries") or [])[:5]
+
+    return {
+        "week_range": week_range,
+        "main_theme": forest_summary.get("weekly_main_theme", ""),
+        "one_sentence": forest_summary.get("one_sentence_verdict", ""),
+        "default_plan": default_plan,
+        "next_questions": next_questions,
+        "series_map": series_map,
+    }
 
 
-def find_diagram(week_dir: Path) -> Path:
-    for p in [week_dir / "weekly_macro_diagram.png", week_dir / "final" / "weekly_macro_diagram.png", week_dir / "data" / "weekly_macro_diagram.png"]:
-        if p.exists():
-            return p
-    raise FileNotFoundError("Cannot find weekly_macro_diagram.png")
+def build_scene_prompt(scene_id: str, brief: Dict[str, Any]) -> str:
+    if scene_id == "scene_06":
+        next_questions = short_points_from_text(brief.get("next_questions", []), limit=5, max_len=26)
+        items_text = "\n".join([f"- {q}" for q in next_questions])
+        return f"""
+{NOTEBOOK_STYLE}
+Create Scene 06 as a full-page closing slide for a weekly macro video.
+Visible structure:
+- no scene label
+- no heavy border
+- one centered or slightly upper-centered short title: 「下週觀察重點」
+- 3 to 5 large observation items arranged like pinned whiteboard notes or hand-marked bullet points
+- each item should have a tiny symbolic icon or doodle only, such as: 美債? / 勞動力↑↓ / 央行 / 美元 / 黃金
+- use very short phrases only
+- page should feel like a clean summary board
+- do not add extra explanation paragraphs
+Week background:
+- week range: {brief.get('week_range', '')}
+- main theme: {brief.get('main_theme', '')}
+Observation items:
+{items_text}
+""".strip()
+
+    conf = brief["default_plan"][scene_id]
+    asset_blocks = latest_asset_block(brief["series_map"], conf.get("assets", []))
+    asset_text = "\n".join([f"- {x['label']}: {x['value']}" for x in asset_blocks]) or "- 無"
+    point_text = "\n".join([f"- {x}" for x in conf.get("points", [])[:3]]) or "- 依旁白主線呈現"
+    news_text = "\n".join([f"- {x}" for x in conf.get("news_lines", [])[:2]]) or "- 依本週代表性新聞呈現"
+    narration = (conf.get("reference_scene", {}) or {}).get("narration", "")
+
+    return f"""
+{NOTEBOOK_STYLE}
+Create {scene_id} as one static slide for a weekly macro video.
+Page goal:
+- this page explains only one topic: {conf.get('topic', '')}
+- one single main visual on the left side
+- lower-left: 1 to 2 big-number data callouts from the provided key metrics
+- right side: exactly 3 short bullet points only
+- bottom area: 1 to 2 short news source lines
+- remove engineering labels such as Scene 02, 目前焦點, 驅動因子
+- do not place a minimap
+- do not use heavy panel borders
+- keep the layout airy and like a summarized notebook page
+Main visual guidance:
+{conf.get('main_visual', '')}
+Visible text guidance:
+- short headline: 「{conf.get('headline', '')}」
+- 3 bullets only, short, direct, readable
+- big numbers, very small units
+- news lines can show source + short title
+- do not render long paragraphs
+Background context only, not all visible:
+- week range: {brief.get('week_range', '')}
+- weekly main theme: {brief.get('main_theme', '')}
+- weekly verdict: {brief.get('one_sentence', '')}
+- related narration excerpt: {narration}
+Key metrics:
+{asset_text}
+Three short bullet ideas:
+{point_text}
+News lines:
+{news_text}
+""".strip()
 
 
-def crop_box(img: Image.Image, preset: Tuple[float, float, float, float]) -> Image.Image:
-    w, h = img.size
-    x1, y1, x2, y2 = preset
-    return img.crop((int(w * x1), int(h * y1), int(w * x2), int(h * y2)))
+def read_file_base64(path: Path) -> Optional[Dict[str, str]]:
+    if not path.exists():
+        return None
+    suffix = path.suffix.lower()
+    mime = {
+        ".png": "image/png",
+        ".jpg": "image/jpeg",
+        ".jpeg": "image/jpeg",
+        ".webp": "image/webp",
+    }.get(suffix)
+    if not mime:
+        return None
+    data = base64.b64encode(path.read_bytes()).decode("utf-8")
+    return {"mimeType": mime, "data": data}
 
 
-def trim_transparent(im: Image.Image) -> Image.Image:
-    if im.mode != "RGBA":
-        im = im.convert("RGBA")
-    bg = Image.new("RGBA", im.size, (0, 0, 0, 0))
-    diff = ImageChops.difference(im, bg)
-    bbox = diff.getbbox()
-    return im.crop(bbox) if bbox else im
+def call_gemini_image(prompt: str, api_key: str, model_candidates: List[str], reference_images: Optional[List[Path]] = None) -> bytes:
+    if not api_key:
+        raise RuntimeError("GEMINI_API_KEY is missing")
+
+    ref_parts = []
+    for p in reference_images or []:
+        encoded = read_file_base64(p)
+        if encoded:
+            ref_parts.append({"inlineData": encoded})
+
+    for model in model_candidates:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
+        payload = {
+            "contents": [{
+                "role": "user",
+                "parts": [{"text": prompt}] + ref_parts,
+            }],
+            "generationConfig": {
+                "temperature": 0.6,
+            },
+        }
+        data = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            url,
+            data=data,
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        try:
+            with urllib.request.urlopen(req, timeout=REQUEST_TIMEOUT) as resp:
+                raw = resp.read()
+            res = json.loads(raw.decode("utf-8"))
+            candidates = res.get("candidates", []) or []
+            for cand in candidates:
+                content = cand.get("content", {}) or {}
+                for part in content.get("parts", []) or []:
+                    inline = part.get("inlineData") or part.get("inline_data")
+                    if inline and inline.get("data"):
+                        return base64.b64decode(inline["data"])
+            raise RuntimeError(f"{model} returned no image data")
+        except urllib.error.HTTPError as exc:
+            detail = exc.read().decode("utf-8", errors="ignore")
+            print(f"[WARN] image model failed: {model} / HTTP {exc.code} / {detail[:300]}")
+        except Exception as exc:
+            print(f"[WARN] image model failed: {model} / {exc}")
+    raise RuntimeError("All image model candidates failed")
 
 
-# Pillow lazy import workaround for ImageChops
-from PIL import ImageChops
+def write_slide(output_path: Path, image_bytes: bytes) -> None:
+    output_path.write_bytes(image_bytes)
+    print(f"[OK] wrote {output_path}")
 
 
-def compose_key_visual(diagram: Image.Image, scene_id: str) -> Image.Image:
-    parts = [crop_box(diagram, p).convert("RGBA") for p in DIAGRAM_PRESETS[scene_id]]
-    processed = []
-    for p in parts:
-        p = trim_transparent(p)
-        processed.append(p)
-
-    if scene_id in ("scene_02", "scene_03", "scene_04"):
-        gap = 48
-        heights = [p.size[1] for p in processed]
-        widths = [p.size[0] for p in processed]
-        canvas = Image.new("RGBA", (sum(widths) + gap * (len(processed) - 1), max(heights)), (0, 0, 0, 0))
-        x = 0
-        for p in processed:
-            y = (canvas.size[1] - p.size[1]) // 2
-            canvas.alpha_composite(p, (x, y))
-            x += p.size[0] + gap
-        return canvas
-
-    # scene_05: top row + bottom row
-    if len(processed) >= 3:
-        top_gap = 40
-        top_w = processed[0].size[0] + processed[1].size[0] + top_gap
-        top_h = max(processed[0].size[1], processed[1].size[1])
-        bottom_w = processed[2].size[0]
-        bottom_h = processed[2].size[1]
-        canvas_w = max(top_w, bottom_w)
-        canvas_h = top_h + 28 + bottom_h
-        canvas = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
-        x0 = (canvas_w - top_w) // 2
-        canvas.alpha_composite(processed[0], (x0, (top_h - processed[0].size[1]) // 2))
-        canvas.alpha_composite(processed[1], (x0 + processed[0].size[0] + top_gap, (top_h - processed[1].size[1]) // 2))
-        canvas.alpha_composite(processed[2], ((canvas_w - processed[2].size[0]) // 2, top_h + 28))
-        return canvas
-
-    return processed[0]
-
-
-def draw_asset_strip(base: Image.Image, series_map: Dict[str, Any], asset_keys: List[str], box: Tuple[int, int, int, int]) -> None:
-    draw_soft_paper_bg(base, box, 154)
-    draw = ImageDraw.Draw(base)
-    x1, y1, x2, y2 = box
-    gap = 18
-    count = max(1, len(asset_keys))
-    cols = count
-    card_w = (x2 - x1 - 32 - (cols - 1) * gap) // cols
-    card_h = y2 - y1 - 24
-
-    for idx, key in enumerate(asset_keys):
-        cx = x1 + 16 + idx * (card_w + gap)
-        cy = y1 + 12
-        item = series_map.get(key, {})
-        latest, prev = latest_and_prev(item)
-        value_str = format_value(latest, key)
-        delta_str = format_delta(latest, prev)
-        unit = str(item.get("unit") or ASSET_UNITS.get(key, "")).strip()
-
-        label_y = cy + 6
-        draw.text((cx + 14, label_y), ASSET_LABELS.get(key, key), font=FONT_SMALL, fill=SUBTEXT)
-
-        num_font = FONT_NUM_BIG if count <= 2 else FONT_NUM_MID
-        num_y = cy + 36
-        draw.text((cx + 14, num_y), value_str, font=num_font, fill=TEXT)
-        num_w, _ = text_size(draw, value_str, num_font)
-        if unit:
-            draw.text((cx + 22 + num_w, num_y + 26), unit, font=FONT_UNIT, fill=MUTED)
-
-        if delta_str:
-            draw.text((cx + 14, num_y + 74), delta_str, font=FONT_XS, fill=ORANGE if delta_str.startswith("+") else SUBTEXT)
-
-        pts = get_points(item)
-        if pts:
-            spark_y1 = cy + card_h - 54
-            spark_y2 = cy + card_h - 12
-            draw_sparkline(draw, pts[-6:], (cx + 12, spark_y1, cx + card_w - 16, spark_y2))
-
-
-def draw_news_list(base: Image.Image, news_items: List[Dict[str, Any]], box: Tuple[int, int, int, int], heading: str) -> None:
-    draw_soft_paper_bg(base, box, 150)
-    draw = ImageDraw.Draw(base)
-    x1, y1, x2, y2 = box
-    draw.text((x1 + 22, y1 + 18), heading, font=FONT_H3, fill=TEXT)
-    cur_y = y1 + 58
-    max_w = x2 - x1 - 44
-    for item in news_items[:2]:
-        source = str(item.get("source") or item.get("publisher") or item.get("site") or "news").strip()
-        title = str(item.get("title") or item.get("headline") or "").strip()
-        summary = str(item.get("summary") or item.get("description") or item.get("why_it_matters") or item.get("reason") or "").strip()
-        draw.text((x1 + 22, cur_y), source[:34], font=FONT_XS, fill=ORANGE)
-        cur_y += 20
-        cur_y = draw_wrapped(draw, title, x1 + 22, cur_y, FONT_LINK, NAVY, max_w, 5, max_lines=2)
-        if summary:
-            cur_y = draw_wrapped(draw, summary, x1 + 22, cur_y + 3, FONT_XS, SUBTEXT, max_w, 4, max_lines=1)
-        cur_y += 22
-
-
-def render_scene_01(diagram_path: Path, out_path: Path) -> None:
-    base = make_canvas().convert("RGBA")
-    diagram = Image.open(diagram_path).convert("RGBA")
-    fitted = fit_contain(diagram, (CANVAS_W - 120, CANVAS_H - 120))
-    base.alpha_composite(fitted, (60, 60))
-    base.convert("RGB").save(out_path, "PNG")
-
-
-def render_focus_scene(scene_id: str, scene: Dict[str, Any], diagram_path: Path, news: Dict[str, Any], market: Dict[str, Any], out_path: Path) -> None:
-    cfg = SCENE_CONFIG[scene_id]
-    base = make_canvas().convert("RGBA")
-    draw = ImageDraw.Draw(base)
-    title = str(scene.get("on_screen_title") or scene.get("scene_title") or cfg["title"]).strip()
-    draw_main_title(draw, title)
-
-    diagram = Image.open(diagram_path).convert("RGBA")
-    visual = compose_key_visual(diagram, scene_id)
-
-    visual_box = (72, 138, 1090, 690)
-    draw_soft_paper_bg(base, visual_box, 112)
-    fitted_visual = fit_contain(visual, (visual_box[2] - visual_box[0] - 24, visual_box[3] - visual_box[1] - 24))
-    base.alpha_composite(fitted_visual, (visual_box[0] + 12, visual_box[1] + 12))
-
-    series_map = normalize_asset_series(market)
-    draw_asset_strip(base, series_map, cfg["assets"], (72, 740, 1090, 980))
-    news_items = search_news(news, cfg["news_category"], cfg["news_keywords"], 2)
-    draw_news_list(base, news_items, (1150, 270, 1848, 980), cfg["news_heading"])
-
-    base.convert("RGB").save(out_path, "PNG")
-
-
-def get_next_watch_points(narration: Dict[str, Any], forest: Dict[str, Any], news: Dict[str, Any]) -> List[str]:
-    scenes = narration.get("scenes") if isinstance(narration, dict) else []
-    if isinstance(scenes, list):
-        for scene in scenes:
-            if str(scene.get("scene_id")) == "scene_06":
-                bullets = scene.get("on_screen_bullets")
-                if isinstance(bullets, list) and bullets:
-                    return [str(x).strip() for x in bullets if str(x).strip()][:3]
-    vp = forest.get("video_planning", {}) if isinstance(forest, dict) else {}
-    points = vp.get("next_week_questions", []) if isinstance(vp, dict) else []
-    if points:
-        return [str(x).strip() for x in points if str(x).strip()][:3]
-    points = news.get("watch_points", []) if isinstance(news, dict) else []
-    if points:
-        return [str(x).strip() for x in points if str(x).strip()][:3]
-    return [
-        "30Y 美債 5.5%？",
-        "勞動力轉弱？",
-        "央行出手？",
-    ]
-
-
-def render_scene_06(narration: Dict[str, Any], forest: Dict[str, Any], news: Dict[str, Any], out_path: Path) -> None:
-    base = make_canvas().convert("RGBA")
-    draw = ImageDraw.Draw(base)
-    title = "下週觀察重點"
-    tw, _ = text_size(draw, title, FONT_H1)
-    draw.text(((CANVAS_W - tw) // 2, 86), title, font=FONT_H1, fill=TEXT)
-
-    points = get_next_watch_points(narration, forest, news)
-    cards = [
-        ("?", points[0] if len(points) > 0 else "30Y 美債 5.5%？"),
-        ("↑↓", points[1] if len(points) > 1 else "勞動力轉弱？"),
-        ("✦", points[2] if len(points) > 2 else "央行出手？"),
-    ]
-
-    start_x = 120
-    gap = 34
-    card_w = (CANVAS_W - start_x * 2 - gap * 2) // 3
-    card_h = 530
-    y = 280
-
-    for idx, (symbol, label) in enumerate(cards):
-        x = start_x + idx * (card_w + gap)
-        draw_soft_paper_bg(base, (x, y, x + card_w, y + card_h), 138)
-        sw, sh = text_size(draw, symbol, FONT_SYMBOL)
-        draw.text((x + (card_w - sw) // 2, y + 84), symbol, font=FONT_SYMBOL, fill=ORANGE)
-        cur_y = y + 214
-        cur_y = draw_wrapped(draw, label, x + 42, cur_y, FONT_WATCH_BIG, TEXT, card_w - 84, 10, max_lines=2)
-        draw.text((x + 42, cur_y + 34), "下週驗證", font=FONT_WATCH_SMALL, fill=MUTED)
-
-    base.convert("RGB").save(out_path, "PNG")
+def save_manifest(week_dir: Path, records: List[Dict[str, Any]]) -> None:
+    manifest_path = week_dir / "weekly_slide_images_manifest.json"
+    manifest_path.write_text(
+        json.dumps({
+            "generated_at": datetime.utcnow().isoformat() + "Z",
+            "image_model": IMAGE_MODEL,
+            "records": records,
+        }, ensure_ascii=False, indent=2),
+        encoding="utf-8"
+    )
 
 
 def main() -> None:
-    week_dir = find_latest_week_dir()
+    if not GEMINI_API_KEY:
+        raise RuntimeError("GEMINI_API_KEY is required")
+
+    explicit_week = os.getenv("WEEK_END_DATE", "").strip()
+    if explicit_week:
+        week_dir = OUTPUT_ROOT / explicit_week
+    else:
+        latest_candidates = sorted([p for p in OUTPUT_ROOT.glob("*") if p.is_dir()])
+        if not latest_candidates:
+            raise RuntimeError("No weekly output directory found under output/weekly")
+        week_dir = latest_candidates[-1]
+
+    context = load_week_context(week_dir)
+    forest_meta = context["forest"].get("meta", {}) or {}
+    week_end = parse_week_end(forest_meta)
+    if week_dir.name != week_end and (OUTPUT_ROOT / week_end).exists():
+        week_dir = OUTPUT_ROOT / week_end
+        context = load_week_context(week_dir)
+
     slides_dir = week_dir / "slides"
     ensure_dir(slides_dir)
 
-    narration = load_json(week_dir / "narration" / "weekly_narration.json", {})
-    forest = find_json(week_dir, "weekly_forest_summary.json")
-    news = find_json(week_dir, "weekly_news_context.json")
-    market = find_json(week_dir, "weekly_market_series.json")
-    diagram_path = find_diagram(week_dir)
+    diagram_path = week_dir / "weekly_macro_diagram.png"
+    brief = get_visual_brief(context)
+    model_candidates = [IMAGE_MODEL] + [m for m in IMAGE_MODEL_FALLBACKS if m != IMAGE_MODEL]
 
-    render_scene_01(diagram_path, slides_dir / "scene_01.png")
+    records: List[Dict[str, Any]] = []
 
-    scene_map = {str(s.get("scene_id")): s for s in narration.get("scenes", []) if isinstance(s, dict)}
+    # Scene 01: directly reuse the full macro diagram as the full-page opening slide.
+    scene_01_output = slides_dir / SCENE_IMAGE_NAMES["scene_01"]
+    if FORCE_REBUILD_SLIDES or not scene_01_output.exists():
+        if not diagram_path.exists():
+            raise RuntimeError(f"Scene 01 requires existing diagram: {diagram_path}")
+        shutil.copy2(diagram_path, scene_01_output)
+        print(f"[OK] copied scene 01 from {diagram_path}")
+    records.append({"scene_id": "scene_01", "path": str(scene_01_output.name), "mode": "copy_diagram"})
+
+    # Scene 02-05: image model generation.
     for scene_id in ["scene_02", "scene_03", "scene_04", "scene_05"]:
-        render_focus_scene(scene_id, scene_map.get(scene_id, {"scene_id": scene_id}), diagram_path, news, market, slides_dir / f"{scene_id}.png")
+        output_path = slides_dir / SCENE_IMAGE_NAMES[scene_id]
+        prompt = build_scene_prompt(scene_id, brief)
+        if FORCE_REBUILD_SLIDES or not output_path.exists():
+            image_bytes = call_gemini_image(
+                prompt=prompt,
+                api_key=GEMINI_API_KEY,
+                model_candidates=model_candidates,
+                reference_images=[diagram_path] if diagram_path.exists() else [],
+            )
+            write_slide(output_path, image_bytes)
+        records.append({"scene_id": scene_id, "path": str(output_path.name), "mode": "image_model", "prompt_excerpt": prompt[:200]})
 
-    render_scene_06(narration, forest, news, slides_dir / "scene_06.png")
+    # Scene 06: full-page next-week watch slide.
+    scene_06_output = slides_dir / SCENE_IMAGE_NAMES["scene_06"]
+    prompt = build_scene_prompt("scene_06", brief)
+    if FORCE_REBUILD_SLIDES or not scene_06_output.exists():
+        image_bytes = call_gemini_image(
+            prompt=prompt,
+            api_key=GEMINI_API_KEY,
+            model_candidates=model_candidates,
+            reference_images=[],
+        )
+        write_slide(scene_06_output, image_bytes)
+    records.append({"scene_id": "scene_06", "path": str(scene_06_output.name), "mode": "image_model", "prompt_excerpt": prompt[:200]})
 
-    manifest = {"generated": [str(slides_dir / f"scene_0{i}.png") for i in range(1, 7)]}
-    (slides_dir / "slides_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"[OK] Generated slide images under: {slides_dir}")
+    save_manifest(week_dir, records)
+    print(f"[DONE] weekly slide images ready: {slides_dir}")
 
 
 if __name__ == "__main__":
