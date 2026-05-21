@@ -7,219 +7,259 @@
     "core_transmission_chain": [
       "再通膨預期",
       "長債殖利率飆升",
-      "強勢美元",
-      "亞洲貨幣承壓"
+      "美元強勢與亞幣承壓",
+      "成長放緩擔憂 (修正因子)",
+      "黃金價格拉鋸"
     ],
-    "primary_driver": "30年期美債殖利率突破5.2%創19年新高",
-    "revision_factor": "美國房市數據疲軟引發成長放緩擔憂"
+    "primary_driver": "再通膨預期推升長債殖利率",
+    "revision_factor": "美國房市數據疲軟引發的成長放緩擔憂"
   },
   "scenes": [
     {
       "scene_id": "scene_01",
       "scene_role": "opening_overview",
-      "scene_title": "總經週報：高利率新常態的定價之週",
-      "scene_purpose": "建立本週總經敘事框架，點出再通膨預期與成長放緩擔憂的拉鋸。",
-      "narrative_focus": "市場核心由長債殖利率飆升主導，確立『高利率維持更久』的敘事主軸。",
+      "narrative_order": 1,
+      "scene_title": "本週總經傳導地圖",
+      "scene_purpose": "建立本週總經敘事的全局地圖，展示從再通膨預期到資產反應的完整傳導鏈，並點出修正因子的位置。",
+      "narrative_focus": "介紹本週市場主線：再通膨預期如何推動利率、美元，並與成長放緩的擔憂形成拉鋸。",
       "supporting_assets": [
-        "US10Y",
-        "DXY",
-        "Gold",
-        "WTI"
+        "weekly_macro_diagram.png"
       ],
       "supporting_news": [
-        "30年期美債殖利率衝破5.2%創19年新高",
-        "美國房市數據下滑顯示成長降溫風險"
+        "再通膨定價與成長放緩疑慮的拉鋸"
       ],
-      "visual_direction": "使用本週的總經傳導圖作為開場，引導觀眾進入核心議題。",
+      "chain_position": {
+        "previous_node": "",
+        "current_node": "全局傳導地圖",
+        "next_node": "再通膨預期 & 長債殖利率",
+        "transmission_sentence": "本週總經故事的核心，是再通膨預期與成長放緩擔憂的拉鋸。我們將從傳導鏈的起點『再通膨預期』開始，一步步拆解市場反應。",
+        "map_role": "全局地圖"
+      },
+      "visual_direction": "使用已生成的 weekly_macro_diagram.png 作為本週總經傳導鏈的全景圖，旁白將依此圖展開後續分鏡。",
       "image_prompt": "reuse weekly_macro_diagram.png",
       "on_screen_text": {
-        "headline": "高利率的拉鋸戰",
+        "headline": "總經傳導地圖",
+        "key_numbers": [],
+        "short_bullets": [
+          "再通膨預期 vs. 成長放緩擔憂",
+          "主線：利率飆升、美元強勢",
+          "修正：房市數據、避險情緒"
+        ],
+        "news_lines": []
+      },
+      "narration_dialogue": [
+        {
+          "speaker": "host",
+          "text": "歡迎收看總經週報。本週市場的核心是一場拉鋸戰：一邊是強勁的『再通膨』預期，另一邊則是悄悄浮現的『成長放緩』擔憂。"
+        },
+        {
+          "speaker": "analyst",
+          "text": "是的，這條傳導鏈就是本週的總經地圖。故事的起點，是能源價格帶動的再通膨預期，這股力量推升了長天期公債殖利率，確立了『高利率維持更久』的市場主軸。接著，我們看到強勢美元壓抑了亞洲貨幣與黃金。但中途出現了變數：疲軟的房市數據，成為了修正因子。接下來，我們就從傳導鏈的起點開始，為您逐一拆解。"
+        }
+      ],
+      "tts_notes": ""
+    },
+    {
+      "scene_id": "scene_02",
+      "scene_role": "transmission_start",
+      "narrative_order": 2,
+      "scene_title": "起點：再通膨預期與殖利率飆升",
+      "scene_purpose": "解釋本週傳導鏈的起點，說明油價如何強化再通膨預期，並直接推動30年期美債殖利率創下19年新高。",
+      "narrative_focus": "建立『再通膨預期 → 長債殖利率飆升』的因果關係，確立『高利率維持更久』的宏觀敘事。",
+      "supporting_assets": [
+        "WTI",
+        "US10Y"
+      ],
+      "supporting_news": [
+        "30年期美債殖利率衝破5.2%創19年新高！華爾街警告5.5%恐成下一目標",
+        "油價上行強化通膨預期"
+      ],
+      "chain_position": {
+        "previous_node": "全局傳導地圖",
+        "current_node": "再通膨預期 & 長債殖利率",
+        "next_node": "美元 & 亞洲貨幣",
+        "transmission_sentence": "持續上行的能源價格，強化了市場的再通膨預期，導致投資人拋售長天期公債，將30年期殖利率推升至5.2%的19年新高，這直接強化了美元的利差優勢。",
+        "map_role": "起點"
+      },
+      "visual_direction": "畫面呈現一個因果鏈：左邊是油桶圖示與上升的箭頭，標示『能源價格』；中間一個大的右向箭頭，標示『強化通膨預期』；右邊是一個急遽攀升的殖利率曲線圖，標示『30年債息 > 5.2%』。整體視覺強調從能源到利率的直接驅動關係。",
+      "image_prompt": "Create a 16:9 NotebookLM-style whiteboard image. On the left, a hand-drawn oil barrel icon with an orange upward arrow labeled '能源價格'. A large black arrow points right, labeled '再通膨預期'. On the right, a stark, hand-drawn chart shows a bond yield curve sharply breaking a historical high, with a large orange tag '30年債息 > 5.2% (19年新高)'. The style is off-white background, gray grid, black lines, orange highlights, minimal text.",
+      "on_screen_text": {
+        "headline": "高利率新常態",
         "key_numbers": [
           {
-            "label": "30Y Yield",
+            "label": "30Y Treasury Yield",
             "value": ">5.2%",
             "unit": ""
           }
         ],
         "short_bullets": [
-          "再通膨預期推升長債殖利率",
-          "成長放緩擔憂成為修正因子",
-          "市場重新定價利率新常態"
+          "能源價格強化通膨預期",
+          "長債殖利率創19年新高",
+          "市場定價『高利率維持更久』"
         ],
         "news_lines": [
-          "30年期美債殖利率創19年新高",
-          "美元指數衝破99，亞幣承壓"
+          "30年期美債殖利率衝破5.2%創19年新高"
         ]
       },
       "narration_dialogue": [
         {
           "speaker": "host",
-          "text": "歡迎收看總經週報。本週市場的主軸非常明確：一場由『再通膨』預期點燃的債市風暴，正在與『經濟放緩』的擔憂激烈碰撞。"
+          "text": "我們從故事的起點看起。本週市場最關注的數字，就是30年期美國公債殖利率，一度衝破了5.2%。"
         },
         {
           "speaker": "analyst",
-          "text": "沒錯，核心觀察點，就是美國長天期公債殖利率。30年期美債殖利率一舉衝破5.2%，創下19年新高。這不只是一個數字，它代表市場正在強力定價一個『高利率新常態』，這也成為本週所有資產價格變動的主旋律。"
+          "text": "沒錯，這創下了19年來的新高。背後的驅動力，就是持續上行的能源價格，它讓市場對通膨的黏性更加擔憂，也就是所謂的『再通膨預期』。這讓市場幾乎完全放棄了短期內降息的希望，全力為『高利率新常態』定價。而如此高的殖利率，下一步自然會對匯率市場產生巨大影響。"
         }
       ],
-      "tts_notes": "開場語氣沉穩，分析師語氣應帶有強調感，凸顯殖利率創高的重要性。"
-    },
-    {
-      "scene_id": "scene_02",
-      "scene_role": "primary_driver",
-      "scene_title": "長債殖利率創高：高利率新常態",
-      "scene_purpose": "深入解釋本週核心驅動因子：長債殖利率飆升的背景與意義。",
-      "narrative_focus": "強調30年期美債殖利率突破5.2%的歷史意義，以及它如何封鎖了市場對降息的預期。",
-      "supporting_assets": [
-        "US10Y"
-      ],
-      "supporting_news": [
-        "30年期美債殖利率衝破5.2%創19年新高！華爾街警告5.5%恐成下一目標",
-        "美債殖利率揚 Fed難降息"
-      ],
-      "visual_direction": "以手繪風格的殖利率走勢圖為主體，視覺化呈現突破關鍵點位的衝擊感。",
-      "image_prompt": "A 16:9 NotebookLM-style whiteboard image. A hand-drawn black line chart shows the US 30-year Treasury yield over time. The line dramatically breaks through a dashed orange horizontal line labeled '5.2%'. Next to the breakout point, an orange tag says '19年新高'. The overall style is clean, with a beige gridded background, using black, orange, and navy blue as main colors. Minimal text, strong visual impact.",
-      "on_screen_text": {
-        "headline": "殖利率的關鍵突破",
-        "key_numbers": [
-          {
-            "label": "30年期美債殖利率",
-            "value": "> 5.2%",
-            "unit": ""
-          }
-        ],
-        "short_bullets": [
-          "創19年以來新高",
-          "再通膨預期為主要推力",
-          "市場定價『高利率維持更久』"
-        ],
-        "news_lines": []
-      },
-      "narration_dialogue": [
-        {
-          "speaker": "host",
-          "text": "我們來聚焦這個核心驅動：30年期美債殖利率，為什麼這個數字如此重要？"
-        },
-        {
-          "speaker": "analyst",
-          "text": "因為長天期利率反映了市場對未來通膨和經濟成長的長期看法。這次突破5.2%，不僅是2007年以來的新高，更代表市場認為，通膨的黏性比預期更強，聯準會不僅短期內難以降息，甚至必須將高利率維持得更久。這是一個根本性的定價轉變。"
-        }
-      ],
-      "tts_notes": "分析師解釋時，語速可稍放慢，強調『根本性的定價轉變』。"
+      "tts_notes": ""
     },
     {
       "scene_id": "scene_03",
       "scene_role": "core_transmission",
-      "scene_title": "利差傳導：強勢美元與亞洲貨幣",
-      "scene_purpose": "說明高利率如何透過利差機制，傳導至外匯市場，特別是對亞洲貨幣的影響。",
-      "narrative_focus": "建立『高殖利率 → 利差擴大 → 美元強勢 → 亞幣承壓』的因果鏈。",
+      "narrative_order": 3,
+      "scene_title": "傳導：強勢美元與承壓的亞洲貨幣",
+      "scene_purpose": "展示利率如何傳導至外匯市場，解釋美債的高殖利率如何擴大利差優勢，支撐美元走強，並對亞洲貨幣（如日圓、台幣）造成貶值壓力。",
+      "narrative_focus": "建立『長債殖利率 → 美元利差優勢 → 亞洲貨幣貶值』的傳導路徑。",
       "supporting_assets": [
         "DXY",
         "USDJPY",
-        "USDTWD",
-        "USDKRW"
+        "USDTWD"
       ],
       "supporting_news": [
         "美元指數衝破99 新台幣連4貶、週線翻黑",
         "美元偏強、日圓承壓 國銀估日圓短線續偏弱"
       ],
-      "visual_direction": "使用流程圖或連動圖，清晰展示利率、美元與亞幣之間的傳導關係。",
-      "image_prompt": "A 16:9 NotebookLM-style whiteboard image. A simple flow diagram. On the left, a node labeled '美債殖利率' with an upward orange arrow. An arrow points to the center node labeled '美元指數 (DXY)', also with an upward orange arrow. From the DXY node, two arrows point to the right, towards nodes labeled '日圓 (JPY)' and '新台幣 (TWD)', both with downward navy blue arrows. The style is hand-drawn, on a beige gridded background.",
+      "chain_position": {
+        "previous_node": "再通膨預期 & 長債殖利率",
+        "current_node": "美元 & 亞洲貨幣",
+        "next_node": "成長放緩擔憂 (修正因子)",
+        "transmission_sentence": "上一段提到的高殖利率，擴大了美國與其他國家的利差，資金流向美元資產，推升美元指數，並對亞洲貨幣形成直接的貶值壓力。然而，這條傳導鏈在週中受到了挑戰。",
+        "map_role": "中段傳導"
+      },
+      "visual_direction": "畫面中央是一個強壯的美元符號『$』圖示，周圍有向上箭頭。從這個中心圖示，分岔出數條指向右下方、較弱的箭頭，分別指向日圓『¥』和台幣『NT$』的圖示，這些貨幣圖示旁有向下的趨勢線。整體視覺呈現美元的向心力與對外圍貨幣的壓力。",
+      "image_prompt": "Create a 16:9 NotebookLM-style whiteboard image. In the center, a large, bold, hand-drawn dollar sign '$' icon with orange upward arrows around it, labeled '美元利差優勢'. From this central icon, two black arrows point outwards and downwards. One arrow points to a Japanese Yen '¥' icon, the other to a New Taiwan Dollar 'NT$' icon. Both the Yen and NTD icons have small, orange downward trend lines next to them, labeled '亞幣承壓'. Style: off-white background, gray grid, black lines, orange highlights.",
       "on_screen_text": {
-        "headline": "美元的利差優勢",
+        "headline": "利差擴大 美元吸金",
         "key_numbers": [
           {
             "label": "DXY",
-            "value": "99.3",
+            "value": ">99",
             "unit": ""
           }
         ],
         "short_bullets": [
-          "美債殖利率攀升，擴大海外利差",
-          "資金流向美元資產",
-          "日圓、台幣等亞洲貨幣普遍承壓"
+          "高殖利率支撐美元",
+          "日圓、台幣等亞幣普遍承壓",
+          "市場關注亞洲央行干預動向"
         ],
-        "news_lines": []
+        "news_lines": [
+          "美元指數衝破99 新台幣連4貶"
+        ]
       },
       "narration_dialogue": [
         {
           "speaker": "host",
-          "text": "更高的利率，自然也影響了匯率市場。美元在本週再度展現強勢。"
+          "text": "上一段我們看到美國公債殖利率飆升，這如何影響全球資金流動？"
         },
         {
           "speaker": "analyst",
-          "text": "是的，這是一個教科書等級的利差傳導。美國利率走高，意味著持有美元資產的收益更具吸引力，資金自然流向美元。這直接導致美元指數走強，相對地，就對亞洲貨幣如日圓、新台幣等，構成了明顯的貶值壓力。市場正在關注各國央行是否會出手干預。"
+          "text": "影響非常直接。當美國的無風險利率遠高於其他主要經濟體，就形成了巨大的利差優勢，就像一個金融磁鐵，把全球資金吸向美元資產。我們看到美元指數一度衝破99，相對地，日圓、台幣等亞洲貨幣就面臨沉重的貶值壓力。不過，這條『高利率等於強美元』的公式，在本週也出現了短暫的例外。"
         }
       ],
       "tts_notes": ""
     },
     {
       "scene_id": "scene_04",
-      "scene_role": "revision_factor",
-      "scene_title": "修正訊號：房市數據引發成長擔憂",
-      "scene_purpose": "引入本週的修正因子，解釋為何市場並非單向交易通膨，成長擔憂的角色。",
-      "narrative_focus": "疲軟的房市數據如何短暫地挑戰了『強勢美元』的敘事，引發市場對經濟硬著陸的疑慮。",
+      "scene_role": "revision_or_cross_validation",
+      "narrative_order": 4,
+      "scene_title": "修正：成長放緩的擔憂浮現",
+      "scene_purpose": "介紹本週的修正因子，說明疲軟的美國房市數據如何引發市場對經濟成長放緩的擔憂，並短暫地壓抑了美元的強勢，顯示市場定價不再只由單一利率因素主導。",
+      "narrative_focus": "解釋『成長放緩擔憂』如何成為修正『高利率→強美元』主線敘事的關鍵變數。",
       "supporting_assets": [
         "DXY"
       ],
       "supporting_news": [
         "美國房市數據下滑顯示成長降溫風險"
       ],
-      "visual_direction": "將疲軟的數據圖表與美元指數的短暫波動並陳，視覺化呈現『修正因子』的影響。",
-      "image_prompt": "A 16:9 NotebookLM-style whiteboard image. On the left, a simple hand-drawn bar chart labeled '美國房市數據' shows declining bars. An orange question mark icon is drawn above it. A dashed arrow points from this chart to the right, where a line graph of the '美元指數 (DXY)' shows a brief, noticeable dip, circled in orange with the label '短暫回調'. The background is beige with a light gray grid.",
+      "chain_position": {
+        "previous_node": "美元 & 亞洲貨幣",
+        "current_node": "成長放緩擔憂 (修正因子)",
+        "next_node": "黃金 & 避險資產",
+        "transmission_sentence": "正當市場沉浸在強美元的邏輯中，疲軟的房市數據卻敲響了警鐘，引發對經濟硬著陸的擔憂，這股力量短暫壓過了利差優勢，導致美元回落，並推動避險資金尋找其他出口。",
+        "map_role": "修正因子"
+      },
+      "visual_direction": "畫面呈現一條向上的主趨勢線，標示為『美元走勢』。中間一個手繪的房子圖示，帶有向下的裂縫與箭頭，旁邊標示『房市數據疲軟』，從這個圖示發出一條橘色的波浪線，衝擊並造成主趨勢線出現一個短暫的凹陷，凹陷處標示『成長擔憂』。視覺上要清晰表達一個修正力量如何干擾主趨勢。",
+      "image_prompt": "Create a 16:9 NotebookLM-style whiteboard image. A main, hand-drawn black trend line moves upwards from left to right, labeled '美元主趨勢'. In the middle of the screen, a simple drawing of a house with a crack and a downward orange arrow is shown, labeled '房市疲軟'. From this house icon, an orange wavy arrow strikes the main trend line, causing a visible dip or interruption. At the point of the dip, add a text label '成長擔憂浮現'. Style: off-white background, gray grid, black lines, orange highlights.",
       "on_screen_text": {
-        "headline": "成長的烏雲",
+        "headline": "成長擔憂 修正美元",
         "key_numbers": [],
         "short_bullets": [
           "美國房市數據疲軟",
-          "引發經濟『硬著陸』擔憂",
-          "美元利差優勢一度被避險情緒抵銷"
+          "引發經濟硬著陸疑慮",
+          "美元強勢主線遭遇短暫逆風"
         ],
-        "news_lines": []
+        "news_lines": [
+          "房市數據疲軟引發成長擔憂，美元短暫走弱"
+        ]
       },
       "narration_dialogue": [
         {
           "speaker": "host",
-          "text": "不過，市場並非一路順風。週中出現了一些雜音，似乎讓美元的漲勢踩了煞車？"
+          "text": "所以，美元並不是一路走強？中間發生了什麼事？"
         },
         {
           "speaker": "analyst",
-          "text": "對，這個修正訊號來自於疲軟的房市數據。這組數據讓市場開始擔心：持續的高利率環境，是不是已經開始侵蝕實體經濟的成長動能？這種對『經濟衰退』的擔憂，一度蓋過了利率題材，引發避險情緒，讓美元短暫走弱。這也提醒我們，市場正在通膨與衰退之間尋找平衡。"
+          "text": "是的，這就是本週故事的轉折點。週中公布的美國房市數據相當疲軟，這讓市場開始擔心：這麼高的利率，是不是已經開始嚴重傷害實體經濟了？這種對『成長放緩』甚至『硬著陸』的擔憂，形成了一股修正力量，短暫地壓過了利差的吸引力，導致美元指數出現回檔。這也讓一些避險資產，出現了喘息的空間。"
         }
       ],
-      "tts_notes": "分析師在講到『通膨與衰退之間尋找平衡』時，可以加強語氣。"
+      "tts_notes": ""
     },
     {
       "scene_id": "scene_05",
-      "scene_role": "cross_validation",
-      "scene_title": "資產拉鋸：黃金的雙重壓力",
-      "scene_purpose": "以黃金為例，展示主要敘事與修正因子如何在資產價格上體現拉鋸。",
-      "narrative_focus": "解釋黃金為何同時受到高利率的壓抑，卻又在成長擔憂升溫時獲得避險買盤的支撐。",
+      "scene_role": "asset_reaction",
+      "narrative_order": 5,
+      "scene_title": "拉鋸：黃金的雙重壓力與避險角色",
+      "scene_purpose": "以黃金為例，總結本週市場的拉鋸格局。解釋黃金如何同時受到『高利率、強美元』的壓抑，又在『成長放緩擔憂』升溫時，獲得避險買盤的短暫支撐。",
+      "narrative_focus": "呈現黃金在『通膨vs.成長』拉鋸下的雙重角色，驗證本週核心主題。",
       "supporting_assets": [
-        "Gold",
-        "DXY",
-        "US10Y"
+        "Gold"
       ],
-      "supporting_news": [],
-      "visual_direction": "使用天秤或翹翹板的意象，表達黃金價格受到的兩股相反力量。",
-      "image_prompt": "A 16:9 NotebookLM-style whiteboard image. A large, hand-drawn seesaw is in the center. On the left side, which is tilted down, are two heavy weights labeled '高利率' and '強勢美元'. This side is pressing down on a gold bar icon. On the right side, which is up in the air, a single, lighter feather icon is labeled '避險需求'. The visual metaphor clearly shows gold is under pressure. Beige gridded background, minimal text.",
+      "supporting_news": [
+        "金價因美元與美債殖利率雙升而承壓"
+      ],
+      "chain_position": {
+        "previous_node": "成長放緩擔憂 (修正因子)",
+        "current_node": "黃金 & 避險資產",
+        "next_node": "下週觀察",
+        "transmission_sentence": "成長放緩的擔憂，讓黃金的避險屬性一度凸顯；但最終，高利率帶來的機會成本與強勢美元的壓力仍然是主導力量，讓金價整體承壓。這場拉鋸戰的勝負，將由下週的關鍵數據決定。",
+        "map_role": "資產反應"
+      },
+      "visual_direction": "畫面中央是一個手繪的金條圖示。左邊一條黑色的粗箭頭指向金條，標示『高利率 & 強美元』，代表壓力。右邊一條橘色的、較細的箭頭也指向金條，標示『避險需求』，代表支撐。兩股力量形成拉鋸，金條下方畫一條震盪的價格走勢線。視覺上呈現拔河的對峙感。",
+      "image_prompt": "Create a 16:9 NotebookLM-style whiteboard image. In the center, a simple hand-drawn gold bar icon. From the left, a thick black arrow points at the gold bar, labeled with '高利率壓力'. From the right, a thinner orange arrow points at the gold bar, labeled '避險支撐'. This creates a visual tug-of-war. Below the gold bar, a volatile, sideways price action line is drawn to represent the struggle. Style: off-white background, gray grid, black and orange highlights.",
       "on_screen_text": {
         "headline": "黃金的十字路口",
-        "key_numbers": [],
+        "key_numbers": [
+          {
+            "label": "Gold",
+            "value": "4480",
+            "unit": "USD/oz"
+          }
+        ],
         "short_bullets": [
-          "壓力：高利率提升持有黃金的機會成本",
-          "壓力：強勢美元使黃金計價變貴",
-          "支撐：經濟衰退擔憂引發避險需求"
+          "壓力：高利率機會成本、強勢美元",
+          "支撐：經濟成長放緩的避險需求",
+          "價格反映市場核心矛盾"
         ],
         "news_lines": []
       },
       "narration_dialogue": [
         {
           "speaker": "host",
-          "text": "在這種複雜的環境下，傳統的避險資產黃金，表現如何？"
+          "text": "在這樣矛盾的市場氛圍下，黃金扮演了什麼樣的角色？"
         },
         {
           "speaker": "analyst",
-          "text": "黃金的處境最能體現本週的拉鋸。一方面，高利率和強勢美元對不孳息的黃金是雙重打擊。但另一方面，當房市數據引發衰退擔憂時，黃金的避險屬性又讓它獲得支撐。所以我們看到金價上沖下洗，它同時在交易『通膨利率』和『衰退避險』這兩個相互矛盾的劇本。"
+          "text": "黃金完美體現了本週的拉鋸格局。一方面，創紀錄的實質利率和強勢美元，對不孳息的黃金是大利空。但另一方面，當市場擔心經濟硬著陸時，黃金的避險功能又會吸引資金。所以我們看到，金價在週中隨避險情緒反彈，但最終仍不敵高利率的主旋律而走弱。黃金的走勢，就像是市場對『通膨』和『衰退』哪個更值得擔心的投票結果。"
         }
       ],
       "tts_notes": ""
@@ -227,37 +267,45 @@
     {
       "scene_id": "scene_06",
       "scene_role": "conclusion_and_outlook",
-      "scene_title": "下週觀察：殖利率關卡與勞動數據",
-      "scene_purpose": "收斂本週結論，並為下週的市場觀察重點提供指引。",
-      "narrative_focus": "市場已進入高利率定價階段，下週的關鍵在於殖利率是否繼續上探，以及勞動力市場數據是否會強化硬著陸風險。",
+      "narrative_order": 6,
+      "scene_title": "展望：下週關鍵驗證點",
+      "scene_purpose": "收斂本週觀察，並提出下週需要關注的關鍵數據與事件，以判斷本週建立的『高利率vs.成長擔憂』敘事將如何延續或轉變。",
+      "narrative_focus": "將本週的傳導鏈與結論，收斂至下週的具體觀察指標上。",
       "supporting_assets": [],
       "supporting_news": [
         "美債30年期殖利率是否挑戰5.5%關卡",
         "美國勞動力市場數據是否確認經濟硬著陸風險"
       ],
-      "visual_direction": "以清單或儀表板的形式，呈現下週需要關注的關鍵指標。",
-      "image_prompt": "A 16:9 NotebookLM-style whiteboard image. A simple checklist layout with the headline '下週觀察重點'. There are two items. The first has an icon of a rising trend line and text: '30年期美債殖利率 vs 5.5% 關卡?'. The second has an icon of a briefcase and text: '勞動力市場數據 → 硬著陸風險?'. A hand-drawn magnifying glass is inspecting the second item. Beige gridded background, clean and forward-looking.",
+      "chain_position": {
+        "previous_node": "黃金 & 避險資產",
+        "current_node": "下週觀察",
+        "next_node": "",
+        "transmission_sentence": "本週市場確立了高利率與成長擔憂的拉鋸格局，下週的焦點將是驗證哪一方力量會佔上風。",
+        "map_role": "下週驗證"
+      },
+      "visual_direction": "畫面呈現一個手繪的放大鏡，鏡片中是下週的日曆或清單。清單上有兩個重點項目，第一個是『30年債息 vs 5.5%?』，第二個是代表就業的公事包圖示，標示『勞動力數據』。整體視覺簡潔，聚焦在未來需要驗證的關鍵問題上。",
+      "image_prompt": "Create a 16:9 NotebookLM-style whiteboard image. On the left, a large, hand-drawn magnifying glass. Inside the lens of the magnifying glass, there is a simple checklist with two items. The first item is text: '30年債息 vs 5.5%?'. The second item is a simple icon of a briefcase, labeled '勞動力數據'. The overall feeling is one of forward-looking analysis. Style: off-white background, gray grid, black lines, orange highlights for the question mark and checklist ticks.",
       "on_screen_text": {
-        "headline": "下週市場焦點",
+        "headline": "下週觀察重點",
         "key_numbers": [],
         "short_bullets": [
-          "觀察 30年期美債殖利率是否挑戰 5.5%",
-          "勞動力市場數據是否確認經濟放緩",
-          "亞洲央行對匯率的態度"
+          "30年期美債殖利率是否挑戰5.5%？",
+          "勞動力市場數據是否確認硬著陸風險？",
+          "亞洲央行是否出手干預匯市？"
         ],
         "news_lines": []
       },
       "narration_dialogue": [
         {
           "speaker": "host",
-          "text": "總結來看，市場似乎已經接受了高利率的現實。那麼下週，我們應該關注什麼？"
+          "text": "總結來看，市場在高利率的預期下，又多了一層對經濟衰退的擔憂。下週我們該觀察什麼，來判斷風向？"
         },
         {
           "speaker": "analyst",
-          "text": "下週有兩個關鍵驗證點。第一，30年期美債殖利率是否會繼續上攻，挑戰5.5%這個更具心理意義的關卡。第二，即將公布的勞動力市場數據，它將是判斷經濟是否走向硬著陸的關鍵證據。這兩個變數，將決定市場的天秤，會繼續倒向通膨，還是轉向衰退。"
+          "text": "下週有兩個關鍵的驗證點。第一，要看30年期公債殖利率，是否會繼續挑戰5.5%這個重要的心理關卡，這代表市場對高利率的定價是否會更極端。第二，更重要的是美國的勞動力市場數據，如果數據急遽轉弱，那『成長放緩』的擔憂就會壓過『通膨』，屆時整條總經傳導鏈可能就會逆轉。這將是我們下週的觀察重點。"
         }
       ],
-      "tts_notes": "結尾語氣應清晰、篤定，為觀眾提供明確的觀察框架。"
+      "tts_notes": ""
     }
   ]
 }
