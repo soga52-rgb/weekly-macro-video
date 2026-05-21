@@ -1,61 +1,55 @@
-name: Build Weekly Slide Images (08 only)
+# Save as: .github/workflows/build_weekly_slide_images_only_08.yml
+name: Build Weekly Slide Images Only (08 Image Model)
 
 on:
   workflow_dispatch:
     inputs:
-      week_date:
-        description: '週報資料夾日期（例如 2026-05-21；留空則由腳本自行判斷）'
+      week_end_date:
+        description: 'Target weekly folder end date, e.g. 2026-05-21'
         required: false
         default: ''
       force_rebuild_slides:
-        description: '是否強制重建 scene_01 ~ scene_06 圖檔'
+        description: 'Force rebuild slide images'
         required: false
-        type: choice
-        options:
-          - 'false'
-          - 'true'
         default: 'true'
 
-permissions:
-  contents: write
+env:
+  IMAGE_MODEL: gemini-3.1-flash-image-preview
+  IMAGE_MODEL_FALLBACKS: gemini-2.5-flash-image
 
 jobs:
-  build-weekly-slide-images:
+  build-slides:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
 
-      - name: Setup Python
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install system fonts
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y fonts-noto-cjk
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pillow requests
+
+      - name: Resolve env
+        run: |
+          echo "WEEK_END_DATE=${{ github.event.inputs.week_end_date }}" >> $GITHUB_ENV
+          echo "FORCE_REBUILD_SLIDES=${{ github.event.inputs.force_rebuild_slides }}" >> $GITHUB_ENV
 
       - name: Build weekly slide images
         env:
-          WEEK_DATE: ${{ github.event.inputs.week_date }}
-          FORCE_REBUILD_SLIDES: ${{ github.event.inputs.force_rebuild_slides }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           python scripts/08_build_weekly_slide_images.py
 
-      - name: Commit generated slide images
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add output/weekly/**/slides/*.png output/weekly/**/slides/*.json || true
-          git diff --cached --quiet && echo "No slide image changes to commit." && exit 0
-          git commit -m "build: weekly slide images (08 only)"
-          git push
+      - name: Upload slide artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-slide-images-${{ github.run_id }}
+          path: |
+            output/weekly/*/slides/*.png
+            output/weekly/*/weekly_slide_images_manifest.json
+          if-no-files-found: warn
