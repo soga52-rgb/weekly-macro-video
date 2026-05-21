@@ -1,0 +1,79 @@
+# Save as: .github/workflows/build_weekly_video_assets.yml
+name: Build Weekly Video Assets
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_end_date:
+        description: 'Target weekly folder end date, e.g. 2026-05-21'
+        required: false
+        default: ''
+      force_rebuild_slides:
+        description: 'Force rebuild slide images'
+        required: false
+        default: 'true'
+
+permissions:
+  contents: write
+
+env:
+  GEMINI_MODEL: gemini-2.5-pro
+  GEMINI_FALLBACK_MODELS: gemini-3.1-flash-lite,gemini-2.5-flash
+  IMAGE_MODEL: gemini-3.1-flash-image-preview
+  IMAGE_MODEL_FALLBACKS: ""
+  GEMINI_TIMEOUT_SECONDS: 120
+  GEMINI_MAX_RETRIES: 1
+  MAX_IMAGE_RETRIES: 1
+  IMAGE_RETRY_SLEEP_SECONDS: 10
+
+jobs:
+  build-video-assets:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+
+      - name: Resolve env
+        run: |
+          echo "WEEK_END_DATE=${{ github.event.inputs.week_end_date }}" >> $GITHUB_ENV
+          echo "FORCE_REBUILD_SLIDES=${{ github.event.inputs.force_rebuild_slides }}" >> $GITHUB_ENV
+
+      - name: Generate weekly scene package
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python scripts/05_generate_weekly_scene_package.py
+
+      - name: Generate TTS audio
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python scripts/06_generate_weekly_tts.py
+
+      - name: Generate slide images
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python scripts/08_build_weekly_slide_images.py
+
+      - name: Commit generated assets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add output/weekly/**/weekly_scene_package.json output/weekly/**/weekly_narration.json output/weekly/**/weekly_narration_full.txt || true
+          git add output/weekly/**/narration/*.json output/weekly/**/audio/* output/weekly/**/slides/*.png output/weekly/**/slides/*.json output/weekly/**/slides/prompts/*.txt || true
+          git diff --cached --quiet && echo "No generated asset changes to commit." && exit 0
+          git commit -m "build: weekly scene package, TTS and slide images"
+          git push
