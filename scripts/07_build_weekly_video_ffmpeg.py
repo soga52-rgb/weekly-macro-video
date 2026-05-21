@@ -67,12 +67,19 @@ HEADER_Y = 34
 # ratios: x, y, w, h on the original diagram image.
 FOCUS_PRESETS: Dict[str, Tuple[float, float, float, float]] = {
     "overview": (0.00, 0.00, 1.00, 1.00),
-    "drivers": (0.02, 0.12, 0.37, 0.42),
-    "yields": (0.30, 0.10, 0.34, 0.42),
-    "dollar_fx": (0.53, 0.11, 0.35, 0.43),
-    "gold_risk": (0.62, 0.12, 0.28, 0.43),
-    "next_watch": (0.79, 0.04, 0.20, 0.72),
-    "correction": (0.25, 0.43, 0.46, 0.38),
+
+    # V8.5 coordinate-tuned presets:
+    # - drivers: focus on "驅動因子 / 再通膨預期 / 油價高檔", avoid over-cutting into long-end yield.
+    # - yields: include "通膨 / 利率" plus "通膨黏性 / 長債利率飆升", keep USD as next-step context only.
+    # - dollar_fx: include USD and Asia FX transmission, avoid the right-side next-watch panel.
+    # - gold_risk: keep Asia FX / gold pressure area, avoid drifting into next-watch.
+    # - next_watch: widen the crop because the right-side panel is vertical; this makes it read better in 16:9 focus panel.
+    "drivers": (0.02, 0.13, 0.34, 0.40),
+    "yields": (0.30, 0.10, 0.36, 0.42),
+    "dollar_fx": (0.50, 0.11, 0.36, 0.46),
+    "gold_risk": (0.61, 0.12, 0.27, 0.43),
+    "next_watch": (0.73, 0.03, 0.26, 0.74),
+    "correction": (0.25, 0.43, 0.47, 0.38),
 }
 
 TARGET_LABELS = {
@@ -330,6 +337,47 @@ def render_focus_panel(
         draw.text((tag[0] + 13, tag[1] + 6), st, font=title_font, fill=MUTED)
 
 
+
+def render_navigation_info(
+    base: Image.Image,
+    target: str,
+    title: str,
+    box: Tuple[int, int, int, int],
+) -> None:
+    """Fill the top-right space beside the minimap with concise navigation context."""
+    draw = ImageDraw.Draw(base)
+    x1, y1, x2, y2 = box
+
+    draw_round_rect(draw, box, 24, (255, 253, 248), outline=(240, 224, 197), width=1)
+
+    label = TARGET_LABELS.get(target, target)
+    draw.text((x1 + 24, y1 + 22), "目前位置", font=font(20, True), fill=(158, 95, 13))
+    draw.text((x1 + 24, y1 + 56), label[:18], font=font(34, True), fill=NAVY)
+
+    if title:
+        draw_wrapped_text(
+            draw,
+            title,
+            (x1 + 24, y1 + 104),
+            font(22, True),
+            NAVY_2,
+            max_chars=18,
+            line_gap=7,
+            max_lines=2,
+        )
+
+    guide_y = y2 - 68
+    items = ["全圖定位", "局部放大", "右側證據"]
+    cursor_x = x1 + 24
+    small_f = font(17, True)
+    for item in items:
+        tw, _ = text_size(draw, item, small_f)
+        chip = (cursor_x, guide_y, cursor_x + tw + 28, guide_y + 34)
+        draw_round_rect(draw, chip, 17, CARD_BG, outline=(232, 225, 215), width=1)
+        draw.text((chip[0] + 14, chip[1] + 8), item, font=small_f, fill=MUTED)
+        cursor_x = chip[2] + 10
+
+
 def render_diagram_panel(base: Image.Image, diagram_path: Path, target: str, title: str) -> None:
     draw = ImageDraw.Draw(base)
     panel = (LEFT_X, LEFT_Y, LEFT_X + LEFT_W, LEFT_Y + LEFT_H)
@@ -346,14 +394,18 @@ def render_diagram_panel(base: Image.Image, diagram_path: Path, target: str, tit
     if target not in FOCUS_PRESETS:
         target = "overview"
 
-    # V8.5 layout: minimap + cropped focus panel
-    minimap_box = (LEFT_X + 34, LEFT_Y + 88, LEFT_X + LEFT_W - 34, LEFT_Y + 306)
-    focus_box = (LEFT_X + 34, LEFT_Y + 326, LEFT_X + LEFT_W - 34, LEFT_Y + LEFT_H - 34)
+    # V8.5 tuned layout:
+    # Minimap uses an aspect-ratio-matched card so the full diagram is readable,
+    # not a tiny image floating inside an overly wide box.
+    minimap_box = (LEFT_X + 34, LEFT_Y + 88, LEFT_X + 500, LEFT_Y + 318)
+    nav_info_box = (LEFT_X + 520, LEFT_Y + 88, LEFT_X + LEFT_W - 34, LEFT_Y + 318)
+    focus_box = (LEFT_X + 34, LEFT_Y + 338, LEFT_X + LEFT_W - 34, LEFT_Y + LEFT_H - 34)
 
     rgba = base.convert("RGBA")
     render_minimap(rgba, original, target, minimap_box)
     base.paste(rgba.convert("RGB"))
 
+    render_navigation_info(base, target, title, nav_info_box)
     render_focus_panel(base, original, target, focus_box, title)
 
 
@@ -705,7 +757,7 @@ def main() -> None:
     ensure_dir(scene_video_dir)
     ensure_dir(final_dir)
 
-    print("[INFO] Rendering V8.5 minimap + focus scene images")
+    print("[INFO] Rendering V8.5 coordinate-tuned minimap + focus scene images")
     scene_video_paths: List[Path] = []
 
     for scene in scenes:
@@ -718,7 +770,7 @@ def main() -> None:
             print(f"[WARN] Missing scene audio, skip {scene_id}: {audio_path}")
             continue
 
-        image_path = video_assets_dir / f"{scene_id}_focus.png"
+        image_path = video_assets_dir / f"{scene_id}_focus_tuned.png"
         video_path = scene_video_dir / f"{scene_id}.mp4"
 
         render_scene_image(week_dir, scene, market, news, image_path)
