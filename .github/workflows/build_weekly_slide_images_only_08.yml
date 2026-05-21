@@ -19,6 +19,9 @@ permissions:
 env:
   IMAGE_MODEL: gemini-3.1-flash-image-preview
   IMAGE_MODEL_FALLBACKS: gemini-2.5-flash-image
+  GEMINI_TIMEOUT_SECONDS: 90
+  MAX_IMAGE_RETRIES: 1
+  IMAGE_RETRY_SLEEP_SECONDS: 10
 
 jobs:
   build-slides:
