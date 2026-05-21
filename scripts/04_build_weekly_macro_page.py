@@ -104,6 +104,41 @@ def render_list(items: Any, empty: str = "資料不足，待觀察") -> str:
     return "\n".join(rows)
 
 
+def render_video_section(week_dir: Path) -> str:
+    """Render the weekly macro video player near the top of the page."""
+    candidates = [
+        week_dir / "final" / "weekly_macro_video.mp4",
+        week_dir / "video" / "weekly_macro_video.mp4",
+        week_dir / "weekly_macro_video.mp4",
+    ]
+
+    video_path = next((p for p in candidates if p.exists()), None)
+    if not video_path:
+        return """
+  <section class="section section-video">
+    <h2>本週總經影片</h2>
+    <div class="muted-box">本週影片尚未產生，完成 07 合成後會自動顯示於此。</div>
+  </section>
+"""
+
+    src = video_path.relative_to(week_dir).as_posix()
+    poster_path = week_dir / "slides" / "scene_01.png"
+    poster_attr = f' poster="{esc(poster_path.relative_to(week_dir).as_posix())}"' if poster_path.exists() else ""
+
+    return f"""
+  <section class="section section-video">
+    <h2>本週總經影片</h2>
+    <div class="video-shell">
+      <video class="weekly-video" controls playsinline preload="metadata"{poster_attr}>
+        <source src="{esc(src)}" type="video/mp4">
+        您的瀏覽器不支援影片播放。
+      </video>
+    </div>
+    <div class="video-note">影片依本週總經傳導圖、旁白與圖卡自動合成。</div>
+  </section>
+"""
+
+
 def build_asset_signal_map(forest: Dict[str, Any]) -> Dict[str, str]:
     variables = forest.get("macro_variables") or {}
     return {
@@ -187,7 +222,7 @@ def render_news_card(item: Dict[str, Any]) -> str:
     """
 
 
-def dedupe_news_items(items: List[Dict[str, Any]], limit: int = 4) -> List[Dict[str, Any]]:
+def dedupe_news_items(items: List[Dict[str, Any]], limit: int = 8) -> List[Dict[str, Any]]:
     output = []
     seen = set()
     for item in items:
@@ -214,7 +249,7 @@ def get_categorized_news(news_context: Dict[str, Any]) -> Dict[str, List[Dict[st
     direct_categories = news_context.get("news_categories")
     if isinstance(direct_categories, dict):
         for key in categories.keys():
-            categories[key] = dedupe_news_items(direct_categories.get(key) or [], 4)
+            categories[key] = dedupe_news_items(direct_categories.get(key) or [], 8)
 
     # Fallback for older weekly_news_context.json:
     # classify top_news only if the AI did not provide category buckets.
@@ -227,7 +262,7 @@ def get_categorized_news(news_context: Dict[str, Any]) -> Dict[str, List[Dict[st
             categories.setdefault(category, []).append(item)
 
         for key in categories.keys():
-            categories[key] = dedupe_news_items(categories[key], 4)
+            categories[key] = dedupe_news_items(categories[key], 8)
 
     return categories
 
@@ -244,19 +279,45 @@ def render_news(news_context: Dict[str, Any]) -> str:
         "其他": "補充其他可能影響主線的事件",
     }
 
+    # Natural weighting:
+    # Categories with more evidence occupy larger visual space.
+    # Keep the macro reading order as a tie breaker.
+    category_order = ["通膨預期", "利率", "貨幣", "其他"]
+    non_empty = [
+        (category, categories.get(category, []))
+        for category in category_order
+        if categories.get(category, [])
+    ]
+
+    if not non_empty:
+        return '<div class="muted-box">本週新聞補充資料不足，待觀察。</div>'
+
+    max_count = max(len(items) for _, items in non_empty)
+
+    def span_for(count: int) -> int:
+        if len(non_empty) == 1:
+            return 12
+        if count >= 5 or count == max_count and max_count >= 4:
+            return 8
+        if count >= 3:
+            return 6
+        return 4
+
     sections = []
-    for category in ["通膨預期", "利率", "貨幣", "其他"]:
-        items = categories.get(category, [])
-        if items:
-            cards = "\n".join(render_news_card(item) for item in items[:4])
-        else:
-            cards = '<div class="muted-box compact">本週暫無明確新聞佐證。</div>'
+    for category, items in non_empty:
+        count = len(items)
+        span = span_for(count)
+        cards = "\n".join(render_news_card(item) for item in items[:8])
+        density_label = f"{count} 則"
 
         sections.append(f"""
-        <div class="news-category">
+        <div class="news-category news-weight-{min(count, 8)}" style="grid-column: span {span};">
           <div class="news-category-head">
-            <div class="category-pill">{esc(category)}</div>
-            <div class="news-category-desc">{esc(category_descriptions[category])}</div>
+            <div>
+              <div class="category-pill">{esc(category)}</div>
+              <div class="news-category-desc">{esc(category_descriptions[category])}</div>
+            </div>
+            <div class="news-count">{esc(density_label)}</div>
           </div>
           <div class="news-category-cards">
             {cards}
@@ -440,6 +501,7 @@ def build_html(week_dir: Path, forest: Dict[str, Any], news_context: Dict[str, A
 
     news_html = render_news(news_context)
     charts_html = render_market_charts(market, forest)
+    video_html = render_video_section(week_dir)
 
     revision_items = render_list([
         first_non_empty(storyline.get("revision_or_noise"), ""),
@@ -616,9 +678,49 @@ ul {{ margin:0; padding-left:22px; }}
   border:1px solid rgba(231,196,106,.35);
   border-radius:13px;
 }}
-.news-grid {{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }}
-.news-category {{ padding:16px; background:rgba(255,255,255,.56); }}
-.news-category-head {{ margin-bottom:12px; }}
+.video-shell {{
+  width:100%;
+  border-radius:24px;
+  overflow:hidden;
+  background:#0f172a;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.72);
+}}
+.weekly-video {{
+  width:100%;
+  display:block;
+  aspect-ratio:16/9;
+  background:#0f172a;
+}}
+.video-note {{
+  color:var(--muted);
+  font-size:14px;
+  margin-top:12px;
+}}
+.news-masonry {{
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:16px;
+  align-items:stretch;
+}}
+.news-category {{ padding:16px; background:rgba(255,255,255,.56); min-width:0; }}
+.news-category-head {{
+  margin-bottom:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}}
+.news-count {{
+  flex:0 0 auto;
+  color:var(--accent-dark);
+  background:rgba(255,243,209,.88);
+  border:1px solid rgba(243,210,139,.72);
+  border-radius:999px;
+  padding:5px 10px;
+  font-size:13px;
+  font-weight:900;
+}}
 .category-pill {{
   color:var(--navy);
   display:inline-flex;
@@ -634,7 +736,7 @@ ul {{ margin:0; padding-left:22px; }}
 .news-category-desc {{ color:var(--muted); font-size:14px; margin-top:8px; }}
 .news-category-cards {{
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
   gap:12px;
 }}
 .news-mini-card {{
@@ -684,6 +786,7 @@ ul {{ margin:0; padding-left:22px; }}
 .footer {{ color:var(--muted); font-size:13px; padding:20px 2px; }}
 @media(max-width:1000px) {{
   .charts,.slides {{ grid-template-columns:repeat(2,minmax(0,1fr)); }}
+  .news-category {{ grid-column:span 6 !important; }}
   .news-category-cards {{ grid-template-columns:1fr; }}
 }}
 @media(max-width:760px) {{
@@ -694,7 +797,9 @@ ul {{ margin:0; padding-left:22px; }}
     white-space:normal;
     margin-top:10px;
   }}
-  .charts,.slides,.news-grid {{ grid-template-columns:1fr; }}
+  .charts,.slides {{ grid-template-columns:1fr; }}
+  .news-masonry {{ grid-template-columns:1fr; }}
+  .news-category {{ grid-column:span 1 !important; }}
   .title {{ font-size:34px; }}
   .subtitle {{ font-size:18px; }}
 }}
@@ -737,6 +842,8 @@ ul {{ margin:0; padding-left:22px; }}
     </div>
   </header>
 
+  {video_html}
+
   <section class="section hero">
     <h2>總經傳導圖解</h2>
     {diagram_html}
@@ -764,7 +871,7 @@ ul {{ margin:0; padding-left:22px; }}
 
   <section class="section section-news">
     <h2>本週新聞佐證</h2>
-    <div class="news-grid">{news_html}</div>
+    <div class="news-masonry">{news_html}</div>
   </section>
 
   <section class="section section-next">
