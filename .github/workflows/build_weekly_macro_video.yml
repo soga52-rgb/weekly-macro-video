@@ -24,10 +24,10 @@ jobs:
 
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      GEMINI_MODEL: gemini-3.1-flash-lite
+      GEMINI_MODEL: gemini-3.1-flash-lite,gemini-2.5-flash-lite,gemini-2.5-flash
       GEMINI_TTS_MODEL: gemini-2.5-flash-preview-tts,gemini-2.5-pro-preview-tts,gemini-3.1-flash-tts-preview
-      GEMINI_TTS_HOST_VOICE: puck
-      GEMINI_TTS_ANALYST_VOICE: kore
+      GEMINI_TTS_HOST_VOICE: Tom
+      GEMINI_TTS_ANALYST_VOICE: Miranda
       FORCE_REBUILD_NARRATION: ${{ inputs.force_rebuild_narration }}
       FORCE_REBUILD_TTS: ${{ inputs.force_rebuild_tts }}
 
