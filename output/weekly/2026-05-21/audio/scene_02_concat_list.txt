@@ -1,4 +1,2 @@
 file '/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/turns/scene_02_01_host.wav'
 file '/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/turns/scene_02_02_analyst.wav'
-file '/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/turns/scene_02_03_host.wav'
-file '/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/audio/turns/scene_02_04_analyst.wav'
