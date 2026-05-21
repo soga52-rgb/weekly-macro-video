@@ -1,10 +1,8 @@
 {
-  "generated_at": "2026-05-21T14:20:43.136747Z",
+  "generated_at": "2026-05-21T14:25:21.451334Z",
   "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21",
   "image_model": "gemini-3.1-flash-image-preview",
   "target_scene_ids": [
-    "scene_03",
-    "scene_05",
     "scene_06"
   ],
   "records": [
