@@ -4,21 +4,13 @@
 Weekly Macro Video - Step 06
 Generate TTS audio for host/analyst dialogue narration using Gemini TTS.
 
-Input:
-- output/weekly/YYYY-MM-DD/narration/weekly_narration.json
-
-Output:
-- output/weekly/YYYY-MM-DD/audio/scene_01.wav ... scene_06.wav
-- output/weekly/YYYY-MM-DD/audio/weekly_narration.wav
-
-Required env:
-- GEMINI_API_KEY
-
-Optional env:
-- GEMINI_TTS_MODEL, default: gemini-3.1-flash-tts-preview
-- GEMINI_TTS_HOST_VOICE, default: Kore
-- GEMINI_TTS_ANALYST_VOICE, default: Puck
-- FORCE_REBUILD_TTS, default: false
+Important:
+- Gemini API does NOT support user-facing voice names like Tom / Miranda.
+- This script maps aliases:
+  Tom     -> puck
+  Miranda -> kore
+- You may also set GEMINI_TTS_HOST_VOICE / GEMINI_TTS_ANALYST_VOICE directly to
+  supported Gemini voice names such as puck, kore, aoede, charon, fenrir, etc.
 """
 
 import argparse
@@ -35,17 +27,18 @@ from typing import Any, Dict, List, Optional
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
+
 DEFAULT_TTS_MODEL = "gemini-2.5-flash-preview-tts"
 DEFAULT_TTS_FALLBACK_MODELS = [
     "gemini-2.5-flash-preview-tts",
     "gemini-2.5-pro-preview-tts",
     "gemini-3.1-flash-tts-preview",
 ]
+
+# User-facing role aliases.
 DEFAULT_HOST_VOICE = "Tom"
 DEFAULT_ANALYST_VOICE = "Miranda"
 
-# Gemini TTS supports only fixed prebuilt voice names.
-# Map user-facing aliases Tom / Miranda to supported Gemini voices.
 VOICE_ALIASES = {
     "tom": "puck",
     "miranda": "kore",
@@ -71,6 +64,35 @@ def find_latest_week_dir() -> Path:
 
 def flag(name: str) -> bool:
     return os.getenv(name, "false").strip().lower() in {"1", "true", "yes", "y"}
+
+
+def normalize_voice_name(name: str, role: str) -> str:
+    raw = (name or "").strip()
+    key = raw.lower()
+    mapped = VOICE_ALIASES.get(key, key)
+
+    if mapped in SUPPORTED_VOICES:
+        if mapped != key:
+            print(f"[INFO] Voice alias mapped: {role} {raw} -> {mapped}")
+        return mapped
+
+    fallback = "puck" if role == "host" else "kore"
+    print(f"[WARN] Unsupported Gemini TTS voice '{raw}' for {role}. Using fallback: {fallback}")
+    return fallback
+
+
+def get_tts_model_candidates() -> List[str]:
+    raw = os.getenv("GEMINI_TTS_MODEL", "").strip()
+    if raw:
+        candidates = [item.strip() for item in raw.split(",") if item.strip()]
+    else:
+        candidates = list(DEFAULT_TTS_FALLBACK_MODELS)
+
+    for item in DEFAULT_TTS_FALLBACK_MODELS:
+        if item not in candidates:
+            candidates.append(item)
+
+    return candidates
 
 
 def load_json(path: Path) -> Dict[str, Any]:
@@ -107,37 +129,6 @@ def find_inline_audio(api_response: Dict[str, Any]) -> Optional[Dict[str, str]]:
     return None
 
 
-
-
-def normalize_voice_name(name: str, role: str) -> str:
-    raw = (name or "").strip()
-    key = raw.lower()
-
-    mapped = VOICE_ALIASES.get(key, key)
-    if mapped in SUPPORTED_VOICES:
-        if mapped != key:
-            print(f"[INFO] Voice alias mapped: {role} {raw} -> {mapped}")
-        return mapped
-
-    fallback = "puck" if role == "host" else "kore"
-    print(f"[WARN] Unsupported Gemini TTS voice '{raw}' for {role}. Using fallback: {fallback}")
-    return fallback
-
-
-def get_tts_model_candidates() -> List[str]:
-    raw = os.getenv("GEMINI_TTS_MODEL", "").strip()
-    if raw:
-        candidates = [item.strip() for item in raw.split(",") if item.strip()]
-    else:
-        candidates = list(DEFAULT_TTS_FALLBACK_MODELS)
-
-    for item in DEFAULT_TTS_FALLBACK_MODELS:
-        if item not in candidates:
-            candidates.append(item)
-
-    return candidates
-
-
 def call_gemini_tts(text: str, model: str, voice: str, api_key: str, role_label: str) -> Dict[str, str]:
     endpoint = (
         "https://generativelanguage.googleapis.com/v1beta/models/"
@@ -149,7 +140,7 @@ def call_gemini_tts(text: str, model: str, voice: str, api_key: str, role_label:
     prompt = (
         f"請用自然、穩定、專業的繁體中文財經週報語氣朗讀以下{role_label}內容。"
         "語速中等，段落之間略停頓，不要加入任何額外說明。"
-        "不要朗讀角色名稱。\\n\\n"
+        "不要朗讀角色名稱。\n\n"
         + text
     )
 
@@ -240,8 +231,13 @@ def main() -> None:
         raise EnvironmentError("Missing GEMINI_API_KEY.")
 
     tts_models = get_tts_model_candidates()
-    host_voice = os.getenv("GEMINI_TTS_HOST_VOICE", DEFAULT_HOST_VOICE).strip() or DEFAULT_HOST_VOICE
-    analyst_voice = os.getenv("GEMINI_TTS_ANALYST_VOICE", DEFAULT_ANALYST_VOICE).strip() or DEFAULT_ANALYST_VOICE
+
+    host_voice_raw = os.getenv("GEMINI_TTS_HOST_VOICE", DEFAULT_HOST_VOICE).strip() or DEFAULT_HOST_VOICE
+    analyst_voice_raw = os.getenv("GEMINI_TTS_ANALYST_VOICE", DEFAULT_ANALYST_VOICE).strip() or DEFAULT_ANALYST_VOICE
+
+    # The important fix: never send Tom / Miranda directly to Gemini API.
+    host_voice = normalize_voice_name(host_voice_raw, "host")
+    analyst_voice = normalize_voice_name(analyst_voice_raw, "analyst")
 
     week_dir = Path(args.week_dir) if args.week_dir else find_latest_week_dir()
     narration = load_json(week_dir / "narration" / "weekly_narration.json")
@@ -280,6 +276,7 @@ def main() -> None:
             else:
                 print(f"[INFO] Generating {scene_id} turn {idx}: {speaker}")
                 last_error = None
+
                 for model in tts_models:
                     try:
                         print(f"[INFO] Trying TTS model: {model}")
@@ -294,6 +291,7 @@ def main() -> None:
                             print(f"[WARN] TTS model not available: {model}. Trying next fallback model.")
                             continue
                         raise
+
                 if last_error is not None:
                     raise last_error
 
