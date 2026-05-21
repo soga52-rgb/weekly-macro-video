@@ -33,6 +33,12 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+          ffmpeg -version
+
       - name: Resolve env
         run: |
           echo "WEEK_END_DATE=${{ github.event.inputs.week_end_date }}" >> $GITHUB_ENV
@@ -43,6 +49,8 @@ jobs:
           rm -f "output/weekly/${{ github.event.inputs.week_end_date }}/audio/"*.wav || true
           rm -f "output/weekly/${{ github.event.inputs.week_end_date }}/audio/"*.mp3 || true
           rm -f "output/weekly/${{ github.event.inputs.week_end_date }}/audio/"*.txt || true
+          rm -rf "output/weekly/${{ github.event.inputs.week_end_date }}/audio/turns" || true
+          mkdir -p "output/weekly/${{ github.event.inputs.week_end_date }}/audio"
 
       - name: Run 06 TTS only
         env:
