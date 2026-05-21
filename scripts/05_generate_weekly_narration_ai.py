@@ -10,6 +10,7 @@ import argparse
 import json
 import os
 import re
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -19,6 +20,11 @@ from typing import Any, Dict, List
 ROOT_DIR = Path(__file__).resolve().parents[1]
 OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
 DEFAULT_GEMINI_MODEL = "gemini-3.1-flash-lite"
+DEFAULT_GEMINI_FALLBACK_MODELS = [
+    "gemini-3.1-flash-lite",
+    "gemini-2.5-flash-lite",
+    "gemini-2.5-flash",
+]
 
 
 def find_latest_week_dir() -> Path:
@@ -69,7 +75,22 @@ def extract_json(text: str) -> Dict[str, Any]:
         return json.loads(match.group(0))
 
 
-def call_gemini(prompt: str, model: str, api_key: str) -> str:
+
+def get_model_candidates() -> List[str]:
+    raw = os.getenv("GEMINI_MODEL", "").strip()
+    if raw:
+        candidates = [item.strip() for item in raw.split(",") if item.strip()]
+    else:
+        candidates = list(DEFAULT_GEMINI_FALLBACK_MODELS)
+
+    for item in DEFAULT_GEMINI_FALLBACK_MODELS:
+        if item not in candidates:
+            candidates.append(item)
+
+    return candidates
+
+
+def call_gemini_once(prompt: str, model: str, api_key: str) -> str:
     endpoint = (
         "https://generativelanguage.googleapis.com/v1beta/models/"
         + urllib.parse.quote(model)
@@ -105,6 +126,50 @@ def call_gemini(prompt: str, model: str, api_key: str) -> str:
     if not output:
         raise RuntimeError(f"Empty Gemini output. Preview: {raw[:1000]}")
     return output
+
+
+def call_gemini_with_retry(prompt: str, model_candidates: List[str], api_key: str) -> str:
+    retryable_markers = [
+        "HTTPError 429",
+        "HTTPError 500",
+        "HTTPError 502",
+        "HTTPError 503",
+        "HTTPError 504",
+        "UNAVAILABLE",
+        "RESOURCE_EXHAUSTED",
+    ]
+
+    last_error = None
+
+    for model in model_candidates:
+        print(f"[INFO] Trying Gemini narration model: {model}")
+
+        for attempt in range(1, 5):
+            try:
+                return call_gemini_once(prompt, model, api_key)
+            except RuntimeError as exc:
+                last_error = exc
+                message = str(exc)
+                is_retryable = any(marker in message for marker in retryable_markers)
+
+                if not is_retryable:
+                    raise
+
+                wait_seconds = min(75, 10 * attempt * attempt)
+                print(
+                    f"[WARN] Gemini narration request failed on {model}, "
+                    f"attempt {attempt}/4. Waiting {wait_seconds}s. Error: {message[:300]}"
+                )
+
+                if attempt < 4:
+                    time.sleep(wait_seconds)
+
+        print(f"[WARN] Model still unavailable after retries: {model}. Trying next model candidate.")
+
+    if last_error is not None:
+        raise last_error
+
+    raise RuntimeError("No Gemini model candidate was available.")
 
 
 def build_prompt(forest: Dict[str, Any], news: Dict[str, Any], market: Dict[str, Any]) -> str:
@@ -340,7 +405,7 @@ def main() -> None:
     if not api_key:
         raise EnvironmentError("Missing GEMINI_API_KEY.")
 
-    model = os.getenv("GEMINI_MODEL", DEFAULT_GEMINI_MODEL).strip() or DEFAULT_GEMINI_MODEL
+    model_candidates = get_model_candidates()
     week_dir = Path(args.week_dir) if args.week_dir else find_latest_week_dir()
     narration_dir = week_dir / "narration"
     out_json = narration_dir / "weekly_narration.json"
@@ -356,8 +421,8 @@ def main() -> None:
     if not forest:
         raise FileNotFoundError(f"Missing weekly_forest_summary.json in {week_dir}")
 
-    print(f"[INFO] Generating V6 evidence-panel dialogue narration with model: {model}")
-    raw = call_gemini(build_prompt(forest, news, market), model, api_key)
+    print(f"[INFO] Generating V6 evidence-panel dialogue narration with model candidates: {', '.join(model_candidates)}")
+    raw = call_gemini_with_retry(build_prompt(forest, news, market), model_candidates, api_key)
     data = validate(extract_json(raw))
 
     save_json(out_json, data)
