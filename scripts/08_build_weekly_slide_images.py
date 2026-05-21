@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Weekly Macro Video - Step 08
-Build 6 NotebookLM-style slide images for the weekly macro video.
+Weekly Macro Video - Step 08 (V3 Notebook Single Visual)
 
-Flow:
-- Scene 01: full-page weekly_macro_diagram.png
-- Scene 02~05: single focused visual only (NO minimap / NO left-top thumbnail)
-- Scene 06: full-page next-week watch list
+Design goals from latest discussion:
+- Scene 01: full-page weekly macro diagram
+- Scene 02~05: NO minimap, NO frame-heavy layout, NO observation bullets
+- Scene 02~05: only show the key visual(s) needed for that scene
+- bottom area shows asset mini-cards + related news links
+- Scene 06: full-page next-week watch page with ultra-minimal icons/text
+- all panels use soft paper blocks without visible borders
+- data cards emphasize the number; units stay very small
 
 Replace:
 - scripts/08_build_weekly_slide_images.py
@@ -26,23 +29,69 @@ OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
 CANVAS_W = 1920
 CANVAS_H = 1080
 BG = (251, 250, 247)
-GRID = (237, 233, 226)
-TEXT = (29, 36, 51)
-SUBTEXT = (80, 96, 122)
-ORANGE = (242, 140, 40)
-NAVY = (36, 54, 77)
-RED = (217, 71, 47)
-MUTED = (121, 135, 156)
+GRID = (238, 234, 227)
+TEXT = (33, 41, 56)
+SUBTEXT = (89, 102, 123)
+MUTED = (138, 149, 165)
+ORANGE = (239, 138, 37)
+NAVY = (42, 58, 81)
+RED = (222, 86, 64)
+WHITE = (255, 255, 255)
 
 MARGIN_X = 72
-MARGIN_Y = 58
+MARGIN_TOP = 58
+TITLE_Y = 48
 
-# Scene 02~05 crop positions on weekly_macro_diagram.png
-FOCUS_PRESETS: Dict[str, Tuple[float, float, float, float]] = {
-    "scene_02": (0.02, 0.08, 0.40, 0.42),  # drivers / oil / reinflation
-    "scene_03": (0.30, 0.08, 0.67, 0.45),  # inflation / rates
-    "scene_04": (0.50, 0.10, 0.88, 0.48),  # dollar / asia FX
-    "scene_05": (0.56, 0.30, 0.88, 0.68),  # gold / correction factor
+DIAGRAM_PRESETS: Dict[str, List[Tuple[float, float, float, float]]] = {
+    # only the essential visual pieces, not whole panels
+    "scene_02": [
+        (0.02, 0.48, 0.16, 0.80),  # 再通膨預期
+        (0.16, 0.48, 0.30, 0.80),  # 油價高檔
+    ],
+    "scene_03": [
+        (0.30, 0.48, 0.44, 0.80),  # 通膨黏性
+        (0.44, 0.48, 0.59, 0.80),  # 長債利率飆升
+    ],
+    "scene_04": [
+        (0.58, 0.48, 0.71, 0.80),  # 美元偏強
+        (0.72, 0.48, 0.85, 0.80),  # 亞幣承壓
+    ],
+    "scene_05": [
+        (0.84, 0.48, 0.96, 0.80),  # 黃金壓力
+        (0.27, 0.72, 0.54, 0.96),  # 修正因子
+        (0.55, 0.76, 0.73, 0.90),  # 美元短暫走弱
+    ],
+}
+
+SCENE_CONFIG = {
+    "scene_02": {
+        "title": "起點：能源價格推升通膨預期",
+        "assets": ["WTI", "Brent"],
+        "news_category": "通膨預期",
+        "news_keywords": ["油價", "原油", "能源", "通膨", "再通膨", "物價"],
+        "news_heading": "通膨預期",
+    },
+    "scene_03": {
+        "title": "利率：長債殖利率重新定價",
+        "assets": ["US10Y"],
+        "news_category": "利率",
+        "news_keywords": ["殖利率", "美債", "利率", "Fed", "升息", "降息"],
+        "news_heading": "利率",
+    },
+    "scene_04": {
+        "title": "美元與亞洲貨幣：利差壓力外溢",
+        "assets": ["DXY", "USDJPY", "USDTWD", "USDKRW"],
+        "news_category": "貨幣",
+        "news_keywords": ["美元", "亞幣", "日圓", "台幣", "韓元", "匯率", "央行干預"],
+        "news_heading": "貨幣",
+    },
+    "scene_05": {
+        "title": "黃金與修正因子：高利率下的避險拉鋸",
+        "assets": ["Gold", "DXY"],
+        "news_category": "其他",
+        "news_keywords": ["黃金", "避險", "房市", "成長", "修正", "衰退", "美元"],
+        "news_heading": "黃金／修正因子",
+    },
 }
 
 ASSET_LABELS = {
@@ -65,53 +114,6 @@ ASSET_UNITS = {
     "USDJPY": "JPY",
     "USDTWD": "TWD",
     "USDKRW": "KRW",
-}
-
-SCENE_CONFIG = {
-    "scene_02": {
-        "title": "起點：能源價格推升通膨預期",
-        "assets": ["WTI", "Brent"],
-        "news_category": "通膨預期",
-        "news_keywords": ["油價", "原油", "通膨", "能源", "再通膨", "物價"],
-        "default_bullets": [
-            "地緣政治風險推升油價",
-            "市場重新擔憂通膨黏性",
-            "聯準會降息空間受限",
-        ],
-    },
-    "scene_03": {
-        "title": "利率：長債殖利率重新定價",
-        "assets": ["US10Y"],
-        "news_category": "利率",
-        "news_keywords": ["殖利率", "美債", "利率", "Fed", "升息", "降息"],
-        "default_bullets": [
-            "長端利率反映高利率維持更久",
-            "債市重新定價聯準會政策路徑",
-            "全球資產估值錨點上移",
-        ],
-    },
-    "scene_04": {
-        "title": "美元與亞洲貨幣：利差壓力外溢",
-        "assets": ["DXY", "USDJPY", "USDTWD", "USDKRW"],
-        "news_category": "貨幣",
-        "news_keywords": ["美元", "亞幣", "日圓", "台幣", "韓元", "匯率"],
-        "default_bullets": [
-            "美債利率上行支撐美元利差優勢",
-            "日圓、台幣與韓元同步承壓",
-            "匯率貶值不等於出口絕對利多",
-        ],
-    },
-    "scene_05": {
-        "title": "黃金與修正因子：高利率下的避險拉鋸",
-        "assets": ["Gold", "DXY"],
-        "news_category": "其他",
-        "news_keywords": ["黃金", "避險", "房市", "成長", "修正", "衰退", "美元"],
-        "default_bullets": [
-            "高利率提高持有黃金的機會成本",
-            "強美元對美元計價黃金形成壓力",
-            "成長疑慮仍可能帶來短線避險支撐",
-        ],
-    },
 }
 
 
@@ -177,16 +179,19 @@ def font(size: int, bold: bool = False):
     return ImageFont.load_default()
 
 
-FONT_H1 = font(48, True)
-FONT_H2 = font(34, True)
-FONT_H3 = font(26, True)
-FONT_BODY = font(23, False)
+FONT_H1 = font(44, True)
+FONT_H2 = font(28, True)
+FONT_H3 = font(22, True)
+FONT_BODY = font(21, False)
 FONT_SMALL = font(18, False)
 FONT_XS = font(14, False)
-FONT_NUM = font(52, True)
-FONT_NUM_SMALL = font(40, True)
-FONT_UNIT = font(15, False)
-FONT_LINK = font(18, False)
+FONT_LINK = font(16, False)
+FONT_NUM_BIG = font(56, True)
+FONT_NUM_MID = font(48, True)
+FONT_UNIT = font(13, False)
+FONT_WATCH_BIG = font(34, True)
+FONT_WATCH_SMALL = font(22, False)
+FONT_SYMBOL = font(54, True)
 
 
 def make_canvas() -> Image.Image:
@@ -202,7 +207,7 @@ def make_canvas() -> Image.Image:
 
 def text_size(draw: ImageDraw.ImageDraw, text: str, fnt) -> Tuple[int, int]:
     if not text:
-        return (0, 0)
+        return 0, 0
     box = draw.textbbox((0, 0), text, font=fnt)
     return box[2] - box[0], box[3] - box[1]
 
@@ -211,7 +216,7 @@ def wrap_text(draw: ImageDraw.ImageDraw, text: str, fnt, max_width: int) -> List
     text = str(text or "").strip()
     if not text:
         return []
-    lines = []
+    lines: List[str] = []
     current = ""
     for ch in text:
         trial = current + ch
@@ -226,7 +231,7 @@ def wrap_text(draw: ImageDraw.ImageDraw, text: str, fnt, max_width: int) -> List
     return lines
 
 
-def draw_wrapped(draw: ImageDraw.ImageDraw, text: str, x: int, y: int, fnt, fill, max_width: int, line_gap: int = 8, max_lines: Optional[int] = None) -> int:
+def draw_wrapped(draw: ImageDraw.ImageDraw, text: str, x: int, y: int, fnt, fill, max_width: int, line_gap: int = 7, max_lines: Optional[int] = None) -> int:
     lines = wrap_text(draw, text, fnt, max_width)
     if max_lines is not None:
         lines = lines[:max_lines]
@@ -238,6 +243,14 @@ def draw_wrapped(draw: ImageDraw.ImageDraw, text: str, x: int, y: int, fnt, fill
     return cur_y
 
 
+def draw_soft_paper_bg(base: Image.Image, box: Tuple[int, int, int, int], alpha: int = 168, radius: int = 28) -> None:
+    overlay = Image.new("RGBA", base.size, (0, 0, 0, 0))
+    od = ImageDraw.Draw(overlay)
+    od.rounded_rectangle(box, radius=radius, fill=(255, 255, 255, alpha))
+    overlay = overlay.filter(ImageFilter.GaussianBlur(0.4))
+    base.alpha_composite(overlay)
+
+
 def fit_contain(image: Image.Image, target_size: Tuple[int, int]) -> Image.Image:
     tw, th = target_size
     iw, ih = image.size
@@ -247,25 +260,6 @@ def fit_contain(image: Image.Image, target_size: Tuple[int, int]) -> Image.Image
     bg = Image.new("RGBA", target_size, (0, 0, 0, 0))
     bg.alpha_composite(img.convert("RGBA"), ((tw - nw) // 2, (th - nh) // 2))
     return bg
-
-
-def fit_crop(image: Image.Image, target_size: Tuple[int, int]) -> Image.Image:
-    tw, th = target_size
-    iw, ih = image.size
-    ratio = max(tw / iw, th / ih)
-    nw, nh = max(1, int(iw * ratio)), max(1, int(ih * ratio))
-    img = image.resize((nw, nh), Image.LANCZOS)
-    left = max(0, (nw - tw) // 2)
-    top = max(0, (nh - th) // 2)
-    return img.crop((left, top, left + tw, top + th))
-
-
-def draw_soft_paper_bg(base: Image.Image, box: Tuple[int, int, int, int], alpha: int = 160, radius: int = 28):
-    overlay = Image.new("RGBA", base.size, (0, 0, 0, 0))
-    od = ImageDraw.Draw(overlay)
-    od.rounded_rectangle(box, radius=radius, fill=(255, 255, 255, alpha))
-    overlay = overlay.filter(ImageFilter.GaussianBlur(0.35))
-    base.alpha_composite(overlay)
 
 
 def normalize_asset_series(market: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
@@ -344,45 +338,9 @@ def draw_sparkline(draw: ImageDraw.ImageDraw, points: List[float], box: Tuple[in
         x = x1 + int(i * (x2 - x1) / (len(points) - 1))
         y = y2 - int((v - lo) * (y2 - y1) / (hi - lo))
         coords.append((x, y))
-    draw.line(coords, fill=NAVY, width=4)
+    draw.line(coords, fill=NAVY, width=3)
     for x, y in coords:
         draw.ellipse((x - 4, y - 4, x + 4, y + 4), fill=ORANGE)
-
-
-def draw_asset_numbers(base_rgba: Image.Image, series_map: Dict[str, Any], asset_keys: List[str], box: Tuple[int, int, int, int]) -> None:
-    draw_soft_paper_bg(base_rgba, box, 132)
-    draw = ImageDraw.Draw(base_rgba)
-    x1, y1, x2, y2 = box
-    gap = 18
-    count = max(1, len(asset_keys))
-    if count <= 2:
-        cols, rows = count, 1
-    else:
-        cols, rows = 2, 2
-    card_w = (x2 - x1 - 32 - (cols - 1) * gap) // cols
-    card_h = (y2 - y1 - 28 - (rows - 1) * gap) // rows
-    for idx, key in enumerate(asset_keys):
-        col = idx % cols
-        row = idx // cols
-        cx = x1 + 16 + col * (card_w + gap)
-        cy = y1 + 14 + row * (card_h + gap)
-        draw.rounded_rectangle((cx, cy, cx + card_w, cy + card_h), radius=22, fill=(255, 255, 255, 218))
-        item = series_map.get(key, {})
-        latest, prev = latest_and_prev(item)
-        value_str = format_value(latest, key)
-        delta = format_delta(latest, prev)
-        unit = str(item.get("unit") or ASSET_UNITS.get(key, "")).strip()
-        draw.text((cx + 20, cy + 16), ASSET_LABELS.get(key, key), font=FONT_SMALL, fill=NAVY)
-        num_font = FONT_NUM if len(asset_keys) <= 2 else FONT_NUM_SMALL
-        draw.text((cx + 20, cy + 48), value_str, font=num_font, fill=TEXT)
-        val_w, _ = text_size(draw, value_str, num_font)
-        if unit:
-            draw.text((cx + 24 + val_w, cy + 76), unit, font=FONT_UNIT, fill=MUTED)
-        if delta:
-            draw.text((cx + 20, cy + 104), delta, font=FONT_XS, fill=ORANGE if delta.startswith("+") else SUBTEXT)
-        pts = get_points(item)
-        if pts:
-            draw_sparkline(draw, pts[-6:], (cx + 20, cy + card_h - 54, cx + card_w - 20, cy + card_h - 18))
 
 
 def flatten_news(news: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -421,9 +379,8 @@ def search_news(news: Dict[str, Any], category: str, keywords: List[str], limit:
     for item in items:
         blob = " ".join([
             str(item.get("title") or item.get("headline") or ""),
-            str(item.get("summary") or item.get("description") or ""),
+            str(item.get("summary") or item.get("description") or item.get("why_it_matters") or item.get("reason") or ""),
             str(item.get("theme") or item.get("category") or item.get("macro_category") or ""),
-            str(item.get("why_it_matters") or item.get("reason") or ""),
         ])
         cat_text = str(item.get("category") or item.get("macro_category") or item.get("theme") or "")
         score = (4 if category and category in cat_text else 0) + sum(1 for kw in keywords if kw.lower() in blob.lower())
@@ -433,79 +390,8 @@ def search_news(news: Dict[str, Any], category: str, keywords: List[str], limit:
     return selected if selected else items[:limit]
 
 
-def draw_three_bullets(base_rgba: Image.Image, title: str, bullets: List[str], box: Tuple[int, int, int, int]) -> None:
-    draw_soft_paper_bg(base_rgba, box, 120)
-    draw = ImageDraw.Draw(base_rgba)
-    x1, y1, x2, y2 = box
-    draw.text((x1 + 24, y1 + 18), title, font=FONT_H3, fill=TEXT)
-    cur_y = y1 + 70
-    max_w = x2 - x1 - 68
-    for bullet in bullets[:3]:
-        draw.ellipse((x1 + 24, cur_y + 8, x1 + 38, cur_y + 22), fill=ORANGE)
-        cur_y = draw_wrapped(draw, bullet, x1 + 52, cur_y, FONT_BODY, TEXT, max_w, 8, max_lines=2) + 22
-
-
-def draw_news_links(base_rgba: Image.Image, news_items: List[Dict[str, Any]], box: Tuple[int, int, int, int], heading: str = "新聞連結") -> None:
-    draw_soft_paper_bg(base_rgba, box, 118)
-    draw = ImageDraw.Draw(base_rgba)
-    x1, y1, x2, y2 = box
-    draw.text((x1 + 22, y1 + 16), heading, font=FONT_H3, fill=TEXT)
-    cur_y = y1 + 60
-    max_w = x2 - x1 - 44
-    for item in news_items[:2]:
-        source = str(item.get("source") or item.get("publisher") or item.get("site") or "").strip()
-        title = str(item.get("title") or item.get("headline") or "").strip()
-        summary = str(item.get("summary") or item.get("description") or item.get("why_it_matters") or item.get("reason") or "").strip()
-        if source:
-            draw.text((x1 + 22, cur_y), source[:32], font=FONT_XS, fill=ORANGE)
-            cur_y += 22
-        cur_y = draw_wrapped(draw, title, x1 + 22, cur_y, FONT_LINK, NAVY, max_w, 5, max_lines=2)
-        if summary:
-            cur_y = draw_wrapped(draw, summary, x1 + 22, cur_y + 4, FONT_XS, SUBTEXT, max_w, 4, max_lines=1)
-        cur_y += 24
-
-
-def draw_main_title(draw: ImageDraw.ImageDraw, title: str):
-    draw.text((MARGIN_X, 40), title, font=FONT_H1, fill=TEXT)
-
-
-def crop_focus(diagram: Image.Image, preset: Tuple[float, float, float, float]) -> Image.Image:
-    w, h = diagram.size
-    x1, y1, x2, y2 = preset
-    box = (int(w * x1), int(h * y1), int(w * x2), int(h * y2))
-    return diagram.crop(box)
-
-
-def get_scene_bullets(scene: Dict[str, Any], cfg: Dict[str, Any]) -> List[str]:
-    bullets = scene.get("on_screen_bullets")
-    if isinstance(bullets, list):
-        cleaned = [str(x).strip() for x in bullets if str(x).strip()]
-        if cleaned:
-            return cleaned[:3]
-    return cfg["default_bullets"][:3]
-
-
-def get_next_watch_points(narration: Dict[str, Any], news: Dict[str, Any], forest: Dict[str, Any]) -> List[str]:
-    scenes = narration.get("scenes") if isinstance(narration, dict) else []
-    if isinstance(scenes, list):
-        for scene in scenes:
-            if str(scene.get("scene_id")) == "scene_06":
-                bullets = scene.get("on_screen_bullets")
-                if isinstance(bullets, list) and bullets:
-                    return [str(x).strip() for x in bullets if str(x).strip()][:5]
-    vp = forest.get("video_planning", {}) if isinstance(forest, dict) else {}
-    points = vp.get("next_week_questions", []) if isinstance(vp, dict) else []
-    if points:
-        return [str(x).strip() for x in points if str(x).strip()][:5]
-    points = news.get("watch_points", []) if isinstance(news, dict) else []
-    if points:
-        return [str(x).strip() for x in points if str(x).strip()][:5]
-    return [
-        "30年期美債殖利率是否挑戰 5.5%",
-        "勞動力數據是否放大成長放緩擔憂",
-        "亞洲央行是否採取實質干預",
-        "美元與黃金是否出現主線修正",
-    ]
+def draw_main_title(draw: ImageDraw.ImageDraw, title: str) -> None:
+    draw.text((MARGIN_X, TITLE_Y), title, font=FONT_H1, fill=TEXT)
 
 
 def find_diagram(week_dir: Path) -> Path:
@@ -513,6 +399,121 @@ def find_diagram(week_dir: Path) -> Path:
         if p.exists():
             return p
     raise FileNotFoundError("Cannot find weekly_macro_diagram.png")
+
+
+def crop_box(img: Image.Image, preset: Tuple[float, float, float, float]) -> Image.Image:
+    w, h = img.size
+    x1, y1, x2, y2 = preset
+    return img.crop((int(w * x1), int(h * y1), int(w * x2), int(h * y2)))
+
+
+def trim_transparent(im: Image.Image) -> Image.Image:
+    if im.mode != "RGBA":
+        im = im.convert("RGBA")
+    bg = Image.new("RGBA", im.size, (0, 0, 0, 0))
+    diff = ImageChops.difference(im, bg)
+    bbox = diff.getbbox()
+    return im.crop(bbox) if bbox else im
+
+
+# Pillow lazy import workaround for ImageChops
+from PIL import ImageChops
+
+
+def compose_key_visual(diagram: Image.Image, scene_id: str) -> Image.Image:
+    parts = [crop_box(diagram, p).convert("RGBA") for p in DIAGRAM_PRESETS[scene_id]]
+    processed = []
+    for p in parts:
+        p = trim_transparent(p)
+        processed.append(p)
+
+    if scene_id in ("scene_02", "scene_03", "scene_04"):
+        gap = 48
+        heights = [p.size[1] for p in processed]
+        widths = [p.size[0] for p in processed]
+        canvas = Image.new("RGBA", (sum(widths) + gap * (len(processed) - 1), max(heights)), (0, 0, 0, 0))
+        x = 0
+        for p in processed:
+            y = (canvas.size[1] - p.size[1]) // 2
+            canvas.alpha_composite(p, (x, y))
+            x += p.size[0] + gap
+        return canvas
+
+    # scene_05: top row + bottom row
+    if len(processed) >= 3:
+        top_gap = 40
+        top_w = processed[0].size[0] + processed[1].size[0] + top_gap
+        top_h = max(processed[0].size[1], processed[1].size[1])
+        bottom_w = processed[2].size[0]
+        bottom_h = processed[2].size[1]
+        canvas_w = max(top_w, bottom_w)
+        canvas_h = top_h + 28 + bottom_h
+        canvas = Image.new("RGBA", (canvas_w, canvas_h), (0, 0, 0, 0))
+        x0 = (canvas_w - top_w) // 2
+        canvas.alpha_composite(processed[0], (x0, (top_h - processed[0].size[1]) // 2))
+        canvas.alpha_composite(processed[1], (x0 + processed[0].size[0] + top_gap, (top_h - processed[1].size[1]) // 2))
+        canvas.alpha_composite(processed[2], ((canvas_w - processed[2].size[0]) // 2, top_h + 28))
+        return canvas
+
+    return processed[0]
+
+
+def draw_asset_strip(base: Image.Image, series_map: Dict[str, Any], asset_keys: List[str], box: Tuple[int, int, int, int]) -> None:
+    draw_soft_paper_bg(base, box, 154)
+    draw = ImageDraw.Draw(base)
+    x1, y1, x2, y2 = box
+    gap = 18
+    count = max(1, len(asset_keys))
+    cols = count
+    card_w = (x2 - x1 - 32 - (cols - 1) * gap) // cols
+    card_h = y2 - y1 - 24
+
+    for idx, key in enumerate(asset_keys):
+        cx = x1 + 16 + idx * (card_w + gap)
+        cy = y1 + 12
+        item = series_map.get(key, {})
+        latest, prev = latest_and_prev(item)
+        value_str = format_value(latest, key)
+        delta_str = format_delta(latest, prev)
+        unit = str(item.get("unit") or ASSET_UNITS.get(key, "")).strip()
+
+        label_y = cy + 6
+        draw.text((cx + 14, label_y), ASSET_LABELS.get(key, key), font=FONT_SMALL, fill=SUBTEXT)
+
+        num_font = FONT_NUM_BIG if count <= 2 else FONT_NUM_MID
+        num_y = cy + 36
+        draw.text((cx + 14, num_y), value_str, font=num_font, fill=TEXT)
+        num_w, _ = text_size(draw, value_str, num_font)
+        if unit:
+            draw.text((cx + 22 + num_w, num_y + 26), unit, font=FONT_UNIT, fill=MUTED)
+
+        if delta_str:
+            draw.text((cx + 14, num_y + 74), delta_str, font=FONT_XS, fill=ORANGE if delta_str.startswith("+") else SUBTEXT)
+
+        pts = get_points(item)
+        if pts:
+            spark_y1 = cy + card_h - 54
+            spark_y2 = cy + card_h - 12
+            draw_sparkline(draw, pts[-6:], (cx + 12, spark_y1, cx + card_w - 16, spark_y2))
+
+
+def draw_news_list(base: Image.Image, news_items: List[Dict[str, Any]], box: Tuple[int, int, int, int], heading: str) -> None:
+    draw_soft_paper_bg(base, box, 150)
+    draw = ImageDraw.Draw(base)
+    x1, y1, x2, y2 = box
+    draw.text((x1 + 22, y1 + 18), heading, font=FONT_H3, fill=TEXT)
+    cur_y = y1 + 58
+    max_w = x2 - x1 - 44
+    for item in news_items[:2]:
+        source = str(item.get("source") or item.get("publisher") or item.get("site") or "news").strip()
+        title = str(item.get("title") or item.get("headline") or "").strip()
+        summary = str(item.get("summary") or item.get("description") or item.get("why_it_matters") or item.get("reason") or "").strip()
+        draw.text((x1 + 22, cur_y), source[:34], font=FONT_XS, fill=ORANGE)
+        cur_y += 20
+        cur_y = draw_wrapped(draw, title, x1 + 22, cur_y, FONT_LINK, NAVY, max_w, 5, max_lines=2)
+        if summary:
+            cur_y = draw_wrapped(draw, summary, x1 + 22, cur_y + 3, FONT_XS, SUBTEXT, max_w, 4, max_lines=1)
+        cur_y += 22
 
 
 def render_scene_01(diagram_path: Path, out_path: Path) -> None:
@@ -523,26 +524,49 @@ def render_scene_01(diagram_path: Path, out_path: Path) -> None:
     base.convert("RGB").save(out_path, "PNG")
 
 
-def render_focus_scene(scene: Dict[str, Any], diagram_path: Path, news: Dict[str, Any], market: Dict[str, Any], out_path: Path) -> None:
-    scene_id = str(scene.get("scene_id") or "").strip()
+def render_focus_scene(scene_id: str, scene: Dict[str, Any], diagram_path: Path, news: Dict[str, Any], market: Dict[str, Any], out_path: Path) -> None:
     cfg = SCENE_CONFIG[scene_id]
     base = make_canvas().convert("RGBA")
     draw = ImageDraw.Draw(base)
     title = str(scene.get("on_screen_title") or scene.get("scene_title") or cfg["title"]).strip()
-    draw_main_title(draw, title[:28])
+    draw_main_title(draw, title)
 
     diagram = Image.open(diagram_path).convert("RGBA")
-    cropped = crop_focus(diagram, FOCUS_PRESETS[scene_id])
-    focus_box = (MARGIN_X, 138, 1008, 728)
-    focus_img = fit_crop(cropped, (focus_box[2] - focus_box[0], focus_box[3] - focus_box[1]))
-    base.alpha_composite(focus_img, (focus_box[0], focus_box[1]))
-    draw.rounded_rectangle(focus_box, radius=26, outline=RED, width=6)
+    visual = compose_key_visual(diagram, scene_id)
+
+    visual_box = (72, 138, 1090, 690)
+    draw_soft_paper_bg(base, visual_box, 112)
+    fitted_visual = fit_contain(visual, (visual_box[2] - visual_box[0] - 24, visual_box[3] - visual_box[1] - 24))
+    base.alpha_composite(fitted_visual, (visual_box[0] + 12, visual_box[1] + 12))
 
     series_map = normalize_asset_series(market)
-    draw_asset_numbers(base, series_map, cfg["assets"], (MARGIN_X, 775, 1008, 1018))
-    draw_three_bullets(base, "三點重點", get_scene_bullets(scene, cfg), (1065, 138, 1848, 508))
-    draw_news_links(base, search_news(news, cfg["news_category"], cfg["news_keywords"], 2), (1065, 565, 1848, 1018), heading=cfg["news_category"])
+    draw_asset_strip(base, series_map, cfg["assets"], (72, 740, 1090, 980))
+    news_items = search_news(news, cfg["news_category"], cfg["news_keywords"], 2)
+    draw_news_list(base, news_items, (1150, 270, 1848, 980), cfg["news_heading"])
+
     base.convert("RGB").save(out_path, "PNG")
+
+
+def get_next_watch_points(narration: Dict[str, Any], forest: Dict[str, Any], news: Dict[str, Any]) -> List[str]:
+    scenes = narration.get("scenes") if isinstance(narration, dict) else []
+    if isinstance(scenes, list):
+        for scene in scenes:
+            if str(scene.get("scene_id")) == "scene_06":
+                bullets = scene.get("on_screen_bullets")
+                if isinstance(bullets, list) and bullets:
+                    return [str(x).strip() for x in bullets if str(x).strip()][:3]
+    vp = forest.get("video_planning", {}) if isinstance(forest, dict) else {}
+    points = vp.get("next_week_questions", []) if isinstance(vp, dict) else []
+    if points:
+        return [str(x).strip() for x in points if str(x).strip()][:3]
+    points = news.get("watch_points", []) if isinstance(news, dict) else []
+    if points:
+        return [str(x).strip() for x in points if str(x).strip()][:3]
+    return [
+        "30Y 美債 5.5%？",
+        "勞動力轉弱？",
+        "央行出手？",
+    ]
 
 
 def render_scene_06(narration: Dict[str, Any], forest: Dict[str, Any], news: Dict[str, Any], out_path: Path) -> None:
@@ -550,16 +574,30 @@ def render_scene_06(narration: Dict[str, Any], forest: Dict[str, Any], news: Dic
     draw = ImageDraw.Draw(base)
     title = "下週觀察重點"
     tw, _ = text_size(draw, title, FONT_H1)
-    draw.text(((CANVAS_W - tw) // 2, 95), title, font=FONT_H1, fill=TEXT)
-    start_y = 225
-    for point in get_next_watch_points(narration, news, forest)[:5]:
-        box = (220, start_y, 1700, start_y + 118)
-        draw_soft_paper_bg(base, box, 126)
-        pin_x = 260
-        pin_y = start_y + 42
-        draw.ellipse((pin_x, pin_y, pin_x + 18, pin_y + 18), fill=ORANGE)
-        draw_wrapped(draw, point, 310, start_y + 30, FONT_H2, TEXT, 1300, 8, max_lines=2)
-        start_y += 136
+    draw.text(((CANVAS_W - tw) // 2, 86), title, font=FONT_H1, fill=TEXT)
+
+    points = get_next_watch_points(narration, forest, news)
+    cards = [
+        ("?", points[0] if len(points) > 0 else "30Y 美債 5.5%？"),
+        ("↑↓", points[1] if len(points) > 1 else "勞動力轉弱？"),
+        ("✦", points[2] if len(points) > 2 else "央行出手？"),
+    ]
+
+    start_x = 120
+    gap = 34
+    card_w = (CANVAS_W - start_x * 2 - gap * 2) // 3
+    card_h = 530
+    y = 280
+
+    for idx, (symbol, label) in enumerate(cards):
+        x = start_x + idx * (card_w + gap)
+        draw_soft_paper_bg(base, (x, y, x + card_w, y + card_h), 138)
+        sw, sh = text_size(draw, symbol, FONT_SYMBOL)
+        draw.text((x + (card_w - sw) // 2, y + 84), symbol, font=FONT_SYMBOL, fill=ORANGE)
+        cur_y = y + 214
+        cur_y = draw_wrapped(draw, label, x + 42, cur_y, FONT_WATCH_BIG, TEXT, card_w - 84, 10, max_lines=2)
+        draw.text((x + 42, cur_y + 34), "下週驗證", font=FONT_WATCH_SMALL, fill=MUTED)
+
     base.convert("RGB").save(out_path, "PNG")
 
 
@@ -578,13 +616,11 @@ def main() -> None:
 
     scene_map = {str(s.get("scene_id")): s for s in narration.get("scenes", []) if isinstance(s, dict)}
     for scene_id in ["scene_02", "scene_03", "scene_04", "scene_05"]:
-        render_focus_scene(scene_map.get(scene_id, {"scene_id": scene_id}), diagram_path, news, market, slides_dir / f"{scene_id}.png")
+        render_focus_scene(scene_id, scene_map.get(scene_id, {"scene_id": scene_id}), diagram_path, news, market, slides_dir / f"{scene_id}.png")
 
     render_scene_06(narration, forest, news, slides_dir / "scene_06.png")
 
-    manifest = {
-        "generated": [str(slides_dir / f"scene_0{i}.png") for i in range(1, 7)]
-    }
+    manifest = {"generated": [str(slides_dir / f"scene_0{i}.png") for i in range(1, 7)]}
     (slides_dir / "slides_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"[OK] Generated slide images under: {slides_dir}")
 
