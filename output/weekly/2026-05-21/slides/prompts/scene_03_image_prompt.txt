@@ -1,0 +1,10 @@
+A 16:9 NotebookLM-style whiteboard image. A simple flow diagram. On the left, a node labeled '美債殖利率' with an upward orange arrow. An arrow points to the center node labeled '美元指數 (DXY)', also with an upward orange arrow. From the DXY node, two arrows point to the right, towards nodes labeled '日圓 (JPY)' and '新台幣 (TWD)', both with downward navy blue arrows. The style is hand-drawn, on a beige gridded background.
+
+請使用 NotebookLM / 白板筆記風格：
+米白底、淺灰網格、黑色手繪線條、橘色重點、少量海軍藍。
+單頁只講一件事，少字、強視覺、弱邊框。
+不要顯示 scene 編號、目前焦點、工程標籤。
+不要把旁白逐字稿塞滿畫面。
+數字要大，單位要小。
+繁體中文。
+16:9 靜態圖卡。

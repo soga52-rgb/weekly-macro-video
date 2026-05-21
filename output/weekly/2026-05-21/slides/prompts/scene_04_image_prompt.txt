@@ -1,0 +1,10 @@
+A 16:9 NotebookLM-style whiteboard image. On the left, a simple hand-drawn bar chart labeled '美國房市數據' shows declining bars. An orange question mark icon is drawn above it. A dashed arrow points from this chart to the right, where a line graph of the '美元指數 (DXY)' shows a brief, noticeable dip, circled in orange with the label '短暫回調'. The background is beige with a light gray grid.
+
+請使用 NotebookLM / 白板筆記風格：
+米白底、淺灰網格、黑色手繪線條、橘色重點、少量海軍藍。
+單頁只講一件事，少字、強視覺、弱邊框。
+不要顯示 scene 編號、目前焦點、工程標籤。
+不要把旁白逐字稿塞滿畫面。
+數字要大，單位要小。
+繁體中文。
+16:9 靜態圖卡。

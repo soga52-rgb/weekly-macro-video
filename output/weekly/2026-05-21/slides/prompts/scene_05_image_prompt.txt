@@ -1,0 +1,10 @@
+A 16:9 NotebookLM-style whiteboard image. A large, hand-drawn seesaw is in the center. On the left side, which is tilted down, are two heavy weights labeled '高利率' and '強勢美元'. This side is pressing down on a gold bar icon. On the right side, which is up in the air, a single, lighter feather icon is labeled '避險需求'. The visual metaphor clearly shows gold is under pressure. Beige gridded background, minimal text.
+
+請使用 NotebookLM / 白板筆記風格：
+米白底、淺灰網格、黑色手繪線條、橘色重點、少量海軍藍。
+單頁只講一件事，少字、強視覺、弱邊框。
+不要顯示 scene 編號、目前焦點、工程標籤。
+不要把旁白逐字稿塞滿畫面。
+數字要大，單位要小。
+繁體中文。
+16:9 靜態圖卡。

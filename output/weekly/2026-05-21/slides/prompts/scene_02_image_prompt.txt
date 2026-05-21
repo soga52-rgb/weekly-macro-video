@@ -1,0 +1,10 @@
+A 16:9 NotebookLM-style whiteboard image. A hand-drawn black line chart shows the US 30-year Treasury yield over time. The line dramatically breaks through a dashed orange horizontal line labeled '5.2%'. Next to the breakout point, an orange tag says '19年新高'. The overall style is clean, with a beige gridded background, using black, orange, and navy blue as main colors. Minimal text, strong visual impact.
+
+請使用 NotebookLM / 白板筆記風格：
+米白底、淺灰網格、黑色手繪線條、橘色重點、少量海軍藍。
+單頁只講一件事，少字、強視覺、弱邊框。
+不要顯示 scene 編號、目前焦點、工程標籤。
+不要把旁白逐字稿塞滿畫面。
+數字要大，單位要小。
+繁體中文。
+16:9 靜態圖卡。

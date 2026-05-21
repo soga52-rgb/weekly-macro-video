@@ -1,0 +1,10 @@
+A 16:9 NotebookLM-style whiteboard image. A simple checklist layout with the headline '下週觀察重點'. There are two items. The first has an icon of a rising trend line and text: '30年期美債殖利率 vs 5.5% 關卡?'. The second has an icon of a briefcase and text: '勞動力市場數據 → 硬著陸風險?'. A hand-drawn magnifying glass is inspecting the second item. Beige gridded background, clean and forward-looking.
+
+請使用 NotebookLM / 白板筆記風格：
+米白底、淺灰網格、黑色手繪線條、橘色重點、少量海軍藍。
+單頁只講一件事，少字、強視覺、弱邊框。
+不要顯示 scene 編號、目前焦點、工程標籤。
+不要把旁白逐字稿塞滿畫面。
+數字要大，單位要小。
+繁體中文。
+16:9 靜態圖卡。
