@@ -1,5 +1,5 @@
 # Save as: .github/workflows/build_weekly_slide_images_only_08.yml
-name: Build Weekly Slide Images Only (08 Image Model)
+name: Build Weekly Slide Images Only (08 Scene Package V2)
 
 on:
   workflow_dispatch:
@@ -12,16 +12,21 @@ on:
         description: 'Force rebuild slide images'
         required: false
         default: 'true'
+      target_scene_ids:
+        description: 'Optional: scene_04 or scene_02,scene_04. Leave blank for all scenes.'
+        required: false
+        default: ''
 
 permissions:
   contents: write
 
 env:
   IMAGE_MODEL: gemini-3.1-flash-image-preview
-  IMAGE_MODEL_FALLBACKS: gemini-2.5-flash-image
+  IMAGE_MODEL_FALLBACKS: ""
   GEMINI_TIMEOUT_SECONDS: 90
   MAX_IMAGE_RETRIES: 1
   IMAGE_RETRY_SLEEP_SECONDS: 10
+  IMAGE_BETWEEN_SCENES_SLEEP_SECONDS: 8
 
 jobs:
   build-slides:
@@ -38,14 +43,11 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-
       - name: Resolve env
         run: |
           echo "WEEK_END_DATE=${{ github.event.inputs.week_end_date }}" >> $GITHUB_ENV
           echo "FORCE_REBUILD_SLIDES=${{ github.event.inputs.force_rebuild_slides }}" >> $GITHUB_ENV
+          echo "TARGET_SCENE_IDS=${{ github.event.inputs.target_scene_ids }}" >> $GITHUB_ENV
 
       - name: Build weekly slide images
         env:
@@ -57,9 +59,9 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add output/weekly/**/slides/*.png output/weekly/**/weekly_slide_images_manifest.json output/weekly/**/slides_manifest.json || true
+          git add output/weekly/**/slides/*.png output/weekly/**/slides/*.json output/weekly/**/slides/prompts/*.txt output/weekly/**/weekly_slide_images_manifest.json || true
           git diff --cached --quiet && echo "No slide image changes to commit." && exit 0
-          git commit -m "build: weekly slide images with image model"
+          git commit -m "build: weekly slide images from scene package"
           git push
 
       - name: Upload slide artifacts
@@ -68,6 +70,7 @@ jobs:
           name: weekly-slide-images-${{ github.run_id }}
           path: |
             output/weekly/*/slides/*.png
+            output/weekly/*/slides/*.json
+            output/weekly/*/slides/prompts/*.txt
             output/weekly/*/weekly_slide_images_manifest.json
-            output/weekly/*/slides_manifest.json
           if-no-files-found: warn
