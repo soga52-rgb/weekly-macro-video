@@ -1,64 +1,110 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Weekly Macro Video - Step 07 V6
-Build weekly macro video with:
-- left: macro transmission diagram + spotlight
-- right: evidence panel with mini market charts + news cards + key bullets
+Weekly Macro Video - Step 07 V8.5
+Build weekly macro video with scene-level visual guidance.
+
+V8.5 direction:
+- Replace single spotlight-only layout with:
+  1) overview minimap (full diagram + highlighted region)
+  2) large cropped focus panel (local zoom)
+- Keep the existing scene-based workflow.
+- One scene image corresponds to one scene audio clip.
 
 Input:
 - output/weekly/YYYY-MM-DD/narration/weekly_narration.json
-- output/weekly/YYYY-MM-DD/audio/scene_01.wav ... scene_06.wav
 - output/weekly/YYYY-MM-DD/weekly_macro_diagram.png
 - output/weekly/YYYY-MM-DD/weekly_market_series.json
 - output/weekly/YYYY-MM-DD/weekly_news_context.json
+- output/weekly/YYYY-MM-DD/audio/scene_01.wav ... scene_06.wav
 
 Output:
-- output/weekly/YYYY-MM-DD/video_assets/scene_01.png ... scene_06.png
+- output/weekly/YYYY-MM-DD/video_assets/scene_01_focus.png ... scene_06_focus.png
 - output/weekly/YYYY-MM-DD/final/weekly_macro_video.mp4
 """
 
-import argparse
 import json
 import math
 import subprocess
+import wave
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
 
-WIDTH = 1920
-HEIGHT = 1080
-BG = (248, 250, 252)
-WHITE = (255, 255, 255)
-NAVY = (15, 42, 68)
-ORANGE = (245, 158, 11)
-GRAY = (100, 116, 139)
-DARK = (31, 41, 55)
-LIGHT_LINE = (226, 232, 240)
-SOFT_ORANGE = (255, 243, 209)
+VIDEO_W = 1920
+VIDEO_H = 1080
+FPS = 30
 
-SPOTLIGHT_PRESETS = {
-    "overview": (0.04, 0.06, 0.96, 0.88),
-    "drivers": (0.04, 0.08, 0.43, 0.34),
-    "yields": (0.28, 0.20, 0.62, 0.49),
-    "dollar_fx": (0.50, 0.18, 0.92, 0.64),
-    "gold_risk": (0.48, 0.52, 0.94, 0.88),
-    "next_watch": (0.06, 0.60, 0.46, 0.90),
+# Layout
+PAGE_BG = (246, 247, 249)
+NAVY = (17, 43, 70)
+NAVY_2 = (43, 58, 80)
+MUTED = (91, 111, 135)
+ORANGE = (245, 157, 36)
+ORANGE_LIGHT = (255, 243, 222)
+BORDER = (228, 218, 198)
+CARD_BG = (255, 255, 255)
+SOFT_GREY = (238, 241, 245)
+GREEN = (27, 158, 119)
+RED = (214, 82, 82)
+
+LEFT_X = 48
+LEFT_Y = 112
+LEFT_W = 1180
+LEFT_H = 820
+
+RIGHT_X = 1260
+RIGHT_Y = 112
+RIGHT_W = 610
+RIGHT_H = 820
+
+HEADER_Y = 34
+
+# ratios: x, y, w, h on the original diagram image.
+FOCUS_PRESETS: Dict[str, Tuple[float, float, float, float]] = {
+    "overview": (0.00, 0.00, 1.00, 1.00),
+    "drivers": (0.02, 0.12, 0.37, 0.42),
+    "yields": (0.30, 0.10, 0.34, 0.42),
+    "dollar_fx": (0.53, 0.11, 0.35, 0.43),
+    "gold_risk": (0.62, 0.12, 0.28, 0.43),
+    "next_watch": (0.79, 0.04, 0.20, 0.72),
+    "correction": (0.25, 0.43, 0.46, 0.38),
+}
+
+TARGET_LABELS = {
+    "overview": "全圖總覽",
+    "drivers": "驅動因子",
+    "yields": "通膨 / 利率",
+    "dollar_fx": "美元 / 亞洲貨幣",
+    "gold_risk": "黃金 / 風險資產",
+    "next_watch": "下週驗證",
+    "correction": "修正因子",
 }
 
 ASSET_LABELS = {
-    "US10Y": "美國10年債",
+    "US10Y": "美國10年期公債殖利率",
     "DXY": "美元指數",
     "Gold": "黃金",
-    "WTI": "WTI原油",
+    "WTI": "西德州原油",
     "Brent": "布蘭特原油",
-    "USDJPY": "美元/日圓",
-    "USDTWD": "美元/台幣",
-    "USDKRW": "美元/韓元",
+    "USDJPY": "美元 / 日圓",
+    "USDTWD": "美元 / 台幣",
+    "USDKRW": "美元 / 韓元",
+}
+
+ASSET_UNITS = {
+    "US10Y": "%",
+    "DXY": "",
+    "Gold": "USD/oz",
+    "WTI": "USD/bbl",
+    "Brent": "USD/bbl",
+    "USDJPY": "JPY",
+    "USDTWD": "TWD",
+    "USDKRW": "KRW",
 }
 
 
@@ -70,370 +116,622 @@ def find_latest_week_dir() -> Path:
     return week_dirs[0]
 
 
-def load_json(path: Path) -> Dict[str, Any]:
+def load_json(path: Path, default: Any = None) -> Any:
     if not path.exists():
-        return {}
+        return default
     with path.open("r", encoding="utf-8") as f:
         return json.load(f)
 
 
-def find_font(size: int, bold: bool = False) -> ImageFont.ImageFont:
+def ensure_dir(path: Path) -> None:
+    path.mkdir(parents=True, exist_ok=True)
+
+
+def run(cmd: List[str]) -> None:
+    print("[CMD]", " ".join(str(x) for x in cmd))
+    subprocess.run(cmd, check=True)
+
+
+def audio_duration_seconds(path: Path) -> float:
+    with wave.open(str(path), "rb") as wf:
+        return wf.getnframes() / float(wf.getframerate())
+
+
+def find_font() -> str:
     candidates = [
-        "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc" if bold else "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
-        "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc" if bold else "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf" if bold else "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+        "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
+        "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
+        "/usr/share/fonts/truetype/noto/NotoSansTC-Regular.otf",
+        "/System/Library/Fonts/PingFang.ttc",
+        "C:/Windows/Fonts/msjh.ttc",
     ]
-    for path in candidates:
-        if path and Path(path).exists():
-            return ImageFont.truetype(path, size=size)
+    for p in candidates:
+        if Path(p).exists():
+            return p
+    return ""
+
+
+FONT_PATH = find_font()
+
+
+def font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
+    if FONT_PATH:
+        try:
+            return ImageFont.truetype(FONT_PATH, size=size)
+        except Exception:
+            pass
     return ImageFont.load_default()
 
 
-def wrap_text(text: str, font: ImageFont.ImageFont, max_width: int) -> List[str]:
-    text = " ".join(str(text or "").split())
-    lines: List[str] = []
-    current = ""
-    for char in text:
-        test = current + char
-        bbox = font.getbbox(test)
-        if bbox[2] - bbox[0] <= max_width:
-            current = test
-        else:
-            if current:
-                lines.append(current)
-            current = char
-    if current:
-        lines.append(current)
+def text_size(draw: ImageDraw.ImageDraw, text: str, fnt: ImageFont.ImageFont) -> Tuple[int, int]:
+    if not text:
+        return (0, 0)
+    box = draw.textbbox((0, 0), text, font=fnt)
+    return (box[2] - box[0], box[3] - box[1])
+
+
+def draw_round_rect(
+    draw: ImageDraw.ImageDraw,
+    box: Tuple[int, int, int, int],
+    radius: int,
+    fill: Tuple[int, int, int],
+    outline: Optional[Tuple[int, int, int]] = None,
+    width: int = 1,
+) -> None:
+    draw.rounded_rectangle(box, radius=radius, fill=fill, outline=outline, width=width)
+
+
+def wrap_text(text: str, max_chars: int) -> List[str]:
+    text = str(text or "").strip()
+    if not text:
+        return []
+    lines = []
+    for raw in text.splitlines():
+        raw = raw.strip()
+        if not raw:
+            continue
+        while len(raw) > max_chars:
+            lines.append(raw[:max_chars])
+            raw = raw[max_chars:]
+        if raw:
+            lines.append(raw)
     return lines
 
 
-def rounded(draw: ImageDraw.ImageDraw, xy: Tuple[int, int, int, int], radius: int, fill, outline=None, width: int = 1) -> None:
-    draw.rounded_rectangle(xy, radius=radius, fill=fill, outline=outline, width=width)
+def draw_wrapped_text(
+    draw: ImageDraw.ImageDraw,
+    text: str,
+    xy: Tuple[int, int],
+    fnt: ImageFont.ImageFont,
+    fill: Tuple[int, int, int],
+    max_chars: int,
+    line_gap: int = 8,
+    max_lines: Optional[int] = None,
+) -> int:
+    x, y = xy
+    lines = wrap_text(text, max_chars)
+    if max_lines is not None:
+        lines = lines[:max_lines]
+    for line in lines:
+        draw.text((x, y), line, font=fnt, fill=fill)
+        y += text_size(draw, line, fnt)[1] + line_gap
+    return y
 
 
-def slide_base() -> Image.Image:
-    img = Image.new("RGB", (WIDTH, HEIGHT), BG)
-    draw = ImageDraw.Draw(img)
-    draw.ellipse((-240, -240, 760, 360), fill=SOFT_ORANGE)
-    draw.ellipse((1280, -260, 2220, 360), fill=(236, 242, 248))
-    return img
+def fit_image(img: Image.Image, box_w: int, box_h: int, fill: bool = False) -> Image.Image:
+    img = img.convert("RGB")
+    ratio = max(box_w / img.width, box_h / img.height) if fill else min(box_w / img.width, box_h / img.height)
+    new_size = (max(1, int(img.width * ratio)), max(1, int(img.height * ratio)))
+    return img.resize(new_size, Image.LANCZOS)
 
 
-def draw_top_meta(draw: ImageDraw.ImageDraw, scene_title: str, visual_direction: str = "") -> None:
-    small = find_font(26, bold=True)
-    title_font = find_font(48, bold=True)
-    sub_font = find_font(24)
-    draw.text((60, 34), "WEEKLY MACRO VIDEO", fill=ORANGE, font=small)
-    draw.text((60, 72), scene_title, fill=NAVY, font=title_font)
-    if visual_direction:
-        y = 132
-        for line in wrap_text(visual_direction, sub_font, 1080)[:2]:
-            draw.text((60, y), line, fill=GRAY, font=sub_font)
-            y += 30
+def paste_center(base: Image.Image, img: Image.Image, box: Tuple[int, int, int, int]) -> None:
+    x1, y1, x2, y2 = box
+    x = x1 + (x2 - x1 - img.width) // 2
+    y = y1 + (y2 - y1 - img.height) // 2
+    base.paste(img, (x, y))
 
 
-def apply_spotlight(diagram: Image.Image, target: str) -> Image.Image:
-    rgba = diagram.convert("RGBA")
-    w, h = rgba.size
-    preset = SPOTLIGHT_PRESETS.get(target, SPOTLIGHT_PRESETS["overview"])
-    x1 = int(preset[0] * w)
-    y1 = int(preset[1] * h)
-    x2 = int(preset[2] * w)
-    y2 = int(preset[3] * h)
-
-    overlay = Image.new("RGBA", (w, h), (8, 22, 38, 145))
-    hole_mask = Image.new("L", (w, h), 255)
-    hdraw = ImageDraw.Draw(hole_mask)
-    hdraw.rounded_rectangle((x1, y1, x2, y2), radius=28, fill=0)
-    overlay.putalpha(hole_mask)
-
-    glow_mask = Image.new("L", (w, h), 0)
-    gdraw = ImageDraw.Draw(glow_mask)
-    gdraw.rounded_rectangle((x1 - 12, y1 - 12, x2 + 12, y2 + 12), radius=34, fill=220)
-    glow_mask = glow_mask.filter(ImageFilter.GaussianBlur(22))
-    glow = Image.new("RGBA", (w, h), (255, 176, 64, 90))
-    glow.putalpha(glow_mask)
-
-    rgba = Image.alpha_composite(rgba, glow)
-    rgba = Image.alpha_composite(rgba, overlay)
-    d = ImageDraw.Draw(rgba)
-    d.rounded_rectangle((x1, y1, x2, y2), radius=28, outline=(255, 168, 54, 255), width=6)
-    return rgba.convert("RGB")
+def ratio_box_to_pixels(img: Image.Image, target: str, pad: float = 0.0) -> Tuple[int, int, int, int]:
+    x, y, w, h = FOCUS_PRESETS.get(target, FOCUS_PRESETS["overview"])
+    x1 = max(0.0, x - pad)
+    y1 = max(0.0, y - pad)
+    x2 = min(1.0, x + w + pad)
+    y2 = min(1.0, y + h + pad)
+    return (
+        int(img.width * x1),
+        int(img.height * y1),
+        int(img.width * x2),
+        int(img.height * y2),
+    )
 
 
-def prepare_diagram_canvas(week_dir: Path, scene: Dict[str, Any]) -> Image.Image:
-    diagram_path = week_dir / "weekly_macro_diagram.png"
+def crop_focus_image(original: Image.Image, target: str) -> Image.Image:
+    if target == "overview":
+        return original.copy()
+    crop_box = ratio_box_to_pixels(original, target, pad=0.03)
+    return original.crop(crop_box)
+
+
+def render_minimap(
+    base: Image.Image,
+    original: Image.Image,
+    target: str,
+    box: Tuple[int, int, int, int],
+) -> None:
+    x1, y1, x2, y2 = box
+    draw = ImageDraw.Draw(base)
+
+    # panel bg
+    draw_round_rect(draw, box, 24, (252, 252, 253), outline=(232, 235, 239), width=1)
+
+    inner = (x1 + 16, y1 + 16, x2 - 16, y2 - 16)
+    preview = fit_image(original, inner[2] - inner[0], inner[3] - inner[1], fill=False)
+
+    px = inner[0] + ((inner[2] - inner[0]) - preview.width) // 2
+    py = inner[1] + ((inner[3] - inner[1]) - preview.height) // 2
+    base.paste(preview, (px, py))
+
+    if target != "overview":
+        rx, ry, rw, rh = FOCUS_PRESETS.get(target, FOCUS_PRESETS["overview"])
+        scale_x = preview.width / original.width
+        scale_y = preview.height / original.height
+        hx1 = px + int(original.width * rx * scale_x)
+        hy1 = py + int(original.height * ry * scale_y)
+        hx2 = px + int(original.width * (rx + rw) * scale_x)
+        hy2 = py + int(original.height * (ry + rh) * scale_y)
+
+        overlay = Image.new("RGBA", base.size, (0, 0, 0, 0))
+        od = ImageDraw.Draw(overlay)
+        for i, alpha in enumerate([42, 28]):
+            grow = 6 + i * 8
+            od.rounded_rectangle(
+                (hx1 - grow, hy1 - grow, hx2 + grow, hy2 + grow),
+                radius=18 + grow // 2,
+                outline=(*ORANGE, alpha),
+                width=6,
+            )
+        od.rounded_rectangle((hx1, hy1, hx2, hy2), radius=16, outline=(*ORANGE, 240), width=4)
+        base.alpha_composite(overlay)
+
+
+def render_focus_panel(
+    base: Image.Image,
+    original: Image.Image,
+    target: str,
+    box: Tuple[int, int, int, int],
+    scene_title: str,
+) -> None:
+    x1, y1, x2, y2 = box
+    draw = ImageDraw.Draw(base)
+
+    draw_round_rect(draw, box, 28, CARD_BG, outline=(232, 235, 239), width=1)
+
+    crop = crop_focus_image(original, target)
+    inner = (x1 + 18, y1 + 18, x2 - 18, y2 - 18)
+    focus_img = fit_image(crop, inner[2] - inner[0], inner[3] - inner[1], fill=False)
+    paste_center(base, focus_img, inner)
+
+    label = TARGET_LABELS.get(target, target)
+    chip_text = f"目前焦點｜{label}"
+    chip_font = font(23, True)
+    tw, th = text_size(draw, chip_text, chip_font)
+    chip = (x1 + 26, y2 - 60, x1 + 62 + tw, y2 - 18)
+    draw_round_rect(draw, chip, 20, ORANGE_LIGHT, outline=(245, 196, 118), width=1)
+    draw.text((chip[0] + 18, chip[1] + 8), chip_text, font=chip_font, fill=(132, 72, 16))
+
+    if scene_title:
+        title_font = font(20, True)
+        st = scene_title[:26]
+        sw, _ = text_size(draw, st, title_font)
+        tag = (x2 - 26 - sw - 26, y1 + 18, x2 - 26, y1 + 50)
+        draw_round_rect(draw, tag, 16, (245, 247, 250), outline=(223, 228, 234), width=1)
+        draw.text((tag[0] + 13, tag[1] + 6), st, font=title_font, fill=MUTED)
+
+
+def render_diagram_panel(base: Image.Image, diagram_path: Path, target: str, title: str) -> None:
+    draw = ImageDraw.Draw(base)
+    panel = (LEFT_X, LEFT_Y, LEFT_X + LEFT_W, LEFT_Y + LEFT_H)
+    draw_round_rect(draw, panel, radius=32, fill=CARD_BG, outline=BORDER, width=2)
+
+    draw.rounded_rectangle((LEFT_X + 32, LEFT_Y + 28, LEFT_X + 42, LEFT_Y + 66), radius=5, fill=ORANGE)
+    draw.text((LEFT_X + 56, LEFT_Y + 25), "總經傳導圖解", font=font(34, True), fill=NAVY)
+
     if not diagram_path.exists():
-        raise FileNotFoundError(f"Missing weekly_macro_diagram.png in {week_dir}")
-
-    img = slide_base()
-    draw = ImageDraw.Draw(img)
-    draw_top_meta(draw, scene.get("scene_title", ""), scene.get("visual_direction", ""))
-
-    diagram = Image.open(diagram_path).convert("RGB")
-    diagram.thumbnail((1160, 720), Image.LANCZOS)
-    x, y = 50, 230
-    rounded(draw, (x - 16, y - 16, x + diagram.width + 16, y + diagram.height + 16), 32, WHITE, outline=(231, 231, 226), width=2)
-    diagram = apply_spotlight(diagram, scene.get("spotlight_target", "overview"))
-    img.paste(diagram, (x, y))
-    return img
-
-
-def market_series_map(market: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
-    output = {}
-    for item in market.get("series") or []:
-        if isinstance(item, dict) and item.get("asset_key"):
-            output[str(item["asset_key"])] = item
-    return output
-
-
-def clean_points(item: Dict[str, Any]) -> List[Dict[str, Any]]:
-    points = []
-    for p in item.get("points") or []:
-        if not isinstance(p, dict):
-            continue
-        try:
-            value = float(p.get("value"))
-        except (TypeError, ValueError):
-            continue
-        if math.isfinite(value):
-            points.append({"date": str(p.get("date") or ""), "value": value})
-    return points
-
-
-def fmt_value(value: float, unit: str = "") -> str:
-    if abs(value) >= 1000:
-        text = f"{value:,.1f}"
-    elif abs(value) >= 100:
-        text = f"{value:.2f}"
-    else:
-        text = f"{value:.3f}"
-    return f"{text} {unit}".strip()
-
-
-def draw_mini_chart(draw: ImageDraw.ImageDraw, item: Dict[str, Any], x: int, y: int, w: int, h: int) -> None:
-    points = clean_points(item)
-    font_label = find_font(22, bold=True)
-    font_small = find_font(18)
-    label = ASSET_LABELS.get(str(item.get("asset_key") or ""), str(item.get("asset") or "資產"))
-    unit = str(item.get("unit") or "")
-
-    rounded(draw, (x, y, x + w, y + h), 20, (255, 255, 255), outline=LIGHT_LINE, width=1)
-    draw.text((x + 16, y + 12), label, fill=NAVY, font=font_label)
-
-    if len(points) < 2:
-        draw.text((x + 16, y + 56), "資料不足", fill=GRAY, font=font_small)
+        draw.text((LEFT_X + 56, LEFT_Y + 150), "找不到 weekly_macro_diagram.png", font=font(28), fill=RED)
         return
 
-    values = [p["value"] for p in points]
-    first, last = values[0], values[-1]
-    change = last - first
-    pct = (change / first * 100) if first else 0
-    sign = "+" if change > 0 else ""
-    direction = "上行" if change > 0 else "下行" if change < 0 else "持平"
-    draw.text((x + 16, y + 44), fmt_value(last, unit), fill=DARK, font=font_label)
-    draw.text((x + 16, y + 74), f"{direction} {sign}{pct:.2f}%", fill=ORANGE if change > 0 else GRAY, font=font_small)
+    original = Image.open(diagram_path).convert("RGB")
+    if target not in FOCUS_PRESETS:
+        target = "overview"
 
-    cx1, cy1 = x + 18, y + 108
-    cx2, cy2 = x + w - 18, y + h - 18
-    min_v, max_v = min(values), max(values)
-    span = max(max_v - min_v, 1e-9)
+    # V8.5 layout: minimap + cropped focus panel
+    minimap_box = (LEFT_X + 34, LEFT_Y + 88, LEFT_X + LEFT_W - 34, LEFT_Y + 306)
+    focus_box = (LEFT_X + 34, LEFT_Y + 326, LEFT_X + LEFT_W - 34, LEFT_Y + LEFT_H - 34)
+
+    rgba = base.convert("RGBA")
+    render_minimap(rgba, original, target, minimap_box)
+    base.paste(rgba.convert("RGB"))
+
+    render_focus_panel(base, original, target, focus_box, title)
+
+
+def normalize_asset_series(market: Dict[str, Any]) -> List[Dict[str, Any]]:
+    series = market.get("series")
+    if isinstance(series, list):
+        return series
+    return []
+
+
+def get_asset_item(market: Dict[str, Any], asset_key: str) -> Optional[Dict[str, Any]]:
+    for item in normalize_asset_series(market):
+        key = str(item.get("asset_key") or item.get("key") or "").strip()
+        if key == asset_key:
+            return item
+    return None
+
+
+def get_points(item: Dict[str, Any]) -> List[float]:
+    candidates = [
+        item.get("values"),
+        item.get("series"),
+        item.get("data"),
+        item.get("points"),
+    ]
+
+    for arr in candidates:
+        if isinstance(arr, list):
+            vals = []
+            for x in arr:
+                if isinstance(x, dict):
+                    v = x.get("value", x.get("close", x.get("price")))
+                else:
+                    v = x
+                try:
+                    if v is not None:
+                        vals.append(float(v))
+                except Exception:
+                    pass
+            if vals:
+                return vals
+
+    vals = []
+    for key in ("previous_value", "prev_value", "prev", "last", "value"):
+        try:
+            v = item.get(key)
+            if v is not None:
+                vals.append(float(v))
+        except Exception:
+            pass
+    return vals[-4:] if vals else []
+
+
+def fmt_num(v: Any, decimals: int = 3) -> str:
+    try:
+        f = float(v)
+    except Exception:
+        return "-"
+    if abs(f) >= 1000:
+        return f"{f:,.1f}"
+    if abs(f) >= 100:
+        return f"{f:,.2f}"
+    return f"{f:,.3f}".rstrip("0").rstrip(".")
+
+
+def asset_value(item: Optional[Dict[str, Any]]) -> str:
+    if not item:
+        return "-"
+    for key in ("value", "last", "latest", "close", "price"):
+        if item.get(key) is not None:
+            return fmt_num(item.get(key))
+    pts = get_points(item)
+    return fmt_num(pts[-1]) if pts else "-"
+
+
+def asset_change_text(item: Optional[Dict[str, Any]]) -> str:
+    if not item:
+        return ""
+    ch = item.get("change", item.get("delta"))
+    pct = item.get("change_pct", item.get("pct", item.get("percent")))
+    parts = []
+    if ch is not None:
+        try:
+            sign = "+" if float(ch) >= 0 else ""
+            parts.append(f"{sign}{fmt_num(ch)}")
+        except Exception:
+            pass
+    if pct is not None:
+        try:
+            sign = "+" if float(pct) >= 0 else ""
+            parts.append(f"{sign}{float(pct):.2f}%")
+        except Exception:
+            pass
+    return " | ".join(parts)
+
+
+def draw_sparkline(draw: ImageDraw.ImageDraw, points: List[float], box: Tuple[int, int, int, int]) -> None:
+    x1, y1, x2, y2 = box
+    if len(points) < 2:
+        draw.line((x1, (y1 + y2) // 2, x2, (y1 + y2) // 2), fill=NAVY_2, width=3)
+        return
+    lo, hi = min(points), max(points)
+    if math.isclose(lo, hi):
+        hi = lo + 1
     coords = []
-    for i, p in enumerate(points):
-        px = cx1 + (i / (len(points) - 1)) * (cx2 - cx1)
-        py = cy1 + (1 - ((p["value"] - min_v) / span)) * (cy2 - cy1)
-        coords.append((px, py))
-    if len(coords) >= 2:
-        draw.line(coords, fill=NAVY, width=4, joint="curve")
-        for px, py in coords:
-            draw.ellipse((px - 4, py - 4, px + 4, py + 4), fill=WHITE, outline=NAVY, width=2)
+    for idx, v in enumerate(points):
+        x = x1 + int(idx * (x2 - x1) / (len(points) - 1))
+        y = y2 - int((v - lo) * (y2 - y1) / (hi - lo))
+        coords.append((x, y))
+    draw.line(coords, fill=NAVY_2, width=4, joint="curve")
+    for x, y in coords:
+        draw.ellipse((x - 5, y - 5, x + 5, y + 5), fill=CARD_BG, outline=NAVY_2, width=3)
 
 
-def get_news_by_category(news: Dict[str, Any], category: str, limit: int = 2) -> List[Dict[str, Any]]:
-    categories = news.get("news_categories")
-    items: List[Dict[str, Any]] = []
-    if isinstance(categories, dict):
-        items = [x for x in (categories.get(category) or []) if isinstance(x, dict)]
-    if not items:
-        items = [x for x in (news.get("top_news") or []) if isinstance(x, dict)]
-    return items[:limit]
+def render_asset_card(
+    draw: ImageDraw.ImageDraw,
+    market: Dict[str, Any],
+    asset_key: str,
+    box: Tuple[int, int, int, int],
+) -> None:
+    x1, y1, x2, y2 = box
+    item = get_asset_item(market, asset_key)
+    draw_round_rect(draw, box, 24, CARD_BG, outline=(232, 225, 215), width=1)
+
+    label = ASSET_LABELS.get(asset_key, asset_key)
+    unit = ASSET_UNITS.get(asset_key, "")
+    value = asset_value(item)
+    change = asset_change_text(item)
+    pts = get_points(item) or [1, 1.05, 1.02, 1.1]
+
+    title_f = font(22, True)
+    value_f = font(34, True)
+    small_f = font(17)
+
+    chip_w = min(210, text_size(draw, label, title_f)[0] + 44)
+    chip = (x1 + 18, y1 + 18, x1 + 18 + chip_w, y1 + 58)
+    draw_round_rect(draw, chip, 20, ORANGE_LIGHT, outline=(244, 204, 139), width=1)
+    draw.ellipse((chip[0] + 14, chip[1] + 15, chip[0] + 24, chip[1] + 25), fill=ORANGE)
+    draw.text((chip[0] + 32, chip[1] + 9), label[:12], font=title_f, fill=(143, 77, 17))
+
+    draw.text((x1 + 22, y1 + 78), f"{value} {unit}".strip(), font=value_f, fill=NAVY)
+    if change:
+        draw.text((x1 + 24, y1 + 124), change, font=small_f, fill=MUTED)
+
+    draw_sparkline(draw, pts[-6:], (x1 + 28, y1 + 160, x2 - 28, y2 - 28))
 
 
-def draw_news_card(draw: ImageDraw.ImageDraw, item: Dict[str, Any], x: int, y: int, w: int, h: int) -> None:
-    font_source = find_font(17, bold=True)
-    font_title = find_font(22, bold=True)
-    font_why = find_font(18)
-    rounded(draw, (x, y, x + w, y + h), 18, (255, 255, 255), outline=LIGHT_LINE, width=1)
-    source = str(item.get("source") or "News")[:18]
-    title = str(item.get("title") or "新聞佐證")
-    why = str(item.get("why_it_matters") or item.get("theme") or "")
-    draw.text((x + 14, y + 10), source, fill=ORANGE, font=font_source)
-    ty = y + 38
-    for line in wrap_text(title, font_title, w - 28)[:2]:
-        draw.text((x + 14, ty), line, fill=NAVY, font=font_title)
-        ty += 29
-    ty += 3
-    for line in wrap_text(why, font_why, w - 28)[:2]:
-        draw.text((x + 14, ty), line, fill=GRAY, font=font_why)
-        ty += 24
-
-
-def draw_bullets(draw: ImageDraw.ImageDraw, bullets: List[str], x: int, y: int, w: int) -> int:
-    font = find_font(24, bold=True)
-    current_y = y
-    for bullet in bullets[:5]:
-        text = str(bullet).strip()
-        if not text:
-            continue
-        draw.ellipse((x, current_y + 10, x + 12, current_y + 22), fill=ORANGE)
-        for line in wrap_text(text, font, w - 30)[:2]:
-            draw.text((x + 24, current_y), line, fill=DARK, font=font)
-            current_y += 32
-        current_y += 8
-    return current_y
-
-
-def draw_evidence_panel(base: Image.Image, scene: Dict[str, Any], market: Dict[str, Any], news: Dict[str, Any]) -> Image.Image:
-    img = base.copy()
-    draw = ImageDraw.Draw(img)
-    panel_x, panel_y, panel_w, panel_h = 1240, 205, 620, 770
-
-    shadow = Image.new("RGBA", (WIDTH, HEIGHT), (0, 0, 0, 0))
-    sdraw = ImageDraw.Draw(shadow)
-    sdraw.rounded_rectangle((panel_x + 8, panel_y + 12, panel_x + panel_w + 8, panel_y + panel_h + 12), radius=34, fill=(15, 42, 68, 55))
-    shadow = shadow.filter(ImageFilter.GaussianBlur(12))
-    img = Image.alpha_composite(img.convert("RGBA"), shadow).convert("RGB")
-    draw = ImageDraw.Draw(img)
-
-    rounded(draw, (panel_x, panel_y, panel_x + panel_w, panel_y + panel_h), 34, WHITE, outline=(233, 232, 228), width=2)
-    draw.rectangle((panel_x, panel_y, panel_x + 12, panel_y + panel_h), fill=ORANGE)
-
-    title_font = find_font(34, bold=True)
-    small_font = find_font(20, bold=True)
-    draw.text((panel_x + 36, panel_y + 28), str(scene.get("on_screen_title") or scene.get("scene_title") or "證據面板"), fill=NAVY, font=title_font)
-    draw.text((panel_x + 38, panel_y + 76), str(scene.get("evidence_panel_title") or "走勢與新聞驗證"), fill=GRAY, font=small_font)
-
-    y = panel_y + 112
-    y = draw_bullets(draw, scene.get("on_screen_bullets") or [], panel_x + 42, y, panel_w - 80)
-
-    series = market_series_map(market)
-    assets = scene.get("evidence_assets") or []
-    chart_items = [series[a] for a in assets if a in series]
-    if not chart_items:
-        chart_items = list(series.values())[:1]
-
-    y += 10
-    chart_w = (panel_w - 88) // 2
-    chart_h = 185
-    for idx, item in enumerate(chart_items[:4]):
-        col = idx % 2
-        row = idx // 2
-        cx = panel_x + 38 + col * (chart_w + 16)
-        cy = y + row * (chart_h + 14)
-        draw_mini_chart(draw, item, cx, cy, chart_w, chart_h)
-
-    y = y + ((min(len(chart_items), 4) + 1) // 2) * (chart_h + 14) + 2
-
-    news_items = get_news_by_category(news, str(scene.get("evidence_news_category") or "其他"), 2)
-    news_h = 132
-    for item in news_items[:2]:
-        if y + news_h > panel_y + panel_h - 28:
+def extract_news_items(news: Dict[str, Any], category: str, limit: int = 2) -> List[Dict[str, Any]]:
+    candidates = []
+    for key in ("categories", "news_by_category", "classified", "by_category"):
+        obj = news.get(key)
+        if isinstance(obj, dict) and isinstance(obj.get(category), list):
+            candidates = obj.get(category) or []
             break
-        draw_news_card(draw, item, panel_x + 38, y, panel_w - 76, news_h)
-        y += news_h + 12
 
-    draw.text((panel_x + 38, panel_y + panel_h - 32), "資料來源：Yahoo財經、Google News RSS", fill=GRAY, font=find_font(17))
-    return img
+    if not candidates:
+        for key in ("items", "news", "articles"):
+            arr = news.get(key)
+            if isinstance(arr, list):
+                candidates = [x for x in arr if str(x.get("category") or x.get("macro_category") or "").strip() == category]
+                if candidates:
+                    break
+
+    return [x for x in candidates if isinstance(x, dict)][:limit]
 
 
-def render_scene(week_dir: Path, scene: Dict[str, Any], market: Dict[str, Any], news: Dict[str, Any], out_path: Path) -> None:
-    canvas = prepare_diagram_canvas(week_dir, scene)
-    final_img = draw_evidence_panel(canvas, scene, market, news)
+def render_news_card(
+    draw: ImageDraw.ImageDraw,
+    item: Dict[str, Any],
+    box: Tuple[int, int, int, int],
+) -> None:
+    x1, y1, x2, y2 = box
+    draw_round_rect(draw, box, 22, CARD_BG, outline=(232, 225, 215), width=1)
+    source = str(item.get("source") or item.get("publisher") or item.get("site") or "").strip()
+    title = str(item.get("title") or item.get("headline") or "").strip()
+    summary = str(item.get("summary") or item.get("description") or item.get("reason") or "").strip()
+
+    small = font(16, True)
+    title_f = font(21, True)
+    body_f = font(17)
+
+    if source:
+        draw.text((x1 + 18, y1 + 14), source[:28], font=small, fill=(147, 92, 16))
+    y = y1 + 44
+    y = draw_wrapped_text(draw, title, (x1 + 18, y), title_f, NAVY, max_chars=17, line_gap=6, max_lines=3)
+    if summary:
+        y += 6
+        draw_wrapped_text(draw, summary, (x1 + 18, y), body_f, MUTED, max_chars=18, line_gap=5, max_lines=2)
+
+
+def render_evidence_panel(
+    base: Image.Image,
+    scene: Dict[str, Any],
+    market: Dict[str, Any],
+    news: Dict[str, Any],
+) -> None:
+    draw = ImageDraw.Draw(base)
+    panel = (RIGHT_X, RIGHT_Y, RIGHT_X + RIGHT_W, RIGHT_Y + RIGHT_H)
+    draw_round_rect(draw, panel, radius=32, fill=(250, 251, 253), outline=(230, 232, 236), width=2)
+
+    title = str(scene.get("evidence_panel_title") or "證據面板")
+    draw.rounded_rectangle((RIGHT_X + 28, RIGHT_Y + 28, RIGHT_X + 38, RIGHT_Y + 64), radius=5, fill=ORANGE)
+    draw.text((RIGHT_X + 52, RIGHT_Y + 24), title[:18], font=font(31, True), fill=NAVY)
+
+    assets = scene.get("evidence_assets") or []
+    if not isinstance(assets, list):
+        assets = []
+    assets = [str(x) for x in assets[:4]]
+
+    y = RIGHT_Y + 88
+    card_gap = 18
+
+    if len(assets) == 1:
+        render_asset_card(draw, market, assets[0], (RIGHT_X + 28, y, RIGHT_X + RIGHT_W - 28, y + 270))
+        y += 290
+    elif len(assets) == 2:
+        card_w = (RIGHT_W - 28 * 2 - card_gap) // 2
+        render_asset_card(draw, market, assets[0], (RIGHT_X + 28, y, RIGHT_X + 28 + card_w, y + 230))
+        render_asset_card(draw, market, assets[1], (RIGHT_X + 28 + card_w + card_gap, y, RIGHT_X + RIGHT_W - 28, y + 230))
+        y += 250
+    else:
+        card_w = (RIGHT_W - 28 * 2 - card_gap) // 2
+        card_h = 205
+        for idx, key in enumerate(assets[:4]):
+            col = idx % 2
+            row = idx // 2
+            x1 = RIGHT_X + 28 + col * (card_w + card_gap)
+            y1 = y + row * (card_h + card_gap)
+            render_asset_card(draw, market, key, (x1, y1, x1 + card_w, y1 + card_h))
+        y += 2 * card_h + card_gap + 18
+
+    bullets = scene.get("on_screen_bullets") or []
+    if isinstance(bullets, list) and bullets:
+        bullet_box = (RIGHT_X + 28, y, RIGHT_X + RIGHT_W - 28, y + 130)
+        draw_round_rect(draw, bullet_box, 22, (255, 253, 248), outline=(240, 224, 197), width=1)
+        by = y + 18
+        for b in bullets[:3]:
+            draw.ellipse((RIGHT_X + 48, by + 8, RIGHT_X + 58, by + 18), fill=ORANGE)
+            draw_wrapped_text(draw, str(b), (RIGHT_X + 70, by), font(19, True), NAVY_2, max_chars=23, line_gap=5, max_lines=1)
+            by += 34
+        y += 150
+
+    category = str(scene.get("evidence_news_category") or "其他")
+    news_items = extract_news_items(news, category, limit=2)
+    if news_items:
+        draw.text((RIGHT_X + 30, y), f"新聞佐證｜{category}", font=font(24, True), fill=NAVY)
+        y += 40
+        news_h = min(150, RIGHT_Y + RIGHT_H - 36 - y)
+        if news_h > 90:
+            if len(news_items) == 1:
+                render_news_card(draw, news_items[0], (RIGHT_X + 28, y, RIGHT_X + RIGHT_W - 28, y + news_h))
+            else:
+                card_w = (RIGHT_W - 28 * 2 - card_gap) // 2
+                render_news_card(draw, news_items[0], (RIGHT_X + 28, y, RIGHT_X + 28 + card_w, y + news_h))
+                render_news_card(draw, news_items[1], (RIGHT_X + 28 + card_w + card_gap, y, RIGHT_X + RIGHT_W - 28, y + news_h))
+    else:
+        draw_round_rect(draw, (RIGHT_X + 28, y, RIGHT_X + RIGHT_W - 28, y + 88), 22, CARD_BG, outline=(232, 225, 215), width=1)
+        draw.text((RIGHT_X + 48, y + 28), f"{category}｜本週暫無明確新聞佐證", font=font(20), fill=MUTED)
+
+
+def render_scene_image(
+    week_dir: Path,
+    scene: Dict[str, Any],
+    market: Dict[str, Any],
+    news: Dict[str, Any],
+    out_path: Path,
+) -> None:
+    rgba = Image.new("RGBA", (VIDEO_W, VIDEO_H), (*PAGE_BG, 255))
+
+    glow = Image.new("RGBA", (VIDEO_W, VIDEO_H), (0, 0, 0, 0))
+    gd = ImageDraw.Draw(glow)
+    gd.ellipse((-300, -360, 900, 560), fill=(255, 214, 132, 85))
+    glow = glow.filter(ImageFilter.GaussianBlur(70))
+    rgba = Image.alpha_composite(rgba, glow)
+
+    base = rgba.convert("RGB")
+    draw = ImageDraw.Draw(base)
+
+    scene_title = str(scene.get("scene_title") or "")
+    on_title = str(scene.get("on_screen_title") or scene_title or "本週總經週報")
+    draw.text((LEFT_X, HEADER_Y), "WEEKLY MACRO VIDEO", font=font(20, True), fill=(158, 95, 13))
+    draw.text((LEFT_X, HEADER_Y + 26), on_title[:32], font=font(40, True), fill=NAVY)
+
+    scene_id = str(scene.get("scene_id") or "")
+    draw.text((RIGHT_X, HEADER_Y + 42), scene_id.upper(), font=font(22, True), fill=MUTED)
+
+    diagram_path = week_dir / "weekly_macro_diagram.png"
+    render_diagram_panel(base, diagram_path, str(scene.get("spotlight_target") or "overview"), scene_title)
+    render_evidence_panel(base, scene, market, news)
+
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    final_img.save(out_path)
+    base.save(out_path, "PNG")
+    print(f"[OK] Rendered scene image: {out_path}")
 
 
-def build_images(week_dir: Path, narration: Dict[str, Any], market: Dict[str, Any], news: Dict[str, Any]) -> List[Path]:
-    scenes = narration.get("scenes") or []
-    assets_dir = week_dir / "video_assets"
-    paths: List[Path] = []
-    for i, scene in enumerate(scenes, start=1):
-        scene_id = scene.get("scene_id") or f"scene_{i:02d}"
-        out_path = assets_dir / f"{scene_id}.png"
-        render_scene(week_dir, scene, market, news, out_path)
-        paths.append(out_path)
-    return paths
+def build_scene_video(image_path: Path, audio_path: Path, out_path: Path) -> None:
+    duration = audio_duration_seconds(audio_path)
+    ensure_dir(out_path.parent)
+    cmd = [
+        "ffmpeg", "-y",
+        "-loop", "1",
+        "-framerate", str(FPS),
+        "-i", str(image_path),
+        "-i", str(audio_path),
+        "-t", f"{duration:.3f}",
+        "-c:v", "libx264",
+        "-pix_fmt", "yuv420p",
+        "-r", str(FPS),
+        "-c:a", "aac",
+        "-b:a", "192k",
+        "-shortest",
+        str(out_path),
+    ]
+    run(cmd)
 
 
-def probe_duration(audio_path: Path) -> float:
-    result = subprocess.run(
-        ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", str(audio_path)],
-        check=True,
-        capture_output=True,
-        text=True,
+def concat_videos(paths: List[Path], out_path: Path) -> None:
+    list_path = out_path.parent / "video_concat_list.txt"
+    list_path.write_text(
+        "\n".join(f"file '{p.resolve().as_posix()}'" for p in paths),
+        encoding="utf-8",
     )
-    return float(result.stdout.strip())
-
-
-def build_video(week_dir: Path, image_paths: List[Path], narration: Dict[str, Any]) -> Path:
-    scenes = narration.get("scenes") or []
-    audio_dir = week_dir / "audio"
-    segment_dir = week_dir / "video_segments"
-    final_dir = week_dir / "final"
-    segment_dir.mkdir(parents=True, exist_ok=True)
-    final_dir.mkdir(parents=True, exist_ok=True)
-    segments: List[Path] = []
-
-    for scene, image_path in zip(scenes, image_paths):
-        scene_id = scene.get("scene_id")
-        audio_path = audio_dir / f"{scene_id}.wav"
-        if not audio_path.exists():
-            raise FileNotFoundError(f"Missing scene audio: {audio_path}")
-        duration = max(1.0, probe_duration(audio_path))
-        segment_path = segment_dir / f"{scene_id}.mp4"
-        subprocess.run(
-            [
-                "ffmpeg", "-y",
-                "-loop", "1",
-                "-t", f"{duration:.3f}",
-                "-i", str(image_path),
-                "-i", str(audio_path),
-                "-vf", "scale=1920:1080,format=yuv420p",
-                "-c:v", "libx264",
-                "-preset", "medium",
-                "-crf", "20",
-                "-c:a", "aac",
-                "-b:a", "192k",
-                "-shortest",
-                str(segment_path),
-            ],
-            check=True,
-        )
-        segments.append(segment_path)
-
-    concat_file = segment_dir / "concat_list.txt"
-    concat_file.write_text("\n".join(f"file '{p.resolve().as_posix()}'" for p in segments), encoding="utf-8")
-    out_path = final_dir / "weekly_macro_video.mp4"
-    subprocess.run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_file), "-c", "copy", str(out_path)], check=True)
-    return out_path
+    cmd = [
+        "ffmpeg", "-y",
+        "-f", "concat",
+        "-safe", "0",
+        "-i", str(list_path),
+        "-c", "copy",
+        str(out_path),
+    ]
+    run(cmd)
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--week-dir", default="")
-    args = parser.parse_args()
-    week_dir = Path(args.week_dir) if args.week_dir else find_latest_week_dir()
-    narration = load_json(week_dir / "narration" / "weekly_narration.json")
-    market = load_json(week_dir / "weekly_market_series.json")
-    news = load_json(week_dir / "weekly_news_context.json")
-    if not narration:
-        raise FileNotFoundError(f"Missing narration JSON in {week_dir / 'narration'}")
+    week_dir = find_latest_week_dir()
+    narration_path = week_dir / "narration" / "weekly_narration.json"
+    narration = load_json(narration_path, {})
+    scenes = narration.get("scenes") or []
+    if not scenes:
+        raise RuntimeError(f"No scenes found in {narration_path}")
 
-    print("[INFO] Rendering V6 evidence-panel scene images")
-    images = build_images(week_dir, narration, market, news)
-    print("[INFO] Building video")
-    out = build_video(week_dir, images, narration)
-    print(f"[OK] Created {out}")
+    market = load_json(week_dir / "weekly_market_series.json", {})
+    news = load_json(week_dir / "weekly_news_context.json", {})
+
+    video_assets_dir = week_dir / "video_assets"
+    scene_video_dir = video_assets_dir / "scene_videos"
+    final_dir = week_dir / "final"
+    ensure_dir(video_assets_dir)
+    ensure_dir(scene_video_dir)
+    ensure_dir(final_dir)
+
+    print("[INFO] Rendering V8.5 minimap + focus scene images")
+    scene_video_paths: List[Path] = []
+
+    for scene in scenes:
+        scene_id = str(scene.get("scene_id") or "").strip()
+        if not scene_id:
+            continue
+
+        audio_path = week_dir / "audio" / f"{scene_id}.wav"
+        if not audio_path.exists():
+            print(f"[WARN] Missing scene audio, skip {scene_id}: {audio_path}")
+            continue
+
+        image_path = video_assets_dir / f"{scene_id}_focus.png"
+        video_path = scene_video_dir / f"{scene_id}.mp4"
+
+        render_scene_image(week_dir, scene, market, news, image_path)
+        build_scene_video(image_path, audio_path, video_path)
+        scene_video_paths.append(video_path)
+
+    if not scene_video_paths:
+        raise RuntimeError("No scene videos generated.")
+
+    final_path = final_dir / "weekly_macro_video.mp4"
+    print("[INFO] Building final weekly video")
+    concat_videos(scene_video_paths, final_path)
+    print(f"[OK] Created {final_path}")
 
 
 if __name__ == "__main__":
