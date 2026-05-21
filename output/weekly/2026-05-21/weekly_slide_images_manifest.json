@@ -1,46 +1,47 @@
 {
-  "generated_at": "2026-05-21T07:20:19.389071Z",
+  "generated_at": "2026-05-21T07:51:17.286574Z",
+  "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21",
   "image_model": "gemini-3.1-flash-image-preview",
   "records": [
     {
       "scene_id": "scene_01",
-      "path": "scene_01.png",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/scene_01.png",
       "mode": "copy_diagram"
     },
     {
       "scene_id": "scene_02",
-      "path": "scene_02.png",
-      "mode": "image_model",
-      "generated_ok": true,
-      "prompt_excerpt": "Design a static 16:9 slide in a NotebookLM-style whiteboard note aesthetic.\nVisual style requirements:\n- off-white / white background\n- very subtle light gray grid texture\n- black hand-drawn linework\n"
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/scene_02.png",
+      "prompt": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/prompts/scene_02_prompt.txt",
+      "mode": "image_from_tts_source",
+      "generated_ok": true
     },
     {
       "scene_id": "scene_03",
-      "path": "scene_03.png",
-      "mode": "image_model",
-      "generated_ok": true,
-      "prompt_excerpt": "Design a static 16:9 slide in a NotebookLM-style whiteboard note aesthetic.\nVisual style requirements:\n- off-white / white background\n- very subtle light gray grid texture\n- black hand-drawn linework\n"
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/scene_03.png",
+      "prompt": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/prompts/scene_03_prompt.txt",
+      "mode": "image_from_tts_source",
+      "generated_ok": true
     },
     {
       "scene_id": "scene_04",
-      "path": "scene_04.png",
-      "mode": "image_model",
-      "generated_ok": true,
-      "prompt_excerpt": "Design a static 16:9 slide in a NotebookLM-style whiteboard note aesthetic.\nVisual style requirements:\n- off-white / white background\n- very subtle light gray grid texture\n- black hand-drawn linework\n"
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/scene_04.png",
+      "prompt": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/prompts/scene_04_prompt.txt",
+      "mode": "image_from_tts_source",
+      "generated_ok": true
     },
     {
       "scene_id": "scene_05",
-      "path": "scene_05.png",
-      "mode": "image_model",
-      "generated_ok": true,
-      "prompt_excerpt": "Design a static 16:9 slide in a NotebookLM-style whiteboard note aesthetic.\nVisual style requirements:\n- off-white / white background\n- very subtle light gray grid texture\n- black hand-drawn linework\n"
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/scene_05.png",
+      "prompt": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/prompts/scene_05_prompt.txt",
+      "mode": "image_from_tts_source",
+      "generated_ok": true
     },
     {
       "scene_id": "scene_06",
-      "path": "scene_06.png",
-      "mode": "image_model",
-      "generated_ok": true,
-      "prompt_excerpt": "Design a static 16:9 slide in a NotebookLM-style whiteboard note aesthetic.\nVisual style requirements:\n- off-white / white background\n- very subtle light gray grid texture\n- black hand-drawn linework\n"
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/scene_06.png",
+      "prompt": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/prompts/scene_06_prompt.txt",
+      "mode": "image_from_tts_source",
+      "generated_ok": true
     }
   ]
 }
