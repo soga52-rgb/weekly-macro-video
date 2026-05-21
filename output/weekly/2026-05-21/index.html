@@ -166,9 +166,49 @@ ul { margin:0; padding-left:22px; }
   border:1px solid rgba(231,196,106,.35);
   border-radius:13px;
 }
-.news-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:16px; }
-.news-category { padding:16px; background:rgba(255,255,255,.56); }
-.news-category-head { margin-bottom:12px; }
+.video-shell {
+  width:100%;
+  border-radius:24px;
+  overflow:hidden;
+  background:#0f172a;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.72);
+}
+.weekly-video {
+  width:100%;
+  display:block;
+  aspect-ratio:16/9;
+  background:#0f172a;
+}
+.video-note {
+  color:var(--muted);
+  font-size:14px;
+  margin-top:12px;
+}
+.news-masonry {
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:16px;
+  align-items:stretch;
+}
+.news-category { padding:16px; background:rgba(255,255,255,.56); min-width:0; }
+.news-category-head {
+  margin-bottom:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}
+.news-count {
+  flex:0 0 auto;
+  color:var(--accent-dark);
+  background:rgba(255,243,209,.88);
+  border:1px solid rgba(243,210,139,.72);
+  border-radius:999px;
+  padding:5px 10px;
+  font-size:13px;
+  font-weight:900;
+}
 .category-pill {
   color:var(--navy);
   display:inline-flex;
@@ -184,7 +224,7 @@ ul { margin:0; padding-left:22px; }
 .news-category-desc { color:var(--muted); font-size:14px; margin-top:8px; }
 .news-category-cards {
   display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
   gap:12px;
 }
 .news-mini-card {
@@ -234,6 +274,7 @@ ul { margin:0; padding-left:22px; }
 .footer { color:var(--muted); font-size:13px; padding:20px 2px; }
 @media(max-width:1000px) {
   .charts,.slides { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .news-category { grid-column:span 6 !important; }
   .news-category-cards { grid-template-columns:1fr; }
 }
 @media(max-width:760px) {
@@ -244,7 +285,9 @@ ul { margin:0; padding-left:22px; }
     white-space:normal;
     margin-top:10px;
   }
-  .charts,.slides,.news-grid { grid-template-columns:1fr; }
+  .charts,.slides { grid-template-columns:1fr; }
+  .news-masonry { grid-template-columns:1fr; }
+  .news-category { grid-column:span 1 !important; }
   .title { font-size:34px; }
   .subtitle { font-size:18px; }
 }
@@ -283,9 +326,22 @@ ul { margin:0; padding-left:22px; }
       <div class="title">本週總經摘要</div>
     </div>
     <div class="meta">
-      週期：2026-05-15 至 2026-05-21　｜　產生日期：2026-05-20
+      週期：2026-05-15 至 2026-05-21　｜　產生日期：2026-05-21
     </div>
   </header>
+
+  
+  <section class="section section-video">
+    <h2>本週總經影片</h2>
+    <div class="video-shell">
+      <video class="weekly-video" controls playsinline preload="metadata" poster="slides/scene_01.png">
+        <source src="final/weekly_macro_video.mp4" type="video/mp4">
+        您的瀏覽器不支援影片播放。
+      </video>
+    </div>
+    <div class="video-note">影片依本週總經傳導圖、旁白與圖卡自動合成。</div>
+  </section>
+
 
   <section class="section hero">
     <h2>總經傳導圖解</h2>
@@ -467,11 +523,14 @@ ul { margin:0; padding-left:22px; }
 
   <section class="section section-news">
     <h2>本週新聞佐證</h2>
-    <div class="news-grid">
-        <div class="news-category">
+    <div class="news-masonry">
+        <div class="news-category news-weight-2" style="grid-column: span 4;">
           <div class="news-category-head">
-            <div class="category-pill">通膨預期</div>
-            <div class="news-category-desc">油價、能源、物價與再通膨訊號</div>
+            <div>
+              <div class="category-pill">通膨預期</div>
+              <div class="news-category-desc">油價、能源、物價與再通膨訊號</div>
+            </div>
+            <div class="news-count">2 則</div>
           </div>
           <div class="news-category-cards">
             
@@ -498,10 +557,13 @@ ul { margin:0; padding-left:22px; }
         </div>
         
 
-        <div class="news-category">
+        <div class="news-category news-weight-2" style="grid-column: span 4;">
           <div class="news-category-head">
-            <div class="category-pill">利率</div>
-            <div class="news-category-desc">美債殖利率、Fed 與高利率定價</div>
+            <div>
+              <div class="category-pill">利率</div>
+              <div class="news-category-desc">美債殖利率、Fed 與高利率定價</div>
+            </div>
+            <div class="news-count">2 則</div>
           </div>
           <div class="news-category-cards">
             
@@ -528,10 +590,13 @@ ul { margin:0; padding-left:22px; }
         </div>
         
 
-        <div class="news-category">
+        <div class="news-category news-weight-2" style="grid-column: span 4;">
           <div class="news-category-head">
-            <div class="category-pill">貨幣</div>
-            <div class="news-category-desc">美元、亞洲貨幣與資金流向壓力</div>
+            <div>
+              <div class="category-pill">貨幣</div>
+              <div class="news-category-desc">美元、亞洲貨幣與資金流向壓力</div>
+            </div>
+            <div class="news-count">2 則</div>
           </div>
           <div class="news-category-cards">
             
@@ -558,10 +623,13 @@ ul { margin:0; padding-left:22px; }
         </div>
         
 
-        <div class="news-category">
+        <div class="news-category news-weight-1" style="grid-column: span 4;">
           <div class="news-category-head">
-            <div class="category-pill">其他</div>
-            <div class="news-category-desc">補充其他可能影響主線的事件</div>
+            <div>
+              <div class="category-pill">其他</div>
+              <div class="news-category-desc">補充其他可能影響主線的事件</div>
+            </div>
+            <div class="news-count">1 則</div>
           </div>
           <div class="news-category-cards">
             
