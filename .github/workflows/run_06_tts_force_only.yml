@@ -1,0 +1,68 @@
+# Save as: .github/workflows/run_06_tts_force_only.yml
+name: Run 06 TTS Only Force Rebuild
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_end_date:
+        description: 'Target weekly folder end date, e.g. 2026-05-21'
+        required: true
+        default: '2026-05-21'
+
+permissions:
+  contents: write
+
+env:
+  TTS_MODEL: gemini-3.1-flash-tts-preview
+  GEMINI_TIMEOUT_SECONDS: 180
+  GEMINI_MAX_RETRIES: 1
+  GEMINI_RETRY_SLEEP_SECONDS: 15
+
+jobs:
+  run-06-tts-force:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Resolve env
+        run: |
+          echo "WEEK_END_DATE=${{ github.event.inputs.week_end_date }}" >> $GITHUB_ENV
+
+      - name: Remove existing TTS audio for target week
+        run: |
+          echo "Force rebuild TTS audio for output/weekly/${{ github.event.inputs.week_end_date }}/audio"
+          rm -f "output/weekly/${{ github.event.inputs.week_end_date }}/audio/"*.wav || true
+          rm -f "output/weekly/${{ github.event.inputs.week_end_date }}/audio/"*.mp3 || true
+          rm -f "output/weekly/${{ github.event.inputs.week_end_date }}/audio/"*.txt || true
+
+      - name: Run 06 TTS only
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          python scripts/06_generate_weekly_tts.py
+
+      - name: Commit 06 outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add output/weekly/**/audio/* || true
+          git diff --cached --quiet && echo "No 06 audio changes to commit." && exit 0
+          git commit -m "build: force rebuild 06 TTS audio"
+          git push
+
+      - name: Upload audio artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-audio-force-${{ github.run_id }}
+          path: |
+            output/weekly/*/audio/*
+          if-no-files-found: warn
