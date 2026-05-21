@@ -144,6 +144,27 @@ def system_instruction() -> str:
 - 圖卡是旁白的視覺導引，不是把旁白全文塞進畫面。
 - 圖卡風格固定為 NotebookLM / 白板筆記風：米白底、淺灰網格、黑色手繪線、橘色重點、少量海軍藍、少字、強視覺、弱邊框。
 - 對市場判斷要客觀克制，不要聳動，不要投資建議。
+
+上午 narration 成功版本的核心邏輯必須保留：
+- 這不是一般財經新聞摘要，而是「本週總經傳導圖解」的導讀影片。
+- Scene 01 不是結論頁，也不是 summary conclusion；Scene 01 是 narrative map / transmission map，作用是先給觀眾本週總經地圖。
+- 影片採用「總覽先行，順敘展開」：先用 Scene 01 建立全局，再從傳導鏈起點一路往後拆解。
+- 總經傳導圖是全片主角，旁白要帶觀眾沿著傳導鏈走。
+- Scene 02~Scene 05 的主題不可硬寫死，但排序應優先遵守本週 core_transmission_chain 的因果順序：
+  1. 傳導起點：例如通膨預期、油價、政策衝擊、就業或其他本週核心驅動。
+  2. 核心傳導變數：例如利率、殖利率、降息預期、流動性。
+  3. 中段資產反應：例如美元指數、風險偏好、信用或其他市場定價。
+  4. 外溢資產 / 修正因子 / 交叉驗證：例如亞洲貨幣、黃金、成長擔憂、房市或其他反向力量。
+- 若本週資料顯示另一種傳導順序更合理，可以調整，但每頁仍必須交代與 core_transmission_chain 的關係。
+- Scene 06 用於下週觀察重點，收斂「哪些數據或事件會驗證這條傳導鏈是否延續或翻轉」。
+- 每段都要明確呈現：市場走勢或數據變化 → 新聞/事件原因 → 市場解讀 → 回到總經傳導鏈。
+- 不要只做單點主題頁；scene_02~scene_05 每頁都必須說明自己在 core_transmission_chain 裡的位置。
+- 每個 scene 的 narration_dialogue 必須回答：
+  1. 本頁接續上一頁哪個總經節點？
+  2. 本頁變數如何推動下一個節點？
+  3. 哪個資產數據或新聞證據驗證這段傳導？
+- image_prompt 也必須保留這種鏈條感，但不要回到複雜小地圖；請用單頁主視覺呈現「上一節點 → 本頁節點 → 下一節點」或「主線 → 修正因子 → 資產反應」。
+
 - 嚴格輸出 JSON，不要 Markdown，不要額外說明。
 """.strip()
 
@@ -162,14 +183,22 @@ def build_prompt(context: Dict[str, Any]) -> str:
         "scenes": [
             {
                 "scene_id": "scene_01",
-                "scene_role": "opening_overview",
+                "scene_role": "opening_overview / transmission_start / core_transmission / asset_reaction / revision_or_cross_validation / conclusion_and_outlook",
+                "narrative_order": 1,
                 "scene_title": "本頁標題",
                 "scene_purpose": "本頁存在目的",
                 "narrative_focus": "本頁敘事重點",
                 "supporting_assets": ["asset_key"],
                 "supporting_news": ["新聞標題或新聞類型"],
-                "visual_direction": "給圖卡導演看的畫面說明",
-                "image_prompt": "給 image model 的完整 prompt；scene_01 可寫 reuse weekly_macro_diagram.png",
+                "chain_position": {
+                    "previous_node": "上一個總經節點，若無則空字串",
+                    "current_node": "本頁所在總經節點",
+                    "next_node": "下一個總經節點，若無則空字串",
+                    "transmission_sentence": "用一句話說明上一節點如何傳到本頁、本頁如何影響下一節點",
+                    "map_role": "本頁在 Scene 01 總經傳導圖中的角色，例如：起點 / 中段傳導 / 資產反應 / 修正因子 / 下週驗證"
+                },
+                "visual_direction": "給圖卡導演看的畫面說明，必須說明本頁如何呈現傳導鏈位置",
+                "image_prompt": "給 image model 的完整 prompt；scene_01 可寫 reuse weekly_macro_diagram.png；scene_02~06 必須保留傳導鏈語意",
                 "on_screen_text": {
                     "headline": "短標題",
                     "key_numbers": [{"label": "DXY", "value": "99.3", "unit": ""}],
@@ -195,6 +224,15 @@ def build_prompt(context: Dict[str, Any]) -> str:
 - Scene 01 固定為 weekly_macro_diagram.png 開場。
 - Scene 02~06 要同時服務 TTS 與 IMAGE。
 - 每個 scene 的 narration_dialogue 與 image_prompt 必須講同一件事。
+- 但你必須保留上午 narration 的成功邏輯：這是一支「總經傳導圖解導讀影片」，不是單點新聞評論。
+- Scene 01 要定位為 narrative map / transmission map，不是 conclusion summary。它先給觀眾本週地圖。
+- Scene 02~Scene 05 要採「順敘展開」：優先沿著 core_transmission_chain 的因果順序逐段導讀。
+- Scene 02 通常應承接傳導起點；Scene 03 承接核心傳導；Scene 04 承接中段資產反應；Scene 05 承接外溢資產、修正因子或交叉驗證；但若本週資料顯示其他排列更合理，可由你動態調整。
+- Scene 06 收斂成下週觀察，重點是哪些事件或數據會驗證這條傳導鏈延續、翻轉或被修正。
+- scene_02~scene_05 不能只是孤立主題，必須沿著 core_transmission_chain 逐段導讀。
+- 每頁都要輸出 narrative_order 與 chain_position，說明 previous_node、current_node、next_node、map_role 與 transmission_sentence。
+- narration_dialogue 中請自然說出這段傳導關係，例如「上一段我們看到...，這會推動...，因此下一步要看...」。
+- image_prompt 中也請描述本頁的鏈條角色，例如「用簡化的三節點或因果箭頭呈現：上一節點 → 本頁節點 → 下一節點」，但畫面仍要少字、單一主視覺。
 
 輸出 JSON schema 範例：
 {json.dumps(schema, ensure_ascii=False, indent=2)}
@@ -302,11 +340,23 @@ def validate_package(pkg: Dict[str, Any]) -> Dict[str, Any]:
         sid = f"scene_{idx:02d}"
         scene = scene_by_id.get(sid, {"scene_id": sid})
         scene["scene_id"] = sid
-        scene.setdefault("scene_title", f"Scene {idx:02d}")
+        scene.setdefault("narrative_order", idx)
+        scene.setdefault("scene_title", "本週總經傳導地圖" if sid == "scene_01" else f"Scene {idx:02d}")
         scene.setdefault("narration_dialogue", [])
         scene.setdefault("image_prompt", "reuse weekly_macro_diagram.png" if sid == "scene_01" else "")
+        if sid == "scene_01":
+            scene.setdefault("scene_role", "opening_narrative_map")
+            scene.setdefault("scene_purpose", "先給觀眾本週總經傳導地圖，作為後續順敘展開的導覽。")
+        scene.setdefault("chain_position", {
+            "previous_node": "",
+            "current_node": "",
+            "next_node": "",
+            "transmission_sentence": "",
+            "map_role": "總覽地圖" if sid == "scene_01" else ""
+        })
         normalized.append(scene)
 
+    # Keep exactly scene_01~scene_06 output names, but preserve the Pro-assigned narrative_order inside each scene.
     pkg["scenes"] = normalized
     meta = pkg.setdefault("meta", {})
     meta["generated_at"] = meta.get("generated_at") or datetime.utcnow().isoformat() + "Z"
@@ -330,8 +380,11 @@ def export_legacy_narration(week_dir: Path, pkg: Dict[str, Any]) -> None:
         dialogue = scene.get("narration_dialogue", []) or []
         narration["scenes"].append({
             "scene_id": sid,
+            "narrative_order": scene.get("narrative_order", ""),
             "scene_title": scene.get("scene_title", ""),
             "scene_purpose": scene.get("scene_purpose", ""),
+            "chain_position": scene.get("chain_position", {}),
+            "narrative_focus": scene.get("narrative_focus", ""),
             "on_screen_title": (scene.get("on_screen_text") or {}).get("headline", scene.get("scene_title", "")),
             "on_screen_bullets": (scene.get("on_screen_text") or {}).get("short_bullets", []),
             "dialogue": dialogue,
