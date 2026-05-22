@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "source": "weekly_forest_summary.json",
+    "image_model": "gemini-3.1-flash-image-preview",
+    "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21"
+  },
+  "images": [
+    {
+      "visual_id": "vis_01",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/vis_01.png",
+      "source_segment_id": "seg_01",
+      "visual_title": "美債殖利率：期限溢價重估",
+      "visual_purpose": "視覺化長天期美債殖利率的攀升，確立市場高利率環境的主調。",
+      "is_web_hero_candidate": false,
+      "status": "created_or_existing"
+    },
+    {
+      "visual_id": "vis_02",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/vis_02.png",
+      "source_segment_id": "seg_02",
+      "visual_title": "強美元與承壓的亞幣",
+      "visual_purpose": "展示美元利差優勢對亞洲貨幣的具體壓迫程度。",
+      "is_web_hero_candidate": true,
+      "status": "created_or_existing"
+    },
+    {
+      "visual_id": "vis_03",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/vis_03.png",
+      "source_segment_id": "seg_03",
+      "visual_title": "地緣降溫驅動油價重挫",
+      "visual_purpose": "強調新聞事件（美伊協議）對商品價格的直接衝擊，解釋通膨壓力的短暫緩解。",
+      "is_web_hero_candidate": true,
+      "status": "created_or_existing"
+    },
+    {
+      "visual_id": "vis_04",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/vis_04.png",
+      "source_segment_id": "seg_04",
+      "visual_title": "黃金的寬幅震盪",
+      "visual_purpose": "反映市場在避險情緒與高利率環境下的猶豫與分歧。",
+      "is_web_hero_candidate": false,
+      "status": "created_or_existing"
+    }
+  ],
+  "failed_images": [],
+  "web_hero_visual_id": "vis_03",
+  "web_hero_output": {
+    "source_visual_id": "vis_03",
+    "weekly_web_hero": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/weekly_web_hero.png",
+    "weekly_macro_diagram_compat": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/weekly_macro_diagram.png"
+  }
+}
