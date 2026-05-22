@@ -1,0 +1,50 @@
+name: 90 Test Visual Sequence Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      force_rebuild_visuals:
+        description: "Force rebuild visual sequence images"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  test-visual-sequence-images:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_IMAGE_MODEL: gemini-3.1-flash-image-preview
+      FORCE_REBUILD_VISUALS: ${{ inputs.force_rebuild_visuals }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Generate visual sequence images from weekly forest summary
+        run: |
+          python scripts/90_test_generate_visual_sequence_images_new_flow.py
+
+      - name: Commit visual sequence images
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add output/weekly/
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Test visual sequence images"
+            git push
+          fi
