@@ -1,318 +1,263 @@
 {
   "meta": {
     "source": "weekly_market_series.json + weekly_news_context.json",
-    "data_status_note": "市場數據與新聞脈絡完整，足以支撐高利率與期限溢價重估的主線分析。",
+    "data_status_note": "市場數據與新聞資訊完整，資料呈現美債殖利率高企與油價回落的交叉影響。",
     "week_range": "2026-05-15 至 2026-05-21",
     "days_observed": "7"
   },
   "forest_summary": {
-    "weekly_main_theme": "期限溢價重估與高利率常態化的市場定價",
-    "main_question": "在長天期美債殖利率攀升與地緣政治風險緩解的雙重作用下，市場如何重新定價資產估值？",
-    "one_sentence_verdict": "高利率『維持更久』的預期已成市場基石，而地緣政治緩解帶來的能源回落，正引發跨資產傳導的結構性分歧。",
-    "overall_verdict": "成立",
-    "narrative_arc": "從再通膨預期轉向期限溢價重估，債市拋售成為核心驅動力，而地緣政治的邊際改善則為商品市場帶來短期修正。",
-    "why_it_matters": "長天期殖利率的攀升將實質緊縮全球金融條件，深刻影響企業融資成本與跨國資本流動，特別加劇了亞洲貨幣的防禦壓力。"
+    "weekly_main_theme": "期限溢價重估主導市場，地緣風險降溫提供短暫緩衝",
+    "main_question": "在聯準會鷹派預期推升長天期殖利率的背景下，地緣政治降溫能否有效緩解通膨與資產定價的壓力？",
+    "one_sentence_verdict": "美債殖利率的期限溢價擴大持續壓抑非美貨幣，但美伊協議傳聞帶動的油價回落，為通膨預期的極端定價帶來修正。",
+    "overall_verdict": "部分成立",
+    "narrative_arc": "本週市場敘事由『美債長天期殖利率飆升』揭開序幕，強勢美元隨之對亞洲貨幣施加重壓。然而，週中傳出的美伊和平協議消息導致原油價格顯著下跌，削弱了部分再通膨預期，使市場在『高利率常態化』與『地緣風險消退』兩股力量中尋求新的平衡點。",
+    "why_it_matters": "市場對利率風險的關注點已從短期的降息時點，轉向長期的『期限溢價』。這意味著即使通膨未進一步惡化，資金成本仍可能居高不下，深刻影響全球資本流動與亞洲央行的政策空間。"
   },
   "macro_storyline": {
-    "story_start": "本週初始，市場延續對通膨黏性的擔憂，聯準會官員的偏鷹表態進一步壓縮了年內的降息空間，確立了鷹派基調。",
+    "story_start": "聯準會官員持續強調通膨黏性，加上市場對長期利率風險重新定價，推動30年期美債殖利率創下19年新高，10年期殖利率亦維持在4.6%的高位震盪。",
     "main_drivers": [
-      "美債長天期殖利率期限溢價回升",
-      "聯準會鷹派政策預期與降息空間壓縮",
-      "地緣政治（美伊談判）對能源價格與避險情緒的擾動"
+      "美債長天期殖利率期限溢價擴大",
+      "聯準會鷹派政策預期壓縮降息空間",
+      "強勢美元對亞洲貨幣的利差壓制"
     ],
-    "market_transmission": "長端殖利率上升支撐了強勢美元，對亞幣形成廣泛壓抑；同時，美伊談判傳聞導致油價顯著回撤，改變了通膨預期的部分路徑。",
-    "revision_or_noise": "房市數據的疲軟與油價的重挫，一度使美元與殖利率出現短暫脫鉤，顯示市場在成長降溫與通膨黏性之間存在拉鋸。",
-    "story_end": "一週結束時，市場確認了『高利率常態化』的定價，但商品與避險資產在週末展現出分歧，顯示地緣政治風險溢價正在重新被評估。"
+    "market_transmission": "高位殖利率直接支撐了美元指數（DXY）穩居99以上，利差劣勢導致日圓逼近159大關，韓元與台幣亦在貶值壓力下劇烈震盪。",
+    "revision_or_noise": "美伊和平協議傳聞引發WTI原油單週從105美元重挫至97美元，地緣政治風險溢價的消退短暫干擾了通膨驅動的利率上行邏輯；此外，疲軟的房市數據也帶來短暫的經濟成長擔憂。",
+    "story_end": "最終市場並未走向單一的極端恐慌，而是進入了複雜的重新定價期：債市承壓、亞幣防守，而能源價格的回落則成為防止通膨預期全面失控的安全閥。"
   },
   "macro_variables": {
-    "inflation_view": "油價的大幅回落短期內緩解了總體通膨壓力，但核心通膨黏性與強韌的就業市場仍讓再通膨預期揮之不去。",
-    "rate_view": "聯準會政策利率預期維持高位，且長天期美債的期限溢價擴大，反映市場對長期財政與通膨風險的補償要求正在提高。",
-    "dollar_fx_view": "美元指數維持在99上下強勢震盪，利差優勢仍是支撐美元的核心動能。",
-    "asia_fx_view": "在強勢美元與美債殖利率高企的雙重壓抑下，日圓逼近159，韓元突破1500，亞幣普遍面臨顯著的貶值壓力。",
-    "gold_view": "儘管面臨高利率的壓抑，黃金仍維持在4500美元上方的高位，顯示結構性避險需求與央行購金動能依然強勁。",
-    "energy_view": "受美伊和平協議傳聞影響，WTI原油跌破100美元大關至97.7美元，地緣風險溢價顯著消退。"
+    "inflation_view": "通膨黏性擔憂仍存，但油價大幅回落為通膨預期降溫提供修正力量。",
+    "rate_view": "市場正在適應『高利率維持更久』的現實，長天期債券的期限溢價成為主導定價的核心。",
+    "dollar_fx_view": "受惠於美國經濟韌性與利差優勢，美元指數維持強勢格局。",
+    "asia_fx_view": "全面承壓。日圓持續在159弱勢盤整，韓元波動加劇，顯示亞洲央行面臨強大的被動貶值壓力。",
+    "gold_view": "在避險情緒波動與實質利率高企的拉扯下，黃金價格於4500美元附近寬幅震盪。",
+    "energy_view": "受美伊談判進展影響，地緣風險溢價大幅消退，原油價格呈現顯著下跌趨勢。"
   },
   "evidence": {
     "most_important_evidence": [
-      "美國10年期公債殖利率維持在 4.57% 至 4.67% 的高位區間",
-      "WTI原油自 105.4 美元重挫至 97.7 美元",
-      "美元兌日圓升至 159 之上，美元兌韓元突破 1500 關卡"
+      "美國10年期公債殖利率維持在4.57%至4.66%高位。",
+      "WTI原油從105.41美元跌至97.70美元，跌幅顯著。",
+      "美元指數穩定於98.9至99.3區間，日圓匯率觸及159.08。"
     ],
     "insufficient_evidence": [
-      "房市疲軟數據是否足以改變聯準會對整體經濟的強韌評估",
-      "美伊和平協議傳聞的最終落實程度及其對原油供給的實質影響"
+      "美中貿易談判初步成果對市場的具體影響尚不明朗，資料不足以判定其對整體供應鏈與通膨的實質衝擊。",
+      "疲軟的房市數據是否代表廣泛的經濟衰退風險，目前僅視為短期雜音，仍待觀察。"
     ],
-    "watch_items_from_daily_summaries": [],
+    "watch_items_from_daily_summaries": [
+      "美債殖利率的高位震盪是否會引發美股等風險資產的估值修正。",
+      "油價下跌趨勢是否具備持續性。"
+    ],
     "watch_items_from_news_context": [
-      "美債殖利率是否持續向 5.5% 目標邁進，以及期限溢價的擴大程度",
-      "美伊談判進展對能源價格的持續性影響",
-      "亞洲央行對於匯率貶值的干預力道與資金流向敏感度"
+      "美債殖利率是否會進一步測試5.5%的心理關卡。",
+      "亞洲央行在強勢美元下的干預力度與貨幣政策邊際變化。",
+      "美伊協議的最終落實程度及其對能源價格的長期影響。"
     ]
   },
   "video_planning": {
-    "suggested_video_title": "期限溢價重估：高利率時代的資產重分配與市場分歧",
+    "suggested_video_title": "期限溢價重估與油價急跌：全球市場的拉扯與平衡",
     "target_duration": "6-8 minutes",
-    "video_thesis": "我們正處於從『再通膨擔憂』向『期限溢價重估』過渡的關鍵階段。長端殖利率的攀升不僅是對聯準會耐心的定價，更是對全球政經結構性變化的重新評估。",
-    "opening_hook": "當30年期美債殖利率突破5.1%，而國際油價卻在同一時間重挫，市場究竟在傳遞什麼訊號？歡迎來到本週的總經洞察。",
+    "video_thesis": "本週市場由美債長端殖利率的重估主導，強美元使亞幣全面承壓；然而地緣政治降溫帶來的油價急跌，為通膨預期提供了關鍵的緩衝。",
+    "opening_hook": "當30年期美債殖利率創下19年新高，市場原以為通膨風暴將全面來襲，但中東傳來的一則消息，卻讓油價單週重挫，這究竟是市場的轉機，還是暴風雨前的寧靜？",
     "video_segments": [
       {
-        "segment_id": "segment_01",
-        "segment_title": "異象浮現：高殖利率與低油價的交錯",
-        "segment_question": "為何本週債市與商品市場出現了截然不同的定價邏輯？",
-        "narration_focus": "點出本週市場的核心矛盾：高利率預期推升長債殖利率，但地緣政治緩解卻讓油價大幅回撤。",
-        "main_point": "市場主線已從單純的通膨預期，轉向對長期資金成本與地緣政治風險的精細拆解。",
-        "estimated_duration": "1分鐘",
+        "segment_id": "seg_01",
+        "segment_title": "期限溢價重估：債市的新錨點",
+        "segment_question": "為何在通膨數據未大幅惡化的情況下，長天期美債殖利率仍創下新高？",
+        "narration_focus": "解析聯準會鷹派言論如何改變市場對『降息空間』的預期，並強調30年期殖利率突破5.2%對全球資產定價的意義。",
+        "main_point": "市場焦點已從短期通膨轉向長期的期限溢價，高利率常態化成為共識。",
+        "estimated_duration": "90 seconds",
         "visual_needed": true,
-        "visual_role": "開場破題",
-        "visual_concept": "美債10年期殖利率與WTI原油走勢的對比折線圖，以視覺對比突顯兩者的分歧。"
+        "visual_role": "呈現美債殖利率的高位震盪與長端利率的突破。",
+        "visual_concept": "美國10年期與30年期公債殖利率走勢對比圖，標註聯準會官員發言的時間點。"
       },
       {
-        "segment_id": "segment_02",
-        "segment_title": "期限溢價：債市定價的新核心",
-        "segment_question": "長天期美債殖利率為何持續攀升？",
-        "narration_focus": "分析美債殖利率維持高位的背後邏輯：聯準會鷹派態度與市場對長期財政風險的補償要求。",
-        "main_point": "『維持更久』不再只是短端利率的故事，長端期限溢價的擴大正實質收緊全球金融條件。",
-        "estimated_duration": "1.5分鐘",
+        "segment_id": "seg_02",
+        "segment_title": "強美元陰影下的亞洲貨幣",
+        "segment_question": "美債殖利率飆升如何傳導至外匯市場？亞洲央行面臨何種困境？",
+        "narration_focus": "說明利差優勢如何支撐美元指數站穩99，並帶出日圓逼近159、韓元劇烈波動的市場實況。",
+        "main_point": "強美元對亞幣形成結構性壓制，亞洲央行防線面臨考驗。",
+        "estimated_duration": "90 seconds",
         "visual_needed": true,
-        "visual_role": "數據佐證",
-        "visual_concept": "美國10年期與30年期公債殖利率的上升趨勢圖，標註關鍵突破點與利差變化。"
+        "visual_role": "展示美元強勢與亞幣弱勢的鏡像關係。",
+        "visual_concept": "美元指數(DXY)與日圓(USDJPY)、韓元(USDKRW)走勢的疊加圖，突顯利差驅動的貶值趨勢。"
       },
       {
-        "segment_id": "segment_03",
-        "segment_title": "地緣退燒：油價重挫的連鎖反應",
-        "segment_question": "美伊和平協議傳聞如何改變商品市場格局？",
-        "narration_focus": "探討WTI原油從105美元跌破100美元大關的過程，以及這如何為通膨預期帶來短期的喘息空間。",
-        "main_point": "地緣政治風險溢價的擠出，是本週市場少數的寬鬆因子，但需警惕其脆弱性。",
-        "estimated_duration": "1.5分鐘",
+        "segment_id": "seg_03",
+        "segment_title": "意外的緩衝：地緣政治與油價回落",
+        "segment_question": "在再通膨預期高漲之際，是什麼因素讓市場暫時喘了口氣？",
+        "narration_focus": "探討美伊和平協議傳聞如何迅速抽離原油市場的地緣風險溢價，導致WTI與布蘭特原油雙雙大跌。",
+        "main_point": "油價的顯著下跌修正了通膨預期的極端定價，成為本週市場的關鍵穩定力量。",
+        "estimated_duration": "90 seconds",
         "visual_needed": true,
-        "visual_role": "事件驅動",
-        "visual_concept": "WTI與Brent原油價格走勢，疊加美伊談判新聞事件的時間軸標籤。"
+        "visual_role": "量化原油價格的跌幅並關聯新聞事件。",
+        "visual_concept": "WTI與布蘭特原油價格走勢圖，在週中價格拐點處標註『美伊協議傳聞』的新聞標籤。"
       },
       {
-        "segment_id": "segment_04",
-        "segment_title": "亞幣承壓：利差鴻溝下的防禦戰",
-        "segment_question": "強勢美元如何重塑亞洲外匯市場？",
-        "narration_focus": "檢視日圓逼近159、韓元突破1500的現象，解析美元利差優勢帶來的資本虹吸效應。",
-        "main_point": "亞洲央行正面臨匯率貶值壓力與內部貨幣政策獨立性之間的艱難抉擇。",
-        "estimated_duration": "1分鐘",
+        "segment_id": "seg_04",
+        "segment_title": "避險情緒與成長擔憂的交錯",
+        "segment_question": "除了利率與地緣政治，還有哪些雜音在干擾市場判斷？",
+        "narration_focus": "分析黃金價格在避險需求與高實質利率之間的寬幅震盪，並簡述疲軟房市數據帶來的短暫經濟成長隱憂。",
+        "main_point": "市場在多空交織的訊號中尋找方向，資產表現呈現分歧。",
+        "estimated_duration": "75 seconds",
         "visual_needed": true,
-        "visual_role": "跨市場傳導",
-        "visual_concept": "美元指數(DXY)與日圓(USDJPY)、韓元(USDKRW)的疊加走勢圖，強調匯率連動性。"
+        "visual_role": "展示黃金價格的波動性。",
+        "visual_concept": "黃金價格走勢圖，強調其單週高低點的震盪幅度。"
       },
       {
-        "segment_id": "segment_05",
-        "segment_title": "市場雜音：成長降溫的隱憂",
-        "segment_question": "在強勁的利率定價下，經濟基本面出現了哪些裂痕？",
-        "narration_focus": "討論房市數據疲軟等修正訊號，以及這些訊號如何短暫導致美元與殖利率的脫鉤。",
-        "main_point": "高利率的滯後效應正在實體經濟中顯現，這可能成為未來限制殖利率上行的潛在力量。",
-        "estimated_duration": "1分鐘",
+        "segment_id": "seg_05",
+        "segment_title": "總結與下週觀察重點",
+        "segment_question": "投資人下週應該關注哪些核心變數？",
+        "narration_focus": "總結本週期限溢價與地緣降溫的平衡局勢，提示下週需緊盯美債5.5%關卡、亞洲央行動態及美伊協議的實質進展。",
+        "main_point": "宏觀環境處於脆弱的平衡，政策干預與地緣事件的落實將是打破僵局的關鍵。",
+        "estimated_duration": "75 seconds",
         "visual_needed": true,
-        "visual_role": "反向思考",
-        "visual_concept": "展示房市數據趨勢與美債殖利率的對比，呈現成長與利率的拉鋸。"
-      },
-      {
-        "segment_id": "segment_06",
-        "segment_title": "結論與下週展望",
-        "segment_question": "投資人下週應關注哪些核心指標？",
-        "narration_focus": "總結本週結構性分歧，並提出下週觀盤重點：美債殖利率是否挑戰5.5%、亞洲央行干預底線及能源價格走勢。",
-        "main_point": "在期限溢價重估的環境下，防禦性與流動性管理將是短期的投資核心。",
-        "estimated_duration": "1分鐘",
-        "visual_needed": true,
-        "visual_role": "總結與呼籲",
-        "visual_concept": "條列式重點字卡，配合沉穩的深色背景與微光效應，呈現權威感。"
+        "visual_role": "總結核心觀點並列出觀察清單。",
+        "visual_concept": "條列式重點圖卡，配合背景的全球宏觀熱圖。"
       }
     ],
     "visual_sequence": [
       {
-        "visual_id": "visual_01",
-        "source_segment_id": "segment_01",
-        "visual_title": "殖利率與油價分歧圖",
-        "visual_purpose": "揭示本週市場核心矛盾",
-        "visual_concept": "將US10Y的上升趨勢與WTI原油的下降趨勢並列，使用對比強烈的顏色。",
+        "visual_id": "vis_01",
+        "source_segment_id": "seg_01",
+        "visual_title": "美債殖利率：期限溢價重估",
+        "visual_purpose": "視覺化長天期美債殖利率的攀升，確立市場高利率環境的主調。",
+        "visual_concept": "線圖：US10Y走勢（4.57%~4.66%區間），並以虛線或註解標示30年期突破5.2%的歷史水位。",
         "key_labels": [
           "US10Y",
-          "WTI原油"
+          "高位震盪",
+          "期限溢價擴大"
         ],
         "is_web_hero_candidate": false
       },
       {
-        "visual_id": "visual_02",
-        "source_segment_id": "segment_02",
-        "visual_title": "美債殖利率曲線與期限溢價",
-        "visual_purpose": "說明債市定價核心邏輯的轉變",
-        "visual_concept": "顯示長天期美債殖利率的攀升，並特別標註30年期突破5.1%的關鍵水位。",
+        "visual_id": "vis_02",
+        "source_segment_id": "seg_02",
+        "visual_title": "強美元與承壓的亞幣",
+        "visual_purpose": "展示美元利差優勢對亞洲貨幣的具體壓迫程度。",
+        "visual_concept": "雙軸線圖：左軸為DXY（99以上），右軸為USDJPY（逼近159）與USDKRW，顯示同步走高的態勢（貨幣貶值）。",
         "key_labels": [
-          "10年期公債",
-          "30年期公債",
-          "期限溢價"
+          "DXY",
+          "USDJPY",
+          "USDKRW",
+          "利差壓制"
         ],
         "is_web_hero_candidate": true
       },
       {
-        "visual_id": "visual_03",
-        "source_segment_id": "segment_03",
-        "visual_title": "原油價格與地緣政治事件軸",
-        "visual_purpose": "呈現風險溢價消退對油價的影響",
-        "visual_concept": "原油價格走勢圖上標記美伊談判傳聞出現的時間點，展示隨後的價格重挫。",
+        "visual_id": "vis_03",
+        "source_segment_id": "seg_03",
+        "visual_title": "地緣降溫驅動油價重挫",
+        "visual_purpose": "強調新聞事件（美伊協議）對商品價格的直接衝擊，解釋通膨壓力的短暫緩解。",
+        "visual_concept": "下降趨勢線圖：WTI從105跌至97的走勢，並在5/18-5/20的下跌段加上新聞閃電圖示。",
         "key_labels": [
-          "WTI",
-          "Brent",
-          "美伊談判傳聞"
+          "WTI原油",
+          "美伊協議傳聞",
+          "地緣溢價消退"
         ],
-        "is_web_hero_candidate": false
+        "is_web_hero_candidate": true
       },
       {
-        "visual_id": "visual_04",
-        "source_segment_id": "segment_04",
-        "visual_title": "強勢美元與亞幣承壓",
-        "visual_purpose": "展示利差優勢對匯市的傳導",
-        "visual_concept": "DXY指數維持高位，背景襯托USDJPY逼近159與USDKRW突破1500的走勢。",
+        "visual_id": "vis_04",
+        "source_segment_id": "seg_04",
+        "visual_title": "黃金的寬幅震盪",
+        "visual_purpose": "反映市場在避險情緒與高利率環境下的猶豫與分歧。",
+        "visual_concept": "K線圖或區域圖：黃金價格在4480至4577之間的波動，標示波峰與波谷。",
         "key_labels": [
-          "DXY",
-          "USDJPY",
-          "USDKRW"
-        ],
-        "is_web_hero_candidate": false
-      },
-      {
-        "visual_id": "visual_05",
-        "source_segment_id": "segment_05",
-        "visual_title": "高利率下的實體經濟裂痕",
-        "visual_purpose": "探討經濟數據疲軟帶來的修正訊號",
-        "visual_concept": "以房市疲軟數據作為直方圖向下延伸，對比上方居高不下的殖利率折線。",
-        "key_labels": [
-          "房市數據",
-          "殖利率脫鉤"
-        ],
-        "is_web_hero_candidate": false
-      },
-      {
-        "visual_id": "visual_06",
-        "source_segment_id": "segment_06",
-        "visual_title": "下週觀盤重點字卡",
-        "visual_purpose": "為觀眾提供明確的觀察指標",
-        "visual_concept": "世界經濟論壇風格的深藍色背景，搭配清晰、簡潔的白色與金色條列文字。",
-        "key_labels": [
-          "美債5.5%關卡",
-          "亞幣干預",
-          "能源走勢"
+          "Gold",
+          "避險情緒",
+          "實質利率壓抑"
         ],
         "is_web_hero_candidate": false
       }
     ],
     "web_hero_visual": {
-      "source_visual_id": "visual_02",
-      "purpose": "作為網頁與影片的視覺焦點，直接傳達本週總經核心。",
-      "reason": "期限溢價重估與長債殖利率攀升是驅動本週所有資產價格變化的源頭，最具代表性。"
+      "source_visual_id": "vis_03",
+      "purpose": "作為網頁主視覺，突顯本週最具戲劇性且具備修正意義的市場轉折。",
+      "reason": "美債殖利率的高企是已知背景，但『油價因地緣政治降溫而大跌』是本週最關鍵的邊際變化，它成功阻止了市場陷入通膨失控的單向恐慌，最能代表本週『拉扯與平衡』的核心主題。"
     },
     "six_scene_outline": [
       {
         "scene_id": "scene_01",
-        "scene_title": "異象浮現：高殖利率與低油價的交錯",
-        "scene_question": "為何本週債市與商品市場出現了截然不同的定價邏輯？",
-        "main_point": "市場主線已從單純的通膨預期，轉向對長期資金成本與地緣政治風險的精細拆解。",
-        "visual_hint": "美債10年期殖利率與WTI原油走勢的對比折線圖，以視覺對比突顯兩者的分歧。"
+        "scene_title": "期限溢價重估：債市的新錨點",
+        "scene_question": "為何在通膨數據未大幅惡化的情況下，長天期美債殖利率仍創下新高？",
+        "main_point": "市場焦點已從短期通膨轉向長期的期限溢價，高利率常態化成為共識。",
+        "visual_hint": "美國10年期與30年期公債殖利率走勢對比圖，標註聯準會官員發言的時間點。"
       },
       {
         "scene_id": "scene_02",
-        "scene_title": "期限溢價：債市定價的新核心",
-        "scene_question": "長天期美債殖利率為何持續攀升？",
-        "main_point": "『維持更久』不再只是短端利率的故事，長端期限溢價的擴大正實質收緊全球金融條件。",
-        "visual_hint": "美國10年期與30年期公債殖利率的上升趨勢圖，標註關鍵突破點與利差變化。"
+        "scene_title": "強美元陰影下的亞洲貨幣",
+        "scene_question": "美債殖利率飆升如何傳導至外匯市場？亞洲央行面臨何種困境？",
+        "main_point": "強美元對亞幣形成結構性壓制，亞洲央行防線面臨考驗。",
+        "visual_hint": "美元指數(DXY)與日圓(USDJPY)、韓元(USDKRW)走勢的疊加圖，突顯利差驅動的貶值趨勢。"
       },
       {
         "scene_id": "scene_03",
-        "scene_title": "地緣退燒：油價重挫的連鎖反應",
-        "scene_question": "美伊和平協議傳聞如何改變商品市場格局？",
-        "main_point": "地緣政治風險溢價的擠出，是本週市場少數的寬鬆因子，但需警惕其脆弱性。",
-        "visual_hint": "WTI與Brent原油價格走勢，疊加美伊談判新聞事件的時間軸標籤。"
+        "scene_title": "意外的緩衝：地緣政治與油價回落",
+        "scene_question": "在再通膨預期高漲之際，是什麼因素讓市場暫時喘了口氣？",
+        "main_point": "油價的顯著下跌修正了通膨預期的極端定價，成為本週市場的關鍵穩定力量。",
+        "visual_hint": "WTI與布蘭特原油價格走勢圖，在週中價格拐點處標註『美伊協議傳聞』的新聞標籤。"
       },
       {
         "scene_id": "scene_04",
-        "scene_title": "亞幣承壓：利差鴻溝下的防禦戰",
-        "scene_question": "強勢美元如何重塑亞洲外匯市場？",
-        "main_point": "亞洲央行正面臨匯率貶值壓力與內部貨幣政策獨立性之間的艱難抉擇。",
-        "visual_hint": "美元指數(DXY)與日圓(USDJPY)、韓元(USDKRW)的疊加走勢圖，強調匯率連動性。"
+        "scene_title": "避險情緒與成長擔憂的交錯",
+        "scene_question": "除了利率與地緣政治，還有哪些雜音在干擾市場判斷？",
+        "main_point": "市場在多空交織的訊號中尋找方向，資產表現呈現分歧。",
+        "visual_hint": "黃金價格走勢圖，強調其單週高低點的震盪幅度。"
       },
       {
         "scene_id": "scene_05",
-        "scene_title": "市場雜音：成長降溫的隱憂",
-        "scene_question": "在強勁的利率定價下，經濟基本面出現了哪些裂痕？",
-        "main_point": "高利率的滯後效應正在實體經濟中顯現，這可能成為未來限制殖利率上行的潛在力量。",
-        "visual_hint": "展示房市數據趨勢與美債殖利率的對比，呈現成長與利率的拉鋸。"
-      },
-      {
-        "scene_id": "scene_06",
-        "scene_title": "結論與下週展望",
-        "scene_question": "投資人下週應關注哪些核心指標？",
-        "main_point": "在期限溢價重估的環境下，防禦性與流動性管理將是短期的投資核心。",
-        "visual_hint": "條列式重點字卡，配合沉穩的深色背景與微光效應，呈現權威感。"
+        "scene_title": "總結與下週觀察重點",
+        "scene_question": "投資人下週應該關注哪些核心變數？",
+        "main_point": "宏觀環境處於脆弱的平衡，政策干預與地緣事件的落實將是打破僵局的關鍵。",
+        "visual_hint": "條列式重點圖卡，配合背景的全球宏觀熱圖。"
       }
     ],
     "image_card_brief": [
       {
         "card_id": "card_01",
-        "headline": "殖利率與油價分歧圖",
+        "headline": "美債殖利率：期限溢價重估",
         "short_labels": [
           "US10Y",
-          "WTI原油"
+          "高位震盪",
+          "期限溢價擴大"
         ],
-        "visual_concept": "將US10Y的上升趨勢與WTI原油的下降趨勢並列，使用對比強烈的顏色。"
+        "visual_concept": "線圖：US10Y走勢（4.57%~4.66%區間），並以虛線或註解標示30年期突破5.2%的歷史水位。"
       },
       {
         "card_id": "card_02",
-        "headline": "美債殖利率曲線與期限溢價",
-        "short_labels": [
-          "10年期公債",
-          "30年期公債",
-          "期限溢價"
-        ],
-        "visual_concept": "顯示長天期美債殖利率的攀升，並特別標註30年期突破5.1%的關鍵水位。"
-      },
-      {
-        "card_id": "card_03",
-        "headline": "原油價格與地緣政治事件軸",
-        "short_labels": [
-          "WTI",
-          "Brent",
-          "美伊談判傳聞"
-        ],
-        "visual_concept": "原油價格走勢圖上標記美伊談判傳聞出現的時間點，展示隨後的價格重挫。"
-      },
-      {
-        "card_id": "card_04",
-        "headline": "強勢美元與亞幣承壓",
+        "headline": "強美元與承壓的亞幣",
         "short_labels": [
           "DXY",
           "USDJPY",
-          "USDKRW"
+          "USDKRW",
+          "利差壓制"
         ],
-        "visual_concept": "DXY指數維持高位，背景襯托USDJPY逼近159與USDKRW突破1500的走勢。"
+        "visual_concept": "雙軸線圖：左軸為DXY（99以上），右軸為USDJPY（逼近159）與USDKRW，顯示同步走高的態勢（貨幣貶值）。"
       },
       {
-        "card_id": "card_05",
-        "headline": "高利率下的實體經濟裂痕",
+        "card_id": "card_03",
+        "headline": "地緣降溫驅動油價重挫",
         "short_labels": [
-          "房市數據",
-          "殖利率脫鉤"
+          "WTI原油",
+          "美伊協議傳聞",
+          "地緣溢價消退"
         ],
-        "visual_concept": "以房市疲軟數據作為直方圖向下延伸，對比上方居高不下的殖利率折線。"
+        "visual_concept": "下降趨勢線圖：WTI從105跌至97的走勢，並在5/18-5/20的下跌段加上新聞閃電圖示。"
       },
       {
-        "card_id": "card_06",
-        "headline": "下週觀盤重點字卡",
+        "card_id": "card_04",
+        "headline": "黃金的寬幅震盪",
         "short_labels": [
-          "美債5.5%關卡",
-          "亞幣干預",
-          "能源走勢"
+          "Gold",
+          "避險情緒",
+          "實質利率壓抑"
         ],
-        "visual_concept": "世界經濟論壇風格的深藍色背景，搭配清晰、簡潔的白色與金色條列文字。"
+        "visual_concept": "K線圖或區域圖：黃金價格在4480至4577之間的波動，標示波峰與波谷。"
       }
     ],
     "next_week_questions": [
-      "美債殖利率是否會進一步挑戰 5.5% 的關鍵關卡？",
-      "地緣政治談判的實質進展將如何左右能源價格的下一步？",
-      "面對持續的資本外流壓力，亞洲央行何時會採取實質干預行動？"
+      "美債殖利率是否會進一步測試5.5%的心理關卡？",
+      "亞洲央行在強勢美元下的干預力度與貨幣政策邊際變化為何？",
+      "美伊協議的最終落實程度及其對能源價格的長期影響為何？"
     ]
   }
 }
