@@ -2,18 +2,18 @@
 # -*- coding: utf-8 -*-
 
 """
-Weekly Macro Video Engine - Forest Summary v8.6 A-Test
+Weekly Macro Explainer Brief - Step 01
 
 Purpose:
-- Generate weekly_forest_summary.json from the freshest primary inputs:
+- Generate weekly_forest_summary.json from:
   1) weekly_market_series.json
   2) weekly_news_context.md / weekly_news_context.json if available
 
 Design:
+- Use market data and news context as the primary inputs.
 - Do not use weekly_source_text.md as the main analysis input.
-- Let the model first read market data, then use news events to explain possible causes.
-- Position the output as a live-news interview style macro explanation.
-- Keep the existing weekly_forest_summary.json schema so downstream steps remain compatible.
+- Produce a 6-8 minute World Economic Forum-style macro explainer brief.
+- Keep the existing weekly_forest_summary.json schema for downstream compatibility.
 
 Input:
 - output/weekly/YYYY-MM-DD/weekly_market_series.json
@@ -40,7 +40,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -49,14 +49,9 @@ DEFAULT_ANALYSIS_MODEL = "gemini-3.5-pro"
 
 
 SYSTEM_PROMPT = """
-你是一位正在接受現場新聞採訪的總經學者。
+你是一位冷靜、專業、具權威感的總經學者。
 
-你的任務是根據市場數據與新聞事件，幫一般觀眾理解本週市場發生什麼事。
-
-請遵守以下原則：
-1. 先看市場數據，再用新聞事件解釋可能原因。
-2. 請用一般大眾聽得懂的語言回答。
-3. 語氣像冷靜的總經學者接受新聞現場採訪，不要像投資老師喊盤。
+請製作一支約 6～8 分鐘的世界經濟論壇式總經說明影片，條理分明地呈現市場數據、新聞事件與資產價格變化之間的關聯性。
 
 請使用繁體中文。
 """
@@ -65,19 +60,13 @@ SYSTEM_PROMPT = """
 USER_PROMPT_TEMPLATE = """
 以下是最近 7 天市場數據與新聞事件。
 
-請像現場新聞採訪一樣，先指出本週最值得注意的矛盾、反差或關鍵變化，再說明：
+請根據資料，產生 weekly_forest_summary.json。
 
-1. 市場數據真正透露了什麼？
-2. 新聞事件能否解釋這些變化？
-3. 如果有矛盾，矛盾在哪裡？
-4. 本週最合理的市場主線是什麼？
-5. 下週一般觀眾應該看什麼？
+請只輸出合法 JSON，不要加 Markdown，不要加解釋文字。
 
-請將你的判斷整理成 weekly_forest_summary.json。
-只輸出合法 JSON，不要加 Markdown，不要加解釋文字。
-
-JSON 結構請維持如下，欄位內容可依本週資料自由判斷，不需要硬湊固定故事線。
-如果資料顯示市場分歧，請讓 JSON 反映「分歧、斷點、部分成立或待觀察」，不要寫成完整順暢的傳導鏈。
+JSON 結構請維持如下。
+video_planning 中可自行安排影片段落與視覺需求，不需固定段落數或圖片數量。
+six_scene_outline 與 image_card_brief 為舊流程相容欄位，可依新版內容同步填入。
 
 {
   "meta": {
@@ -117,88 +106,40 @@ JSON 結構請維持如下，欄位內容可依本週資料自由判斷，不需
   },
   "video_planning": {
     "suggested_video_title": "",
-    "six_scene_outline": [
+    "target_duration": "6-8 minutes",
+    "video_thesis": "",
+    "opening_hook": "",
+    "video_segments": [
       {
-        "scene_id": "scene_01",
-        "scene_title": "",
-        "scene_question": "",
+        "segment_id": "segment_01",
+        "segment_title": "",
+        "segment_question": "",
+        "narration_focus": "",
         "main_point": "",
-        "visual_hint": ""
-      },
-      {
-        "scene_id": "scene_02",
-        "scene_title": "",
-        "scene_question": "",
-        "main_point": "",
-        "visual_hint": ""
-      },
-      {
-        "scene_id": "scene_03",
-        "scene_title": "",
-        "scene_question": "",
-        "main_point": "",
-        "visual_hint": ""
-      },
-      {
-        "scene_id": "scene_04",
-        "scene_title": "",
-        "scene_question": "",
-        "main_point": "",
-        "visual_hint": ""
-      },
-      {
-        "scene_id": "scene_05",
-        "scene_title": "",
-        "scene_question": "",
-        "main_point": "",
-        "visual_hint": ""
-      },
-      {
-        "scene_id": "scene_06",
-        "scene_title": "",
-        "scene_question": "",
-        "main_point": "",
-        "visual_hint": ""
-      }
-    ],
-    "image_card_brief": [
-      {
-        "card_id": "card_01",
-        "headline": "",
-        "short_labels": [],
-        "visual_concept": ""
-      },
-      {
-        "card_id": "card_02",
-        "headline": "",
-        "short_labels": [],
-        "visual_concept": ""
-      },
-      {
-        "card_id": "card_03",
-        "headline": "",
-        "short_labels": [],
-        "visual_concept": ""
-      },
-      {
-        "card_id": "card_04",
-        "headline": "",
-        "short_labels": [],
-        "visual_concept": ""
-      },
-      {
-        "card_id": "card_05",
-        "headline": "",
-        "short_labels": [],
-        "visual_concept": ""
-      },
-      {
-        "card_id": "card_06",
-        "headline": "",
-        "short_labels": [],
+        "estimated_duration": "",
+        "visual_needed": true,
+        "visual_role": "",
         "visual_concept": ""
       }
     ],
+    "visual_sequence": [
+      {
+        "visual_id": "visual_01",
+        "source_segment_id": "segment_01",
+        "visual_title": "",
+        "visual_purpose": "",
+        "visual_concept": "",
+        "key_labels": [],
+        "is_web_hero_candidate": false
+      }
+    ],
+    "web_hero_visual": {
+      "source_visual_id": "",
+      "purpose": "",
+      "reason": ""
+    },
+    "six_scene_outline": [],
+    "image_card_brief": [],
     "next_week_questions": []
   }
 }
@@ -241,10 +182,15 @@ def find_latest_week_dir() -> Path:
     return week_dirs[0]
 
 
+def as_list(value: Any) -> List[Any]:
+    if isinstance(value, list):
+        return value
+    if value in (None, ""):
+        return []
+    return [value]
+
+
 def extract_json_from_text(text: str) -> Dict[str, Any]:
-    """
-    Extract the first valid JSON object from Gemini output.
-    """
     cleaned = text.strip()
 
     if cleaned.startswith("```"):
@@ -265,6 +211,48 @@ def extract_json_from_text(text: str) -> Dict[str, Any]:
     except json.JSONDecodeError as exc:
         preview = cleaned[:2000]
         raise ValueError(f"Unable to parse Gemini JSON. Error: {exc}. Preview: {preview}") from exc
+
+
+def normalize_video_planning(summary: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Fill legacy fields from the flexible video fields so older workflows can continue to run.
+    The legacy field names are kept only for compatibility and do not imply a fixed scene count.
+    """
+    video = summary.setdefault("video_planning", {})
+
+    segments = as_list(video.get("video_segments"))
+    visuals = as_list(video.get("visual_sequence"))
+
+    if not video.get("six_scene_outline") and segments:
+        legacy_scenes = []
+        for idx, segment in enumerate(segments, start=1):
+            if not isinstance(segment, dict):
+                continue
+            legacy_scenes.append({
+                "scene_id": f"scene_{idx:02d}",
+                "scene_title": segment.get("segment_title", ""),
+                "scene_question": segment.get("segment_question", ""),
+                "main_point": segment.get("main_point") or segment.get("narration_focus", ""),
+                "visual_hint": segment.get("visual_concept", ""),
+            })
+        video["six_scene_outline"] = legacy_scenes
+
+    if not video.get("image_card_brief") and visuals:
+        image_cards = []
+        for idx, visual in enumerate(visuals, start=1):
+            if not isinstance(visual, dict):
+                continue
+            image_cards.append({
+                "card_id": f"card_{idx:02d}",
+                "headline": visual.get("visual_title", ""),
+                "short_labels": as_list(visual.get("key_labels")),
+                "visual_concept": visual.get("visual_concept", ""),
+            })
+        video["image_card_brief"] = image_cards
+
+    video.setdefault("target_duration", "6-8 minutes")
+
+    return summary
 
 
 def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: str) -> Dict[str, Any]:
@@ -371,6 +359,7 @@ def main() -> None:
     print(f"[INFO] News context json included: {bool((week_dir / 'weekly_news_context.json').exists())}")
 
     forest_summary = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
+    forest_summary = normalize_video_planning(forest_summary)
 
     out_path = week_dir / "weekly_forest_summary.json"
     save_json(out_path, forest_summary)
