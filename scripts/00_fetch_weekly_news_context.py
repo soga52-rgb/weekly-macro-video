@@ -162,7 +162,7 @@ B. weekly_news_candidates：
 
 新聞分類規則：
 - 請務必輸出 news_categories，分成「通膨預期」「利率」「貨幣」「其他」四類。
-- 每類最多放 4 則新聞，優先挑對本週主線最有佐證價值者。
+- 每類可依新聞重要性自然分配，最多 8 則；若該類新聞明顯較多，請保留較多新聞，以反映本週市場關注比重。，優先挑對本週主線最有佐證價值者。
 - 一則新聞只能放在一類，不要重複。
 - 分類以標題與新聞主題優先，why_it_matters 只作輔助。
 - 「油價、能源、CPI、PPI、物價、再通膨、通膨黏性」優先放「通膨預期」。
@@ -530,7 +530,7 @@ def normalize_news_categories(context: Dict[str, Any]) -> Dict[str, Any]:
     for key in ["通膨預期", "利率", "貨幣", "其他"]:
         if not isinstance(categories.get(key), list):
             categories[key] = []
-        categories[key] = [item for item in categories[key] if isinstance(item, dict)][:4]
+        categories[key] = [item for item in categories[key] if isinstance(item, dict)][:8]
 
     # Preserve top_news if present, but supplement it from category buckets.
     top_news = context.get("top_news")
