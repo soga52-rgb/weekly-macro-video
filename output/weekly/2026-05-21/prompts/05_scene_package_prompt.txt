@@ -1,21 +1,26 @@
 請根據以下同源資料，產出 weekly_scene_package.json。
 
-重要：
-- 先判讀本週資料，再決定 scene_02~scene_06 的分工。
-- 不要硬套 scene_02=油價、scene_03=利率、scene_04=美元、scene_05=黃金。
-- 若本週主線剛好是這樣，才可以如此安排；否則依本週資料調整。
-- Scene 01 固定為 weekly_macro_diagram.png 開場。
-- Scene 02~06 要同時服務 TTS 與 IMAGE。
-- 每個 scene 的 narration_dialogue 與 image_prompt 必須講同一件事。
-- 但你必須保留上午 narration 的成功邏輯：這是一支「總經傳導圖解導讀影片」，不是單點新聞評論。
-- Scene 01 要定位為 narrative map / transmission map，不是 conclusion summary。它先給觀眾本週地圖。
-- Scene 02~Scene 05 要採「順敘展開」：優先沿著 core_transmission_chain 的因果順序逐段導讀。
-- Scene 02 通常應承接傳導起點；Scene 03 承接核心傳導；Scene 04 承接中段資產反應；Scene 05 承接外溢資產、修正因子或交叉驗證；但若本週資料顯示其他排列更合理，可由你動態調整。
-- Scene 06 收斂成下週觀察，重點是哪些事件或數據會驗證這條傳導鏈延續、翻轉或被修正。
-- scene_02~scene_05 不能只是孤立主題，必須沿著 core_transmission_chain 逐段導讀。
-- 每頁都要輸出 narrative_order 與 chain_position，說明 previous_node、current_node、next_node、map_role 與 transmission_sentence。
-- narration_dialogue 中請自然說出這段傳導關係，例如「上一段我們看到...，這會推動...，因此下一步要看...」。
-- image_prompt 中也請描述本頁的鏈條角色，例如「用簡化的三節點或因果箭頭呈現：上一節點 → 本頁節點 → 下一節點」，但畫面仍要少字、單一主視覺。
+影片定位：
+- 這是一支「本週總經傳導圖解導讀影片」。
+- Scene 01 是 narrative map / transmission map，用 weekly_macro_diagram.png 開場。
+- Scene 02~Scene 06 依本週資料整理成 6 個清楚分鏡，不要做成單點新聞摘要。
+
+建議分鏡：
+- scene_01：總經傳導地圖總覽。
+- scene_02：本週最重要的驅動因子。
+- scene_03：核心市場變數如何反應。
+- scene_04：主要資產外溢影響。
+- scene_05：本週修正因子、背離或交叉驗證。
+- scene_06：下週觀察重點。
+
+每個 scene 請做到：
+- 每頁只講一個重點。
+- 每頁都要引用至少一個數據或新聞證據。
+- narration_dialogue 要像總經分析師導讀，不要像新聞摘要。
+- image_prompt 要服務旁白，畫面要像總經簡報圖卡。
+- 圖卡需包含：明確標題、2～3 個重點、1 條簡單傳導箭頭、1 句結論。
+- 不要畫天平、漩渦、純 checklist、過度抽象符號。
+- 圖卡少字、重點明確、畫面乾淨。
 
 輸出 JSON schema 範例：
 {
@@ -50,11 +55,11 @@
         "previous_node": "上一個總經節點，若無則空字串",
         "current_node": "本頁所在總經節點",
         "next_node": "下一個總經節點，若無則空字串",
-        "transmission_sentence": "用一句話說明上一節點如何傳到本頁、本頁如何影響下一節點",
-        "map_role": "本頁在 Scene 01 總經傳導圖中的角色，例如：起點 / 中段傳導 / 資產反應 / 修正因子 / 下週驗證"
+        "transmission_sentence": "用一句話說明本頁在總經傳導鏈中的位置",
+        "map_role": "起點 / 核心傳導 / 資產反應 / 修正因子 / 下週驗證"
       },
-      "visual_direction": "給圖卡導演看的畫面說明，必須說明本頁如何呈現傳導鏈位置",
-      "image_prompt": "給 image model 的完整 prompt；scene_01 可寫 reuse weekly_macro_diagram.png；scene_02~06 必須保留傳導鏈語意",
+      "visual_direction": "給圖卡導演看的畫面說明",
+      "image_prompt": "給 image model 的完整 prompt；scene_01 可寫 reuse weekly_macro_diagram.png",
       "on_screen_text": {
         "headline": "短標題",
         "key_numbers": [
