@@ -15,24 +15,6 @@
       "status": "created_or_existing"
     },
     {
-      "visual_id": "vis_02",
-      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/vis_02.png",
-      "source_segment_id": "seg_02",
-      "visual_title": "強美元與承壓的亞幣",
-      "visual_purpose": "展示美元利差優勢對亞洲貨幣的具體壓迫程度。",
-      "is_web_hero_candidate": true,
-      "status": "created_or_existing"
-    },
-    {
-      "visual_id": "vis_03",
-      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/vis_03.png",
-      "source_segment_id": "seg_03",
-      "visual_title": "地緣降溫驅動油價重挫",
-      "visual_purpose": "強調新聞事件（美伊協議）對商品價格的直接衝擊，解釋通膨壓力的短暫緩解。",
-      "is_web_hero_candidate": true,
-      "status": "created_or_existing"
-    },
-    {
       "visual_id": "vis_04",
       "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/vis_04.png",
       "source_segment_id": "seg_04",
@@ -42,11 +24,19 @@
       "status": "created_or_existing"
     }
   ],
-  "failed_images": [],
-  "web_hero_visual_id": "vis_03",
-  "web_hero_output": {
-    "source_visual_id": "vis_03",
-    "weekly_web_hero": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/weekly_web_hero.png",
-    "weekly_macro_diagram_compat": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/weekly_macro_diagram.png"
-  }
+  "failed_images": [
+    {
+      "visual_id": "vis_02",
+      "source_segment_id": "seg_02",
+      "visual_title": "強美元與承壓的亞幣",
+      "error": "Remote end closed connection without response"
+    },
+    {
+      "visual_id": "vis_03",
+      "source_segment_id": "seg_03",
+      "visual_title": "地緣降溫驅動油價重挫",
+      "error": "Remote end closed connection without response"
+    }
+  ],
+  "web_hero_visual_id": "vis_03"
 }
