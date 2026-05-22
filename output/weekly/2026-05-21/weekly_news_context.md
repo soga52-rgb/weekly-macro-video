@@ -1,41 +1,44 @@
 ## 本週新聞補充
 
 ### 新聞主線
-再通膨預期與期限溢價重估雙重驅動，高利率維持更久敘事主導全球資產，惟成長放緩與地緣政治引發階段性避險分歧
+再通膨預期與期限溢價重估共振，推升美債長端殖利率至歷史高點，強化美元利差優勢並壓抑非美資產；惟週中房市數據疲軟與地緣政治避險情緒一度引發資產走勢分歧。
 
 ### 新聞與每日摘要的關係
 支持
 
 ### 主要總經驅動
-- 期限溢價重估與長債拋售壓力｜推升全球無風險利率，壓抑科技股估值，並對非美資產造成資金流出壓力。｜信心：高
-  - 美國30年期公債殖利率衝破5.2%創19年新高
-  - 市場重新評估長期利率風險，債市邁向高殖利率新常態
-- 再通膨預期與地緣政治風險交織｜強化市場對通膨難以根除的預期，進一步封鎖聯準會的降息空間。｜信心：高
-  - 美伊關係反覆推升油價，布蘭特原油一度逼近110美元警戒線
-  - 台灣央行因通膨黏性不排除上修CPI增幅
-- 聯準會維持高利率更久（Higher for Longer）政策定價｜美元指數突破99關卡，利差優勢持續壓制非美貨幣與黃金。｜信心：高
-  - Fed會議紀錄顯示多數官員主張將升息列入選項
-  - 戴蒙示警利率可能還會更高
 
 ### 支撐訊號
-- 高利率預期推升美債殖利率，美元指數突破99，導致新台幣連4貶、日圓持續承壓，呈現典型的緊縮傳導路徑。
-- 美元與美債殖利率雙升期間，黃金因持有機會成本上升而出現單日逾1%的跌幅，驗證了利差對貴金屬的壓制。
+- {'title': '戴蒙示警利率還會更高 Fed會議紀錄多數官員主張將升息列入選項', 'why_it_matters': '證實聯準會內部及市場意見領袖對通膨黏性的擔憂，支持高利率維持更久的政策路徑。'}
+- {'title': '30年期美債殖利率衝破5.2%創19年新高！華爾街警告5.5%恐成下一目標', 'why_it_matters': '反映債市期限溢價重估，長端殖利率走高直接推升美元並壓抑風險資產。'}
+- {'title': '〈台幣〉聯準會不排除重啟升息 爆量重挫1.05角收31.65元', 'why_it_matters': '驗證「高利率 → 美元強勢 → 亞幣承壓」的傳導鏈，台幣面臨資金流出壓力。'}
+- {'title': '通膨恐催生鷹派央行 金價走弱 自中東衝突以來已跌15%', 'why_it_matters': '顯示在實質利率與美元雙升的背景下，黃金作為無息資產的機會成本上升，承壓下行。'}
 
 ### 修正或背離訊號
-- 房市數據疲軟（如5月18日與20日）引發市場對經濟成長放緩的擔憂，成為壓低美元與殖利率的修正因子。
-- 美伊談判在5月19日與21日出現反覆，油價在飆漲後因談判曙光而逆轉收跌，部分緩解了再通膨的即時壓力。
+- {'title': '〈貴金屬盤後〉金價小漲 油價和美債殖利率下跌提供支撐', 'why_it_matters': '反映週中成長放緩疑慮（如房市數據疲軟）導致殖利率與油價回落，為金價提供短暫喘息空間。'}
+- {'title': '〈台幣〉拋匯力道轉強 量縮升值4.8分收31.595元', 'why_it_matters': '顯示在連續貶值後，市場出現出口商拋匯等修正因子，亞幣並非單邊無抵抗貶值。'}
 
 ### 新聞校正
-- 修正5月18日與20日的單日背離：雖然通膨預期推升利率，但房市疲軟引發的經濟硬著陸擔憂，使美元階段性失去利差支撐，資金轉向黃金避險，導致『殖利率上升、美元下跌、黃金上漲』的非常規走勢。
-- 修正5月21日的黃金走勢：儘管Fed官員釋放鷹派訊號推升美元與利率，但地緣政治避險溢價（美伊協議傳聞與不確定性）提供了黃金獨立的支撐，使金價與美元呈現同步走強的防禦性格局。
+- {'factor': '地緣政治變數與油價逆轉', 'description': '美伊談判傳聞（如川普稱談判進入最後階段）導致油價單日重挫近6%，此修正因子暫時緩解了再通膨預期對債市的壓力，使殖利率在週中一度回落。'}
 
 ### 下週觀察
-- 美國後續就業與通膨數據，以確認經濟是否朝向停滯性通膨方向發展。
-- 美伊談判的實質進展，這將直接影響油價波動與全球通膨預期的強弱。
-- 亞洲央行（特別是日本與台灣）面對本國貨幣貶值與輸入性通膨壓力時的貨幣政策與干預態度。
+- 30年期美債殖利率是否會進一步測試華爾街預期的5.5%水平，加劇全球債市拋售潮。
+- 美伊談判的最終實質進展，將如何重新定義能源價格與全球通膨路徑。
+- 亞洲央行（如台灣央行下月利率會議）是否因應通膨預期上修與本幣貶值壓力，採取口頭干預或意外緊縮政策。
 
 ### 代表新聞
-- news.cnyes.com｜30年期美債殖利率衝破5.2%創19年新高！華爾街警告5.5%恐成下一目標｜這是本週最具指標性的市場事件。長期美債殖利率的失控飆升，不僅反映了期限溢價的重估，更實質性地收緊了全球金融環境，成為壓制非美貨幣、黃金及科技股的主導力量。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTE5QVDQ2aWhTNDBYTjVMLW1MVlVBLU5sQ1JPbFRKREl0Vk1yMFVCenkxUWJuamtLLXlVdVdmMkxLZHFUUWxjSFJZclg1dGo4Q0k?oc=5
+- ｜〈能源盤後〉美伊談判變數壓垮市場 油價飆漲4%後逆轉收挫 布油跌破103美元創近兩週低點｜地緣政治談判不確定性導致油價劇烈波動，直接影響市場對未來通膨黏性的評估。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTFBHRTZWWWFhazd0d3Y1NmNSRUk5dzlZdlNPN3doY21NSGJIWEhwTHZacUFsbXdHRTlaWDE0N0pzb3d0dUFQSHZOMXVuWFlfLVU?oc=5
+- ｜央行不排除上修CPI增幅 利率走向 下月說分明｜反映輸入性通膨與再通膨預期已開始影響區域央行的政策展望。｜https://news.google.com/rss/articles/CBMiWkFVX3lxTFBSQU9wMDhuSlZZZzBwSGd4aWRkeUVGNFAxaUNtN3dWcXdvZ2s0TDFlLUwwdTl2Y2pZUUlQZ3ZubXg5Zy1RNzlHdmxveko5NkZHQXg0TXZrVUQwUdIBX0FVX3lxTE5DSVo4b251T3BRMUdwRXpLeThZQzBTVFdoclY2ZVptME5WSkZLaV9weTJLVUJZRm1rZlhwbVVEbG1sZTM5dzRtaUtQbVp5T21XVEd6Q1M2Z0NCejlWWXBz?oc=5
+- ｜〈能源盤後〉川普稱美伊談判傳進入最後階段 油價重挫近6% 創近一個月最大日跌幅｜地緣政治局勢緩和預期一度壓低油價，成為通膨預期的下行修正因子。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTE5sTE1vVldtSlNqNDQtMkdjLWl0YmZXSHctNWI1N3ZnN1l1M241NzFEODI3bGw3TjNybkhQWU9MYU0yQy1vYThuekk3WXVIOGc?oc=5
+- ｜荷姆茲危機對全球經濟的“七步殺”｜分析潛在供應鏈中斷對全球再通膨的結構性威脅。｜https://news.google.com/rss/articles/CBMiSEFVX3lxTE9mdDZQOFN6RzVaa2R6NVJ6N20xV1REMWR6UWdyRENSMkhKcHJzUEtFT21yWVhOZENMVjVmbjVhNkMyT1Z4Xy1UMg?oc=5
+- ｜戴蒙示警利率還會更高 Fed會議紀錄多數官員主張將升息列入選項｜Fed會議紀錄與市場領袖表態偏鷹，強化高利率維持更久的預期。｜https://news.google.com/rss/articles/CBMikAFBVV95cUxPMVVlR0IxcV9FR1dSeGx5d1BxNHhQdXhDRTJPczBnWEhxNm1aMXJHX0VqeHdYc2Y2SGZYSk9XTUUxSGJ0dkZmTkR2UlozcWtESlEtRFg3SWZtNEx0Y2JocXFYWC1ma2M5c19JWlZJSHdEOGh5VGdEamVIYm80TVFKbVFCbF92cFQ3bkJ0Y3lJLU7SAV9BVV95cUxPNjhfblJTRHhyaF9iWVdNc1NUdnJ0LWE0NmV6RzR3YXEzU2RvU2xFMnBnTVpHaWluZjRZMHVRbnc1eGpNZFN5TFluVDZ6dHI0RS1zZ3F0OF9FaXVwVFE3cw?oc=5
+- ｜30年期美債殖利率衝破5.2%創19年新高！華爾街警告5.5%恐成下一目標｜長端美債殖利率突破關鍵阻力，顯示期限溢價重估壓力顯著。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTE5QVDQ2aWhTNDBYTjVMLW1MVlVBLU5sQ1JPbFRKREl0Vk1yMFVCenkxUWJuamtLLXlVdVdmMkxLZHFUUWxjSFJZclg1dGo4Q0k?oc=5
+- ｜債券市場出事了？全球殖利率狂飆背後藏巨大危機｜反映全球債市同步拋售的系統性風險，實質利率走高壓抑整體估值。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTE04Q1dqNWtrdExvNjQtRlRxTlZza1lPNnhLc2wwOXMwcWtkeklkSjBzVnZTWk1iUU14aHZXeGdiWUwtWTZFeGxnelFaallFSmc?oc=5
+- ｜美債避險神話動搖？美國30年期殖利率衝上5.18% 創2007年來新高｜長債供需失衡與期限溢價回升，削弱美債傳統的避險屬性。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTFB4bnU5ck9YT1l2V1EydTVCR0pZd3hEZXhsTDJqSjlRTUI5dk8zYzZ4aEhJWU5USTV2bF91eDdpUlhtaVpTUUdrdVR2dF9OUkE?oc=5
+- ｜降息夢碎、30年美債衝破5% 債市邁向高殖利率新常態｜市場定價邏輯轉向「高利率新常態」，徹底封鎖短期降息空間。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTE05NGRsZjVwQnR2dlR2Q1FPUXdQUUNheDVvRjRFQkFwSGJZUEVYQ1JKZkVxR1haQ3ROMlA4TkQ3czZPeUFFTm11YUZmNm9uVmc?oc=5
+- ｜〈台幣〉拋匯力道轉強 量縮升值4.8分收31.595元｜顯示台幣在連續承壓後，於31.6關卡附近出現出口商拋匯支撐。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTE5vbFZETms2dzVPTUI0Z2V2NWpZMjFndUJSRUh5RTV5TW1IdzVfRGxpTGk5cDRqQ3VkUWxXcGowZ3VuTFpnVkY2YUtPT0k5YVk?oc=5
+- ｜台北股匯「雙殺」 熱錢匯出新台幣爆量重貶逾1角 短線測試31.7｜美債殖利率衝高引發熱錢加速流出，亞幣面臨顯著貶值壓力。｜https://news.google.com/rss/articles/CBMid0FVX3lxTE04M0kxbmpyZ0F4WndlY05ZX0dDdUprbFNlNlVqcmtselh4Q3E2TnNiSXl6R0pSRmVOT1o1QnhVMzV3NDVSVl8ycnplb3MxRkdhUUg1aGEzd2R1dWtrSWNmdmdRRDBaRWhrSFU2NFZEYlllZXdKcV9n0gFfQVVfeXFMTjk0aVJGcWsySGVaM2xoNGUzQTJ2S3IwYUlKNW15WUk2cXdNODVDRFVFOU9RT21QMEhVUFJuR0VQNGd6WFdFRzNBa3p6VENLWUJMRzBqbmlUTDd3dzdOdkE?oc=5
+- ｜〈台幣〉買賣力道劇烈拉鋸 收31.643元 微升0.7分｜反映市場在強勢美元與本土防禦力量之間的拉鋸，匯率波動加劇。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTE9ERUhEaE44ZE5fdGRZNFpwdXQ2UEk0MmhXV3lla2hpYW5GVlVvLXJEbEpySEpQT1Y2N0U5elBiY1NUMjhOZlU3dG5Gdkp3RGM?oc=5
 
 ### 給 Forest Summary 的編輯提示
-本週市場的核心敘事在於『期限溢價重估』與『再通膨擔憂』的共振。30年期美債殖利率衝破5.2%創下19年新高，確立了高利率維持更久的宏觀背景。儘管週間房市數據疲軟一度引發成長放緩的疑慮，並對美元構成短期修正，但聯準會官員的鷹派表態與地緣政治風險（美伊關係反覆）迅速填補了空缺，使市場最終回歸緊縮定價。下週需密切觀察美國實體經濟數據是否進一步惡化，以驗證市場是否會從『高利率維持更久』過渡到『停滯性通膨』的交易體制。
+本週全球金融市場的核心邏輯在於「再通膨預期」與「長端美債期限溢價重估」的雙重共振。聯準會會議紀錄偏鷹，加上戴蒙等市場領袖示警升息選項，推動30年期美債殖利率突破5.2%創多年新高。此舉確立了高利率維持更久的宏觀敘事，並透過利差優勢推升美元，導致新台幣等亞洲貨幣與黃金顯著承壓。儘管週中因房市數據疲軟與美伊談判傳聞一度引發油價及殖利率回落，但整體緊縮傳導鏈依然穩固。下週應密切關注長端殖利率是否持續向5.5%測試，以及地緣政治變數對能源價格的實質干擾。
