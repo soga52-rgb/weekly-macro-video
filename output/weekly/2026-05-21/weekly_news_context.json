@@ -1,89 +1,69 @@
 {
   "meta": {
     "source": "Google News RSS",
-    "week_range": "2026-05-15 ～ 2026-05-21",
+    "week_range": "2026-05-15 至 2026-05-21",
     "sources_used": [
-      "cnyes.com",
-      "news.cnyes.com",
-      "anuenews.cnyes.com",
       "經濟日報",
-      "UDN"
+      "cnyes.com"
     ],
-    "candidate_count": 30,
-    "data_quality_note": "候選新聞來源與週報主線高度契合，特別在長端美債殖利率突破關鍵水位與亞洲貨幣承壓方面，提供了充足的數據與市場情緒佐證。"
+    "candidate_count": 32,
+    "data_quality_note": "本週新聞高度集中於美債殖利率飆升與再通膨敘事，與每日總經摘要的市場定價邏輯高度一致。"
   },
-  "weekly_news_theme": "期限溢價重估與再通膨預期雙重驅動，長端美債殖利率創多年新高，強化美元利差優勢並持續壓抑非美資產，惟地緣政治與經濟放緩疑慮引發局部避險分歧",
+  "weekly_news_theme": "再通膨定價與期限溢價重估，驅動高利率維持更久敘事，導致全球資產傳導鏈出現結構性緊縮。",
   "news_fit_to_daily_summaries": "支持",
   "macro_drivers": [
     {
-      "driver": "期限溢價重估與長端美債拋售壓力",
+      "driver": "再通膨與期限溢價",
       "evidence": [
-        "30年期美債殖利率衝破5.2%創19年新高",
-        "全球債市拋售加劇，美債30年期殖利率突破5%大關"
+        "30年期美債殖利率突破5.2%創19年新高",
+        "市場對長期利率風險重新定價"
       ],
-      "impact": "推升全球實質利率，封鎖聯聯準會降息空間，並對高估值資產與非美貨幣施加系統性壓力。",
+      "impact": "推升長天期美債殖利率，封鎖降息空間",
       "confidence": "高"
     },
     {
-      "driver": "美伊地緣政治局勢與原油供給不確定性",
+      "driver": "高利率維持更久",
       "evidence": [
-        "川普對伊朗表態與美伊談判變數引發油價劇烈波動",
-        "布蘭特原油一度站上109美元，隨後因談判傳聞回落"
+        "Fed官員鷹派談話",
+        "市場對降息預期反轉"
       ],
-      "impact": "波動的原油價格持續干擾通膨預期，同時為黃金與美元提供階段性的地緣政治避險溢價。",
-      "confidence": "中"
+      "impact": "強化美元利差優勢，壓抑非美資產",
+      "confidence": "高"
     }
   ],
   "confirming_signals": [
-    "30年期美債殖利率突破5%並創下多年新高，確認市場對高利率維持更久（Higher for Longer）的定價。",
-    "美元指數突破99關卡，導致新台幣、日圓等亞洲貨幣同步承壓貶值，新台幣連4貶並測試31.7水位。",
-    "黃金在美債殖利率與美元雙升的交易日中顯著承壓下挫，反映高利率機會成本的壓制。"
+    "美債殖利率與美元指數同步走強，確認緊縮傳導鏈。",
+    "亞洲貨幣（台幣、日圓）因利差擴大而承壓。"
   ],
   "contradicting_signals": [
-    "美伊談判一度傳出曙光導致油價回落，暫時緩解市場對再通膨的極端擔憂，與再通膨主線出現短暫背離。",
-    "在特定交易日中，黃金與美元/美債殖利率同步上漲，顯示地緣政治避險需求在特定時刻蓋過了高利率的壓制效應。"
+    "房市數據疲軟引發成長降溫擔憂，曾短暫導致美元與殖利率脫鉤。",
+    "地緣政治（美伊協議傳聞）作為修正因子，推升黃金避險需求，抵銷部分利率壓制。"
   ],
   "news_based_corrections": [
-    "修正了單純由短期通膨數據驅動利率的敘事，引入了『期限溢價重估』與『美債供需失衡』作為推升長端殖利率的主因，顯示市場正重新評估長期財政與利率風險。"
+    "修正了對『成長降溫』僅為雜訊的判斷，數據顯示成長擔憂已成為市場定價利率的重要修正因子。"
   ],
   "watch_points": [
-    "美國長端公債標售需求，以確認期限溢價是否持續擴大。",
-    "美伊地緣政治談判的實質進展及其對原油供給與通膨預期的影響。",
-    "亞洲央行面對本幣貶值壓力是否採取實質干預措施。"
+    "美債30年期殖利率是否進一步挑戰5.5%關卡。",
+    "Fed官員對經濟前景與通膨路徑的最新表態。",
+    "美伊地緣政治談判進展對能源價格與避險情緒的影響。"
   ],
   "news_categories": {
     "通膨預期": [
       {
-        "title": "〈能源盤後〉川普對伊朗失去耐心 美伊關係又惡化 油價飆逾3% 布蘭特站上109美元",
+        "title": "美債殖利率揚 Fed難降息",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9lOEFuaUtWRDFzc01GQ1drWmo0TEN0WFJ1ZUh6bllDRWNLMWJPMk10OFJ1dlRnbGItVmpLLUlhMHExVkJEclYwYTZnSHFhdXlUQUtQaXBjNGlzQdIBX0FVX3lxTE9tRDFrNEdJVFJ1TzQxUjVQbmptdEJ1bk9FTFJnWmxHRGRILVlwUTU5dlI4bDZRMTBkOUJqWW1BRFE2RnRzQ3h6d2tWNk1XaWhsNnY1VXZWUDI5YzRnalNZ?oc=5",
+        "published_at": "2026-05-15 16:20:26 UTC",
+        "theme": "inflation_energy",
+        "why_it_matters": "確認通膨黏性導致降息空間受限。"
+      },
+      {
+        "title": "〈能源盤後〉川普對伊朗失去耐心 美伊關係又惡化 油價飆逾3%",
         "source": "news.cnyes.com",
         "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFA3amdjek1hX1pkWEpXNUJmZkY3dmFqZDhLMXpGMk9BUExBTUtHSHdsR0t2NTRzOW9MZDMwU2dmRUFoTmI0QXRueVlIajdSTUE?oc=5",
         "published_at": "2026-05-15 22:46:29 UTC",
         "theme": "inflation_energy",
-        "why_it_matters": "反映地緣政治緊張局勢直接推升原油風險溢價，強化市場的再通膨預期。"
-      },
-      {
-        "title": "〈能源盤後〉美伊談判現曙光 油價回落但110美元警戒線未解 油市仍處高震盪模式",
-        "source": "cnyes.com",
-        "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5UQmhrclR6SWJHdkVLUGJWLVotaXJFQWFRQVppZUYwVERfZTVMaDZrejdURHRQVzVSby03eXVaLVhXRzV0YVZTbTUwbw?oc=5",
-        "published_at": "2026-05-19 21:38:43 UTC",
-        "theme": "inflation_energy",
-        "why_it_matters": "顯示油價高檔震盪，談判進展成為通膨預期波動的關鍵修正因子。"
-      },
-      {
-        "title": "〈能源盤後〉美伊談判變數壓垮市場 油價飆漲4%後逆轉收挫 布油跌破103美元創近兩週低點",
-        "source": "news.cnyes.com",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBHRTZWWWFhazd0d3Y1NmNSRUk5dzlZdlNPN3doY21NSGJIWEhwTHZacUFsbXdHRTlaWDE0N0pzb3d0dUFQSHZOMXVuWFlfLVU?oc=5",
-        "published_at": "2026-05-21 21:40:07 UTC",
-        "theme": "inflation_energy",
-        "why_it_matters": "證實地緣政治不確定性導致原油市場波動加劇，影響通膨預期的穩定性。"
-      },
-      {
-        "title": "央行不排除上修CPI增幅 利率走向 下月說分明",
-        "source": "經濟日報",
-        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBSQU9wMDhuSlZZZzBwSGd4aWRkeUVGNFAxaUNtN3dWcXdvZ2s0TDFlLUwwdTl2Y2pZUUlQZ3ZubXg5Zy1RNzlHdmxveko5NkZHQXg0TXZrVUQwUdIBX0FVX3lxTE5DSVo4b251T3BRMUdwRXpLeThZQzBTVFdoclY2ZVptME5WSkZLaV9weTJLVUJZRm1rZlhwbVVEbG1sZTM5dzRtaUtQbVp5T21XVEd6Q1M2Z0NCejlWWXBz?oc=5",
-        "published_at": "2026-05-20 16:24:15 UTC",
-        "theme": "inflation_energy",
-        "why_it_matters": "顯示輸入性通膨與能源壓力已開始影響亞洲央行的通膨預估與貨幣政策考量。"
+        "why_it_matters": "地緣政治風險推升油價，強化通膨預期。"
       }
     ],
     "利率": [
@@ -93,15 +73,7 @@
         "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5QVDQ2aWhTNDBYTjVMLW1MVlVBLU5sQ1JPbFRKREl0Vk1yMFVCenkxUWJuamtLLXlVdVdmMkxLZHFUUWxjSFJZclg1dGo4Q0k?oc=5",
         "published_at": "2026-05-20 06:20:03 UTC",
         "theme": "rates_bonds_fed",
-        "why_it_matters": "長端殖利率創歷史性新高，反映期限溢價重估與市場對長期高利率常態化的定價。"
-      },
-      {
-        "title": "降息夢碎、30年美債衝破5% 債市邁向高殖利率新常態",
-        "source": "news.cnyes.com",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE05NGRsZjVwQnR2dlR2Q1FPUXdQUUNheDVvRjRFQkFwSGJZUEVYQ1JKZkVxR1haQ3ROMlA4TkQ3czZPeUFFTm11YUZmNm9uVmc?oc=5",
-        "published_at": "2026-05-18 08:29:10 UTC",
-        "theme": "rates_bonds_fed",
-        "why_it_matters": "確認債市交易邏輯轉向，降息預期降溫，高殖利率成為市場新基準。"
+        "why_it_matters": "期限溢價重估，債市邁向高殖利率新常態。"
       },
       {
         "title": "戴蒙示警利率還會更高 Fed會議紀錄多數官員主張將升息列入選項",
@@ -109,23 +81,7 @@
         "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPMVVlR0IxcV9FR1dSeGx5d1BxNHhQdXhDRTJPczBnWEhxNm1aMXJHX0VqeHdYc2Y2SGZYSk9XTUUxSGJ0dkZmTkR2UlozcWtESlEtRFg3SWZtNEx0Y2JocXFYWC1ma2M5c19JWlZJSHdEOGh5VGdEamVIYm80TVFKbVFCbF92cFQ3bkJ0Y3lJLU7SAV9BVV95cUxPNjhfblJTRHhyaF9iWVdNc1NUdnJ0LWE0NmV6RzR3YXEzU2RvU2xFMnBnTVpHaWluZjRZMHVRbnc1eGpNZFN5TFluVDZ6dHI0RS1zZ3F0OF9FaXVwVFE3cw?oc=5",
         "published_at": "2026-05-21 05:19:58 UTC",
         "theme": "rates_bonds_fed",
-        "why_it_matters": "聯準會會議紀錄釋放鷹派訊號，甚至提及升息選項，為高利率維持更久提供政策依據。"
-      },
-      {
-        "title": "美債避險神話動搖？美國30年期殖利率衝上5.18% 創2007年來新高",
-        "source": "news.cnyes.com",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFB4bnU5ck9YT1l2V1EydTVCR0pZd3hEZXhsTDJqSjlRTUI5dk8zYzZ4aEhJWU5USTV2bF91eDdpUlhtaVpTUUdrdVR2dF9OUkE?oc=5",
-        "published_at": "2026-05-19 14:10:09 UTC",
-        "theme": "rates_bonds_fed",
-        "why_it_matters": "長端美債遭拋售，顯示財政赤字與供需壓力推升期限溢價，避險屬性受到考驗。"
-      },
-      {
-        "title": "日本30年債殖利率飆破4% 創26年新高 股匯同步重挫 再現「三殺」",
-        "source": "news.cnyes.com",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1uQWxoaEpmU1Z5Vldqd0I1WmNhRExkSkU5TkM2MVRTR3prSzZzQ1ZKaDZmM0NLdDRjTm41bHlONGtKNzNFMmhLU3FfMUVDdms?oc=5",
-        "published_at": "2026-05-16 01:00:57 UTC",
-        "theme": "rates_bonds_fed",
-        "why_it_matters": "全球債市共振，日本長端利率上行反映全球再通膨與緊縮壓力外溢。"
+        "why_it_matters": "Fed鷹派立場支撐高利率維持更久。"
       }
     ],
     "貨幣": [
@@ -135,57 +91,17 @@
         "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1LazNCTjdXeVliQ3dBampPVXlWNE1JOERhcHVNd1ZzaVZBcndvLW9YZGdtMURtZkNkLWZTUkVVR21qSll2RmlsR2NKXzRBeTI0?oc=5",
         "published_at": "2026-05-15 10:42:22 UTC",
         "theme": "dollar_asia_fx",
-        "why_it_matters": "美元指數逼近100大關，利差優勢驅動資金回流美國，非美貨幣普遍承壓。"
-      },
-      {
-        "title": "台北股匯「雙殺」 熱錢匯出新台幣爆量重貶逾1角 短線測試31.7",
-        "source": "經濟日報",
-        "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE00M0kxbmpyZ0F4WndlY05ZX0dDdUprbFNlNlVqcmtselh4Q3E2TnNiSXl6R0pSRmVOT1o1QnhVMzV3NDVSVl8ycnplb3MxRkdhUUg1aGEzd2R1dWtrSWNmdmdRRDBaRWhrSFU2NFZEYlllZXdKcV9n0gFfQVVfeXFMTjk0aVJGcWsySGVaM2xoNGUzQTJ2S3IwYUlKNW15WUk2cXdNODVDRFVFOU9RT21QMEhVUFJuR0VQNGd6WFdFRzNBa3p6VENLWUJMRzBqbmlUTDd3dzdOdkE?oc=5",
-        "published_at": "2026-05-19 16:58:04 UTC",
-        "theme": "dollar_asia_fx",
-        "why_it_matters": "外資加速匯出，顯示高美債殖利率對新興市場資金具有強烈拉力。"
-      },
-      {
-        "title": "美元偏強、日圓承壓 國銀估日圓短線續偏弱",
-        "source": "經濟日報",
-        "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBQS29uRTBRd3Fac012X0ZQc0hoLXl2enY4MkVSVzJiNGZDVUVDeURaUTVWcWswOENRU0I2TXZQaWNyemk5cVhyU19CTmlPd3lpY05DeDRqTHc2eW5DT0Q1dVphVm9Mei1laG01dnFTNmhidmg0TE9Z0gFfQVVfeXFMT2Z6YmNMakdmNWZ2NlpaM09udzFnYWt2VW0xbmtLNVhidTFrMHpMVjVSWFZuYjZsVV9vY2RpZjJ3MzIxZGFMREFKTjlYNFp5TWFKYmpJU0F6VkZzU1BFLTQ?oc=5",
-        "published_at": "2026-05-15 03:39:42 UTC",
-        "theme": "dollar_asia_fx",
-        "why_it_matters": "美日利差維持高位，日圓貶值壓力未消，可能引發亞洲鄰國貨幣競爭性貶值。"
-      },
-      {
-        "title": "〈台幣〉聯準會不排除重啟升息 爆量重挫1.05角收31.65元",
-        "source": "news.cnyes.com",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE40NnBNazd4OWxDaFhvTnRaM2lEZW9wb00zZWxDejNqM0JqLWVNTlZqOVJEWS12ZUtEWGd3Yk9xdWIxazZUejIxZTJDeEszNlU?oc=5",
-        "published_at": "2026-05-19 08:54:35 UTC",
-        "theme": "dollar_asia_fx",
-        "why_it_matters": "升息預期重燃直接打擊台幣匯率，資金流出壓力顯著增加。"
+        "why_it_matters": "強勢美元壓抑亞幣，利差效應顯著。"
       }
     ],
     "其他": [
       {
         "title": "〈貴金屬盤後〉美元美債殖利率雙升 金價下挫逾1%",
         "source": "news.cnyes.com",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFPLYkowVTQ1U0dLOW4tVjl5dFRRR0hJbVNWLWY1bng5OVk4TFR3MXdLNFF2Wkp1NGRadDBvRj擺rSU4tWHRXa2xDajRlZGl2S3M?oc=5",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBMYkowVTQ1U0dLOW4tVjl5dFRRR0hJbVNWLWY1bng5OVk4TFR3MXdLNFF2Wkp1NGRadDBvRjBySU4tWHRXa2xDajRlZGl2S3M?oc=5",
         "published_at": "2026-05-20 01:52:44 UTC",
         "theme": "other_macro",
-        "why_it_matters": "證實黃金在強美元與高實質利率環境下的下行壓力，符合傳統傳導鏈。"
-      },
-      {
-        "title": "〈貴金屬盤後〉金價小漲 油價和美債殖利率下跌提供支撐",
-        "source": "news.cnyes.com",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBxUTBpMzJDM3lUa2tsT2VqOU1Ib1pvU3g0d25NWHJ0Y2k4QXBkaEpqanJjbURLcmpoT1dUZmFkZTdpRnB4QmtuTUpqbWpydGM?oc=5",
-        "published_at": "2026-05-21 22:55:53 UTC",
-        "theme": "other_macro",
-        "why_it_matters": "顯示當利率與油價回落時，黃金能迅速獲得喘息，反映其對利率的高度敏感性。"
-      },
-      {
-        "title": "〈貴金屬盤後〉金價一周跌逾2% 美債殖利率在通膨升溫疑慮中上揚",
-        "source": "news.cnyes.com",
-        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFByVEVQQmN1UmkxdVE4MXh6ZG9tWnhlOGM0OVRxcWdSbVNyM1hiTmZBSmpfOElnMEN2MnRKYWZYUlViN2drVUJVWnpiZVhISlE?oc=5",
-        "published_at": "2026-05-16 19:42:16 UTC",
-        "theme": "other_macro",
-        "why_it_matters": "總結全週黃金走勢，再通膨預期推升利率，構成黃金的主要利空。"
+        "why_it_matters": "利率與美元雙升對金價構成直接壓力。"
       }
     ]
   },
@@ -195,25 +111,9 @@
       "source": "news.cnyes.com",
       "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5QVDQ2aWhTNDBYTjVMLW1MVlVBLU5sQ1JPbFRKREl0Vk1yMFVCenkxUWJuamtLLXlVdVdmMkxLZHFUUWxjSFJZclg1dGo4Q0k?oc=5",
       "published_at": "2026-05-20 06:20:03 UTC",
-      "theme": "rates_bonds_fed",
-      "why_it_matters": "此為本週最具指標性的事件，象徵長端債券定價體制的轉變，直接推動全球資產重新定價。"
-    },
-    {
-      "title": "戴蒙示警利率還會更高 Fed會議紀錄多數官員主張將升息列入選項",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPMVVlR0IxcV9FR1dSeGx5d1BxNHhQdXhDRTJPczBnWEhxNm1aMXJHX0VqeHdYc2Y2SGZYSk9XTUUxSGJ0dkZmTkR2UlozcWtESlEtRFg3SWZtNEx0Y2JocXFYWC1ma2M5c19JWlZJSHdEOGh5VGdEamVIYm80TVFKbVFCbF92cFQ3bkJ0Y3lJLU7SAV9BVV95cUxPNjhfblJTRHhyaF9iWVdNc1NUdnJ0LWE0NmV6RzR3YXEzU2RvU2xFMnBnTVpHaWluZjRZMHVRbnc1eGpNZFN5TFluVDZ6dHI0RS1zZ3F0OF9FaXVwVFE3cw?oc=5",
-      "published_at": "2026-05-21 05:19:58 UTC",
-      "theme": "rates_bonds_fed",
-      "why_it_matters": "政策面與市場意見領袖的鷹派表態，為『高利率維持更久』提供了堅實的論點支撐。"
-    },
-    {
-      "title": "美元指數衝破99 新台幣連4貶、週線翻黑",
-      "source": "UDN",
-      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1LazNCTjdXeVliQ3dBampPVXlWNE1JOERhcHVNd1ZzaVZBcndvLW9YZGdtMURtZkNkLWZTUkVVR21qSll2RmlsR2NKXzRBeTI0?oc=5",
-      "published_at": "2026-05-15 10:42:22 UTC",
-      "theme": "dollar_asia_fx",
-      "why_it_matters": "反映『高利率 → 強美元 → 亞幣承壓』傳導鏈的實質影響，直接衝擊新興市場資金流向。"
+      "theme": "long_bond_yields",
+      "why_it_matters": "本週市場定價的核心，反映期限溢價重估與高利率常態化。"
     }
   ],
-  "editor_note_for_forest_summary": "本週市場主線由『再通膨預期』與『期限溢價重估』雙輪驅動。長端美債殖利率（如30年期）突破5%並創下多年新高，顯示市場正重新評估長期財政赤字與高利率常態化的風險，而非僅聚焦於短期通膨數據。此一體制轉變強化了美元的利差優勢，美元指數逼近99.3，導致新台幣與日圓等亞洲貨幣面臨顯著的資金流出與貶值壓力。儘管期間房市數據疲軟一度引發成長放緩疑慮，並對美元構成短暫修正，但聯準會會議紀錄的鷹派基調與地緣政治變數（如美伊談判波動）迅速收復了利率跌幅。黃金走勢則呈現分歧，雖受制於高實質利率，但地緣政治避險溢價提供了下檔支撐。整體而言，『高利率維持更久』的宏觀敘事依然穩固，資產傳導鏈條高度連貫，下週應密切觀察長端公債標售需求與亞洲央行對匯率的干預態度。"
+  "editor_note_for_forest_summary": "本週市場主線由『再通膨預期』轉向『期限溢價重估』，美債長天期殖利率飆升成為驅動全球資產配置的關鍵。儘管房市數據與地緣政治帶來修正因子，但市場對『高利率維持更久』的共識依然強勁，導致美元維持強勢，亞幣與黃金在避險需求與利差壓制間劇烈拉鋸。"
 }
