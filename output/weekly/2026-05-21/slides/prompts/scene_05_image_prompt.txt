@@ -3,36 +3,32 @@ Create one 16:9 static slide image for a weekly macro video.
 This slide must be based on the following Pro-generated scene plan. Keep the narrative and visual logic, but simplify the image into a clean NotebookLM-style whiteboard card.
 
 [Scene title]
-拉鋸：黃金的雙重壓力與避險角色
+修正因子：成長擔憂與地緣政治的雜音
 
 [Scene purpose]
-以黃金為例，總結本週市場的拉鋸格局。解釋黃金如何同時受到『高利率、強美元』的壓抑，又在『成長放緩擔憂』升溫時，獲得避險買盤的短暫支撐。
+說明總經並非線性傳導，本週出現了干擾主敘事的修正因子。
 
 [Narrative focus]
-呈現黃金在『通膨vs.成長』拉鋸下的雙重角色，驗證本週核心主題。
+解釋為何週中利率與美元一度回落。疲軟的房市數據引發了對經濟『成長』的擔憂，而美伊談判傳聞則帶來了『避險』情緒，這兩股力量短暫地對抗了『高利率』的主線。
 
 [Visual direction]
-畫面中央是一個手繪的金條圖示。左邊一條黑色的粗箭頭指向金條，標示『高利率 & 強美元』，代表壓力。右邊一條橘色的、較細的箭頭也指向金條，標示『避險需求』，代表支撐。兩股力量形成拉鋸，金條下方畫一條震盪的價格走勢線。視覺上呈現拔河的對峙感。
+畫面中間是一條粗壯的橘色主線，標示「高利率傳導」。從下方有兩條較細的、虛線的藍色箭頭向上衝擊主線，分別標示「房市疲軟 ➝ 成長擔憂」與「美伊談判 ➝ 避險需求」，在主線上造成一個短暫的凹陷或波動。
 
 [Original image prompt from Pro]
-Create a 16:9 NotebookLM-style whiteboard image. In the center, a simple hand-drawn gold bar icon. From the left, a thick black arrow points at the gold bar, labeled with '高利率壓力'. From the right, a thinner orange arrow points at the gold bar, labeled '避險支撐'. This creates a visual tug-of-war. Below the gold bar, a volatile, sideways price action line is drawn to represent the struggle. Style: off-white background, gray grid, black and orange highlights.
+A 16:9 NotebookLM-style whiteboard image. A thick, solid orange arrow labeled '高利率傳導' moves horizontally across the middle. From below, two thinner, dashed navy blue arrows push upwards against the orange arrow, causing a visible 'dip' in its path. The first blue arrow is labeled '房市疲軟 → 成長擔憂'. The second is labeled '美伊談判 → 避險需求'. The style is clean and conceptual on an off-white grid background.
 
 [Suggested on-screen text, use only if helpful and keep minimal]
 {
-  "headline": "黃金的十字路口",
-  "key_numbers": [
-    {
-      "label": "Gold",
-      "value": "4480",
-      "unit": "USD/oz"
-    }
-  ],
+  "headline": "主線之外的修正力量",
+  "key_numbers": [],
   "short_bullets": [
-    "壓力：高利率機會成本、強勢美元",
-    "支撐：經濟成長放緩的避險需求",
-    "價格反映市場核心矛盾"
+    "房市數據疲軟，引發成長放緩擔憂",
+    "美伊談判傳聞，油價重挫、避險情緒升溫",
+    "資產走勢一度脫鉤，反映市場多空拉鋸"
   ],
-  "news_lines": []
+  "news_lines": [
+    "油價重挫近6% 創近一個月最大日跌幅"
+  ]
 }
 
 Production instructions:

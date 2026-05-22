@@ -3,37 +3,37 @@ Create one 16:9 static slide image for a weekly macro video.
 This slide must be based on the following Pro-generated scene plan. Keep the narrative and visual logic, but simplify the image into a clean NotebookLM-style whiteboard card.
 
 [Scene title]
-起點：再通膨預期與殖利率飆升
+傳導起點：期限溢價的關鍵重估
 
 [Scene purpose]
-解釋本週傳導鏈的起點，說明油價如何強化再通膨預期，並直接推動30年期美債殖利率創下19年新高。
+解釋本週傳導鏈的真正驅動核心：長債殖利率飆升，及其背後的期限溢價重估。
 
 [Narrative focus]
-建立『再通膨預期 → 長債殖利率飆升』的因果關係，確立『高利率維持更久』的宏觀敘事。
+強調30年期美債殖利率突破5.2%的歷史意義，這不僅反映通膨，更反映市場對持有長期債券所要求的風險補償（期限溢價）正在大幅拉高。
 
 [Visual direction]
-畫面呈現一個因果鏈：左邊是油桶圖示與上升的箭頭，標示『能源價格』；中間一個大的右向箭頭，標示『強化通膨預期』；右邊是一個急遽攀升的殖利率曲線圖，標示『30年債息 > 5.2%』。整體視覺強調從能源到利率的直接驅動關係。
+畫面核心是一個陡峭上升的30年美債殖利率走勢圖，突破一個標示為「19年新高」的水平線。圖表旁用手繪風格標註「期限溢價重估」是主要推力。
 
 [Original image prompt from Pro]
-Create a 16:9 NotebookLM-style whiteboard image. On the left, a hand-drawn oil barrel icon with an orange upward arrow labeled '能源價格'. A large black arrow points right, labeled '再通膨預期'. On the right, a stark, hand-drawn chart shows a bond yield curve sharply breaking a historical high, with a large orange tag '30年債息 > 5.2% (19年新高)'. The style is off-white background, gray grid, black lines, orange highlights, minimal text.
+A 16:9 NotebookLM-style whiteboard image. A large, hand-drawn chart dominates the center, showing the 30-year US Treasury yield sharply breaking above a horizontal line labeled '5.2% (19-year high)'. An upward orange arrow runs alongside the yield curve, labeled with the Traditional Chinese text '期限溢價重估'. In the background, a faint doodle of a Fed building with a hawk icon. The overall style is clean, with an off-white grid background, black lines, and orange accents.
 
 [Suggested on-screen text, use only if helpful and keep minimal]
 {
-  "headline": "高利率新常態",
+  "headline": "長債利率的風險重估",
   "key_numbers": [
     {
-      "label": "30Y Treasury Yield",
+      "label": "30年美債殖利率",
       "value": ">5.2%",
       "unit": ""
     }
   ],
   "short_bullets": [
-    "能源價格強化通膨預期",
-    "長債殖利率創19年新高",
-    "市場定價『高利率維持更久』"
+    "創19年新高",
+    "市場要求更高的「期限溢價」",
+    "高利率維持更久（Higher for Longer）定價"
   ],
   "news_lines": [
-    "30年期美債殖利率衝破5.2%創19年新高"
+    "Fed會議紀錄：多數官員主張將升息列入選項"
   ]
 }
 

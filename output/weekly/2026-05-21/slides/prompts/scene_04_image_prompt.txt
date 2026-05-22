@@ -3,31 +3,37 @@ Create one 16:9 static slide image for a weekly macro video.
 This slide must be based on the following Pro-generated scene plan. Keep the narrative and visual logic, but simplify the image into a clean NotebookLM-style whiteboard card.
 
 [Scene title]
-修正：成長放緩的擔憂浮現
+資產反應：亞幣與黃金的壓力測試
 
 [Scene purpose]
-介紹本週的修正因子，說明疲軟的美國房市數據如何引發市場對經濟成長放緩的擔憂，並短暫地壓抑了美元的強勢，顯示市場定價不再只由單一利率因素主導。
+展示強勢美元的外溢效應，解釋為何亞洲貨幣普遍貶值，以及黃金價格承壓。
 
 [Narrative focus]
-解釋『成長放緩擔憂』如何成為修正『高利率→強美元』主線敘事的關鍵變數。
+點出美元走強的雙重打擊：對亞幣形成資金外流的貶值壓力；對黃金則提高了持有這種無息資產的機會成本。
 
 [Visual direction]
-畫面呈現一條向上的主趨勢線，標示為『美元走勢』。中間一個手繪的房子圖示，帶有向下的裂縫與箭頭，旁邊標示『房市數據疲軟』，從這個圖示發出一條橘色的波浪線，衝擊並造成主趨勢線出現一個短暫的凹陷，凹陷處標示『成長擔憂』。視覺上要清晰表達一個修正力量如何干擾主趨勢。
+畫面呈現一個巨大的、強勢的「USD」龍頭，正在吸走周圍較小的貨幣符號（JPY, TWD, KRW）的能量。在另一側，一個金條（Gold）圖示上，被一個標示「機會成本上升」的壓力計施壓。
 
 [Original image prompt from Pro]
-Create a 16:9 NotebookLM-style whiteboard image. A main, hand-drawn black trend line moves upwards from left to right, labeled '美元主趨勢'. In the middle of the screen, a simple drawing of a house with a crack and a downward orange arrow is shown, labeled '房市疲軟'. From this house icon, an orange wavy arrow strikes the main trend line, causing a visible dip or interruption. At the point of the dip, add a text label '成長擔憂浮現'. Style: off-white background, gray grid, black lines, orange highlights.
+A 16:9 NotebookLM-style whiteboard image. On the left, a large, powerful 'USD' symbol acts like a vortex, with faint orange lines pulling in smaller, fading currency symbols for 'JPY', 'TWD', and 'KRW'. On the right, a hand-drawn gold bar icon is being squeezed by a clamp labeled with Traditional Chinese text '機會成本上升'. The background is a clean, off-white grid.
 
 [Suggested on-screen text, use only if helpful and keep minimal]
 {
-  "headline": "成長擔憂 修正美元",
-  "key_numbers": [],
+  "headline": "美元強權下的資產表現",
+  "key_numbers": [
+    {
+      "label": "USD/TWD",
+      "value": ">31.6",
+      "unit": ""
+    }
+  ],
   "short_bullets": [
-    "美國房市數據疲軟",
-    "引發經濟硬著陸疑慮",
-    "美元強勢主線遭遇短暫逆風"
+    "亞洲貨幣面臨資金外流壓力",
+    "高利率環境，黃金機會成本上升",
+    "全球資產定價錨點轉向美元"
   ],
   "news_lines": [
-    "房市數據疲軟引發成長擔憂，美元短暫走弱"
+    "〈台幣〉聯準會不排除重啟升息 爆量重挫"
   ]
 }
 
