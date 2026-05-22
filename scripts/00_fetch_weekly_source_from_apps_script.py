@@ -16,7 +16,9 @@ Optional env:
 
 Output:
 - data/weekly_video_source.json
+- data/market_history_series.json
 - output/weekly/YYYY-MM-DD/weekly_source_text.md
+- output/weekly/YYYY-MM-DD/weekly_market_series.json
 """
 
 import argparse
@@ -123,6 +125,25 @@ def infer_week_label(data: Dict[str, Any]) -> str:
     return datetime.utcnow().strftime("%Y-%m-%d")
 
 
+def infer_market_week_label(data: Dict[str, Any]) -> str:
+    meta = data.get("meta") or {}
+    range_data = meta.get("range") or data.get("range") or {}
+
+    end_date = range_data.get("end") or range_data.get("end_date") or data.get("end_date")
+    if end_date:
+        return str(end_date)
+
+    dates = []
+    for item in data.get("series") or []:
+        if not isinstance(item, dict):
+            continue
+        for point in item.get("points") or []:
+            if isinstance(point, dict) and point.get("date"):
+                dates.append(str(point.get("date")))
+
+    return max(dates) if dates else datetime.utcnow().strftime("%Y-%m-%d")
+
+
 def build_daily_section(day: Dict[str, Any], index: int) -> str:
     date = safe_text(day.get("date"))
     headline = safe_text(day.get("headline"))
@@ -226,28 +247,53 @@ def main() -> None:
     if not args.url:
         raise EnvironmentError("Missing WEEKLY_SOURCE_URL. Add your Apps Script deployment URL as a GitHub Actions secret.")
 
-    final_url = add_query_params(args.url, {
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+
+    # 1) Fetch daily narrative source from History_Data.
+    weekly_url = add_query_params(args.url, {
         "mode": "weekly_video_source",
         "start": args.start,
         "end": args.end,
     })
 
-    print("[INFO] Fetching weekly source JSON from Apps Script endpoint...")
-    data = fetch_json(final_url)
+    print("[INFO] Fetching weekly_video_source JSON from Apps Script endpoint...")
+    weekly_data = fetch_json(weekly_url)
 
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    save_json(DATA_DIR / "weekly_video_source.json", data)
+    save_json(DATA_DIR / "weekly_video_source.json", weekly_data)
     print(f"[OK] Saved {DATA_DIR / 'weekly_video_source.json'}")
 
-    week_label = infer_week_label(data)
+    week_label = infer_week_label(weekly_data)
     week_dir = OUTPUT_WEEKLY_DIR / week_label
     week_dir.mkdir(parents=True, exist_ok=True)
 
-    source_text = build_weekly_source_text(data)
+    source_text = build_weekly_source_text(weekly_data)
     source_path = week_dir / "weekly_source_text.md"
     save_text(source_path, source_text)
-
     print(f"[OK] Saved {source_path}")
+
+    # 2) Fetch market history series from Market_Source_Test.
+    market_url = add_query_params(args.url, {
+        "mode": "market_history_series",
+        "start": args.start,
+        "end": args.end,
+    })
+
+    print("[INFO] Fetching market_history_series JSON from Apps Script endpoint...")
+    market_data = fetch_json(market_url)
+
+    save_json(DATA_DIR / "market_history_series.json", market_data)
+    print(f"[OK] Saved {DATA_DIR / 'market_history_series.json'}")
+
+    market_week_label = infer_market_week_label(market_data)
+    market_week_dir = OUTPUT_WEEKLY_DIR / market_week_label
+    market_week_dir.mkdir(parents=True, exist_ok=True)
+
+    market_path = market_week_dir / "weekly_market_series.json"
+    save_json(market_path, market_data)
+    print(f"[OK] Saved {market_path}")
+
+    if market_week_label != week_label:
+        print(f"[WARN] weekly_video_source week={week_label}, market_history_series week={market_week_label}")
 
 
 if __name__ == "__main__":
