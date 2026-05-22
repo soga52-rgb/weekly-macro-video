@@ -3,30 +3,32 @@ Create one 16:9 static slide image for a weekly macro video.
 This slide must be based on the following Pro-generated scene plan. Keep the narrative and visual logic, but simplify the image into a clean NotebookLM-style whiteboard card.
 
 [Scene title]
-下週觀察：驗證傳導鏈的關鍵指標
+下週觀察重點
 
 [Scene purpose]
-收斂本週的討論，並為觀眾提供下週需要關注的關鍵數據與事件，以判斷本週的傳導鏈是否會延續或反轉。
+總結並給出下週市場驗證指標
 
 [Narrative focus]
-將觀察重點聚焦在三個最可能影響當前傳導鏈的變數上：長債殖利率的關鍵心理關卡、聯準會官員的最新表態，以及地緣政治的實質進展。
+關注長債殖利率是否挑戰5.5%關卡，以及Fed官員對通膨路徑的進一步表態。
 
 [Visual direction]
-畫面是一個簡潔的待辦清單或儀表板，上面有三個重點項目，每個項目旁邊都有一個放大鏡或望遠鏡的圖示，強調這是需要密切觀察的目標。
+NotebookLM 白板筆記風格。畫面上方畫一個放大鏡圖示，下方列出一個帶有核取方塊（Checklist）的清單，包含三個重點觀察項目。重點項目用橘色手繪底線強調。畫面保持留白與乾淨。
 
 [Original image prompt from Pro]
-A 16:9 NotebookLM-style whiteboard image. The visual is a clean checklist titled '下週觀察重點'. There are three items, each preceded by a hand-drawn magnifying glass icon. The items are: 1. '30年債殖利率 vs 5.5%關卡', 2. 'Fed 官員最新談話', and 3. '美伊談判實質進展'. The layout is spacious and clear, with an off-white grid background, black text, and orange icons.
+NotebookLM style, whiteboard explainer, off-white background, light gray grid paper texture. Black hand-drawn line art. A hand-drawn magnifying glass icon at the top. Below it, a simple checklist with three bullet points. Key phrases underlined with a rough orange marker stroke. Clean, uncluttered, professional macro outlook slide.
 
 [Suggested on-screen text, use only if helpful and keep minimal]
 {
-  "headline": "下週觀察重點",
+  "headline": "下週驗證：利率風險極限",
   "key_numbers": [],
   "short_bullets": [
-    "30年期美債殖利率是否挑戰5.5%？",
-    "Fed官員對通膨與成長的最新看法？",
-    "地緣政治風險如何影響油價與通膨預期？"
+    "30年美債是否挑戰5.5%",
+    "Fed官員對通膨最新表態",
+    "亞洲央行防禦性干預力道"
   ],
-  "news_lines": []
+  "news_lines": [
+    "關注央行政策展望與干預意願"
+  ]
 }
 
 Production instructions:

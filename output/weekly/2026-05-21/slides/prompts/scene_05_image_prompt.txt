@@ -3,31 +3,37 @@ Create one 16:9 static slide image for a weekly macro video.
 This slide must be based on the following Pro-generated scene plan. Keep the narrative and visual logic, but simplify the image into a clean NotebookLM-style whiteboard card.
 
 [Scene title]
-修正因子：成長擔憂與地緣政治的雜音
+成長擔憂的修正因子
 
 [Scene purpose]
-說明總經並非線性傳導，本週出現了干擾主敘事的修正因子。
+探討本週短暫打斷主線的修正變數
 
 [Narrative focus]
-解釋為何週中利率與美元一度回落。疲軟的房市數據引發了對經濟『成長』的擔憂，而美伊談判傳聞則帶來了『避險』情緒，這兩股力量短暫地對抗了『高利率』的主線。
+房市數據疲軟與美伊談判傳聞，一度引發油價重挫與殖利率短暫回落。
 
 [Visual direction]
-畫面中間是一條粗壯的橘色主線，標示「高利率傳導」。從下方有兩條較細的、虛線的藍色箭頭向上衝擊主線，分別標示「房市疲軟 ➝ 成長擔憂」與「美伊談判 ➝ 避險需求」，在主線上造成一個短暫的凹陷或波動。
+NotebookLM 白板筆記風格。畫一個代表主線的粗實線箭頭，中間被一個帶有『警告/閃電』符號的橘色圓圈短暫打斷，圓圈旁標註『成長擔憂』與『油價重挫』。下方畫一條短暫向下的折線代表短暫脫鉤。
 
 [Original image prompt from Pro]
-A 16:9 NotebookLM-style whiteboard image. A thick, solid orange arrow labeled '高利率傳導' moves horizontally across the middle. From below, two thinner, dashed navy blue arrows push upwards against the orange arrow, causing a visible 'dip' in its path. The first blue arrow is labeled '房市疲軟 → 成長擔憂'. The second is labeled '美伊談判 → 避險需求'. The style is clean and conceptual on an off-white grid background.
+NotebookLM style, whiteboard explainer, off-white background, light gray grid paper texture. Black hand-drawn line art. A thick main trend arrow moving forward, temporarily interrupted by an orange circle with a warning/lightning bolt icon. Small labels pointing to the interruption saying 'Growth Concerns' and 'Oil Drop'. A small downward zig-zag line below indicating a temporary divergence. Minimalist, analytical style.
 
 [Suggested on-screen text, use only if helpful and keep minimal]
 {
-  "headline": "主線之外的修正力量",
-  "key_numbers": [],
+  "headline": "成長擔憂與地緣避險拉鋸",
+  "key_numbers": [
+    {
+      "label": "油價單日重挫",
+      "value": "6",
+      "unit": "%"
+    }
+  ],
   "short_bullets": [
-    "房市數據疲軟，引發成長放緩擔憂",
-    "美伊談判傳聞，油價重挫、避險情緒升溫",
-    "資產走勢一度脫鉤，反映市場多空拉鋸"
+    "美伊談判傳聞壓抑油價",
+    "房市疲軟引發成長疑慮",
+    "殖利率短暫回落"
   ],
   "news_lines": [
-    "油價重挫近6% 創近一個月最大日跌幅"
+    "油價重挫創近一個月最大日跌幅"
   ]
 }
 

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-22T02:25:43.138131Z",
+  "generated_at": "2026-05-22T03:24:58.335571Z",
   "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21",
   "image_model": "gemini-3.1-flash-image-preview",
   "target_scene_ids": [],
@@ -13,7 +13,7 @@
       "scene_id": "scene_02",
       "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/scene_02.png",
       "prompt": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/prompts/scene_02_image_prompt.txt",
-      "generated_ok": false,
+      "generated_ok": true,
       "mode": "image_from_scene_package_v2"
     },
     {

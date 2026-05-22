@@ -3,37 +3,37 @@ Create one 16:9 static slide image for a weekly macro video.
 This slide must be based on the following Pro-generated scene plan. Keep the narrative and visual logic, but simplify the image into a clean NotebookLM-style whiteboard card.
 
 [Scene title]
-資產反應：亞幣與黃金的壓力測試
+主要資產外溢影響
 
 [Scene purpose]
-展示強勢美元的外溢效應，解釋為何亞洲貨幣普遍貶值，以及黃金價格承壓。
+展示強美元對其他資產的壓抑
 
 [Narrative focus]
-點出美元走強的雙重打擊：對亞幣形成資金外流的貶值壓力；對黃金則提高了持有這種無息資產的機會成本。
+受強勢美元與利差擴大影響，亞幣普遍承壓，黃金也面臨機會成本上升的逆風。
 
 [Visual direction]
-畫面呈現一個巨大的、強勢的「USD」龍頭，正在吸走周圍較小的貨幣符號（JPY, TWD, KRW）的能量。在另一側，一個金條（Gold）圖示上，被一個標示「機會成本上升」的壓力計施壓。
+NotebookLM 白板筆記風格。畫面上方是一個強勢的美元圖示向下施壓。下方分為兩塊：左邊是亞洲貨幣（可畫一疊鈔票帶向下箭頭），右邊是黃金（金條帶向下箭頭）。用橘色標註『資金流出』與『機會成本』。
 
 [Original image prompt from Pro]
-A 16:9 NotebookLM-style whiteboard image. On the left, a large, powerful 'USD' symbol acts like a vortex, with faint orange lines pulling in smaller, fading currency symbols for 'JPY', 'TWD', and 'KRW'. On the right, a hand-drawn gold bar icon is being squeezed by a clamp labeled with Traditional Chinese text '機會成本上升'. The background is a clean, off-white grid.
+NotebookLM style, whiteboard explainer, off-white background, light gray grid paper texture. Black hand-drawn line art. At the top, a dominant Dollar symbol pressing downward with weight lines. Below, split into two sections: left side shows a stack of banknotes (Asian FX) with a downward arrow; right side shows a gold bar with a downward arrow. Orange accent tags indicating pressure. Clean, structured layout.
 
 [Suggested on-screen text, use only if helpful and keep minimal]
 {
-  "headline": "美元強權下的資產表現",
+  "headline": "非美資產全面承壓",
   "key_numbers": [
     {
-      "label": "USD/TWD",
-      "value": ">31.6",
-      "unit": ""
+      "label": "台幣測試",
+      "value": "31.7",
+      "unit": "關卡"
     }
   ],
   "short_bullets": [
-    "亞洲貨幣面臨資金外流壓力",
-    "高利率環境，黃金機會成本上升",
-    "全球資產定價錨點轉向美元"
+    "熱錢匯出亞幣承壓",
+    "實質利率走高壓抑黃金",
+    "強美元 -> 資金流出"
   ],
   "news_lines": [
-    "〈台幣〉聯準會不排除重啟升息 爆量重挫"
+    "新台幣爆量重貶逾1角"
   ]
 }
 

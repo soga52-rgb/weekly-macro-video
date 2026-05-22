@@ -3,36 +3,38 @@ Create one 16:9 static slide image for a weekly macro video.
 This slide must be based on the following Pro-generated scene plan. Keep the narrative and visual logic, but simplify the image into a clean NotebookLM-style whiteboard card.
 
 [Scene title]
-核心傳導：美元的利差護城河
+強勢美元的傳導鏈
 
 [Scene purpose]
-說明飆升的長債殖利率如何直接傳導至外匯市場，強化美元的強勢地位。
+說明核心變數如何反應驅動因子
 
 [Narrative focus]
-解釋「利差交易」的邏輯：當美國提供更高的無風險報酬率，全球資金自然會流向美元資產，推升美元指數。
+高利率預期擴大美元利差優勢，美元指數維持強勢格局。
 
 [Visual direction]
-畫面用一個簡化的天平或蹺蹺板呈現。一端是標有「US >5%」的砝碼，顯著高於另一端標有「Global <3%」的砝碼。天平向美國一側傾斜，一個強壯的「DXY」美元符號被推升向上。
+NotebookLM 白板筆記風格。左側畫一個代表利率的向上箭頭，連接著一條粗黑線指向右側代表美元的符號（$），美元符號用橘色高光強調。下方寫出簡單的傳導路徑：高利率 -> 利差擴大 -> 強美元。
 
 [Original image prompt from Pro]
-A 16:9 NotebookLM-style whiteboard image. The central visual is a simple, hand-drawn seesaw. On the left side, a large weight labeled 'US >5%' pushes the seesaw down. On the right, a smaller weight labeled 'Global <3%' is lifted high. From the rising right side, an orange arrow points upwards to a bold, ascending 'DXY' icon. The style is minimalist on an off-white grid background, using black lines and orange for emphasis.
+NotebookLM style, whiteboard explainer, off-white background, light gray grid paper texture. Black hand-drawn line art. On the left, an upward arrow symbolizing interest rates. A thick causal arrow points to the right, leading to a large Dollar sign ($) highlighted in warm amber/orange. Below, a simple flow path: 'High Rates -> Yield Spread -> Strong USD' (represented visually or with minimal text). Clean, educational macro-finance diagram.
 
 [Suggested on-screen text, use only if helpful and keep minimal]
 {
-  "headline": "利差擴大 推升美元",
+  "headline": "美元利差優勢確立",
   "key_numbers": [
     {
       "label": "DXY",
-      "value": "~99.2",
+      "value": "99.3",
       "unit": ""
     }
   ],
   "short_bullets": [
-    "美國利率優勢擴大",
-    "吸引全球套利資金流入",
-    "美元維持強勢格局"
+    "利差優勢擴大",
+    "避險屬性雙重支撐",
+    "高利率 -> 強美元"
   ],
-  "news_lines": []
+  "news_lines": [
+    "全球殖利率狂飆推升美元"
+  ]
 }
 
 Production instructions:
