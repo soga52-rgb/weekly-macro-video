@@ -118,7 +118,7 @@ def call_gemini_image(prompt: str, model: str, api_key: str) -> bytes:
             }
         ],
         "generationConfig": {
-            "temperature": 0.35,
+            "temperature": 0.9,
         },
     }
 
