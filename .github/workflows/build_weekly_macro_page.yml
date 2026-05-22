@@ -22,6 +22,7 @@ jobs:
       WEEKLY_MARKET_SERIES_URL: ${{ secrets.WEEKLY_MARKET_SERIES_URL }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_MODEL: gemini-3.1-flash-lite
+      GEMINI_ANALYSIS_MODEL: gemini-3.1-pro-preview
       GEMINI_IMAGE_MODEL: gemini-3.1-flash-image-preview
       WEEKLY_NEWS_MAX_ITEMS: "30"
       FORCE_REBUILD_DIAGRAM: ${{ inputs.force_rebuild_diagram }}
