@@ -13,8 +13,8 @@ permissions:
   contents: write
 
 env:
-  GEMINI_MODEL: gemini-2.5-pro
-  GEMINI_FALLBACK_MODELS: gemini-3.1-flash-lite,gemini-2.5-flash
+  GEMINI_MODEL: gemini-3.1-pro-preview
+  GEMINI_FALLBACK_MODELS: gemini-2.5-pro,gemini-3.1-flash-lite,gemini-2.5-flash
   GEMINI_TIMEOUT_SECONDS: 180
   GEMINI_MAX_RETRIES: 1
   GEMINI_RETRY_SLEEP_SECONDS: 15
