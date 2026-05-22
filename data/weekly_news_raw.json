@@ -3,7 +3,7 @@
     "source": "Google News RSS",
     "week_range": "2026-05-15 ～ 2026-05-21",
     "query_count": 21,
-    "raw_count": 78,
+    "raw_count": 84,
     "ranked_count": 30,
     "sources_preferred": [
       "site:udn.com",
@@ -13,15 +13,6 @@
     ]
   },
   "items": [
-    {
-      "theme": "fed_policy",
-      "query": "Fed 降息 縮表 美債 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "美債殖利率揚 Fed難降息 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9lOEFuaUtWRDFzc01GQ1drWmo0TEN0WFJ1ZUh6bllDRWNLMWJPMk10OFJ1dlRnbGItVmpLLUlhMHExVkJEclYwYTZnSHFhdXlUQUtQaXBjNGlzQdIBX0FVX3lxTE9tRDFrNEdJVFJ1TzQxUjVQbmptdEJ1bk9FTFJnWmxHRGRILVlwUTU5dlI4bDZRMTBkOUJqWW1BRFE2RnRzQ3h6d2tWNk1XaWhsNnY1VXZWUDI5YzRnalNZ?oc=5",
-      "published_at": "2026-05-15 16:20:26 UTC",
-      "score": 11
-    },
     {
       "theme": "fed_policy",
       "query": "聯準會 高利率 維持更久 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
@@ -74,6 +65,15 @@
       "source": "經濟日報",
       "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxPMVVlR0IxcV9FR1dSeGx5d1BxNHhQdXhDRTJPczBnWEhxNm1aMXJHX0VqeHdYc2Y2SGZYSk9XTUUxSGJ0dkZmTkR2UlozcWtESlEtRFg3SWZtNEx0Y2JocXFYWC1ma2M5c19JWlZJSHdEOGh5VGdEamVIYm80TVFKbVFCbF92cFQ3bkJ0Y3lJLU7SAV9BVV95cUxPNjhfblJTRHhyaF9iWVdNc1NUdnJ0LWE0NmV6RzR3YXEzU2RvU2xFMnBnTVpHaWluZjRZMHVRbnc1eGpNZFN5TFluVDZ6dHI0RS1zZ3F0OF9FaXVwVFE3cw?oc=5",
       "published_at": "2026-05-21 05:19:58 UTC",
+      "score": 9
+    },
+    {
+      "theme": "dollar_asia_fx",
+      "query": "美元指數 亞洲貨幣 台幣 日圓 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "美元偏強、日圓承壓 國銀估日圓短線續偏弱 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBQS29uRTBRd3Fac012X0ZQc0hoLXl2enY4MkVSVzJiNGZDVUVDeURaUTVWcWswOENRU0I2TXZQaWNyemk5cVhyU19CTmlPd3lpY05DeDRqTHc2eW5DT0Q1dVphVm9Mei1laG01dnFTNmhidmg0TE9Z0gFfQVVfeXFMT2Z6YmNMakdmNWZ2NlpaM09udzFnYWt2VW0xbmtLNVhidTFrMHpMVjVSWFZuYjZsVV9vY2RpZjJ3MzIxZGFMREFKTjlYNFp5TWFKYmpJU0F6VkZzU1BFLTQ?oc=5",
+      "published_at": "2026-05-15 03:39:42 UTC",
       "score": 9
     },
     {
@@ -165,6 +165,15 @@
       "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFA5S2tYeEhkNWhzci1SeFVzWk1OZkxWMzktTFBLN1g2QUhQU19hSU53WFpBbXhIUENVWktEdHI0WjJBOURHeENqVnhCVk9ONkE?oc=5",
       "published_at": "2026-05-15 06:51:01 UTC",
       "score": 8
+    },
+    {
+      "theme": "dollar_asia_fx",
+      "query": "美元指數 亞洲貨幣 台幣 日圓 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "台北股匯「雙殺」 熱錢匯出新台幣爆量重貶逾1角 短線測試31.7 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE00M0kxbmpyZ0F4WndlY05ZX0dDdUprbFNlNlVqcmtselh4Q3E2TnNiSXl6R0pSRmVOT1o1QnhVMzV3NDVSVl8ycnplb3MxRkdhUUg1aGEzd2R1dWtrSWNmdmdRRDBaRWhrSFU2NFZEYlllZXdKcV9n0gFfQVVfeXFMTjk0aVJGcWsySGVaM2xoNGUzQTJ2S3IwYUlKNW15WUk2cXdNODVDRFVFOU9RT21QMEhVUFJuR0VQNGd6WFdFRzNBa3p6VENLWUJMRzBqbmlUTDd3dzdOdkE?oc=5",
+      "published_at": "2026-05-19 16:58:04 UTC",
+      "score": 7
     },
     {
       "theme": "energy_inflation",
@@ -266,22 +275,13 @@
       "score": 5
     },
     {
-      "theme": "energy_inflation",
-      "query": "油價 原油 通膨 預期 地緣政治 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "荷姆茲危機對全球經濟的“七步殺” - 鉅亨號",
-      "source": "鉅亨號",
-      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE9mdDZQOFN6RzVaa2R6NVJ6N20xV1REMWR6UWdyRENSMkhKcHJzUEtFT21yWVhOZENMVjVmbjVhNkMyT1Z4Xy1UMg?oc=5",
-      "published_at": "2026-05-19 01:49:10 UTC",
+      "theme": "dollar_asia_fx",
+      "query": "美元指數 亞洲貨幣 台幣 日圓 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "出口表現強勁帶動 人民幣可能小幅升值 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9jMUNmN0V2aWg1aUN0Vy1wZXg3eVUtOV9hS0xsNVlXUWZ4V2NFTDlFX1NZdk84OVRMTnR1emxmcTZOVl9TSU5nYlJzbWdsN0hBTWJVaTNQVHlmZ9IBX0FVX3lxTE93dVhINk55bjJLVE1JN0hQNEJxMzR2MWxWZDVsaFFjTlBFNmlEVnFIUllyMlZYZUxseHFkbDBPQ19sWHVDcHh2b2NHT0VZcFFrdm5UNElobklTQWNYQTZr?oc=5",
+      "published_at": "2026-05-16 15:29:35 UTC",
       "score": 5
-    },
-    {
-      "theme": "fed_policy",
-      "query": "Fed 降息 縮表 美債 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "聯準會降息預期反轉？沃什上任會帶來哪些影響？ - news.cnyes.com",
-      "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1ZaFJrX2c2cmJnM253WE1NeDl5ODE1bkViNE8yWEg2VnplSEcwb2FGVG5raUpCSmM4WnkxSklwM3RLb0M2Rzc4SmUxXzJlQlZHNk9B?oc=5",
-      "published_at": "2026-05-18 10:57:09 UTC",
-      "score": 4
     }
   ]
 }
