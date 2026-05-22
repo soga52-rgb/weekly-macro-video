@@ -1,8 +1,11 @@
 {
-  "generated_at": "2026-05-22T03:24:58.335571Z",
+  "generated_at": "2026-05-22T03:29:29.116238Z",
   "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21",
   "image_model": "gemini-3.1-flash-image-preview",
-  "target_scene_ids": [],
+  "target_scene_ids": [
+    "scene_04",
+    "scene_05"
+  ],
   "records": [
     {
       "scene_id": "scene_01",
@@ -27,14 +30,14 @@
       "scene_id": "scene_04",
       "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/scene_04.png",
       "prompt": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/prompts/scene_04_image_prompt.txt",
-      "generated_ok": false,
+      "generated_ok": true,
       "mode": "image_from_scene_package_v2"
     },
     {
       "scene_id": "scene_05",
       "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/scene_05.png",
       "prompt": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/slides/prompts/scene_05_image_prompt.txt",
-      "generated_ok": true,
+      "generated_ok": false,
       "mode": "image_from_scene_package_v2"
     },
     {
