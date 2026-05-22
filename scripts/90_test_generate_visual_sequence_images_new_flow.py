@@ -38,6 +38,7 @@ import base64
 import json
 import os
 import shutil
+import socket
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -129,13 +130,13 @@ def call_gemini_image(prompt: str, model: str, api_key: str) -> bytes:
     )
 
     try:
-        with urllib.request.urlopen(request, timeout=240) as response:
+        with urllib.request.urlopen(request, timeout=360) as response:
             raw = response.read().decode("utf-8")
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode("utf-8", errors="replace")
         raise RuntimeError(f"Gemini image HTTPError {exc.code}: {detail}") from exc
-    except urllib.error.URLError as exc:
-        raise RuntimeError(f"Gemini image URLError: {exc}") from exc
+    except (urllib.error.URLError, TimeoutError, socket.timeout) as exc:
+        raise RuntimeError(f"Gemini image request failed or timed out: {exc}") from exc
 
     api_response = json.loads(raw)
     image_bytes = find_inline_image(api_response)
@@ -254,6 +255,7 @@ def main() -> None:
             "week_dir": str(week_dir),
         },
         "images": [],
+        "failed_images": [],
         "web_hero_visual_id": web_hero_visual_id,
     }
 
@@ -274,23 +276,39 @@ def main() -> None:
         out_path = out_dir / f"{visual_id}.png"
         is_hero = visual_id == web_hero_visual_id
 
-        if out_path.exists() and not should_force_rebuild():
-            print(f"[SKIP] Image already exists: {out_path}")
-        else:
-            prompt = build_visual_prompt(forest_summary, visual, is_web_hero=is_hero)
-            image_bytes = call_gemini_image(prompt, model, api_key)
-            save_binary(out_path, image_bytes)
-            print(f"[OK] Created {out_path}")
+        try:
+            if out_path.exists() and not should_force_rebuild():
+                print(f"[SKIP] Image already exists: {out_path}")
+            else:
+                prompt = build_visual_prompt(forest_summary, visual, is_web_hero=is_hero)
+                image_bytes = call_gemini_image(prompt, model, api_key)
+                save_binary(out_path, image_bytes)
+                print(f"[OK] Created {out_path}")
 
-        generated_paths[visual_id] = out_path
-        manifest["images"].append({
-            "visual_id": visual_id,
-            "path": str(out_path),
-            "source_segment_id": visual.get("source_segment_id", ""),
-            "visual_title": visual.get("visual_title", ""),
-            "visual_purpose": visual.get("visual_purpose", ""),
-            "is_web_hero_candidate": bool(visual.get("is_web_hero_candidate", False)),
-        })
+            generated_paths[visual_id] = out_path
+            manifest["images"].append({
+                "visual_id": visual_id,
+                "path": str(out_path),
+                "source_segment_id": visual.get("source_segment_id", ""),
+                "visual_title": visual.get("visual_title", ""),
+                "visual_purpose": visual.get("visual_purpose", ""),
+                "is_web_hero_candidate": bool(visual.get("is_web_hero_candidate", False)),
+                "status": "created_or_existing",
+            })
+
+        except Exception as exc:
+            error_message = str(exc)
+            print(f"[WARN] Failed to generate {visual_id}: {error_message}")
+            manifest["failed_images"].append({
+                "visual_id": visual_id,
+                "source_segment_id": visual.get("source_segment_id", ""),
+                "visual_title": visual.get("visual_title", ""),
+                "error": error_message,
+            })
+            continue
+
+    if not generated_paths:
+        print("[WARN] No images were generated successfully. Manifest will still be saved for debugging.")
 
     if web_hero_visual_id and web_hero_visual_id in generated_paths:
         hero_source = generated_paths[web_hero_visual_id]
@@ -309,6 +327,9 @@ def main() -> None:
         print(f"[OK] Set web hero image from {hero_source.name}")
         print(f"[OK] Updated {weekly_web_hero}")
         print(f"[OK] Updated compatibility alias {weekly_macro_diagram}")
+
+    elif web_hero_visual_id:
+        print(f"[WARN] Web hero visual was selected but not generated successfully: {web_hero_visual_id}")
 
     manifest_path = out_dir / "visual_sequence_manifest.json"
     save_json(manifest_path, manifest)
