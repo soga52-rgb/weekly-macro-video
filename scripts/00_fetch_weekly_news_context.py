@@ -39,7 +39,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from datetime import timezone
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
@@ -162,13 +162,17 @@ B. weekly_news_candidates：
 
 新聞分類規則：
 - 請務必輸出 news_categories，分成「通膨預期」「利率」「貨幣」「其他」四類。
-- 每類可依新聞重要性自然分配，最多 8 則；若該類新聞明顯較多，請保留較多新聞，以反映本週市場關注比重。，優先挑對本週主線最有佐證價值者。
+- 不要平均分配新聞，也不要為了湊數把低相關新聞放進分類。
+- 請依本週新聞密度與重要性自然分配：新聞較少的類別可以只放 0～2 則；新聞明顯較多的類別可以放 5～8 則。
+- 每類最多 8 則，優先挑對本週主線最有佐證價值者。
+- 請優先保留靠近週末或最新交易日的新聞；若 5/20～5/21 有同類新聞，除非舊新聞更具代表性，否則不要大量使用 5/15～5/18 的新聞。
 - 一則新聞只能放在一類，不要重複。
 - 分類以標題與新聞主題優先，why_it_matters 只作輔助。
 - 「油價、能源、CPI、PPI、物價、再通膨、通膨黏性」優先放「通膨預期」。
 - 「美債殖利率、長債、Fed、聯準會、升息、降息、利率路徑」優先放「利率」。
 - 「美元、DXY、新台幣、日圓、韓元、人民幣、亞幣、匯率」優先放「貨幣」。
 - 地緣政治若主要影響油價或能源，放「通膨預期」；若無法明確歸類，放「其他」。
+- 下方 JSON 結構只是格式示例，不代表每類必須輸出相同數量。
 
 請輸出 JSON 結構：
 
@@ -182,70 +186,18 @@ B. weekly_news_candidates：
   },
   "weekly_news_theme": "",
   "news_fit_to_daily_summaries": "支持 / 部分支持 / 不支持 / 待觀察",
-  "macro_drivers": [
-    {
-      "driver": "",
-      "evidence": [],
-      "impact": "",
-      "confidence": "高 / 中 / 低"
-    }
-  ],
+  "macro_drivers": [],
   "confirming_signals": [],
   "contradicting_signals": [],
   "news_based_corrections": [],
   "watch_points": [],
   "news_categories": {
-    "通膨預期": [
-      {
-        "title": "",
-        "source": "",
-        "url": "",
-        "published_at": "",
-        "theme": "inflation_energy",
-        "why_it_matters": ""
-      }
-    ],
-    "利率": [
-      {
-        "title": "",
-        "source": "",
-        "url": "",
-        "published_at": "",
-        "theme": "rates_bonds_fed",
-        "why_it_matters": ""
-      }
-    ],
-    "貨幣": [
-      {
-        "title": "",
-        "source": "",
-        "url": "",
-        "published_at": "",
-        "theme": "dollar_asia_fx",
-        "why_it_matters": ""
-      }
-    ],
-    "其他": [
-      {
-        "title": "",
-        "source": "",
-        "url": "",
-        "published_at": "",
-        "theme": "other_macro",
-        "why_it_matters": ""
-      }
-    ]
+    "通膨預期": [],
+    "利率": [],
+    "貨幣": [],
+    "其他": []
   },
-  "top_news": [
-    {
-      "title": "",
-      "source": "",
-      "url": "",
-      "published_at": "",
-      "theme": "",
-      "why_it_matters": ""
-    }
-  ],
+  "top_news": [],
   "editor_note_for_forest_summary": ""
 }
 
@@ -323,6 +275,21 @@ def parse_pubdate(pubdate: str) -> str:
         return pubdate
 
 
+def pubdate_to_datetime(value: str) -> datetime | None:
+    if not value:
+        return None
+    for fmt in ("%Y-%m-%d %H:%M:%S UTC", "%Y-%m-%d %H:%M:%S"):
+        try:
+            return datetime.strptime(value, fmt).replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+    try:
+        dt = email.utils.parsedate_to_datetime(value)
+        return dt.astimezone(timezone.utc) if dt.tzinfo else dt.replace(tzinfo=timezone.utc)
+    except Exception:
+        return None
+
+
 def clean_title(title: str) -> str:
     return re.sub(r"\s+", " ", html.unescape(title or "").strip())
 
@@ -387,6 +354,18 @@ def score_item(item: Dict[str, Any]) -> int:
     for src in preferred_sources:
         if src.lower() in text:
             score += 3
+
+    published = pubdate_to_datetime(str(item.get("published_at") or ""))
+    if published:
+        date_key = published.strftime("%Y-%m-%d")
+        if date_key >= "2026-05-21":
+            score += 10
+        elif date_key == "2026-05-20":
+            score += 8
+        elif date_key == "2026-05-19":
+            score += 5
+        elif date_key == "2026-05-18":
+            score += 2
 
     return score
 
@@ -514,7 +493,6 @@ def build_news_context_markdown(context: Dict[str, Any]) -> str:
     return "\n".join(lines).strip() + "\n"
 
 
-
 def normalize_news_categories(context: Dict[str, Any]) -> Dict[str, Any]:
     """Ensure categorized news fields exist and top_news has enough items."""
     categories = context.get("news_categories")
@@ -532,7 +510,6 @@ def normalize_news_categories(context: Dict[str, Any]) -> Dict[str, Any]:
             categories[key] = []
         categories[key] = [item for item in categories[key] if isinstance(item, dict)][:8]
 
-    # Preserve top_news if present, but supplement it from category buckets.
     top_news = context.get("top_news")
     if not isinstance(top_news, list):
         top_news = []
@@ -610,6 +587,7 @@ def main() -> None:
 
     print(f"[INFO] Generating weekly news context with model: {model}")
     context = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
+    context = normalize_news_categories(context)
 
     context.setdefault("meta", {})
     context["meta"]["source"] = "Google News RSS"
