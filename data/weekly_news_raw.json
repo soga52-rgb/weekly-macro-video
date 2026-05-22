@@ -259,10 +259,10 @@
     {
       "theme": "energy_inflation",
       "query": "WTI Brent 原油 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "〈能源盤後〉美伊談判變數壓垮市場 油價飆漲4%後逆轉收挫 布油跌破103美元創近兩週低點 - anuenews.cnyes.com",
-      "source": "anuenews.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBFOFdvc196UzJGQlc0eDdXTVBySkxFeWJCbHNnbzdjakdGRE1EWmc0VVF5MTdSSmtLMnNwYkpaNWhyMERXVVlCbWUzRHprT1E5MkMzMw?oc=5",
-      "published_at": "2026-05-22 00:49:28 UTC",
+      "title": "〈能源盤後〉美伊談判變數壓垮市場 油價飆漲4%後逆轉收挫 布油跌破103美元創近兩週低點 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBHRTZWWWFhazd0d3Y1NmNSRUk5dzlZdlNPN3doY21NSGJIWEhwTHZacUFsbXdHRTlaWDE0N0pzb3d0dUFQSHZOMXVuWFlfLVU?oc=5",
+      "published_at": "2026-05-21 21:40:07 UTC",
       "score": 6
     },
     {
