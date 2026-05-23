@@ -13,7 +13,7 @@ Design:
 - Use market data and news context as the primary inputs.
 - Do not use weekly_source_text.md as the main analysis input.
 - Produce a 6-8 minute World Economic Forum-style macro explainer brief.
-- Emphasize relationships among source materials: market data, news events, and asset price moves.
+- Emphasize transmission checks among market data, news events, expectations, and asset price moves.
 - Keep the existing weekly_forest_summary.json schema for downstream compatibility.
 
 Input:
@@ -64,12 +64,14 @@ USER_PROMPT_TEMPLATE = """
 請根據來源資料產生 weekly_forest_summary.json。
 
 這支影片的格式是：說明影片。
-目標是條理分明地呈現來源之間的關聯性，讓觀眾理解市場數據、新聞事件與資產價格變化如何互相印證或互相矛盾。
+目標是條理分明地呈現來源之間的關聯性，讓觀眾理解市場數據、新聞事件與資產價格變化如何互相印證、互相修正，或形成值得解釋的分歧。
+
+分析方法：
+請參考總經傳遞鏈概念，根據市場數據逐段檢查傳導是否同頻：通膨預期與利率預期、利率預期與美元、美元與亞洲貨幣 / 黃金 / 商品。若同頻，請結合新聞消息與市場預期，說明該段傳導為何受到支持；若不同頻，請將其視為需要解釋的市場訊號，並找出可能的替代傳導源、局部基本面、資金流或政策因素。新聞與經濟數據的用途，是協助解釋同頻或不同頻的原因，並判斷這些證據是否可能在下週或後續造成定價質變，最後據此自然產生影片段落。
 
 請注意：
-- 不要固定段落數或圖片數量。
 - 影片段落與視覺需求由本週資料自然決定。
-- 若某個結論無法由來源資料直接支持，請呈現為分歧、待觀察或資料不足，不要寫成確定結論。
+- 若某個結論無法由來源資料直接支持，請呈現為分歧、待觀察或資料不足。
 - video_segments 請依內容自行產生；每一項請包含 segment_id、segment_title、segment_question、narration_focus、main_point、estimated_duration、visual_needed、visual_role、visual_concept。
 - visual_sequence 請依內容自行產生；每一項請包含 visual_id、source_segment_id、visual_title、visual_purpose、visual_concept、key_labels、is_web_hero_candidate。
 - web_hero_visual 請指出最適合作為網頁主視覺或影片總結圖的視覺。
