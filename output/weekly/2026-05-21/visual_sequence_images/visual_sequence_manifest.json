@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "weekly_forest_summary.json",
-    "image_model": "gemini-3.1-flash-image-preview",
+    "image_model": "gemini-3-pro-image-preview",
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21"
   },
   "images": [
