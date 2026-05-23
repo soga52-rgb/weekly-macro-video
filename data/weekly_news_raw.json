@@ -97,8 +97,8 @@
     {
       "theme": "fed_policy",
       "query": "聯準會 高利率 維持更久 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "美股漲勢降溫油價與美債殖利率攀升拖累科技股 - cnyes.com",
-      "source": "cnyes.com",
+      "title": "美股漲勢降溫油價與美債殖利率攀升拖累科技股 - news.cnyes.com",
+      "source": "news.cnyes.com",
       "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1vbU1zd0NSa1N5MDdyRGdzSzRsd1NKTkRuQmQ5RDZNeDl6aDdFdTYwem5pSlRPZzgzR19KelRLa1B4dm0yb3lBU19COA?oc=5",
       "published_at": "2026-05-19 00:01:39 UTC",
       "score": 15
@@ -151,8 +151,8 @@
     {
       "theme": "gold",
       "query": "金價 美債殖利率 美元 避險 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "黃金王子晉封「王」！楊天立再喊4500美元是進場點 建議兩招聰明淘金 - cnyes.com",
-      "source": "cnyes.com",
+      "title": "黃金王子晉封「王」！楊天立再喊4500美元是進場點 建議兩招聰明淘金 - news.cnyes.com",
+      "source": "news.cnyes.com",
       "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBDT0o0ZHdBYWlDWGtSM1RtX05wMk5iOXQ2alRRZUJBTzlyMDN1ZjQyTUJaOXZLdXhiVHF1WlNCcThxTTF2Mkd6cDJtNA?oc=5",
       "published_at": "2026-05-20 11:05:35 UTC",
       "score": 14
@@ -178,8 +178,8 @@
     {
       "theme": "long_bond_yields",
       "query": "美債 殖利率 20年期 30年期 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "美債避險神話動搖？美國30年期殖利率衝上5.18% 創2007年來新高 - cnyes.com",
-      "source": "cnyes.com",
+      "title": "美債避險神話動搖？美國30年期殖利率衝上5.18% 創2007年來新高 - news.cnyes.com",
+      "source": "news.cnyes.com",
       "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1USER3OG1RY3BReDNtQXRDclp0U3dUZXhMRkZGVUJaRU1yQ245M2FDVU5scV91Q1NOWGpMRkxVUUJpNGU5QlNXc0RDUQ?oc=5",
       "published_at": "2026-05-19 14:10:09 UTC",
       "score": 13
@@ -187,19 +187,10 @@
     {
       "theme": "long_bond_yields",
       "query": "美債 長天期 殖利率 期限溢價 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "美債30年殖利率直逼2007年高點！專家：恐飆破5.5% 創2004年來最恐怖紀錄 建議低配或砍光 - cnyes.com",
-      "source": "cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5XaUFmcllWT3JpVWszREx2ejVOcGM0RU0xTUY3R2tzeDBXRl8xNWRNTmlYNWRSV3NpX0FIaG05TkJPLTE1V3ZYTkJsRQ?oc=5",
-      "published_at": "2026-05-19 06:40:02 UTC",
-      "score": 13
-    },
-    {
-      "theme": "long_bond_yields",
-      "query": "美債 長天期 殖利率 期限溢價 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
       "title": "美債30年殖利率直逼2007年高點！專家：恐飆破5.5% 創2004年來最恐怖紀錄 建議低配或砍光 - news.cnyes.com",
       "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE4wdmdHcW9FeXZkOW5FQkF1ZjVWdkVPbTJRWXRZQzlYODloc1VwM25ZQUZXQ1RDOHNxODE2UXRwd2FfX1dta1F3YjEzRlBVNHZMMk5n?oc=5",
-      "published_at": "2026-05-19 06:58:12 UTC",
+      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5XaUFmcllWT3JpVWszREx2ejVOcGM0RU0xTUY3R2tzeDBXRl8xNWRNTmlYNWRSV3NpX0FIaG05TkJPLTE1V3ZYTkJsRQ?oc=5",
+      "published_at": "2026-05-19 06:40:02 UTC",
       "score": 13
     },
     {
@@ -232,8 +223,8 @@
     {
       "theme": "dollar_asia_fx",
       "query": "美元指數 亞洲貨幣 台幣 日圓 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "摩根士丹利日本區負責人：日元兌美元恐升至140或貶至170 央行升息是提振日元的關鍵 - cnyes.com",
-      "source": "cnyes.com",
+      "title": "摩根士丹利日本區負責人：日元兌美元恐升至140或貶至170 央行升息是提振日元的關鍵 - news.cnyes.com",
+      "source": "news.cnyes.com",
       "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFB4WWxWeVVwNHVIY2lBTmFiMjdJcWFsYklJOEdVcExxRXZHZzEzS1FVQmpVR0ZFZWYwV0JOczNpdEN3M1MtQ0k2V1BiVQ?oc=5",
       "published_at": "2026-05-20 02:15:57 UTC",
       "score": 12
@@ -281,6 +272,15 @@
       "source": "UDN",
       "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE5wZ1hjeGZYaW9XTzhRcHZaTWVBOFdsQ2Npd2FMZWZIb2hieXVldXE2NGJ5N1JsU0NycGk0RzR1R21BMWcyQlhMMDA3Z3o3SG1a?oc=5",
       "published_at": "2026-05-19 17:22:27 UTC",
+      "score": 11
+    },
+    {
+      "theme": "dollar_asia_fx",
+      "query": "美元 亞幣 承壓 台幣 日圓 韓元 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "〈台幣〉聯準會不排除重啟升息 爆量重挫1.05角收31.65元 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE40NnBNazd4OWxDaFhvTnRaM2lEZW9wb00zZWxDejNqM0JqLWVNTlZqOVJEWS12ZUtEWGd3Yk9xdWIxazZUejIxZTJDeEszNlU?oc=5",
+      "published_at": "2026-05-19 08:54:35 UTC",
       "score": 11
     }
   ]
