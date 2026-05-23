@@ -26,6 +26,8 @@ Required env:
 Optional env:
 - GEMINI_IMAGE_MODEL, default: gemini-3.1-flash-image-preview
 - FORCE_REBUILD_VISUALS, default: false
+- TARGET_VISUAL_ID, optional: generate only one visual_id, e.g. vis_01
+- GEMINI_IMAGE_RETRIES, default: 2
 
 Notes:
 - This script follows the new flow:
@@ -63,6 +65,18 @@ def should_force_rebuild() -> bool:
     return os.getenv("FORCE_REBUILD_VISUALS", "false").strip().lower() in {"1", "true", "yes", "y"}
 
 
+def target_visual_id() -> str:
+    return os.getenv("TARGET_VISUAL_ID", "").strip()
+
+
+def gemini_image_retries() -> int:
+    raw = os.getenv("GEMINI_IMAGE_RETRIES", "2").strip()
+    try:
+        return max(1, int(raw))
+    except ValueError:
+        return 2
+
+
 def load_json(path: Path, default: Any = None) -> Any:
     if not path.exists():
         return default
@@ -74,6 +88,21 @@ def save_json(path: Path, data: Dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+def call_gemini_image_with_retry(prompt: str, model: str, api_key: str, retries: int) -> bytes:
+    last_error: Optional[Exception] = None
+
+    for attempt in range(1, retries + 1):
+        try:
+            if attempt > 1:
+                print(f"[INFO] Retry image generation attempt {attempt}/{retries}")
+            return call_gemini_image(prompt, model, api_key)
+        except Exception as exc:
+            last_error = exc
+            print(f"[WARN] Image generation attempt {attempt}/{retries} failed: {exc}")
+
+    raise RuntimeError(str(last_error) if last_error else "Image generation failed")
 
 
 def save_binary(path: Path, data: bytes) -> None:
@@ -208,16 +237,16 @@ Current visual brief:
 - Key labels: {key_labels_text}
 
 Style requirements:
-- Match the drawing style of the existing daily macro transmission diagram: hand-drawn explanatory market note, light cream/off-white background, black sketch-like outlines, soft pastel highlights, beige/yellow accent blocks, and simple icon doodles.
-- The image should look like a clean daily visual note card, not a formal institutional conference slide and not a polished WEF-style finance infographic.
-- Use a whiteboard / notebook-like composition: boxed sections, hand-drawn arrows, simple causal flow, small icons, speech-bubble callouts, and clear visual grouping.
-- Keep text sparse: one large Traditional Chinese title, 3-5 short labels, and only essential numbers.
-- Emphasize the logic: market signal, key divergence, evidence, or watch item depending on the current visual brief.
-- Use simplified line charts and directional arrows only when helpful; avoid dense professional charting, complex axes, tiny ticks, and chart-heavy layouts.
-- Prefer visual explanation over data-dashboard precision.
-- Make it suitable for a daily macro visual note page and a 6-8 minute explainer video.
+- Match the drawing style of the existing daily macro transmission diagram, not the WEF chart style.
+- Use a hand-drawn explanatory market note style: light cream/off-white background, thick black sketch-like outlines, soft pastel highlights, beige/yellow note blocks, rounded boxes, simple doodle icons, and hand-drawn arrows.
+- The image should look like a clean daily visual macro note card / whiteboard explanation, not a formal institutional conference slide, not a professional Bloomberg-style chart, and not a polished policy-forum infographic.
+- Prioritize causal explanation over chart precision. If the current visual brief asks for a line chart, standardized chart, dual-axis chart, map, or exact market plot, simplify it into a schematic mini-chart plus arrows and explanatory callouts.
+- Use one focused canvas with a clear hierarchy: large Traditional Chinese title at top, one central causal flow or key divergence, and 3-5 short labels.
+- Use only essential numbers and dates. Avoid dense axes, repeated ticks, long time-series labels, exact data plotting, and chart-heavy layouts.
+- Prefer the daily transmission-note structure: 核心市場訊號 / 核心背離 / 宏觀證據 / 觀察重點, but only include the blocks that fit the current visual brief.
+- For the first or summary visual, make it feel like a macro transmission diagram: market signal -> transmission -> divergence -> watch point.
 - Use concise Traditional Chinese labels when labels are shown.
-- Avoid clutter, tiny text, over-detailed axes, excessive numeric ticks, long paragraphs, and excessive financial terminal styling.
+- Avoid clutter, tiny text, long paragraphs, excessive financial terminal styling, logos, watermarks, and institutional branding.
 - Do not use World Economic Forum style.
 - Do not add WEF, World Economic Forum, media, institution, brand logos, or watermarks.
 - {hero_note}
@@ -263,9 +292,16 @@ def main() -> None:
         "web_hero_visual_id": web_hero_visual_id,
     }
 
+    force_rebuild = should_force_rebuild()
+    target_id = target_visual_id()
+    retries = gemini_image_retries()
+
     print(f"[INFO] Generating visual sequence images with model: {model}")
     print(f"[INFO] Week dir: {week_dir}")
     print(f"[INFO] visual_sequence count: {len(visual_sequence)}")
+    print(f"[INFO] force_rebuild: {force_rebuild}")
+    print(f"[INFO] target_visual_id: {target_id or '(all)'}")
+    print(f"[INFO] gemini_image_retries: {retries}")
 
     generated_paths: Dict[str, Path] = {}
 
@@ -277,19 +313,24 @@ def main() -> None:
         if not visual_id:
             visual_id = f"visual_{idx:02d}"
 
+        if target_id and visual_id != target_id:
+            print(f"[SKIP] Target visual is {target_id}; skip {visual_id}")
+            continue
+
         out_path = out_dir / f"{visual_id}.png"
         is_hero = visual_id == web_hero_visual_id
 
         try:
-            if out_path.exists() and not should_force_rebuild():
+            if out_path.exists() and not force_rebuild:
                 print(f"[SKIP] Image already exists: {out_path}")
             else:
                 prompt = build_visual_prompt(forest_summary, visual, is_web_hero=is_hero)
-                image_bytes = call_gemini_image(prompt, model, api_key)
+                image_bytes = call_gemini_image_with_retry(prompt, model, api_key, retries)
                 save_binary(out_path, image_bytes)
                 print(f"[OK] Created {out_path}")
 
-            generated_paths[visual_id] = out_path
+            if out_path.exists():
+                generated_paths[visual_id] = out_path
             manifest["images"].append({
                 "visual_id": visual_id,
                 "path": str(out_path),
