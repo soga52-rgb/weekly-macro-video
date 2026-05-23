@@ -38,7 +38,7 @@
       "visual_id": "vis_01",
       "source_segment_id": "seg_01",
       "visual_title": "美債 10 年期殖利率本週走勢",
-      "error": "Remote end closed connection without response"
+      "error": "Gemini image request failed or timed out: The read operation timed out"
     }
   ],
   "web_hero_visual_id": "vis_02",
