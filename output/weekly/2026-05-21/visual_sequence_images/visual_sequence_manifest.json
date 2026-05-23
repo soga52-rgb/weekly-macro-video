@@ -6,6 +6,15 @@
   },
   "images": [
     {
+      "visual_id": "vis_01",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/vis_01.png",
+      "source_segment_id": "seg_01",
+      "visual_title": "美債 10 年期殖利率本週走勢",
+      "visual_purpose": "確立本週『利率重估』的宏觀起點。",
+      "is_web_hero_candidate": false,
+      "status": "created_or_existing"
+    },
+    {
       "visual_id": "vis_02",
       "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/vis_02.png",
       "source_segment_id": "seg_02",
@@ -33,14 +42,7 @@
       "status": "created_or_existing"
     }
   ],
-  "failed_images": [
-    {
-      "visual_id": "vis_01",
-      "source_segment_id": "seg_01",
-      "visual_title": "美債 10 年期殖利率本週走勢",
-      "error": "Gemini image request failed or timed out: The read operation timed out"
-    }
-  ],
+  "failed_images": [],
   "web_hero_visual_id": "vis_02",
   "web_hero_output": {
     "source_visual_id": "vis_02",
