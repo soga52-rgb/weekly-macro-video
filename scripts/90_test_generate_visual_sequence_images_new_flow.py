@@ -170,15 +170,15 @@ def build_visual_prompt(
     if is_web_hero:
         hero_note = (
             "This visual is the selected web hero / final summary image. "
-            "Make it especially clear, balanced, and representative of the week's core macro logic."
+            "Make it feel like a clean visual market note that summarizes the week's core transmission and key divergence."
         )
 
     key_labels_text = " / ".join([str(x) for x in key_labels if str(x).strip()])
 
     return f"""
-Create a polished editorial infographic image in a World Economic Forum-style macro explainer aesthetic.
+Create a clean visual market note in a light daily-macro-web-card aesthetic.
 
-This image is part of a weekly macro explainer series. Do not re-analyze the market. Only visualize the provided brief faithfully.
+This image is part of a weekly macro explainer series. Visualize only the provided brief faithfully. The image should feel like a clear explanatory card on a modern macro dashboard, not a formal policy forum slide.
 
 Overall series context:
 - Suggested video title: {title}
@@ -208,14 +208,18 @@ Current visual brief:
 - Key labels: {key_labels_text}
 
 Style requirements:
-- Sophisticated, global-macro, policy-forum presentation style
-- Clean layout, premium editorial infographic quality
-- Clear hierarchy and readable labels
-- Visually persuasive but not sensational
-- Suitable for use in a macro explainer website or briefing deck
-- Use concise Traditional Chinese labels when labels are shown
-- Avoid clutter
-- Do not add brand logos or watermarks
+- Match the drawing style of the existing daily macro transmission diagram: hand-drawn explanatory market note, light cream/off-white background, black sketch-like outlines, soft pastel highlights, beige/yellow accent blocks, and simple icon doodles.
+- The image should look like a clean daily visual note card, not a formal institutional conference slide and not a polished WEF-style finance infographic.
+- Use a whiteboard / notebook-like composition: boxed sections, hand-drawn arrows, simple causal flow, small icons, speech-bubble callouts, and clear visual grouping.
+- Keep text sparse: one large Traditional Chinese title, 3-5 short labels, and only essential numbers.
+- Emphasize the logic: market signal, key divergence, evidence, or watch item depending on the current visual brief.
+- Use simplified line charts and directional arrows only when helpful; avoid dense professional charting, complex axes, tiny ticks, and chart-heavy layouts.
+- Prefer visual explanation over data-dashboard precision.
+- Make it suitable for a daily macro visual note page and a 6-8 minute explainer video.
+- Use concise Traditional Chinese labels when labels are shown.
+- Avoid clutter, tiny text, over-detailed axes, excessive numeric ticks, long paragraphs, and excessive financial terminal styling.
+- Do not use World Economic Forum style.
+- Do not add WEF, World Economic Forum, media, institution, brand logos, or watermarks.
 - {hero_note}
 """.strip()
 
