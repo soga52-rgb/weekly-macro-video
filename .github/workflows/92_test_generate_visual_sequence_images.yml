@@ -1,0 +1,60 @@
+name: 92 Test Generate Visual Sequence Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_dir:
+        description: "Optional week folder under output/weekly, e.g. 2026-05-21. Leave blank to use latest."
+        required: false
+        default: ""
+      image_model:
+        description: "Gemini image model"
+        required: false
+        default: "gemini-3-pro-image-preview"
+      force_rebuild_visuals:
+        description: "Force rebuild existing visual images"
+        required: false
+        type: boolean
+        default: false
+      target_visual_id:
+        description: "Optional: generate only one visual_id, e.g. overview_01 or vis_01"
+        required: false
+        default: ""
+      image_retries:
+        description: "Gemini image generation retries"
+        required: false
+        default: "3"
+
+jobs:
+  generate-visual-sequence-images:
+    runs-on: ubuntu-latest
+
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_IMAGE_MODEL: ${{ inputs.image_model }}
+      FORCE_REBUILD_VISUALS: ${{ inputs.force_rebuild_visuals }}
+      TARGET_VISUAL_ID: ${{ inputs.target_visual_id }}
+      GEMINI_IMAGE_RETRIES: ${{ inputs.image_retries }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run 92 test visual sequence image generation
+        run: |
+          if [ -n "${{ inputs.week_dir }}" ]; then
+            python scripts/92_test_generate_visual_sequence_images_v8_presentation_pages.py --week-dir "${{ inputs.week_dir }}"
+          else
+            python scripts/92_test_generate_visual_sequence_images_v8_presentation_pages.py
+          fi
+
+      - name: Upload visual output artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-visual-sequence-test-output
+          path: output/weekly/
