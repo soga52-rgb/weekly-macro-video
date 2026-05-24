@@ -492,7 +492,14 @@ def main() -> None:
         or DEFAULT_ANALYSIS_MODEL
     )
 
-    week_dir = Path(args.week_dir) if args.week_dir else find_latest_week_dir()
+    if args.week_dir:
+        week_dir = Path(args.week_dir)
+        if not week_dir.exists() and not week_dir.is_absolute():
+            candidate = OUTPUT_WEEKLY_DIR / args.week_dir
+            if candidate.exists():
+                week_dir = candidate
+    else:
+        week_dir = find_latest_week_dir()
 
     weekly_market_series = load_json(week_dir / "weekly_market_series.json", {})
     weekly_news_context_md = load_text(week_dir / "weekly_news_context.md")
