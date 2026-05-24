@@ -1,0 +1,44 @@
+name: 91 Test Generate Weekly Forest Summary
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_dir:
+        description: "Optional week folder under output/weekly, e.g. 2026-05-21. Leave blank to use latest."
+        required: false
+        default: ""
+      analysis_model:
+        description: "Gemini analysis model"
+        required: false
+        default: "gemini-3.5-pro"
+
+jobs:
+  generate-weekly-forest-summary:
+    runs-on: ubuntu-latest
+
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_ANALYSIS_MODEL: ${{ inputs.analysis_model }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run 91 test weekly forest summary
+        run: |
+          if [ -n "${{ inputs.week_dir }}" ]; then
+            python scripts/91_test_generate_weekly_forest_summary_v92_analysis_presentation_layers.py --week-dir "${{ inputs.week_dir }}"
+          else
+            python scripts/91_test_generate_weekly_forest_summary_v92_analysis_presentation_layers.py
+          fi
+
+      - name: Upload weekly output artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-forest-summary-test-output
+          path: output/weekly/
