@@ -1,0 +1,57 @@
+name: 93 Test Fetch Macro Background Context
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_dir:
+        description: "Optional week folder under output/weekly, e.g. 2026-05-21. Leave blank to use latest."
+        required: false
+        default: ""
+      model:
+        description: "Gemini model"
+        required: false
+        default: "gemini-3.5-flash"
+      lookback_days:
+        description: "Background news lookback days"
+        required: false
+        default: "30"
+      max_items:
+        description: "Maximum ranked background candidates"
+        required: false
+        default: "40"
+
+jobs:
+  fetch-macro-background-context:
+    runs-on: ubuntu-latest
+
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_MODEL: ${{ inputs.model }}
+      MACRO_BACKGROUND_LOOKBACK_DAYS: ${{ inputs.lookback_days }}
+      MACRO_BACKGROUND_MAX_ITEMS: ${{ inputs.max_items }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run 93 test macro background context
+        run: |
+          if [ -n "${{ inputs.week_dir }}" ]; then
+            python scripts/93_test_fetch_macro_background_context.py --week-dir "${{ inputs.week_dir }}" --lookback-days "${{ inputs.lookback_days }}" --max-items "${{ inputs.max_items }}"
+          else
+            python scripts/93_test_fetch_macro_background_context.py --lookback-days "${{ inputs.lookback_days }}" --max-items "${{ inputs.max_items }}"
+          fi
+
+      - name: Upload macro background output artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: macro-background-context-test-output
+          path: |
+            output/weekly/**/macro_background_context.json
+            output/weekly/**/macro_background_context.md
+            data/macro_background_raw.json
