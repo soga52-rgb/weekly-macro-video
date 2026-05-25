@@ -25,6 +25,9 @@ on:
         required: false
         default: "3"
 
+permissions:
+  contents: write
+
 jobs:
   generate-visual-sequence-images:
     runs-on: ubuntu-latest
@@ -51,6 +54,23 @@ jobs:
             python scripts/92_test_generate_visual_sequence_images_v8_presentation_pages.py --week-dir "${{ inputs.week_dir }}"
           else
             python scripts/92_test_generate_visual_sequence_images_v8_presentation_pages.py
+          fi
+
+      - name: Commit visual sequence images
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add output/weekly/**/visual_sequence_images/*.png || true
+          git add output/weekly/**/visual_sequence_images/visual_sequence_manifest.json || true
+          git add output/weekly/**/weekly_web_hero.png || true
+          git add output/weekly/**/weekly_macro_diagram.png || true
+
+          if git diff --cached --quiet; then
+            echo "No generated visual changes to commit."
+          else
+            git commit -m "Test visual sequence images"
+            git push
           fi
 
       - name: Upload visual output artifact
