@@ -1,0 +1,66 @@
+name: 94 Test Generate Video Narration Script
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_dir:
+        description: "Optional week folder under output/weekly, e.g. 2026-05-21. Leave blank to use latest."
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  generate-video-narration-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run 94 test narration script generation
+        run: |
+          SCRIPT_PATH="scripts/94_test_generate_video_narration_script.py"
+
+          if [ ! -f "$SCRIPT_PATH" ]; then
+            echo "Missing $SCRIPT_PATH"
+            echo "Available 94 scripts:"
+            ls -la scripts/94* || true
+            exit 1
+          fi
+
+          if [ -n "${{ inputs.week_dir }}" ]; then
+            python "$SCRIPT_PATH" --week-dir "${{ inputs.week_dir }}"
+          else
+            python "$SCRIPT_PATH"
+          fi
+
+      - name: Commit narration script
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add output/weekly/**/video_narration_script.md || true
+          git add output/weekly/**/video_narration_script.json || true
+
+          if git diff --cached --quiet; then
+            echo "No narration script changes to commit."
+          else
+            git commit -m "Test video narration script"
+            git push
+          fi
+
+      - name: Upload narration artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-video-narration-script
+          path: |
+            output/weekly/**/video_narration_script.md
+            output/weekly/**/video_narration_script.json
+          if-no-files-found: warn
