@@ -7,12 +7,12 @@
   },
   "images": [
     {
-      "visual_id": "scene_05",
-      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/scene_05.png",
+      "visual_id": "scene_06",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/scene_06.png",
       "source_layer": "video_visual_scenes",
-      "source_segment_id": "scene_05",
-      "visual_title": "亞幣承壓，黃金拉鋸",
-      "visual_purpose": "日圓韓圜顯著走弱，黃金在利空與避險中尋找平衡。",
+      "source_segment_id": "scene_06",
+      "visual_title": "下週觀察重點",
+      "visual_purpose": "關注 Fed 官員談話與地緣政治實質進展。",
       "status": "created_or_existing"
     }
   ],
