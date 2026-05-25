@@ -1,0 +1,101 @@
+{
+  "meta": {
+    "source": "weekly_forest_summary.json",
+    "purpose": "text narration review before TTS",
+    "segment_count": 6
+  },
+  "title": "鷹派政策預期與地緣避險情緒的拉鋸戰",
+  "opening": "長端利率受政策指引推升，但油價重挫削弱了通膨預期，導致資產傳導鏈在避險與利差之間出現結構性分歧。",
+  "segments": [
+    {
+      "segment_id": "narration_segment_01",
+      "scene_id": "scene_01",
+      "screen_title": "本週市場主線：鷹派與避險的拉鋸",
+      "single_message": "再通膨交易降溫，市場轉向定價高利率與尾部風險。",
+      "voiceover_goal": "破題，點出本週市場邏輯的轉變。",
+      "spoken_text": "這一週市場的主線，可以先用一句話說明：再通膨交易降溫，市場轉向定價高利率與尾部風險。 本週市場不再單純交易『再通膨』。 Fed 的鷹派表態與突發的地緣政治消息，讓市場陷入拉鋸。 資產走勢出現了明顯的結構性分歧。",
+      "evidence_to_mention": [],
+      "avoid_saying": [
+        "市場已經崩盤",
+        "通膨已經失控"
+      ],
+      "estimated_seconds": 20
+    },
+    {
+      "segment_id": "narration_segment_02",
+      "scene_id": "scene_02",
+      "screen_title": "通膨預期：油價大跌打亂陣腳",
+      "single_message": "美伊和平傳聞重挫油價，削弱了再通膨敘事。",
+      "voiceover_goal": "解釋通膨預期為何轉為分歧。",
+      "spoken_text": "接著看第 2 幕：通膨預期：油價大跌打亂陣腳。 原本市場還在擔憂通膨僵固，但美伊和平協議的傳聞突然殺出。 這導致 WTI 原油單週從 105 美元重挫至 97 美元。 油價的大跌，直接削弱了能源端推升通膨的預期，讓通膨訊號變得不再單向看多。 這裡可以對照的證據是：WTI 原油跌破 100 美元大關。",
+      "evidence_to_mention": [
+        "WTI 原油跌破 100 美元大關"
+      ],
+      "avoid_saying": [
+        "通膨已經解決",
+        "Fed 將因此降息"
+      ],
+      "estimated_seconds": 29
+    },
+    {
+      "segment_id": "narration_segment_03",
+      "scene_id": "scene_03",
+      "screen_title": "利率預期：升息選項重回桌面",
+      "single_message": "Fed 會議紀錄與長債拋售，共同推升利率預期。",
+      "voiceover_goal": "說明利率為何依然偏強。",
+      "spoken_text": "接著看第 3 幕：利率預期：升息選項重回桌面。 儘管油價下跌，但利率預期依然強勁。 主要原因是 Fed 會議紀錄顯示，多數官員竟然將『升息』重新列入選項。 加上 30 年期美債殖利率創下 19 年新高，顯示市場正在重新定價長期的利率風險。 這裡可以對照的證據是：Fed 會議紀錄、10年期美債殖利率維持在 4.6% 附近高檔。",
+      "evidence_to_mention": [
+        "Fed 會議紀錄",
+        "10年期美債殖利率維持在 4.6% 附近高檔"
+      ],
+      "avoid_saying": [
+        "Fed 已經宣布升息"
+      ],
+      "estimated_seconds": 31
+    },
+    {
+      "segment_id": "narration_segment_04",
+      "scene_id": "scene_04",
+      "screen_title": "美元指數：高檔震盪",
+      "single_message": "利差提供支撐，但經濟降溫隱憂限制了漲幅。",
+      "voiceover_goal": "解釋美元的高檔震盪邏輯。",
+      "spoken_text": "接著看第 4 幕：美元指數：高檔震盪。 在高利率的支撐下，美元指數理所當然維持在 99 以上的強勢區間。 但為什麼沒有進一步暴衝？因為美國國內的房市數據出現了疲軟跡象。 市場開始擔憂經濟成長放緩，這股隱憂牽制了美元的上行空間。 這裡可以對照的證據是：美元指數在 99 附近震盪。",
+      "evidence_to_mention": [
+        "美元指數在 99 附近震盪"
+      ],
+      "avoid_saying": [
+        "美元即將反轉向下"
+      ],
+      "estimated_seconds": 27
+    },
+    {
+      "segment_id": "narration_segment_05",
+      "scene_id": "scene_05",
+      "screen_title": "亞幣承壓，黃金拉鋸",
+      "single_message": "日圓韓圜顯著走弱，黃金在利空與避險中尋找平衡。",
+      "voiceover_goal": "分析亞幣與黃金的分化表現。",
+      "spoken_text": "接著看第 5 幕：亞幣承壓，黃金拉鋸。 強勢美元讓亞洲貨幣喘不過氣，日圓逼近 159，韓圜也貶破 1500 大關。 有趣的是黃金。按理說利率創高對黃金是利空，金價確實在週中一度大跌。 但隨後迅速反彈，這證明了市場對經濟與地緣風險的避險需求，依然為黃金提供了強大的下檔支撐。 這裡可以對照的證據是：日圓 159、韓圜 1506、黃金在 4480 至 4577 間拉鋸。",
+      "evidence_to_mention": [
+        "日圓 159",
+        "韓圜 1506",
+        "黃金在 4480 至 4577 間拉鋸"
+      ],
+      "avoid_saying": [
+        "亞幣將全面崩盤",
+        "黃金完全無視利率"
+      ],
+      "estimated_seconds": 35
+    },
+    {
+      "segment_id": "narration_segment_06",
+      "scene_id": "scene_06",
+      "screen_title": "下週觀察重點",
+      "single_message": "關注 Fed 官員談話與地緣政治實質進展。",
+      "voiceover_goal": "總結並給出下週觀察重點。",
+      "spoken_text": "接著看第 6 幕：下週觀察重點。 總結來說，市場正在『高利率』與『避險情緒』中尋找新的平衡。 下週我們必須密切關注 Fed 官員對升息選項的進一步解釋。 同時，美伊談判是否會有實質進展，將決定油價與通膨預期的下一步走向。",
+      "evidence_to_mention": [],
+      "avoid_saying": [],
+      "estimated_seconds": 21
+    }
+  ]
+}
