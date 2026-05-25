@@ -51,9 +51,9 @@ jobs:
       - name: Run 92 test visual sequence image generation
         run: |
           if [ -n "${{ inputs.week_dir }}" ]; then
-            python scripts/92_test_generate_visual_sequence_images_v8_presentation_pages.py --week-dir "${{ inputs.week_dir }}"
+            python scripts/92_test_generate_visual_sequence_images_v9_layered.py --week-dir "${{ inputs.week_dir }}"
           else
-            python scripts/92_test_generate_visual_sequence_images_v8_presentation_pages.py
+            python scripts/92_test_generate_visual_sequence_images_v9_layered.py
           fi
 
       - name: Commit visual sequence images
