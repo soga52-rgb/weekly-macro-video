@@ -11,19 +11,27 @@ on:
         description: "Gemini image model"
         required: false
         default: "gemini-3-pro-image-preview"
+      visual_source:
+        description: "presentation_pages or video_scenes"
+        required: false
+        default: "video_scenes"
       force_rebuild_visuals:
         description: "Force rebuild existing visual images"
         required: false
         type: boolean
         default: false
       target_visual_id:
-        description: "Optional: generate only one visual_id, e.g. overview_01 or vis_01"
+        description: "Optional: generate only one visual_id, e.g. overview_01, vis_01, scene_01"
         required: false
         default: ""
       image_retries:
         description: "Gemini image generation retries"
         required: false
-        default: "3"
+        default: "1"
+      image_temperature:
+        description: "Gemini image temperature"
+        required: false
+        default: "0.9"
 
 permissions:
   contents: write
@@ -35,9 +43,11 @@ jobs:
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_IMAGE_MODEL: ${{ inputs.image_model }}
+      VISUAL_SOURCE: ${{ inputs.visual_source }}
       FORCE_REBUILD_VISUALS: ${{ inputs.force_rebuild_visuals }}
       TARGET_VISUAL_ID: ${{ inputs.target_visual_id }}
       GEMINI_IMAGE_RETRIES: ${{ inputs.image_retries }}
+      IMAGE_TEMPERATURE: ${{ inputs.image_temperature }}
 
     steps:
       - name: Checkout repository
@@ -50,10 +60,20 @@ jobs:
 
       - name: Run 92 test visual sequence image generation
         run: |
+          SCRIPT_PATH="scripts/92_test_generate_visual_sequence_images_v8_presentation_pages.py"
+
+          if [ ! -f "$SCRIPT_PATH" ]; then
+            echo "Missing $SCRIPT_PATH"
+            echo "Please paste the latest 92 layered Python code into this existing file path."
+            echo "Available 92 scripts:"
+            ls -la scripts/92* || true
+            exit 1
+          fi
+
           if [ -n "${{ inputs.week_dir }}" ]; then
-            python scripts/92_test_generate_visual_sequence_images_v9_layered.py --week-dir "${{ inputs.week_dir }}"
+            python "$SCRIPT_PATH" --week-dir "${{ inputs.week_dir }}"
           else
-            python scripts/92_test_generate_visual_sequence_images_v9_layered.py
+            python "$SCRIPT_PATH"
           fi
 
       - name: Commit visual sequence images
