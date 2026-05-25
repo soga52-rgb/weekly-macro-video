@@ -12,6 +12,9 @@ on:
         required: false
         default: "gemini-3.5-pro"
 
+permissions:
+  contents: write
+
 jobs:
   generate-weekly-forest-summary:
     runs-on: ubuntu-latest
@@ -32,13 +35,29 @@ jobs:
       - name: Run 91 test weekly forest summary
         run: |
           if [ -n "${{ inputs.week_dir }}" ]; then
-            python scripts/91_test_generate_weekly_forest_summary_v92_analysis_presentation_layers.py --week-dir "${{ inputs.week_dir }}"
+            python scripts/91_test_generate_weekly_forest_summary_v96_keep_4_presentation_pages.py --week-dir "${{ inputs.week_dir }}"
           else
-            python scripts/91_test_generate_weekly_forest_summary_v92_analysis_presentation_layers.py
+            python scripts/91_test_generate_weekly_forest_summary_v96_keep_4_presentation_pages.py
           fi
 
-      - name: Upload weekly output artifact
+      - name: Commit weekly forest summary
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add output/weekly/**/weekly_forest_summary.json || true
+
+          if git diff --cached --quiet; then
+            echo "No weekly_forest_summary.json changes to commit."
+          else
+            git commit -m "Test weekly forest summary"
+            git push
+          fi
+
+      - name: Upload summary artifact only
         uses: actions/upload-artifact@v4
         with:
-          name: weekly-forest-summary-test-output
-          path: output/weekly/
+          name: weekly-forest-summary-json
+          path: |
+            output/weekly/**/weekly_forest_summary.json
+          if-no-files-found: warn
