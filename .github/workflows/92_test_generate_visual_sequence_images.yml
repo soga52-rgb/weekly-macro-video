@@ -58,13 +58,12 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run 92 test visual sequence image generation
+      - name: Run 92 v9 layered visual generation
         run: |
-          SCRIPT_PATH="scripts/92_test_generate_visual_sequence_images_v8_presentation_pages.py"
+          SCRIPT_PATH="scripts/92_test_generate_visual_sequence_images_v9_layered.py"
 
           if [ ! -f "$SCRIPT_PATH" ]; then
             echo "Missing $SCRIPT_PATH"
-            echo "Please paste the latest 92 layered Python code into this existing file path."
             echo "Available 92 scripts:"
             ls -la scripts/92* || true
             exit 1
