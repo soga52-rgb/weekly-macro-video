@@ -116,6 +116,12 @@ USER_PROMPT_TEMPLATE = """
 3. video_visual_scenes：影片畫面用，少字、單一重點、適合 92 產圖。
 4. narration_outline：旁白邏輯，用來講清楚畫面背後的因果，不要把旁白全部塞進圖。
 5. overview_visual / presentation_pages / video_planning：保留舊流程相容欄位，但內容應由 web_visual_pages / video_visual_scenes 自然轉寫。
+6. presentation_pages 必須完整保留 4 張說明頁，供現有 92 流程讀取，不可只輸出 1 張：
+   - page_01：inflation_expectation，先回答「通膨預期訊號是否明確」。
+   - page_02：rate_expectation，再回答「利率預期為何偏強」。
+   - page_03：dollar_index，說明美元指數與利差 / 避險 / 成長疑慮。
+   - page_04：asia_fx_gold，說明日圓、台幣、韓圜與黃金的分化。
+7. video_visual_scenes 可較精簡，但 presentation_pages 必須維持上述 4 頁，以確保 92 舊流程相容。
 
 五、請只輸出合法 JSON，不要加 Markdown，不要加解釋文字。
 
@@ -267,7 +273,7 @@ JSON 結構請維持並擴充如下：
     {
       "page_id": "page_01",
       "page_type": "inflation_expectation",
-      "page_title": "",
+      "page_title": "通膨預期訊號明不明確？",
       "viewer_question": "",
       "viewer_message": "",
       "blocks": [
@@ -279,7 +285,67 @@ JSON 結構請維持並擴充如下：
       ],
       "conclusion": "",
       "visual_brief": {
-        "layout": "two_signals_plus_conclusion / dashboard_note / roadmap",
+        "layout": "two_signals_plus_conclusion",
+        "style_note": "日報總經傳遞圖解風格，簡潔、少字、手繪感",
+        "key_labels": []
+      }
+    },
+    {
+      "page_id": "page_02",
+      "page_type": "rate_expectation",
+      "page_title": "利率預期為何偏強？",
+      "viewer_question": "",
+      "viewer_message": "",
+      "blocks": [
+        {
+          "block_title": "",
+          "block_body": "",
+          "evidence_hint": ""
+        }
+      ],
+      "conclusion": "",
+      "visual_brief": {
+        "layout": "two_signals_plus_conclusion",
+        "style_note": "日報總經傳遞圖解風格，簡潔、少字、手繪感",
+        "key_labels": []
+      }
+    },
+    {
+      "page_id": "page_03",
+      "page_type": "dollar_index",
+      "page_title": "美元指數為何維持偏強？",
+      "viewer_question": "",
+      "viewer_message": "",
+      "blocks": [
+        {
+          "block_title": "",
+          "block_body": "",
+          "evidence_hint": ""
+        }
+      ],
+      "conclusion": "",
+      "visual_brief": {
+        "layout": "two_signals_plus_conclusion",
+        "style_note": "日報總經傳遞圖解風格，簡潔、少字、手繪感",
+        "key_labels": []
+      }
+    },
+    {
+      "page_id": "page_04",
+      "page_type": "asia_fx_gold",
+      "page_title": "亞洲貨幣與黃金為何分化？",
+      "viewer_question": "",
+      "viewer_message": "",
+      "blocks": [
+        {
+          "block_title": "",
+          "block_body": "",
+          "evidence_hint": ""
+        }
+      ],
+      "conclusion": "",
+      "visual_brief": {
+        "layout": "two_signals_plus_conclusion",
         "style_note": "日報總經傳遞圖解風格，簡潔、少字、手繪感",
         "key_labels": []
       }
