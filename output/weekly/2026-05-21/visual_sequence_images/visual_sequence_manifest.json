@@ -1,26 +1,10 @@
 {
   "meta": {
     "source": "weekly_forest_summary.json",
-    "visual_source": "presentation_pages",
     "image_model": "gemini-3-pro-image-preview",
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21"
   },
-  "images": [
-    {
-      "visual_id": "overview_01",
-      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/overview_01.png",
-      "source_layer": "overview_visual",
-      "source_segment_id": "",
-      "visual_title": "本週總經傳遞總覽",
-      "visual_purpose": "再通膨交易降溫，市場轉向定價高利率與尾部風險。",
-      "status": "created_or_existing"
-    }
-  ],
+  "images": [],
   "failed_images": [],
-  "web_hero_visual_id": "overview_01",
-  "web_hero_output": {
-    "source_visual_id": "overview_01",
-    "weekly_web_hero": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/weekly_web_hero.png",
-    "weekly_macro_diagram_compat": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/weekly_macro_diagram.png"
-  }
+  "web_hero_visual_id": "overview_01"
 }
