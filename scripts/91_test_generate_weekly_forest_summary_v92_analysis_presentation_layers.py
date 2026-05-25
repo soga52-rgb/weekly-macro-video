@@ -21,6 +21,7 @@ Input:
 - output/weekly/YYYY-MM-DD/weekly_market_series.json
 - output/weekly/YYYY-MM-DD/weekly_news_context.md optional
 - output/weekly/YYYY-MM-DD/weekly_news_context.json optional
+- output/weekly/YYYY-MM-DD/macro_background_context.md/json optional
 
 Output:
 - output/weekly/YYYY-MM-DD/weekly_forest_summary.json
@@ -60,7 +61,7 @@ SYSTEM_PROMPT = """
 
 
 USER_PROMPT_TEMPLATE = """
-以下是最近 7 天市場數據與新聞事件。
+以下是最近 7 天市場數據與新聞事件，以及近 2～4 週仍具市場影響力的總經背景資料。
 
 請根據來源資料產生 weekly_forest_summary.json。
 
@@ -68,13 +69,15 @@ USER_PROMPT_TEMPLATE = """
 核心原則是「分析層」與「呈現層」分開：
 
 一、分析層 transmission_diagnosis
-請根據市場數據與新聞，先做內部分析判斷：
-- 本週市場資訊是否足夠形成明確通膨預期。
-- 利率預期走強主要是通膨推動、Fed 政策引導、長天期債券供需 / 期限溢價，或多因素共同推動。
-- 利率預期是否傳導至美元。
-- 美元是否傳導至台幣、日圓、韓圜與黃金。
+請根據市場數據、近 7 天新聞與 2～4 週宏觀背景，先做嚴謹的內部分析判斷：
+- 追蹤外生衝擊（地緣政治、能源、大宗商品、政策突變）是否已實質傳導至通膨預期；若只是短線能源或避險修正，不要直接推論整體通膨預期已明確轉強或轉弱。
+- 判斷本週市場資訊是否足夠形成明確通膨預期；若前期物價 / 就業 / 薪資背景與本週油價或地緣事件方向相反，請判斷為 mixed / unclear / 待確認。
+- 診斷長端利率（10年 / 30年殖利率）的驅動力：究竟是基本面通膨、Fed 政策引導、長債供需失衡、期限溢價重估，或多因素共同推動。
+- 檢查利率預期是否傳導至美元，並區分利差支撐、避險需求與政策預期。
+- 檢查美元是否傳導至台幣、日圓、韓圜與黃金；台幣、日圓、韓圜必須逐一檢視，不能只用「亞幣」集合判斷。
 - 若資料多空交錯，請判斷為 mixed / unclear，不要硬下單邊結論。
 - 若不同市場反應不一致，請判斷為 partial_sync / divergent，並找出可能的局部基本面、資金流、政策或避險因素。
+- 若出現長債殖利率上升、美元偏強、黃金或亞幣反應不一致，請診斷是否代表市場正在交易期限溢價、避險需求或流動性收縮，而不是只用單一通膨敘事解釋。
 
 二、呈現層 presentation_pages
 請把上述分析轉成觀眾容易理解的網頁 / 影片說明頁。
@@ -87,6 +90,8 @@ USER_PROMPT_TEMPLATE = """
 
 三、新聞與經濟數據的角色
 新聞與經濟數據必須存在於分析中，但在畫面呈現中只需要自然嵌入重點區塊。
+評估通膨預期時，請同時參考 weekly_news_context 的近 7 天事件與 macro_background_context 的近 2～4 週背景資料。
+若本週油價下跌，但 macro_background_context 顯示 CPI / PPI / PCE / 就業 / 薪資 / 全球長債仍支撐通膨黏性或高利率疑慮，請將通膨預期判斷為 mixed 或 unclear，不要直接判斷為 weak。
 請避免把同一則新聞在不同區塊重複呈現。
 例如：
 - 若美伊協議傳聞已放在通膨 / 油價訊號中，就不要再另開「新聞驗證」區重複一次。
@@ -263,6 +268,12 @@ weekly_news_context.md：
 
 weekly_news_context.json：
 {weekly_news_context_json}
+
+macro_background_context.md：
+{macro_background_context_md}
+
+macro_background_context.json：
+{macro_background_context_json}
 """
 
 
@@ -428,8 +439,8 @@ def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: 
         "systemInstruction": {"parts": [{"text": system_prompt}]},
         "contents": [{"role": "user", "parts": [{"text": user_prompt}]}],
         "generationConfig": {
-            "temperature": 0.9,
-            "topP": 0.9,
+            "temperature": 0.2,
+            "topP": 0.85,
             "responseMimeType": "application/json",
         },
     }
@@ -464,6 +475,8 @@ def build_user_prompt(
     weekly_market_series: Dict[str, Any],
     weekly_news_context_md: str,
     weekly_news_context_json: Dict[str, Any],
+    macro_background_context_md: str,
+    macro_background_context_json: Dict[str, Any],
 ) -> str:
     return USER_PROMPT_TEMPLATE.replace(
         "{weekly_market_series_json}",
@@ -474,6 +487,12 @@ def build_user_prompt(
     ).replace(
         "{weekly_news_context_json}",
         json.dumps(weekly_news_context_json, ensure_ascii=False, indent=2),
+    ).replace(
+        "{macro_background_context_md}",
+        macro_background_context_md,
+    ).replace(
+        "{macro_background_context_json}",
+        json.dumps(macro_background_context_json, ensure_ascii=False, indent=2),
     )
 
 
@@ -504,6 +523,8 @@ def main() -> None:
     weekly_market_series = load_json(week_dir / "weekly_market_series.json", {})
     weekly_news_context_md = load_text(week_dir / "weekly_news_context.md")
     weekly_news_context_json = load_json(week_dir / "weekly_news_context.json", {})
+    macro_background_context_md = load_text(week_dir / "macro_background_context.md")
+    macro_background_context_json = load_json(week_dir / "macro_background_context.json", {})
 
     if not weekly_market_series:
         raise FileNotFoundError(f"Missing or empty weekly_market_series.json in {week_dir}")
@@ -518,6 +539,8 @@ def main() -> None:
         weekly_market_series=weekly_market_series,
         weekly_news_context_md=weekly_news_context_md,
         weekly_news_context_json=weekly_news_context_json,
+        macro_background_context_md=macro_background_context_md,
+        macro_background_context_json=macro_background_context_json,
     )
 
     print(f"[INFO] Generating weekly forest summary with analysis model: {model}")
@@ -525,6 +548,8 @@ def main() -> None:
     print(f"[INFO] Market series included: {bool(weekly_market_series)}")
     print(f"[INFO] News context md included: {bool((week_dir / 'weekly_news_context.md').exists())}")
     print(f"[INFO] News context json included: {bool((week_dir / 'weekly_news_context.json').exists())}")
+    print(f"[INFO] Macro background context md included: {bool((week_dir / 'macro_background_context.md').exists())}")
+    print(f"[INFO] Macro background context json included: {bool((week_dir / 'macro_background_context.json').exists())}")
 
     forest_summary = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
     forest_summary = normalize_video_planning(forest_summary)
