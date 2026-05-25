@@ -10,7 +10,7 @@ on:
       dialogue_model:
         description: "Gemini dialogue model"
         required: false
-        default: "gemini-3.1-pro-preview"
+        default: "gemini-3.5-pro"
       dialogue_temperature:
         description: "Dialogue generation temperature"
         required: false
