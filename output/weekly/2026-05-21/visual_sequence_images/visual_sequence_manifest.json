@@ -7,12 +7,12 @@
   },
   "images": [
     {
-      "visual_id": "scene_04",
-      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/scene_04.png",
+      "visual_id": "scene_05",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/scene_05.png",
       "source_layer": "video_visual_scenes",
-      "source_segment_id": "scene_04",
-      "visual_title": "美元指數：高檔震盪",
-      "visual_purpose": "利差提供支撐，但經濟降溫隱憂限制了漲幅。",
+      "source_segment_id": "scene_05",
+      "visual_title": "亞幣承壓，黃金拉鋸",
+      "visual_purpose": "日圓韓圜顯著走弱，黃金在利空與避險中尋找平衡。",
       "status": "created_or_existing"
     }
   ],
