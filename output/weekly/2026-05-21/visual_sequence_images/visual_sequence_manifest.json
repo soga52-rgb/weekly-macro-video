@@ -7,12 +7,12 @@
   },
   "images": [
     {
-      "visual_id": "scene_01",
-      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/scene_01.png",
+      "visual_id": "scene_02",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/scene_02.png",
       "source_layer": "video_visual_scenes",
-      "source_segment_id": "scene_01",
-      "visual_title": "本週市場主線：鷹派與避險的拉鋸",
-      "visual_purpose": "再通膨交易降溫，市場轉向定價高利率與尾部風險。",
+      "source_segment_id": "scene_02",
+      "visual_title": "通膨預期：油價大跌打亂陣腳",
+      "visual_purpose": "美伊和平傳聞重挫油價，削弱了再通膨敘事。",
       "status": "created_or_existing"
     }
   ],
