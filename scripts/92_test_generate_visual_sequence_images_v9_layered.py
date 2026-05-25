@@ -251,7 +251,7 @@ def build_items_from_video_scenes(summary: Dict[str, Any]) -> List[Dict[str, Any
     if not isinstance(scenes, list):
         return []
 
-    narration_map = {}
+    narration_map: Dict[str, Dict[str, Any]] = {}
     for item in summary.get("narration_outline") or []:
         if isinstance(item, dict):
             narration_map[str(item.get("narration_id", ""))] = item
@@ -294,7 +294,6 @@ def build_visual_items(summary: Dict[str, Any], visual_source: str) -> Tuple[Lis
         hero_id = "overview_01" if any(str(x.get("visual_id")) == "overview_01" for x in items) else str(items[0].get("visual_id", ""))
         return items, hero_id
 
-    # Legacy fallback
     video_planning = summary.get("video_planning", {}) or {}
     visual_sequence = video_planning.get("visual_sequence") or []
     if not isinstance(visual_sequence, list) or not visual_sequence:
@@ -320,7 +319,6 @@ def build_visual_prompt(summary: Dict[str, Any], visual: Dict[str, Any], is_web_
     forest = summary.get("forest_summary", {})
     storyline = summary.get("macro_storyline", {})
     diagnosis = summary.get("transmission_diagnosis", {})
-    funnel = summary.get("common_judgment_funnel", {})
 
     page_type = str(visual.get("page_type", "")).strip()
     title = str(visual.get("visual_title", "")).strip()
@@ -335,6 +333,55 @@ def build_visual_prompt(summary: Dict[str, Any], visual: Dict[str, Any], is_web_
 
     blocks_text = block_lines(visual.get("blocks", []), limit=3)
 
+    narration_text = ""
+    if visual.get("narration_summary"):
+        narration_text = "\n".join(f"- {x}" for x in visual.get("narration_summary", [])[:3])
+
+    avoid_text = ""
+    if visual.get("avoid_saying"):
+        avoid_text = " / ".join(str(x) for x in visual.get("avoid_saying", []) if str(x).strip())
+
+    if source_layer == "video_visual_scenes":
+        return f"""
+Create ONE Traditional Chinese low-text video storyboard frame.
+
+STRICT TASK:
+- Draw only this scene.
+- Do not create an overview dashboard unless page_type is overview.
+- Do not include other asset classes unless they are listed in the current scene labels.
+- Do not copy the full macro analysis onto the image.
+- Do not add extra sections that are not requested by this scene.
+
+Current scene only:
+- Scene type: {page_type}
+- Screen title: {title}
+- Single message: {purpose}
+- Visual metaphor: {concept}
+- On-screen labels: {labels_text}
+- Must-show numbers: {numbers_text}
+
+Narration reference only, do not copy all text to screen:
+{narration_text}
+
+Avoid saying or implying:
+{avoid_text}
+
+Scene-specific rules:
+- If scene_type is overview: show only the one central tug-of-war message and 2-4 labels.
+- If scene_type is inflation_expectation: focus on oil / WTI / energy / inflation expectation only.
+- If scene_type is rate_expectation: focus on Fed / bond yields / US10Y / term premium only.
+- If scene_type is dollar_index: focus on DXY / rate differential / growth concern only.
+- If scene_type is asia_fx_gold: focus on JPY / KRW / TWD / gold only.
+- If scene_type is next_week_roadmap: focus on next-week watchpoints only.
+
+Style:
+- Clean hand-drawn editorial macro explainer.
+- Light cream background, black outlines, soft beige/yellow blocks, simple icons.
+- Very sparse text: one title, 2-4 short labels, 0-2 numbers.
+- Make it suitable for video with voiceover.
+- No long paragraphs, no full report layout, no dense charts, no logos, no watermarks.
+""".strip()
+
     overview_text = ""
     if page_type == "overview_dashboard":
         overview_text = compact_json({
@@ -345,33 +392,17 @@ def build_visual_prompt(summary: Dict[str, Any], visual: Dict[str, Any], is_web_
             "watch_items": visual.get("watch_items", []),
         }, max_chars=2800)
 
-    narration_text = ""
-    if visual.get("narration_summary"):
-        narration_text = "\n".join(f"- {x}" for x in visual.get("narration_summary", [])[:4])
-
-    avoid_text = ""
-    if visual.get("avoid_saying"):
-        avoid_text = " / ".join(str(x) for x in visual.get("avoid_saying", []) if str(x).strip())
-
     hero_note = ""
     if is_web_hero:
         hero_note = "This image is the web hero / overview image. Make it feel like a complete one-page overview, but keep text sparse."
-
-    density_rule = (
-        "For video_visual_scenes: use very sparse text, one single message, 2-4 short labels, and no long paragraphs."
-        if source_layer == "video_visual_scenes"
-        else "For presentation_pages: use a clean title, 2-3 large content blocks, and one visually separated conclusion area."
-    )
 
     return f"""
 Create a Traditional Chinese macro visual note in a clean hand-drawn editorial style.
 
 Purpose:
 - Generate a viewer-facing visual, not an internal analysis document.
-- Do not expose internal framework labels unless they are part of the viewer message.
 - Keep the conclusion visually clear and not buried.
 - Evidence may appear as short labels inside blocks; do not create a separate dense news list.
-- Do not turn inference into fact.
 
 Weekly context:
 - Theme: {forest.get("weekly_main_theme", "")}
@@ -379,11 +410,8 @@ Weekly context:
 - Transmission: {storyline.get("market_transmission", "")}
 - Revision/noise: {storyline.get("revision_or_noise", "")}
 
-Judgment funnel reference:
-{compact_json(funnel, max_chars=1600)}
-
 Internal diagnosis reference:
-{compact_json(diagnosis, max_chars=2200)}
+{compact_json(diagnosis, max_chars=1800)}
 
 Current visual:
 - Source layer: {source_layer}
@@ -392,13 +420,8 @@ Current visual:
 - Viewer message: {purpose}
 - Core concept / conclusion: {concept}
 - Key labels: {labels_text}
-- Must-show numbers: {numbers_text}
 - Blocks:
 {blocks_text}
-- Narration reference, do not copy all text to screen:
-{narration_text}
-- Avoid saying or implying:
-{avoid_text}
 
 Overview structure if applicable:
 {overview_text}
@@ -406,10 +429,10 @@ Overview structure if applicable:
 Style:
 - Light cream/off-white background.
 - Hand-drawn black outlines, soft beige/yellow blocks, rounded boxes, simple doodle icons, clear arrows.
-- Business-simple, not childish; forum-style macro explainer.
-- {density_rule}
-- Keep text sparse and readable: short Chinese titles, short labels, very few numbers.
-- Avoid dense charts, tiny text, long paragraphs, financial terminal style, WEF style, logos, watermarks.
+- Business-simple, forum-style macro explainer.
+- For presentation_pages: use a clean title, 2-3 large content blocks, and one visually separated conclusion area.
+- Keep text readable and not too dense.
+- Avoid long paragraphs, financial terminal style, WEF style, logos, watermarks.
 - {hero_note}
 """.strip()
 
