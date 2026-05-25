@@ -1,10 +1,21 @@
 {
   "meta": {
     "source": "weekly_forest_summary.json",
+    "visual_source": "video_scenes",
     "image_model": "gemini-3-pro-image-preview",
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21"
   },
-  "images": [],
+  "images": [
+    {
+      "visual_id": "scene_01",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/scene_01.png",
+      "source_layer": "video_visual_scenes",
+      "source_segment_id": "scene_01",
+      "visual_title": "本週市場主線：鷹派與避險的拉鋸",
+      "visual_purpose": "再通膨交易降溫，市場轉向定價高利率與尾部風險。",
+      "status": "created_or_existing"
+    }
+  ],
   "failed_images": [],
   "web_hero_visual_id": "overview_01"
 }
