@@ -1,4 +1,4 @@
-name: 94 Test Generate Video Narration Script
+name: 94 Test Generate Video Dialogue Script
 
 on:
   workflow_dispatch:
@@ -7,13 +7,26 @@ on:
         description: "Optional week folder under output/weekly, e.g. 2026-05-21. Leave blank to use latest."
         required: false
         default: ""
+      dialogue_model:
+        description: "Gemini dialogue model"
+        required: false
+        default: "gemini-3.1-pro-preview"
+      dialogue_temperature:
+        description: "Dialogue generation temperature"
+        required: false
+        default: "0.6"
 
 permissions:
   contents: write
 
 jobs:
-  generate-video-narration-script:
+  generate-video-dialogue-script:
     runs-on: ubuntu-latest
+
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_DIALOGUE_MODEL: ${{ inputs.dialogue_model }}
+      DIALOGUE_TEMPERATURE: ${{ inputs.dialogue_temperature }}
 
     steps:
       - name: Checkout repository
@@ -24,9 +37,9 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run 94 test narration script generation
+      - name: Run 94 test dialogue script generation
         run: |
-          SCRIPT_PATH="scripts/94_test_generate_video_narration_script.py"
+          SCRIPT_PATH="scripts/94_test_generate_video_dialogue_script.py"
 
           if [ ! -f "$SCRIPT_PATH" ]; then
             echo "Missing $SCRIPT_PATH"
@@ -41,26 +54,26 @@ jobs:
             python "$SCRIPT_PATH"
           fi
 
-      - name: Commit narration script
+      - name: Commit dialogue script
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add output/weekly/**/video_narration_script.md || true
-          git add output/weekly/**/video_narration_script.json || true
+          git add output/weekly/**/video_dialogue_script.md || true
+          git add output/weekly/**/video_dialogue_script.json || true
 
           if git diff --cached --quiet; then
-            echo "No narration script changes to commit."
+            echo "No dialogue script changes to commit."
           else
-            git commit -m "Test video narration script"
+            git commit -m "Test video dialogue script"
             git push
           fi
 
-      - name: Upload narration artifact
+      - name: Upload dialogue artifact
         uses: actions/upload-artifact@v4
         with:
-          name: weekly-video-narration-script
+          name: weekly-video-dialogue-script
           path: |
-            output/weekly/**/video_narration_script.md
-            output/weekly/**/video_narration_script.json
+            output/weekly/**/video_dialogue_script.md
+            output/weekly/**/video_dialogue_script.json
           if-no-files-found: warn
