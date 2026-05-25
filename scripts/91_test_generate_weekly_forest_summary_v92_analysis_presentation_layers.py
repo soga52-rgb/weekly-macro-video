@@ -63,68 +63,67 @@ SYSTEM_PROMPT = """
 USER_PROMPT_TEMPLATE = """
 以下是最近 7 天市場數據與新聞事件，以及近 2～4 週仍具市場影響力的總經背景資料。
 
-請根據來源資料產生 weekly_forest_summary.json。
+請產生 weekly_forest_summary.json。
 
-這支影片的格式是：說明影片。
-核心原則是「分析層」與「呈現層」分開：
+核心原則：
+1. 分析邏輯、靜態網頁呈現、動態影片畫面、旁白邏輯必須分層。
+2. 分析層可以完整、專業；靜態網頁可以保留較多資訊；影片畫面必須少字、單一主訊息；旁白負責說清楚因果、轉折與證據。
+3. 網頁圖與影片圖共用同一套分析邏輯，但不應共用同一張圖。
+4. 所有推論必須錨定來源資料；若只是市場押注、新聞解讀或模型推論，不可寫成官方已宣布或已發生事實。
 
-一、分析層 transmission_diagnosis
-請根據市場數據、近 7 天新聞與 2～4 週宏觀背景，先做嚴謹的內部分析判斷：
-- 追蹤外生衝擊（地緣政治、能源、大宗商品、政策突變）是否已實質傳導至通膨預期；若只是短線能源或避險修正，不要直接推論整體通膨預期已明確轉強或轉弱。
-- 判斷本週市場資訊是否足夠形成明確通膨預期；若前期物價 / 就業 / 薪資背景與本週油價或地緣事件方向相反，請判斷為 mixed / unclear / 待確認。
-- 診斷長端利率（10年 / 30年殖利率）的驅動力：究竟是基本面通膨、Fed 政策引導、長債供需失衡、期限溢價重估，或多因素共同推動。
-- 檢查利率預期是否傳導至美元，並區分利差支撐、避險需求與政策預期。
-- 檢查美元是否傳導至台幣、日圓、韓圜與黃金；台幣、日圓、韓圜必須逐一檢視，不能只用「亞幣」集合判斷。
-- 若資料多空交錯，請判斷為 mixed / unclear，不要硬下單邊結論。
-- 若不同市場反應不一致，請判斷為 partial_sync / divergent，並找出可能的局部基本面、資金流、政策或避險因素。
-- 若出現長債殖利率上升、美元偏強、黃金或亞幣反應不一致，請診斷是否代表市場正在交易期限溢價、避險需求或流動性收縮，而不是只用單一通膨敘事解釋。
+一、共通研判漏斗 common_judgment_funnel
+請對通膨、利率、美元、亞洲貨幣與黃金，使用同一套研判漏斗：
+1. 新聞自然比重：觀察當週新聞與 2～4 週背景新聞中，哪些主題被高密度討論。此為市場關注度訊號，不是結論。
+2. 方向一致性：判斷新聞方向是偏多、偏空、混合或不明。例如同一類新聞中是否多數指向升溫、降溫、風險上升或風險下降。
+3. 市場價格驗證：檢查對應資產價格是否同步反映，例如 WTI / Brent、US10Y / 30Y、DXY、USDJPY、USDTWD、USDKRW、Gold。
+4. 高權重事件修正：CPI、PPI、PCE、Fed 會議紀錄、主要政策變化、長債拍賣、重大地緣事件等，可以覆蓋一般新聞篇數的判斷。
+5. 結論分類：若兩類以上資訊同向且價格驗證成立，可判斷方向較明確；若多空力道交錯或高權重事件互相抵銷，應判斷 mixed / unclear / 待確認。
 
-二、呈現層 presentation_pages
-請把上述分析轉成觀眾容易理解的網頁 / 影片說明頁。
-畫面呈現不要直接使用「同頻、背離、新聞驗證」作為硬性三欄標題；這些是內部分析方法。
-對外呈現應以結果導向的問題與結論為主，例如：
-- 通膨預期訊號明不明確？
-- 利率預期為何仍偏強？
-- 美元指數為何維持偏強？
-- 亞洲貨幣與黃金為何出現分化？
+二、各變數分析框架
+1. 通膨預期：
+   - 參考物價硬數據：CPI、PPI、PCE、核心 PCE、PMI / ISM 價格分項。
+   - 參考能源與供給：WTI、Brent、天然氣、BDI、OPEC、EIA、戰略儲備、荷姆茲海峽、戰爭與地緣供應風險。
+   - 參考需求與景氣：零售銷售、PMI / ISM、GDP、消費信心。
+   - 參考勞動市場：非農、ADP、初領失業金、失業率、薪資、裁員報導。
+   - 參考市場與政策預期：Fed 談話、會議紀錄、升降息機率、美債殖利率、通膨連動債。
+   - 不得只因油價單週下跌就判斷通膨預期降溫；也不得只因 CPI / PPI 偏強就忽略能源端修正。
 
-三、新聞與經濟數據的角色
-新聞與經濟數據必須存在於分析中，但在畫面呈現中只需要自然嵌入重點區塊。
-評估通膨預期時，請同時參考 weekly_news_context 的近 7 天事件與 macro_background_context 的近 2～4 週背景資料。
-若本週油價下跌，但 macro_background_context 顯示 CPI / PPI / PCE / 就業 / 薪資 / 全球長債仍支撐通膨黏性或高利率疑慮，請將通膨預期判斷為 mixed 或 unclear，不要直接判斷為 weak。
-請避免把同一則新聞在不同區塊重複呈現。
-例如：
-- 若美伊協議傳聞已放在通膨 / 油價訊號中，就不要再另開「新聞驗證」區重複一次。
-- Fed 鷹派談話應放在利率訊號或政策引導中，不要和新聞驗證區重複。
-- 結論要單獨清楚呈現，字數要少，讓觀眾一眼看懂。
+2. 利率預期：
+   - 區分基本面通膨、Fed 政策引導、長債供需、期限溢價、財政赤字、全球長債同步拋售、避險需求。
+   - 若長端利率上升但油價或通膨預期未同步上升，應檢查是否為 term_premium / bond_supply_demand / policy_guidance。
 
-四、建議的對外頁面順序
-presentation_pages 請優先產生以下 4 頁；若當週資料不支持某頁，請調整標題與內容，但保持 viewer-facing，不要暴露內部分析術語：
-1. inflation_expectation：市場資訊足不足夠形成通膨預期？
-2. rate_expectation：利率預期是通膨推動，還是政策 / 長債重估推動？
-3. dollar_index：美元指數為何偏強或偏弱？
-4. asia_fx_gold：台幣、日圓、韓圜與黃金如何反應美元壓力？
+3. 美元指數：
+   - 區分利差支撐、避險需求、美元流動性、非美貨幣弱勢、貿易與政策風險。
+   - 若利率偏強但美元未突破，應檢查成長擔憂或風險偏好是否限制美元上行。
 
-五、總覽圖 overview_visual
-overview_visual 是整週的總覽母頁，不是單一說明頁。
-它應該統整：
-- 主傳導圖解
-- 本週重點摘要
-- 總經傳導鏈
-- 走勢驗證卡片
-- 下週觀察重點
+4. 亞洲貨幣：
+   - 日圓、台幣、韓圜必須分開判斷，不可只寫「亞幣」。
+   - 檢查利差、央行干預、出口 / 股市資金流、外資流動、地緣與美元壓力。
+   - 若 asset 是 USD/JPY，direction 應描述匯率走高或走低；若要描述日圓承壓，asset 應寫「日圓」。
 
-請注意：
-- 若某個結論無法由來源資料直接支持，請呈現為資料不足、訊號混雜、分歧或待觀察。
-- presentation_pages 是 90 產圖主要資料來源。
-- video_segments 與 video_planning.visual_sequence 保留為舊流程相容欄位，可由 presentation_pages 自然轉寫。
-- 請只輸出合法 JSON，不要加 Markdown，不要加解釋文字。
+5. 黃金：
+   - 檢查實質利率、美元、避險需求、地緣政治、央行買金、中印需求。
+   - 若高利率壓抑與避險需求同時存在，應判斷為拉鋸 / mixed，不可硬下單邊結論。
+
+三、官方訊號、媒體解讀、市場定價、模型推論要分清楚
+- Fed 已正式宣布、Fed 會議紀錄、媒體報導、市場押注、模型推論，必須明確區分。
+- 若資料只顯示「市場押注未來 Fed 轉鷹」，不可改寫成「Fed 已正式重啟升息」。
+- 若沒有 MMF、T-Bill 或資金流數據，不可把「現金為王」寫成已發生事實；可寫成「防禦性配置可能上升 / 待觀察」。
+
+四、輸出分層要求
+1. transmission_diagnosis：分析層，完整保留因果、證據、多空力道與判斷。
+2. web_visual_pages：靜態網頁圖卡，可承載較多資訊，作為研究摘要式呈現。
+3. video_visual_scenes：影片畫面用，少字、單一重點、適合 92 產圖。
+4. narration_outline：旁白邏輯，用來講清楚畫面背後的因果，不要把旁白全部塞進圖。
+5. overview_visual / presentation_pages / video_planning：保留舊流程相容欄位，但內容應由 web_visual_pages / video_visual_scenes 自然轉寫。
+
+五、請只輸出合法 JSON，不要加 Markdown，不要加解釋文字。
 
 JSON 結構請維持並擴充如下：
 
 {
   "meta": {
-    "source": "weekly_market_series.json + weekly_news_context.md/json",
+    "source": "weekly_market_series.json + weekly_news_context.md/json + macro_background_context.md/json",
     "data_status_note": "",
     "week_range": "",
     "days_observed": ""
@@ -136,6 +135,22 @@ JSON 結構請維持並擴充如下：
     "overall_verdict": "成立 / 部分成立 / 分歧待觀察 / 待觀察",
     "narrative_arc": "",
     "why_it_matters": ""
+  },
+  "common_judgment_funnel": {
+    "attention_signal": {
+      "dominant_topics": [],
+      "natural_news_weight_note": ""
+    },
+    "direction_consistency": {
+      "inflation": "bullish / bearish / mixed / unclear",
+      "rates": "bullish / bearish / mixed / unclear",
+      "dollar": "bullish / bearish / mixed / unclear",
+      "asia_fx": "pressure / resilient / mixed / unclear",
+      "gold": "supportive / restrictive / mixed / unclear"
+    },
+    "price_validation": [],
+    "high_weight_event_adjustments": [],
+    "final_rule_note": ""
   },
   "macro_storyline": {
     "story_start": "",
@@ -167,7 +182,7 @@ JSON 結構請維持並擴充如下：
     "sync_checks": [
       {
         "check_id": "check_01",
-        "pair": "通膨預期 vs 利率預期",
+        "pair": "",
         "status": "sync / partial_sync / divergent / mixed / unclear",
         "market_signal": "",
         "interpretation": "",
@@ -178,7 +193,7 @@ JSON 結構請維持並擴充如下：
     "macro_evidence": [
       {
         "evidence_id": "evidence_01",
-        "type": "market_data / news / macro_data",
+        "type": "market_data / news / macro_data / inference",
         "title": "",
         "supports": "",
         "related_checks": []
@@ -186,6 +201,46 @@ JSON 結構請維持並擴充如下：
     ],
     "watch_points": []
   },
+  "web_visual_pages": [
+    {
+      "page_id": "web_01",
+      "page_type": "overview / inflation_expectation / rate_expectation / dollar_index / asia_fx_gold / next_week_roadmap",
+      "page_title": "",
+      "viewer_question": "",
+      "viewer_message": "",
+      "blocks": [
+        {
+          "block_title": "",
+          "block_body": "",
+          "evidence_hint": ""
+        }
+      ],
+      "conclusion": "",
+      "visual_density": "medium / high"
+    }
+  ],
+  "video_visual_scenes": [
+    {
+      "scene_id": "scene_01",
+      "scene_type": "overview / inflation_expectation / rate_expectation / dollar_index / asia_fx_gold / next_week_roadmap",
+      "screen_title": "",
+      "single_message": "",
+      "on_screen_labels": [],
+      "must_show_numbers": [],
+      "visual_metaphor": "",
+      "voiceover_link": "narration_01"
+    }
+  ],
+  "narration_outline": [
+    {
+      "narration_id": "narration_01",
+      "scene_id": "scene_01",
+      "voiceover_goal": "",
+      "key_points": [],
+      "evidence_to_mention": [],
+      "avoid_saying": []
+    }
+  ],
   "overview_visual": {
     "visual_id": "overview_01",
     "page_type": "overview_dashboard",
@@ -205,13 +260,7 @@ JSON 結構請維持並擴充如下：
       "headline": "",
       "steps": []
     },
-    "validation_cards": [
-      {
-        "asset": "",
-        "direction": "",
-        "role": ""
-      }
-    ],
+    "validation_cards": [],
     "watch_items": []
   },
   "presentation_pages": [
@@ -230,7 +279,7 @@ JSON 結構請維持並擴充如下：
       ],
       "conclusion": "",
       "visual_brief": {
-        "layout": "three_blocks / two_signals_plus_conclusion / dashboard_note",
+        "layout": "two_signals_plus_conclusion / dashboard_note / roadmap",
         "style_note": "日報總經傳遞圖解風格，簡潔、少字、手繪感",
         "key_labels": []
       }
