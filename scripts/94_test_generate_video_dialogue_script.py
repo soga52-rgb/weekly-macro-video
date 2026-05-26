@@ -55,16 +55,21 @@ SYSTEM_PROMPT = """
 
 最高原則：
 1. 畫面少字，語音深講：scene 圖片只是視覺錨點；正式台詞必須把 scene_dialogue_context 裡的 prior_market_impression、this_week_catalyst、data_validation、causal_interpretation、offset_or_risk、tom_question_angle、miranda_talk_track 轉成自然對談。
-2. 圖片優先對齊：每一幕必須呼應該 scene 圖片中可見的視覺隱喻、標籤與數字，例如天平、折線、Fed 建築、烏雲、溺水貨幣、金磚、望遠鏡。
-3. Metadata 為準：若圖片文字與 weekly_forest_summary 的 scene metadata 不一致，以 weekly_forest_summary 為準。
+2. 實際圖片優先對齊：每一幕必須優先描述該 scene 圖片中「實際可見」的視覺隱喻、標籤與數字，不可沿用 metadata 裡不存在於圖片上的舊視覺描述。
+3. Metadata 為準：若圖片文字與 weekly_forest_summary 的事實資料不一致，以 weekly_forest_summary 為準；但視覺物件描述必須以實際圖片為準。
 4. 不能憑圖編新聞：圖片只用於畫面對齊，新聞與因果素材必須來自 supporting_context，特別是 scene_dialogue_context、macro_storyline、transmission_diagnosis、common_judgment_funnel、evidence。
 5. 完整因果鏈：Miranda 的回答必須包含「前因慣性 → 本週催化事件 → 市場數據驗證 / 抵銷 → 總經定價機制 → 下一幕伏筆」。
 6. 伏筆而不暴雷：Miranda 可以在結尾銜接下一幕，但不能提前把下一幕完整分析講完。
-7. 口吻控制：台灣專業財經節目口語，清楚、有節奏、有洞察，但避免過度戲劇化或網路化詞彙，例如「精神分裂」、「核彈級」、「尚方寶劍」、「崩盤」、「全面失守」、「躺平任人捶打」。
-8. Tom 的單次發言不能過短。除非是最後的簡短回應，Tom 每次 spoken_text 建議至少 25 個中文字，讓 TTS 與畫面字卡有足夠停留時間。
-9. 最後一幕必須由 Tom 收尾，形成節目完結感。收尾可以提醒觀眾持續追蹤、保持彈性、下週見；避免投資建議式語氣。
-10. news_reference 必須跨幕一致。若某一幕使用前一幕的新聞因果作為解釋，例如用「房市數據疲軟」解釋黃金避險需求，該 turn 的 news_reference 必須補上該新聞線索。
-11. 嚴格輸出合法 JSON，不要 Markdown，不要多餘文字。
+7. 動態解圖規則：
+   - 若圖片是天平、翹翹板、拔河、左右對立、兩端力量：用「兩股宏觀力量拉鋸 / 政策與地緣互相抵銷」解讀。
+   - 若圖片是漢堡、層狀箱子、底座、烏雲、壓力、煞車：用「底層支撐因子 vs 頂層阻力因子」解讀。特別注意 scene_04 若是漢堡 / 三層結構，應說底層利差支撐、中層美元震盪、上層成長擔憂壓制，不要說成拔河或重物拉扯。
+   - 若圖片是溺水、漂浮、波浪、金磚、不同資產命運分化：用「不同定價模型造成資產分化」解讀，例如亞幣是純利差壓力，黃金是實質利率與避險需求雙軌拉鋸。
+   - 若圖片是折線、急跌、箭頭、價格階梯：先描述實際可見的線形，不要把平滑折線說成階梯或把沒有出現的氣球說成畫面物件。
+8. 口吻控制：台灣專業財經節目口語，清楚、有節奏、有洞察，但避免過度戲劇化或網路化詞彙，例如「精神分裂」、「核彈級」、「尚方寶劍」、「崩盤」、「全面失守」、「躺平任人捶打」、「免死金牌」、「哀鴻遍野」。
+9. Tom 的單次發言不能過短。除非是最後的簡短回應，Tom 每次 spoken_text 建議至少 25 個中文字，讓 TTS 與畫面字卡有足夠停留時間。
+10. 最後一幕必須由 Tom 收尾，形成節目完結感。收尾可以提醒觀眾持續追蹤、保持彈性、下週見；避免投資建議式語氣。
+11. news_reference 必須跨幕一致。若某一幕使用前一幕的新聞因果作為解釋，例如用「房市數據疲軟」解釋黃金避險需求，該 turn 的 news_reference 必須補上該新聞線索。
+12. 嚴格輸出合法 JSON，不要 Markdown，不要多餘文字。
 """
 
 
@@ -87,11 +92,14 @@ USER_PROMPT_TEMPLATE = """
 - 每一幕對談素材要足以支撐約 60～90 秒。
 - 全片目標 6～8 分鐘。
 - subtitle_text 必須是精簡字幕，不超過 25 個中文字；不要直接複製完整 spoken_text。
-- visual_reference 必須指出本 turn 對應的圖上物件或 scene_id。
+- visual_reference 必須指出本 turn 對應的圖上實際可見物件或 scene_id。
 - news_reference 必須列出本 turn 用到的新聞 / 政策 / 數據線索；沒有就填空陣列。
 - Tom 的功能性提問不要太短。除非是必要的簡短追問，每個 Tom turn 建議至少 25 個中文字，estimated_seconds 建議至少 8 秒。
 - 最後一個 scene 的最後一個 speaker_turn 必須是 Tom，用於正式片尾收束；內容應感謝 Miranda、提醒觀眾持續追蹤，並自然說「我們下週見」。
 - 如果 Miranda 在某一幕使用跨幕因果，例如用房市疲弱 / 成長隱憂解釋黃金避險支撐，news_reference 必須保留該跨幕新聞線索，不得留空。
+- 產生台詞前，請先讀取該 scene 圖片中的實際視覺結構；不要把 metadata 的 visual_metaphor 當成唯一真相。
+- 若圖片是三層 / 漢堡 / 底座與烏雲結構，台詞要明確說「底層支撐、上層壓制、中央震盪」，不要說成「向上箭頭與向下重物拉扯」。
+- 若圖片是急跌折線，台詞要說「急墜折線 / 價格滑落」，不要自行說成「階梯」或不存在的「氣球」。
 
 輸出 JSON 結構：
 {
@@ -496,7 +504,7 @@ def call_gemini_json(parts: List[Dict[str, Any]], model: str, api_key: str, temp
 
 
 def estimate_seconds(text: str) -> int:
-    return max(3, min(50, round(len(text or "") / 4.8)))
+    return max(3, min(32, round(len(text or "") / 5.2)))
 
 
 def short_subtitle(text: str, max_len: int = 25) -> str:
@@ -517,6 +525,19 @@ def sanitize_tone_phrases(data: Dict[str, Any]) -> Dict[str, Any]:
     contain vivid wording that the model reuses.
     """
     replacements = {
+
+        "最讓人最違反直覺": "本週最違反直覺",
+        "最讓人最違反直覺的地方": "本週最違反直覺的地方",
+        "推上了天": "推升至高位",
+        "推上天": "推升至高位",
+        "免死金牌": "政策安全墊",
+        "粗暴打碎": "明顯修正",
+        "哀鴻遍野": "壓力明顯升高",
+        "跌得這麼慘": "出現明顯修正",
+        "跌得這麼重": "出現明顯修正",
+        "這和傳統傳導邏輯不一致": "這和傳統傳導邏輯不一致",
+        "搞砸": "造成明顯壓力",
+        "亂震": "劇烈震盪",
         "精神分裂的一週": "錯綜複雜的一週",
         "精神分裂": "錯綜複雜",
         "核彈級的利空": "非常沉重的利空",
