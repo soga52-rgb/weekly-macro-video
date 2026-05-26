@@ -1,7 +1,20 @@
-name: 95 Test Generate TTS Audio
+name: 95 Generate TTS Audio
 
 on:
   workflow_dispatch:
+    inputs:
+      week_dir:
+        description: "Weekly folder name under output/weekly, e.g. 2026-05-21. Leave blank to use latest."
+        required: false
+        default: ""
+      force_regenerate_tts:
+        description: "Regenerate existing TTS wav files"
+        required: false
+        default: "false"
+      tts_dry_run:
+        description: "Dry run only, do not call Gemini TTS"
+        required: false
+        default: "false"
 
 permissions:
   contents: write
@@ -15,33 +28,81 @@ jobs:
       TTS_MODEL: gemini-3.1-flash-tts-preview
       TOM_VOICE: Puck
       MIRANDA_VOICE: Kore
-      FORCE_REGENERATE_TTS: "false"
-      TTS_DRY_RUN: "true"
+      FORCE_REGENERATE_TTS: ${{ github.event.inputs.force_regenerate_tts || 'false' }}
+      TTS_DRY_RUN: ${{ github.event.inputs.tts_dry_run || 'false' }}
       TTS_TURN_PAUSE_MS: "180"
       TTS_SCENE_PAUSE_MS: "700"
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Check files
+      - name: Show repo files
+        shell: bash
         run: |
+          echo "[INFO] repo root"
           ls -la
+          echo ""
+          echo "[INFO] scripts"
           ls -la scripts || true
-          ls -la output/weekly/2026-05-21 || true
-          test -f scripts/95_generate_tts_audio_from_dialogue.py
-          test -f output/weekly/2026-05-21/video_dialogue_script.json
+          echo ""
+          echo "[INFO] output/weekly"
+          ls -la output/weekly || true
 
-      - name: Run dry-run TTS
+      - name: Check required files
+        shell: bash
         run: |
-          python scripts/95_generate_tts_audio_from_dialogue.py --week-dir 2026-05-21 --dry-run
+          test -f scripts/95_generate_tts_audio_from_dialogue.py || (echo "Missing scripts/95_generate_tts_audio_from_dialogue.py" && exit 1)
 
-      - name: Show outputs
+          if [ -n "${{ github.event.inputs.week_dir }}" ]; then
+            TARGET_WEEK="output/weekly/${{ github.event.inputs.week_dir }}"
+          else
+            TARGET_WEEK=$(find output/weekly -mindepth 1 -maxdepth 1 -type d | sort | tail -n 1)
+          fi
+
+          echo "[INFO] TARGET_WEEK=${TARGET_WEEK}"
+          test -n "${TARGET_WEEK}" || (echo "No weekly folder found" && exit 1)
+          test -f "${TARGET_WEEK}/video_dialogue_script.json" || (echo "Missing ${TARGET_WEEK}/video_dialogue_script.json" && exit 1)
+
+      - name: Generate TTS audio
+        shell: bash
+        run: |
+          if [ -n "${{ github.event.inputs.week_dir }}" ]; then
+            python scripts/95_generate_tts_audio_from_dialogue.py --week-dir "${{ github.event.inputs.week_dir }}"
+          else
+            python scripts/95_generate_tts_audio_from_dialogue.py
+          fi
+
+      - name: Show generated outputs
         if: always()
+        shell: bash
         run: |
+          echo "[INFO] Generated TTS files"
+          find output/weekly -path "*/tts_audio/*" -type f | sort || true
+          echo ""
+          echo "[INFO] Generated TTS manifest"
           find output/weekly -name "tts_audio_manifest.json" -type f | sort || true
+
+      - name: Commit generated TTS outputs
+        if: always()
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add output/weekly/*/tts_audio_manifest.json || true
+          git add output/weekly/*/tts_audio || true
+
+          if git diff --cached --quiet; then
+            echo "No generated TTS changes to commit."
+          else
+            git commit -m "Generate weekly TTS audio"
+            git push
+          fi
