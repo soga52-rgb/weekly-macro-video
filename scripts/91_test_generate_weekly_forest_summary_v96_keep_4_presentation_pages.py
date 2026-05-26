@@ -2,26 +2,32 @@
 # -*- coding: utf-8 -*-
 
 """
-Weekly Macro Explainer Brief - Step 01
+Weekly Macro Explainer Brief - Step 91
 
 Purpose:
 - Generate weekly_forest_summary.json from:
   1) weekly_market_series.json
   2) weekly_news_context.md / weekly_news_context.json if available
+  3) macro_background_context.md / macro_background_context.json if available
 
 Design:
 - Use market data and news context as the primary inputs.
 - Do not use weekly_source_text.md as the main analysis input.
-- Produce a 6-8 minute macro explainer brief based on a separated analysis layer and presentation layer.
+- Produce a 6-8 minute macro explainer brief based on separated layers:
+  1) analysis layer
+  2) visual layer
+  3) dialogue layer
 - The analysis layer diagnoses signals, expectations, transmission, divergence, and evidence.
-- The presentation layer converts the diagnosis into viewer-facing pages for the website/video.
+- The visual layer converts the diagnosis into viewer-facing website/video pages.
+- The dialogue layer converts the diagnosis into scene-level Tom / Miranda talking material.
 - Keep the existing weekly_forest_summary.json schema for downstream compatibility.
 
 Input:
 - output/weekly/YYYY-MM-DD/weekly_market_series.json
 - output/weekly/YYYY-MM-DD/weekly_news_context.md optional
 - output/weekly/YYYY-MM-DD/weekly_news_context.json optional
-- output/weekly/YYYY-MM-DD/macro_background_context.md/json optional
+- output/weekly/YYYY-MM-DD/macro_background_context.md optional
+- output/weekly/YYYY-MM-DD/macro_background_context.json optional
 
 Output:
 - output/weekly/YYYY-MM-DD/weekly_forest_summary.json
@@ -66,8 +72,8 @@ USER_PROMPT_TEMPLATE = """
 請產生 weekly_forest_summary.json。
 
 核心原則：
-1. 分析邏輯、靜態網頁呈現、動態影片畫面、旁白邏輯必須分層。
-2. 分析層可以完整、專業；靜態網頁可以保留較多資訊；影片畫面必須少字、單一主訊息；旁白負責說清楚因果、轉折與證據。
+1. 分析邏輯、靜態網頁呈現、動態影片畫面、旁白 / 對話邏輯必須分層。
+2. 分析層可以完整、專業；靜態網頁可以保留較多資訊；影片畫面必須少字、單一主訊息；旁白 / 對話層負責說清楚因果、轉折與證據。
 3. 網頁圖與影片圖共用同一套分析邏輯，但不應共用同一張圖。
 4. 所有推論必須錨定來源資料；若只是市場押注、新聞解讀或模型推論，不可寫成官方已宣布或已發生事實。
 
@@ -115,6 +121,18 @@ USER_PROMPT_TEMPLATE = """
 2. web_visual_pages：靜態網頁圖卡，可承載較多資訊，作為研究摘要式呈現。
 3. video_visual_scenes：影片畫面用，少字、單一重點、適合 92 產圖。
 4. narration_outline：旁白邏輯，用來講清楚畫面背後的因果，不要把旁白全部塞進圖。
+4-1. scene_dialogue_context：對話層，供 94 Tom / Miranda 雙人講稿使用。
+   - 這一層不是重新分析，也不是畫圖素材，而是把分析層轉成「可被主持人與分析師說出口」的素材。
+   - 每一個 scene 必須對齊 video_visual_scenes 的 scene_id、scene_type、screen_title 與 single_message。
+   - 每一幕必須補足：
+     a. 過去 2～4 週市場原本怎麼想 / 原本在交易什麼。
+     b. 本週哪一條新聞、政策訊號或數據事件造成轉折。
+     c. 哪個市場數據驗證或抵銷這個轉折。
+     d. Miranda 應該如何用因果鏈解釋這張圖。
+     e. Tom 應該從哪個觀眾疑問切入，但不能提前說破答案。
+     f. 這一幕結尾如何自然銜接下一幕。
+   - scene_dialogue_context 必須比 video_visual_scenes 更有敘事血肉，但比 web_visual_pages 更適合口語。
+   - 不可把下一幕的完整分析提前寫進本幕，只能保留伏筆。
 5. overview_visual / presentation_pages / video_planning：保留舊流程相容欄位，但內容應由 web_visual_pages / video_visual_scenes 自然轉寫。
 6. presentation_pages 必須完整保留 4 張說明頁，供現有 92 流程讀取，不可只輸出 1 張：
    - page_01：inflation_expectation，先回答「通膨預期訊號是否明確」。
@@ -123,7 +141,20 @@ USER_PROMPT_TEMPLATE = """
    - page_04：asia_fx_gold，說明日圓、台幣、韓圜與黃金的分化。
 7. video_visual_scenes 可較精簡，但 presentation_pages 必須維持上述 4 頁，以確保 92 舊流程相容。
 
-五、請只輸出合法 JSON，不要加 Markdown，不要加解釋文字。
+五、scene_dialogue_context 生成規則
+1. scene_dialogue_context 是給 94 生成 Tom / Miranda 對談稿使用，不是給 92 畫圖使用。
+2. 每一幕必須以 video_visual_scenes 的畫面主題為邊界，不得為了敘事順暢而超出該幕畫面。
+3. 每一幕要補足跨期敘事：
+   - prior_market_impression：過去 2～4 週市場原本怎麼想。
+   - this_week_catalyst：本週哪個新聞 / 政策 / 數據事件改變判斷。
+   - data_validation：本週價格或數據如何驗證或抵銷。
+   - causal_interpretation：最終因果解釋。
+4. Tom 的提示語必須是「觀眾會問的問題」，不得提前講出 Miranda 的答案。
+5. Miranda 的 talk track 必須以新聞或政策訊號解釋數據，不得只用數據解釋數據。
+6. 如果資料不足，請在 offset_or_risk 或 avoid_saying 裡標明，不可自行編造。
+7. scene_dialogue_context 必須可以和 94 的圖片輸入版搭配；94 會看圖，但新聞與因果素材以此欄位為準。
+
+六、請只輸出合法 JSON，不要加 Markdown，不要加解釋文字。
 
 JSON 結構請維持並擴充如下：
 
@@ -245,6 +276,31 @@ JSON 結構請維持並擴充如下：
       "key_points": [],
       "evidence_to_mention": [],
       "avoid_saying": []
+    }
+  ],
+  "scene_dialogue_context": [
+    {
+      "scene_id": "scene_01",
+      "scene_type": "overview / inflation_expectation / rate_expectation / dollar_index / asia_fx_gold / next_week_roadmap",
+      "screen_title": "",
+      "dialogue_topic": "",
+      "visual_anchor": {
+        "what_the_image_shows": "",
+        "must_align_with": [],
+        "do_not_expand": []
+      },
+      "prior_market_impression": "",
+      "this_week_catalyst": "",
+      "data_validation": "",
+      "causal_interpretation": "",
+      "offset_or_risk": "",
+      "foreshadow_next": "",
+      "tom_question_angle": "",
+      "miranda_talk_track": "",
+      "key_news_lines": [],
+      "key_numbers": [],
+      "avoid_saying": [],
+      "image_alignment_note": ""
     }
   ],
   "overview_visual": {
@@ -450,12 +506,73 @@ def extract_json_from_text(text: str) -> Dict[str, Any]:
         raise ValueError(f"Unable to parse Gemini JSON. Error: {exc}. Preview: {preview}") from exc
 
 
+def normalize_scene_dialogue_context(summary: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Ensure weekly_forest_summary.json has a dialogue layer for Step 94.
+
+    scene_dialogue_context is the bridge between:
+    - analysis layer: transmission_diagnosis / common_judgment_funnel / macro_storyline
+    - visual layer: video_visual_scenes
+    - dialogue layer: Tom / Miranda script generation
+
+    It should not create new analysis. It only backfills safe placeholders if Gemini omits the field.
+    """
+    scenes = as_list(summary.get("video_visual_scenes"))
+    existing = summary.get("scene_dialogue_context")
+
+    if isinstance(existing, list) and existing:
+        return summary
+
+    narration_items = as_list(summary.get("narration_outline"))
+    narration_by_scene = {
+        str(item.get("scene_id", "")): item
+        for item in narration_items
+        if isinstance(item, dict)
+    }
+
+    scene_dialogue_context = []
+    for scene in scenes:
+        if not isinstance(scene, dict):
+            continue
+
+        scene_id = str(scene.get("scene_id", ""))
+        narration = narration_by_scene.get(scene_id, {})
+
+        scene_dialogue_context.append({
+            "scene_id": scene_id,
+            "scene_type": scene.get("scene_type", ""),
+            "screen_title": scene.get("screen_title", ""),
+            "dialogue_topic": scene.get("single_message", "") or scene.get("screen_title", ""),
+            "visual_anchor": {
+                "what_the_image_shows": scene.get("visual_metaphor", ""),
+                "must_align_with": as_list(scene.get("on_screen_labels")) + as_list(scene.get("must_show_numbers")),
+                "do_not_expand": []
+            },
+            "prior_market_impression": "",
+            "this_week_catalyst": "",
+            "data_validation": "",
+            "causal_interpretation": narration.get("voiceover_goal", ""),
+            "offset_or_risk": "",
+            "foreshadow_next": "",
+            "tom_question_angle": "",
+            "miranda_talk_track": "請根據本幕畫面、narration_outline 與 evidence，用新聞事件解釋市場數據。",
+            "key_news_lines": as_list(narration.get("evidence_to_mention")),
+            "key_numbers": as_list(scene.get("must_show_numbers")),
+            "avoid_saying": as_list(narration.get("avoid_saying")),
+            "image_alignment_note": "94 會搭配 scene 圖片讀取；若圖片文字與此 metadata 不一致，以 metadata 為準。"
+        })
+
+    summary["scene_dialogue_context"] = scene_dialogue_context
+    return summary
+
+
 def normalize_video_planning(summary: Dict[str, Any]) -> Dict[str, Any]:
     """
     Fill legacy fields from presentation_pages so older workflows can continue to run.
     The new contract is:
     - transmission_diagnosis: internal analysis layer
-    - overview_visual / presentation_pages: viewer-facing presentation layer
+    - overview_visual / presentation_pages / video_visual_scenes: visual layer
+    - scene_dialogue_context / narration_outline: dialogue layer
     - video_planning.visual_sequence: compatibility layer for existing image workflows
     """
     video = summary.setdefault("video_planning", {})
@@ -541,6 +658,7 @@ def normalize_video_planning(summary: Dict[str, Any]) -> Dict[str, Any]:
     video.setdefault("target_duration", "6-8 minutes")
 
     return summary
+
 
 def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: str) -> Dict[str, Any]:
     url = (
@@ -667,6 +785,7 @@ def main() -> None:
     print(f"[INFO] Macro background context json included: {bool((week_dir / 'macro_background_context.json').exists())}")
 
     forest_summary = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
+    forest_summary = normalize_scene_dialogue_context(forest_summary)
     forest_summary = normalize_video_planning(forest_summary)
 
     out_path = week_dir / "weekly_forest_summary.json"
