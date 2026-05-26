@@ -2,39 +2,12 @@ name: 95 Test Generate TTS Audio
 
 on:
   workflow_dispatch:
-    inputs:
-      week_dir:
-        description: "Weekly folder under output/weekly. Example: 2026-05-21. Leave empty to use latest."
-        required: false
-        type: string
-        default: ""
-      force_regenerate_tts:
-        description: "Regenerate existing TTS wav files"
-        required: true
-        type: choice
-        options:
-          - "false"
-          - "true"
-        default: "false"
-      tts_dry_run:
-        description: "Dry run only. Do not call Gemini TTS"
-        required: true
-        type: choice
-        options:
-          - "false"
-          - "true"
-        default: "false"
 
 permissions:
   contents: write
 
-concurrency:
-  group: weekly-tts-audio
-  cancel-in-progress: false
-
 jobs:
   generate-tts:
-    name: Generate TTS audio
     runs-on: ubuntu-latest
 
     env:
@@ -42,98 +15,33 @@ jobs:
       TTS_MODEL: gemini-3.1-flash-tts-preview
       TOM_VOICE: Puck
       MIRANDA_VOICE: Kore
-      FORCE_REGENERATE_TTS: ${{ inputs.force_regenerate_tts }}
-      TTS_DRY_RUN: ${{ inputs.tts_dry_run }}
+      FORCE_REGENERATE_TTS: "false"
+      TTS_DRY_RUN: "true"
       TTS_TURN_PAUSE_MS: "180"
       TTS_SCENE_PAUSE_MS: "700"
-      WEEK_DIR_INPUT: ${{ inputs.week_dir }}
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Confirm inputs and paths
-        shell: bash
+      - name: Check files
         run: |
-          echo "WEEK_DIR_INPUT=${WEEK_DIR_INPUT}"
-          echo "FORCE_REGENERATE_TTS=${FORCE_REGENERATE_TTS}"
-          echo "TTS_DRY_RUN=${TTS_DRY_RUN}"
-          echo "TTS_MODEL=${TTS_MODEL}"
-          echo "TOM_VOICE=${TOM_VOICE}"
-          echo "MIRANDA_VOICE=${MIRANDA_VOICE}"
+          ls -la
+          ls -la scripts || true
+          ls -la output/weekly/2026-05-21 || true
+          test -f scripts/95_generate_tts_audio_from_dialogue.py
+          test -f output/weekly/2026-05-21/video_dialogue_script.json
 
-          if [ ! -f "scripts/95_generate_tts_audio_from_dialogue.py" ]; then
-            echo "Missing scripts/95_generate_tts_audio_from_dialogue.py"
-            exit 1
-          fi
-
-          if [ -n "${WEEK_DIR_INPUT}" ]; then
-            if [ ! -d "output/weekly/${WEEK_DIR_INPUT}" ]; then
-              echo "Missing output/weekly/${WEEK_DIR_INPUT}"
-              exit 1
-            fi
-            if [ ! -f "output/weekly/${WEEK_DIR_INPUT}/video_dialogue_script.json" ]; then
-              echo "Missing output/weekly/${WEEK_DIR_INPUT}/video_dialogue_script.json"
-              exit 1
-            fi
-          fi
-
-      - name: Generate TTS audio
-        shell: bash
+      - name: Run dry-run TTS
         run: |
-          if [ -n "${WEEK_DIR_INPUT}" ]; then
-            python scripts/95_generate_tts_audio_from_dialogue.py --week-dir "${WEEK_DIR_INPUT}"
-          else
-            python scripts/95_generate_tts_audio_from_dialogue.py
-          fi
+          python scripts/95_generate_tts_audio_from_dialogue.py --week-dir 2026-05-21 --dry-run
 
-      - name: Show generated outputs
+      - name: Show outputs
         if: always()
-        shell: bash
         run: |
-          echo "Generated TTS manifest:"
           find output/weekly -name "tts_audio_manifest.json" -type f | sort || true
-
-          echo ""
-          echo "Generated TTS audio files:"
-          find output/weekly -path "*/tts_audio/*" -type f | sort || true
-
-      - name: Commit generated TTS outputs
-        if: ${{ success() && inputs.tts_dry_run == 'false' }}
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git add output/weekly/*/tts_audio_manifest.json || true
-          git add output/weekly/*/tts_audio || true
-
-          if git diff --cached --quiet; then
-            echo "No generated TTS changes to commit."
-          else
-            git commit -m "Generate weekly TTS audio"
-            git push
-          fi
-
-      - name: Commit dry-run manifest only
-        if: ${{ success() && inputs.tts_dry_run == 'true' }}
-        shell: bash
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          git add output/weekly/*/tts_audio_manifest.json || true
-
-          if git diff --cached --quiet; then
-            echo "No dry-run manifest changes to commit."
-          else
-            git commit -m "Test weekly TTS audio dry run"
-            git push
-          fi
