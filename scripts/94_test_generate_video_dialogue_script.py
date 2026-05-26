@@ -61,7 +61,10 @@ SYSTEM_PROMPT = """
 5. 完整因果鏈：Miranda 的回答必須包含「前因慣性 → 本週催化事件 → 市場數據驗證 / 抵銷 → 總經定價機制 → 下一幕伏筆」。
 6. 伏筆而不暴雷：Miranda 可以在結尾銜接下一幕，但不能提前把下一幕完整分析講完。
 7. 口吻控制：台灣專業財經節目口語，清楚、有節奏、有洞察，但避免過度戲劇化或網路化詞彙，例如「精神分裂」、「核彈級」、「尚方寶劍」、「崩盤」、「全面失守」、「躺平任人捶打」。
-8. 嚴格輸出合法 JSON，不要 Markdown，不要多餘文字。
+8. Tom 的單次發言不能過短。除非是最後的簡短回應，Tom 每次 spoken_text 建議至少 25 個中文字，讓 TTS 與畫面字卡有足夠停留時間。
+9. 最後一幕必須由 Tom 收尾，形成節目完結感。收尾可以提醒觀眾持續追蹤、保持彈性、下週見；避免投資建議式語氣。
+10. news_reference 必須跨幕一致。若某一幕使用前一幕的新聞因果作為解釋，例如用「房市數據疲軟」解釋黃金避險需求，該 turn 的 news_reference 必須補上該新聞線索。
+11. 嚴格輸出合法 JSON，不要 Markdown，不要多餘文字。
 """
 
 
@@ -86,6 +89,9 @@ USER_PROMPT_TEMPLATE = """
 - subtitle_text 必須是精簡字幕，不超過 25 個中文字；不要直接複製完整 spoken_text。
 - visual_reference 必須指出本 turn 對應的圖上物件或 scene_id。
 - news_reference 必須列出本 turn 用到的新聞 / 政策 / 數據線索；沒有就填空陣列。
+- Tom 的功能性提問不要太短。除非是必要的簡短追問，每個 Tom turn 建議至少 25 個中文字，estimated_seconds 建議至少 8 秒。
+- 最後一個 scene 的最後一個 speaker_turn 必須是 Tom，用於正式片尾收束；內容應感謝 Miranda、提醒觀眾持續追蹤，並自然說「我們下週見」。
+- 如果 Miranda 在某一幕使用跨幕因果，例如用房市疲弱 / 成長隱憂解釋黃金避險支撐，news_reference 必須保留該跨幕新聞線索，不得留空。
 
 輸出 JSON 結構：
 {
@@ -490,7 +496,7 @@ def call_gemini_json(parts: List[Dict[str, Any]], model: str, api_key: str, temp
 
 
 def estimate_seconds(text: str) -> int:
-    return max(3, min(50, round(len(text or "") / 4.8)))
+    return max(3, min(32, round(len(text or "") / 5.2)))
 
 
 def short_subtitle(text: str, max_len: int = 25) -> str:
@@ -498,6 +504,115 @@ def short_subtitle(text: str, max_len: int = 25) -> str:
     if len(text) <= max_len:
         return text
     return text[:max_len].rstrip("，。；、 ") + "…"
+
+
+
+
+def ensure_minimum_tom_turns(data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Add a quality note when Tom turns are too short.
+    We do not rewrite generated content here, but we surface the issue clearly.
+    """
+    short_turns: List[str] = []
+    for scene in data.get("scene_dialogues", []) or []:
+        if not isinstance(scene, dict):
+            continue
+        scene_id = str(scene.get("scene_id", ""))
+        for turn in scene.get("speaker_turns", []) or []:
+            if not isinstance(turn, dict):
+                continue
+            if turn.get("speaker") != "Tom":
+                continue
+            spoken = str(turn.get("spoken_text", "")).strip()
+            # Allow final closing turn and very short connector questions, but flag very short ones.
+            if 0 < len(spoken) < 18:
+                short_turns.append(str(turn.get("turn_id") or scene_id))
+
+    if short_turns:
+        qc = data.setdefault("quality_checks", {})
+        prev = str(qc.get("dialogue_naturalness_note", ""))
+        qc["dialogue_naturalness_note"] = (
+            (prev + " " if prev else "")
+            + f"Tom has very short turns that may create visual flicker in TTS/video: {short_turns}."
+        )
+    return data
+
+
+def ensure_final_tom_closing(data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Ensure the last scene ends with Tom, so the video has a proper closing rhythm.
+    """
+    scenes = data.get("scene_dialogues")
+    if not isinstance(scenes, list) or not scenes:
+        return data
+
+    last_scene = scenes[-1]
+    if not isinstance(last_scene, dict):
+        return data
+
+    turns = last_scene.setdefault("speaker_turns", [])
+    if not isinstance(turns, list):
+        turns = []
+        last_scene["speaker_turns"] = turns
+
+    if turns and isinstance(turns[-1], dict) and turns[-1].get("speaker") == "Tom":
+        return data
+
+    scene_id = str(last_scene.get("scene_id", "scene"))
+    turn_idx = len(turns) + 1
+    closing_text = (
+        "明白了。在這些關鍵訊號明朗之前，市場仍需要保持彈性、持續觀察風險變化。"
+        "非常感謝 Miranda 的深度拆解，也謝謝觀眾朋友收看，我們下週見。"
+    )
+
+    turns.append({
+        "turn_id": f"{scene_id}_turn_{turn_idx:02d}",
+        "speaker": "Tom",
+        "display_name": "Tom",
+        "role_label": "主持人",
+        "spoken_text": closing_text,
+        "subtitle_text": "感謝收看，保持彈性，我們下週見。",
+        "speaker_label_text": "Tom｜主持人",
+        "estimated_seconds": estimate_seconds(closing_text),
+        "news_reference": [],
+        "visual_reference": last_scene.get("scene_id", ""),
+    })
+
+    qc = data.setdefault("quality_checks", {})
+    prev = str(qc.get("continuity_note", ""))
+    qc["continuity_note"] = (prev + " " if prev else "") + "Added final Tom closing turn for proper ending rhythm."
+    return data
+
+
+def enrich_cross_scene_news_references(data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Patch common cross-scene causal references so downstream video/news labels do not miss them.
+    This is intentionally conservative and only adds obvious references based on spoken_text.
+    """
+    keyword_refs = [
+        (["房市", "成長隱憂"], "房市數據疲軟引發成長降溫擔憂"),
+        (["經濟成長隱憂"], "房市數據疲軟引發成長降溫擔憂"),
+        (["避險", "黃金"], "經濟成長隱憂支撐黃金避險需求"),
+        (["升息", "會議紀錄"], "Fed會議紀錄重啟升息討論"),
+        (["美伊", "和平"], "美伊和平協議傳聞"),
+    ]
+
+    for scene in data.get("scene_dialogues", []) or []:
+        if not isinstance(scene, dict):
+            continue
+        for turn in scene.get("speaker_turns", []) or []:
+            if not isinstance(turn, dict):
+                continue
+            spoken = str(turn.get("spoken_text", ""))
+            refs = turn.get("news_reference")
+            if not isinstance(refs, list):
+                refs = []
+            for keywords, ref in keyword_refs:
+                if all(k in spoken for k in keywords) and ref not in refs:
+                    refs.append(ref)
+            turn["news_reference"] = refs
+
+    return data
 
 
 def normalize_dialogue(data: Dict[str, Any], summary: Dict[str, Any], week_dir: Path, used_image_input: bool) -> Dict[str, Any]:
@@ -573,7 +688,10 @@ def normalize_dialogue(data: Dict[str, Any], summary: Dict[str, Any], week_dir: 
             turn["speaker_label_text"] = f"{speaker}｜{role}"
             turn["turn_id"] = turn.get("turn_id") or f"{scene_id}_turn_{idx:02d}"
             turn["subtitle_text"] = short_subtitle(str(turn.get("subtitle_text") or spoken))
-            turn["estimated_seconds"] = int(turn.get("estimated_seconds") or estimate_seconds(spoken))
+            estimated = int(turn.get("estimated_seconds") or estimate_seconds(spoken))
+            if speaker == "Tom" and len(spoken) >= 18:
+                estimated = max(8, estimated)
+            turn["estimated_seconds"] = estimated
             turn.setdefault("news_reference", [])
             turn.setdefault("visual_reference", scene_id)
             normalized_turns.append(turn)
@@ -706,6 +824,9 @@ def main() -> None:
         api_key=api_key,
         temperature=temperature,
     )
+    data = ensure_final_tom_closing(data)
+    data = enrich_cross_scene_news_references(data)
+    data = ensure_minimum_tom_turns(data)
     data = normalize_dialogue(data, summary, week_dir, effective_image_input)
 
     json_path = week_dir / "video_dialogue_script.json"
