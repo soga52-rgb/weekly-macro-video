@@ -10,6 +10,12 @@ Purpose:
 - Concatenate turn audio into scene-level WAV files and one full-dialogue WAV.
 - Do NOT generate video.
 
+Design:
+- Single-speaker per request.
+- Voice is selected by Python code, not by the model.
+- Do not send speaker labels such as "Tom:" or "Miranda:" into the TTS prompt.
+- This avoids Gemini accidentally performing multi-speaker dialogue.
+
 Input:
 - output/weekly/YYYY-MM-DD/video_dialogue_script.json
 
@@ -198,6 +204,14 @@ def collect_turns(dialogue: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 def build_tts_prompt(turn: Dict[str, Any]) -> str:
+    """
+    Build a single-speaker TTS prompt.
+
+    Important:
+    - Do not include "Tom:" or "Miranda:" labels in the prompt.
+    - Each request contains only one speaker's line.
+    - Voice identity is controlled only by voiceName in speechConfig.
+    """
     speaker = turn["speaker"]
     text = turn["spoken_text"]
 
@@ -205,16 +219,20 @@ def build_tts_prompt(turn: Dict[str, Any]) -> str:
         style = (
             "Read exactly the following Traditional Chinese financial-program host line. "
             "Voice style: male host, warm, clear, steady, curious, professional. "
-            "Pace: calm but conversational. Do not add extra words."
+            "Pace: calm but conversational. "
+            "Only read the line itself. Do not read speaker names. "
+            "Do not perform multiple characters. Do not add extra words."
         )
     else:
         style = (
             "Read exactly the following Traditional Chinese macro strategist line. "
             "Voice style: female strategist, calm, authoritative, analytical, precise. "
-            "Pace: steady and slightly slower than casual conversation. Do not add extra words."
+            "Pace: steady and slightly slower than casual conversation. "
+            "Only read the line itself. Do not read speaker names. "
+            "Do not perform multiple characters. Do not add extra words."
         )
 
-    return f"{style}\n\n{speaker}: {text}"
+    return f"{style}\n\n{text}"
 
 
 def extract_audio_bytes(api_response: Dict[str, Any]) -> bytes:
