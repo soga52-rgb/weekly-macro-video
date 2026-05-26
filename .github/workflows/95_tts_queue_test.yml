@@ -1,0 +1,17 @@
+name: 95 TTS Queue Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  queue-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Queue test
+        run: |
+          echo "GitHub Actions workflow_dispatch queue test OK"
+          echo "Ref: $GITHUB_REF"
+          echo "SHA: $GITHUB_SHA"
