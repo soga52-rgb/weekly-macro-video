@@ -26,8 +26,8 @@ jobs:
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       TTS_MODEL: gemini-3.1-flash-tts-preview
-      TOM_VOICE: Puck
-      MIRANDA_VOICE: Kore
+      TOM_VOICE: Charon
+      MIRANDA_VOICE: Sulafat
       FORCE_REGENERATE_TTS: ${{ github.event.inputs.force_regenerate_tts || 'false' }}
       TTS_DRY_RUN: ${{ github.event.inputs.tts_dry_run || 'false' }}
       TTS_TURN_PAUSE_MS: "180"
