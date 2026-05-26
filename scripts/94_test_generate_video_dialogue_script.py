@@ -496,7 +496,7 @@ def call_gemini_json(parts: List[Dict[str, Any]], model: str, api_key: str, temp
 
 
 def estimate_seconds(text: str) -> int:
-    return max(3, min(50, round(len(text or "") / 4.8)))
+    return max(3, min(32, round(len(text or "") / 5.2)))
 
 
 def short_subtitle(text: str, max_len: int = 25) -> str:
@@ -506,6 +506,86 @@ def short_subtitle(text: str, max_len: int = 25) -> str:
     return text[:max_len].rstrip("，。；、 ") + "…"
 
 
+
+
+
+
+def sanitize_tone_phrases(data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Post-process generated dialogue to enforce institutional financial-program tone.
+    This is safer than relying only on prompt guardrails because upstream context may
+    contain vivid wording that the model reuses.
+    """
+    replacements = {
+        "精神分裂的一週": "錯綜複雜的一週",
+        "精神分裂": "錯綜複雜",
+        "核彈級的利空": "非常沉重的利空",
+        "核彈級利空": "非常沉重的利空",
+        "核彈級": "非常強烈",
+        "毛骨悚然的地方": "最違反直覺的地方",
+        "毛骨悚然": "最違反直覺",
+        "躺平承受重壓": "承受明顯貶值壓力",
+        "躺平任人捶打": "承受明顯貶值壓力",
+        "躺平": "承受壓力",
+        "震撼彈": "重要訊號",
+        "死灰復燃": "重新升溫",
+        "噴出": "明顯突破",
+        "嚇壞": "引發重新定價",
+        "崩盤": "大幅修正",
+        "全面失守": "壓力明顯升高",
+        "尚方寶劍": "政策工具",
+    }
+
+    changed_turns: List[str] = []
+
+    for scene in data.get("scene_dialogues", []) or []:
+        if not isinstance(scene, dict):
+            continue
+
+        for field in ["scene_summary", "single_message"]:
+            if isinstance(scene.get(field), str):
+                original = scene[field]
+                updated = original
+                for old, new in replacements.items():
+                    updated = updated.replace(old, new)
+                if updated != original:
+                    scene[field] = updated
+
+        avoid = scene.get("avoid_saying")
+        if isinstance(avoid, list):
+            for term in ["精神分裂", "核彈級", "毛骨悚然", "躺平", "震撼彈", "死灰復燃", "噴出", "崩盤"]:
+                if term not in avoid:
+                    avoid.append(term)
+            scene["avoid_saying"] = avoid
+
+        for turn in scene.get("speaker_turns", []) or []:
+            if not isinstance(turn, dict):
+                continue
+
+            changed = False
+            for field in ["spoken_text", "subtitle_text", "visual_reference"]:
+                if not isinstance(turn.get(field), str):
+                    continue
+                original = turn[field]
+                updated = original
+                for old, new in replacements.items():
+                    updated = updated.replace(old, new)
+                if updated != original:
+                    turn[field] = updated
+                    changed = True
+
+            if changed:
+                changed_turns.append(str(turn.get("turn_id", "")))
+
+    if changed_turns:
+        qc = data.setdefault("quality_checks", {})
+        prev = str(qc.get("risk_control_note", ""))
+        qc["risk_control_note"] = (
+            (prev + " " if prev else "")
+            + f"Sanitized over-dramatic tone phrases in turns: {changed_turns}."
+        )
+
+    return data
 
 
 def ensure_minimum_tom_turns(data: Dict[str, Any]) -> Dict[str, Any]:
@@ -826,8 +906,10 @@ def main() -> None:
     )
     data = ensure_final_tom_closing(data)
     data = enrich_cross_scene_news_references(data)
+    data = sanitize_tone_phrases(data)
     data = ensure_minimum_tom_turns(data)
     data = normalize_dialogue(data, summary, week_dir, effective_image_input)
+    data = sanitize_tone_phrases(data)
 
     json_path = week_dir / "video_dialogue_script.json"
     md_path = week_dir / "video_dialogue_script.md"
