@@ -58,7 +58,26 @@ DEFAULT_ANALYSIS_MODEL = "gemini-3.5-pro"
 
 
 SYSTEM_PROMPT = """
-你是一位冷靜、專業、具權威感的總經學者。
+你是一位冷靜、專業、具權威感的總經學者，同時也是影音內容結構設計師。
+
+本任務的最終用途是生成一支總經影音說明影片，而不是單純生成文字報告。
+
+因此 weekly_forest_summary.json 必須同時產生三個彼此對齊的內容層：
+1. 分析層：負責判斷市場主線、因果傳導、數據驗證與風險分歧。
+2. 視覺呈現層：負責把分析結果轉成適合影片畫面的 scene。每一個 scene 必須少字、單一主題、適合產圖。
+3. 語音對話層：負責把每一個 scene 背後的因果、新聞、數據、矛盾與伏筆，整理成 Tom / Miranda 可講述的深度素材。
+
+最高原則是「畫面少字，語音深講」：
+- video_visual_scenes 是給 92 產圖用，必須少字、單一主題、視覺化。
+- scene_dialogue_context 是給 94 生成 Tom / Miranda 6～8 分鐘對談用，必須比畫面深入，能支撐每個主題約 60～90 秒的講解。
+- scene_dialogue_context 不可只重複畫面文字，必須補足通膨、利率、美元指數、亞洲貨幣與黃金背後的總經分析邏輯。
+
+影片分鏡控制規則：
+- scene_control_list 是本週影片分鏡主控清單。
+- video_visual_scenes、narration_outline、scene_dialogue_context 必須完全依照 scene_control_list 的數量、順序、scene_id、scene_type、screen_title 輸出。
+- 不得出現畫面有某一幕，但旁白或對話素材缺漏。
+- 也不得出現旁白或對話素材多出畫面不存在的 scene。
+- 影片 scene 數量由本週內容自然決定，通常可為 5～7 幕；不要硬性固定為 6 幕，但所有影片相關層必須一致。
 
 請製作一支約 6～8 分鐘的世界經濟論壇式總經說明影片，條理分明地呈現市場數據、新聞事件與資產價格變化之間的關聯性。
 
@@ -72,10 +91,12 @@ USER_PROMPT_TEMPLATE = """
 請產生 weekly_forest_summary.json。
 
 核心原則：
-1. 分析邏輯、靜態網頁呈現、動態影片畫面、旁白 / 對話邏輯必須分層。
-2. 分析層可以完整、專業；靜態網頁可以保留較多資訊；影片畫面必須少字、單一主訊息；旁白 / 對話層負責說清楚因果、轉折與證據。
-3. 網頁圖與影片圖共用同一套分析邏輯，但不應共用同一張圖。
-4. 所有推論必須錨定來源資料；若只是市場押注、新聞解讀或模型推論，不可寫成官方已宣布或已發生事實。
+1. 本任務最終用途是生成影片，不是單純文字報告；分析邏輯、靜態網頁呈現、動態影片畫面、旁白 / 對話邏輯必須分層且彼此對齊。
+2. 最高原則是「畫面少字，語音深講」：video_visual_scenes 要少字、單一主題、適合產圖；scene_dialogue_context 要深入、完整、能支撐 Tom / Miranda 6～8 分鐘對談。
+3. 分析層可以完整、專業；靜態網頁可以保留較多資訊；影片畫面只呈現單一主訊息；語音對話層負責說清楚因果、轉折、反向證據、總經邏輯與伏筆。
+4. 網頁圖與影片圖共用同一套分析邏輯，但不應共用同一張圖。
+5. 所有推論必須錨定來源資料；若只是市場押注、新聞解讀或模型推論，不可寫成官方已宣布或已發生事實。
+6. scene_control_list 是影片分鏡主控清單；video_visual_scenes、narration_outline、scene_dialogue_context 必須與 scene_control_list 一一對齊，數量、順序、scene_id、scene_type、screen_title 必須一致。
 
 一、共通研判漏斗 common_judgment_funnel
 請對通膨、利率、美元、亞洲貨幣與黃金，使用同一套研判漏斗：
@@ -119,21 +140,25 @@ USER_PROMPT_TEMPLATE = """
 四、輸出分層要求
 1. transmission_diagnosis：分析層，完整保留因果、證據、多空力道與判斷。
 2. web_visual_pages：靜態網頁圖卡，可承載較多資訊，作為研究摘要式呈現。
-3. video_visual_scenes：影片畫面用，少字、單一重點、適合 92 產圖。
-4. narration_outline：旁白邏輯，用來講清楚畫面背後的因果，不要把旁白全部塞進圖。
-4-1. scene_dialogue_context：對話層，供 94 Tom / Miranda 雙人講稿使用。
-   - 這一層不是重新分析，也不是畫圖素材，而是把分析層轉成「可被主持人與分析師說出口」的素材。
-   - 每一個 scene 必須對齊 video_visual_scenes 的 scene_id、scene_type、screen_title 與 single_message。
+3. scene_control_list：影片分鏡主控清單，先決定本週影片自然需要幾幕。通常可為 5～7 幕，不要硬性固定 6 幕。
+4. video_visual_scenes：視覺層，影片畫面用，少字、單一重點、適合 92 產圖；必須完全依照 scene_control_list 輸出。
+5. narration_outline：旁白重點層，用來講清楚畫面背後的因果，不要把旁白全部塞進圖；必須完全依照 scene_control_list 輸出。
+5-1. scene_dialogue_context：深度語音對話層，供 94 Tom / Miranda 雙人講稿使用；必須完全依照 scene_control_list 輸出。
+   - 這一層不是重新分析，也不是畫圖素材，而是把分析層轉成「可被主持人與分析師說出口」的深度素材。
+   - 每一個 scene 必須對齊 scene_control_list 與 video_visual_scenes 的 scene_id、scene_type、screen_title 與 single_message。
+   - 每一幕應足以支撐約 60～90 秒對談；全片素材需足以支撐 6～8 分鐘。
    - 每一幕必須補足：
      a. 過去 2～4 週市場原本怎麼想 / 原本在交易什麼。
      b. 本週哪一條新聞、政策訊號或數據事件造成轉折。
      c. 哪個市場數據驗證或抵銷這個轉折。
      d. Miranda 應該如何用因果鏈解釋這張圖。
-     e. Tom 應該從哪個觀眾疑問切入，但不能提前說破答案。
-     f. 這一幕結尾如何自然銜接下一幕。
-   - scene_dialogue_context 必須比 video_visual_scenes 更有敘事血肉，但比 web_visual_pages 更適合口語。
+     e. 多空力量如何互相抵銷或形成分歧。
+     f. Tom 應該從哪個觀眾疑問切入，但不能提前說破答案。
+     g. 這一幕結尾如何自然銜接下一幕。
+   - 通膨、利率、美元指數、亞洲貨幣與黃金等主題，都必須在對應 scene 補足深入總經分析邏輯，不可只寫一句結論。
+   - scene_dialogue_context 必須比 video_visual_scenes 更深入，也必須比 narration_outline 更完整。
    - 不可把下一幕的完整分析提前寫進本幕，只能保留伏筆。
-5. overview_visual / presentation_pages / video_planning：保留舊流程相容欄位，但內容應由 web_visual_pages / video_visual_scenes 自然轉寫。
+6. overview_visual / presentation_pages / video_planning：保留舊流程相容欄位，但內容應由 web_visual_pages / video_visual_scenes 自然轉寫。
 6. presentation_pages 必須完整保留 4 張說明頁，供現有 92 流程讀取，不可只輸出 1 張：
    - page_01：inflation_expectation，先回答「通膨預期訊號是否明確」。
    - page_02：rate_expectation，再回答「利率預期為何偏強」。
@@ -141,18 +166,23 @@ USER_PROMPT_TEMPLATE = """
    - page_04：asia_fx_gold，說明日圓、台幣、韓圜與黃金的分化。
 7. video_visual_scenes 可較精簡，但 presentation_pages 必須維持上述 4 頁，以確保 92 舊流程相容。
 
-五、scene_dialogue_context 生成規則
-1. scene_dialogue_context 是給 94 生成 Tom / Miranda 對談稿使用，不是給 92 畫圖使用。
-2. 每一幕必須以 video_visual_scenes 的畫面主題為邊界，不得為了敘事順暢而超出該幕畫面。
-3. 每一幕要補足跨期敘事：
+五、scene_control_list 與 scene_dialogue_context 生成規則
+1. scene_control_list 是本週影片分鏡主控清單，必須先根據本週市場主線自然決定需要幾幕，通常 5～7 幕，不要硬性固定 6 幕。
+2. video_visual_scenes、narration_outline、scene_dialogue_context 必須完全依照 scene_control_list 的數量、順序、scene_id、scene_type、screen_title 輸出。
+3. scene_dialogue_context 是給 94 生成 Tom / Miranda 對談稿使用，不是給 92 畫圖使用。
+4. 每一幕必須以 video_visual_scenes 的畫面主題為邊界，不得為了敘事順暢而超出該幕畫面。
+5. 最高原則是「畫面少字，語音深講」：video_visual_scenes 只呈現單一主題；scene_dialogue_context 必須提供足夠深度，支撐每幕約 60～90 秒對談。
+6. 每一幕要補足跨期敘事：
    - prior_market_impression：過去 2～4 週市場原本怎麼想。
    - this_week_catalyst：本週哪個新聞 / 政策 / 數據事件改變判斷。
    - data_validation：本週價格或數據如何驗證或抵銷。
    - causal_interpretation：最終因果解釋。
-4. Tom 的提示語必須是「觀眾會問的問題」，不得提前講出 Miranda 的答案。
-5. Miranda 的 talk track 必須以新聞或政策訊號解釋數據，不得只用數據解釋數據。
-6. 如果資料不足，請在 offset_or_risk 或 avoid_saying 裡標明，不可自行編造。
-7. scene_dialogue_context 必須可以和 94 的圖片輸入版搭配；94 會看圖，但新聞與因果素材以此欄位為準。
+   - offset_or_risk：多空力量如何抵銷、分歧或尚待確認。
+   - foreshadow_next：除最後一幕外，必須銜接 scene_control_list 中下一個 scene 的主題。
+7. Tom 的提示語必須是「觀眾會問的問題」，不得提前講出 Miranda 的答案。
+8. Miranda 的 talk track 必須以新聞或政策訊號解釋數據，不得只用數據解釋數據；每幕至少提供 3～5 個可展開的分析重點。
+9. 如果資料不足，請在 offset_or_risk 或 avoid_saying 裡標明，不可自行編造。
+10. scene_dialogue_context 必須可以和 94 的圖片輸入版搭配；94 會看圖，但新聞與因果素材以此欄位為準。
 
 六、請只輸出合法 JSON，不要加 Markdown，不要加解釋文字。
 
@@ -256,6 +286,16 @@ JSON 結構請維持並擴充如下：
       "visual_density": "medium / high"
     }
   ],
+  "scene_control_list": [
+    {
+      "scene_id": "scene_01",
+      "scene_type": "overview / inflation_expectation / rate_expectation / dollar_index / asia_fx_gold / next_week_roadmap / other",
+      "screen_title": "",
+      "single_message": "",
+      "role_in_video": "opening / explanation / transition / conclusion",
+      "next_scene_id": ""
+    }
+  ],
   "video_visual_scenes": [
     {
       "scene_id": "scene_01",
@@ -297,6 +337,8 @@ JSON 結構請維持並擴充如下：
       "foreshadow_next": "",
       "tom_question_angle": "",
       "miranda_talk_track": "",
+      "miranda_deep_dive_points": [],
+      "expected_dialogue_seconds": "60-90",
       "key_news_lines": [],
       "key_numbers": [],
       "avoid_saying": [],
@@ -504,6 +546,194 @@ def extract_json_from_text(text: str) -> Dict[str, Any]:
     except json.JSONDecodeError as exc:
         preview = cleaned[:2000]
         raise ValueError(f"Unable to parse Gemini JSON. Error: {exc}. Preview: {preview}") from exc
+
+
+
+
+def normalize_scene_control_list(summary: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Ensure there is a deterministic scene_control_list.
+
+    Preferred source:
+    - Gemini output scene_control_list
+
+    Fallback source:
+    - video_visual_scenes
+
+    This function does not decide market logic. It only creates a control list so that
+    visual, narration, and dialogue layers can be aligned deterministically.
+    """
+    existing = summary.get("scene_control_list")
+    if isinstance(existing, list) and existing:
+        normalized = []
+        for idx, item in enumerate(existing, start=1):
+            if not isinstance(item, dict):
+                continue
+            scene_id = str(item.get("scene_id") or f"scene_{idx:02d}")
+            normalized.append({
+                "scene_id": scene_id,
+                "scene_type": item.get("scene_type", ""),
+                "screen_title": item.get("screen_title", ""),
+                "single_message": item.get("single_message", ""),
+                "role_in_video": item.get("role_in_video", ""),
+                "next_scene_id": item.get("next_scene_id", ""),
+            })
+        if normalized:
+            for idx, item in enumerate(normalized):
+                if idx < len(normalized) - 1:
+                    item["next_scene_id"] = item.get("next_scene_id") or normalized[idx + 1]["scene_id"]
+                else:
+                    item["next_scene_id"] = ""
+            summary["scene_control_list"] = normalized
+            return summary
+
+    scenes = as_list(summary.get("video_visual_scenes"))
+    control = []
+    for idx, scene in enumerate(scenes, start=1):
+        if not isinstance(scene, dict):
+            continue
+        scene_id = str(scene.get("scene_id") or f"scene_{idx:02d}")
+        control.append({
+            "scene_id": scene_id,
+            "scene_type": scene.get("scene_type", ""),
+            "screen_title": scene.get("screen_title", ""),
+            "single_message": scene.get("single_message", ""),
+            "role_in_video": "opening" if idx == 1 else ("conclusion" if idx == len(scenes) else "explanation"),
+            "next_scene_id": "",
+        })
+
+    for idx, item in enumerate(control):
+        if idx < len(control) - 1:
+            item["next_scene_id"] = control[idx + 1]["scene_id"]
+
+    summary["scene_control_list"] = control
+    if not control:
+        meta = summary.setdefault("meta", {})
+        warnings = as_list(meta.get("quality_warnings"))
+        warnings.append("scene_control_list and video_visual_scenes are both missing or empty.")
+        meta["quality_warnings"] = warnings
+    return summary
+
+
+def align_scene_layers(summary: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Align video_visual_scenes, narration_outline, and scene_dialogue_context
+    to scene_control_list.
+
+    The control list is the deterministic gear. If Gemini omits a scene in the
+    narration or dialogue layer, this function creates a safe placeholder so
+    downstream steps do not silently misalign.
+    """
+    control = as_list(summary.get("scene_control_list"))
+    if not control:
+        return summary
+
+    meta = summary.setdefault("meta", {})
+    warnings = as_list(meta.get("quality_warnings"))
+
+    visual_by_id = {
+        str(item.get("scene_id", "")): item
+        for item in as_list(summary.get("video_visual_scenes"))
+        if isinstance(item, dict)
+    }
+    narration_by_scene = {
+        str(item.get("scene_id", "")): item
+        for item in as_list(summary.get("narration_outline"))
+        if isinstance(item, dict)
+    }
+    dialogue_by_scene = {
+        str(item.get("scene_id", "")): item
+        for item in as_list(summary.get("scene_dialogue_context"))
+        if isinstance(item, dict)
+    }
+
+    aligned_visuals = []
+    aligned_narration = []
+    aligned_dialogue = []
+
+    for idx, ctrl in enumerate(control, start=1):
+        if not isinstance(ctrl, dict):
+            continue
+
+        scene_id = str(ctrl.get("scene_id") or f"scene_{idx:02d}")
+        scene_type = ctrl.get("scene_type", "")
+        screen_title = ctrl.get("screen_title", "")
+        single_message = ctrl.get("single_message", "")
+
+        visual = dict(visual_by_id.get(scene_id, {}))
+        if not visual:
+            warnings.append(f"video_visual_scenes missing {scene_id}; backfilled from scene_control_list.")
+        visual["scene_id"] = scene_id
+        visual["scene_type"] = visual.get("scene_type") or scene_type
+        visual["screen_title"] = visual.get("screen_title") or screen_title
+        visual["single_message"] = visual.get("single_message") or single_message
+        visual.setdefault("on_screen_labels", [])
+        visual.setdefault("must_show_numbers", [])
+        visual.setdefault("visual_metaphor", "")
+        visual.setdefault("voiceover_link", f"narration_{idx:02d}")
+        aligned_visuals.append(visual)
+
+        narration = dict(narration_by_scene.get(scene_id, {}))
+        if not narration:
+            warnings.append(f"narration_outline missing {scene_id}; backfilled placeholder.")
+        narration["narration_id"] = narration.get("narration_id") or f"narration_{idx:02d}"
+        narration["scene_id"] = scene_id
+        narration["voiceover_goal"] = narration.get("voiceover_goal") or f"說明 {screen_title or single_message} 背後的因果邏輯。"
+        narration.setdefault("key_points", [])
+        narration.setdefault("evidence_to_mention", [])
+        narration.setdefault("avoid_saying", [])
+        aligned_narration.append(narration)
+
+        dialogue = dict(dialogue_by_scene.get(scene_id, {}))
+        if not dialogue:
+            warnings.append(f"scene_dialogue_context missing {scene_id}; backfilled placeholder.")
+        dialogue["scene_id"] = scene_id
+        dialogue["scene_type"] = dialogue.get("scene_type") or scene_type
+        dialogue["screen_title"] = dialogue.get("screen_title") or screen_title
+        dialogue["dialogue_topic"] = dialogue.get("dialogue_topic") or single_message or screen_title
+        visual_anchor = dialogue.get("visual_anchor") if isinstance(dialogue.get("visual_anchor"), dict) else {}
+        visual_anchor.setdefault("what_the_image_shows", visual.get("visual_metaphor", ""))
+        visual_anchor.setdefault(
+            "must_align_with",
+            as_list(visual.get("on_screen_labels")) + as_list(visual.get("must_show_numbers"))
+        )
+        visual_anchor.setdefault("do_not_expand", [])
+        dialogue["visual_anchor"] = visual_anchor
+        dialogue.setdefault("prior_market_impression", "")
+        dialogue.setdefault("this_week_catalyst", "")
+        dialogue.setdefault("data_validation", "")
+        dialogue.setdefault("causal_interpretation", narration.get("voiceover_goal", ""))
+        dialogue.setdefault("offset_or_risk", "")
+        dialogue.setdefault("foreshadow_next", "")
+        dialogue.setdefault("tom_question_angle", "")
+        dialogue.setdefault(
+            "miranda_talk_track",
+            "請根據本幕畫面、narration_outline 與 evidence，用新聞事件解釋市場數據。"
+        )
+        dialogue.setdefault("miranda_deep_dive_points", [])
+        dialogue.setdefault("expected_dialogue_seconds", "60-90")
+        dialogue.setdefault("key_news_lines", as_list(narration.get("evidence_to_mention")))
+        dialogue.setdefault("key_numbers", as_list(visual.get("must_show_numbers")))
+        dialogue.setdefault("avoid_saying", as_list(narration.get("avoid_saying")))
+        dialogue.setdefault("image_alignment_note", "94 會搭配 scene 圖片讀取；若圖片文字與此 metadata 不一致，以 metadata 為準。")
+        aligned_dialogue.append(dialogue)
+
+    summary["video_visual_scenes"] = aligned_visuals
+    summary["narration_outline"] = aligned_narration
+    summary["scene_dialogue_context"] = aligned_dialogue
+
+    meta["scene_alignment_status"] = {
+        "scene_count": len(control),
+        "control_scene_ids": [item.get("scene_id", "") for item in control if isinstance(item, dict)],
+        "video_visual_scenes_count": len(aligned_visuals),
+        "narration_outline_count": len(aligned_narration),
+        "scene_dialogue_context_count": len(aligned_dialogue),
+        "status": "aligned_with_scene_control_list",
+    }
+    if warnings:
+        meta["quality_warnings"] = warnings
+
+    return summary
 
 
 def normalize_scene_dialogue_context(summary: Dict[str, Any]) -> Dict[str, Any]:
@@ -785,7 +1015,9 @@ def main() -> None:
     print(f"[INFO] Macro background context json included: {bool((week_dir / 'macro_background_context.json').exists())}")
 
     forest_summary = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
+    forest_summary = normalize_scene_control_list(forest_summary)
     forest_summary = normalize_scene_dialogue_context(forest_summary)
+    forest_summary = align_scene_layers(forest_summary)
     forest_summary = normalize_video_planning(forest_summary)
 
     out_path = week_dir / "weekly_forest_summary.json"
