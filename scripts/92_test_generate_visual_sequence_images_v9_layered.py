@@ -268,7 +268,7 @@ def build_items_from_video_scenes(summary: Dict[str, Any]) -> List[Dict[str, Any
             "source_segment_id": scene.get("scene_id", f"scene_{idx:02d}"),
             "visual_title": scene.get("screen_title", ""),
             "visual_purpose": scene.get("single_message", ""),
-            "visual_concept": scene.get("visual_metaphor", ""),
+            "visual_concept": scene.get("diagram_structure_brief") or scene.get("visual_metaphor", ""),
             "key_labels": scene.get("on_screen_labels", []),
             "must_show_numbers": scene.get("must_show_numbers", []),
             "narration_summary": narration.get("key_points", []),
@@ -356,7 +356,7 @@ Current scene only:
 - Scene type: {page_type}
 - Screen title: {title}
 - Single message: {purpose}
-- Visual metaphor: {concept}
+- Diagram structure brief: {concept}
 - On-screen labels: {labels_text}
 - Must-show numbers: {numbers_text}
 
