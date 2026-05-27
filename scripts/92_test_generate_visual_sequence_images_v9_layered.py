@@ -33,7 +33,7 @@ Optional env:
 - VISUAL_SOURCE, default: presentation_pages
   - presentation_pages: overview_visual + presentation_pages
   - video_scenes: overview_visual + video_visual_scenes
-- IMAGE_TEMPERATURE, default: 0.9
+- IMAGE_TEMPERATURE, default: 0.35
 """
 
 import argparse
@@ -315,6 +315,103 @@ def build_visual_items(summary: Dict[str, Any], visual_source: str) -> Tuple[Lis
     return legacy_items, hero_id
 
 
+VIDEO_SCENE_IMAGE_PROMPT_TEMPLATE = """
+Create ONE Traditional Chinese low-text macro diagram frame for a video.
+
+Task focus:
+- Current scene only.
+- The image should work as a clean visual anchor for voiceover.
+- The scene should present one core market relationship, not the full weekly report.
+
+Current scene:
+- Scene type: {page_type}
+- Screen title: {title}
+- Single message: {purpose}
+- Diagram structure brief: {concept}
+- On-screen labels: {labels_text}
+- Must-show numbers: {numbers_text}
+
+Narration reference for context:
+{narration_text}
+
+Tone and layout:
+- Clean macro relationship map.
+- Light cream background.
+- Hand-drawn black outlines.
+- Soft beige / pale yellow blocks.
+- Clear arrows, simple boxes, relation lines, pressure layers, support layers, divergence marks, and observation nodes.
+- One title, 2-4 short labels, and 0-2 key numbers.
+- Large empty space around the central relationship so the image remains readable on video.
+- Suitable for a 16:9 video frame with voiceover.
+
+Scene type guidance:
+- overview: show the core divergence or transmission split as a central relationship map with 2-4 labels.
+- inflation_expectation: focus on energy, oil, supply shock, and inflation expectation transmission.
+- rate_expectation: focus on Fed, bond yields, US10Y / US30Y, term premium, and policy repricing.
+- dollar_index: focus on DXY, rate differential, growth concern, and currency pressure.
+- asia_fx_gold: focus on Asian currencies and gold as two related but distinct market responses.
+- next_week_roadmap: show a simple watchpoint map or timeline with 3 observation nodes.
+
+Text discipline:
+- Use short financial labels instead of paragraphs.
+- Use market variables and numbers as labels.
+- Keep the frame analytical, calm, and business-simple.
+- Use logos-free, watermark-free original diagram elements.
+""".strip()
+
+
+OVERVIEW_IMAGE_PROMPT_TEMPLATE = """
+Create a Traditional Chinese macro visual note in a clean hand-drawn editorial style.
+
+Purpose:
+- Generate a viewer-facing macro diagram, not an internal analysis document.
+- Make the market conclusion visible at first glance.
+- Use evidence as short labels inside blocks.
+- Keep the image readable as a web hero or report visual.
+
+Weekly context:
+- Theme: {theme}
+- Verdict: {verdict}
+- Transmission: {transmission}
+- Revision/noise: {revision_noise}
+
+Internal diagnosis reference:
+{diagnosis_text}
+
+Current visual:
+- Source layer: {source_layer}
+- Page type: {page_type}
+- Title: {title}
+- Viewer message: {purpose}
+- Core concept / conclusion: {concept}
+- Key labels: {labels_text}
+- Blocks:
+{blocks_text}
+
+Overview structure if applicable:
+{overview_text}
+
+Layout direction:
+- Use a central macro transmission map.
+- Arrange drivers, transmission chain, divergence points, validation cards, and watch items as clear blocks.
+- Use arrows to show cause and effect.
+- Use separated zones for policy, rates, dollar / FX, commodities, gold, and watchpoints when relevant.
+- Put the main conclusion near the visual center or upper third.
+
+Style:
+- Light cream / off-white background.
+- Hand-drawn black outlines.
+- Soft beige / yellow blocks.
+- Rounded boxes and clear arrows.
+- Simple analytical icons only when they help identify a market variable.
+- Business-simple, macro explainer style.
+- Readable Traditional Chinese text.
+- One clear title, 3-6 short labels, and a small number of key figures.
+- Logos-free, watermark-free original diagram elements.
+- {hero_note}
+""".strip()
+
+
 def build_visual_prompt(summary: Dict[str, Any], visual: Dict[str, Any], is_web_hero: bool = False) -> str:
     forest = summary.get("forest_summary", {})
     storyline = summary.get("macro_storyline", {})
@@ -337,50 +434,16 @@ def build_visual_prompt(summary: Dict[str, Any], visual: Dict[str, Any], is_web_
     if visual.get("narration_summary"):
         narration_text = "\n".join(f"- {x}" for x in visual.get("narration_summary", [])[:3])
 
-    avoid_text = ""
-    if visual.get("avoid_saying"):
-        avoid_text = " / ".join(str(x) for x in visual.get("avoid_saying", []) if str(x).strip())
-
     if source_layer == "video_visual_scenes":
-        return f"""
-Create ONE Traditional Chinese low-text video storyboard frame.
-
-STRICT TASK:
-- Draw only this scene.
-- Do not create an overview dashboard unless page_type is overview.
-- Do not include other asset classes unless they are listed in the current scene labels.
-- Do not copy the full macro analysis onto the image.
-- Do not add extra sections that are not requested by this scene.
-
-Current scene only:
-- Scene type: {page_type}
-- Screen title: {title}
-- Single message: {purpose}
-- Diagram structure brief: {concept}
-- On-screen labels: {labels_text}
-- Must-show numbers: {numbers_text}
-
-Narration reference only, do not copy all text to screen:
-{narration_text}
-
-Avoid saying or implying:
-{avoid_text}
-
-Scene-specific rules:
-- If scene_type is overview: show only the one central tug-of-war message and 2-4 labels.
-- If scene_type is inflation_expectation: focus on oil / WTI / energy / inflation expectation only.
-- If scene_type is rate_expectation: focus on Fed / bond yields / US10Y / term premium only.
-- If scene_type is dollar_index: focus on DXY / rate differential / growth concern only.
-- If scene_type is asia_fx_gold: focus on JPY / KRW / TWD / gold only.
-- If scene_type is next_week_roadmap: focus on next-week watchpoints only.
-
-Style:
-- Clean hand-drawn editorial macro explainer.
-- Light cream background, black outlines, soft beige/yellow blocks, simple icons.
-- Very sparse text: one title, 2-4 short labels, 0-2 numbers.
-- Make it suitable for video with voiceover.
-- No long paragraphs, no full report layout, no dense charts, no logos, no watermarks.
-""".strip()
+        return VIDEO_SCENE_IMAGE_PROMPT_TEMPLATE.format(
+            page_type=page_type,
+            title=title,
+            purpose=purpose,
+            concept=concept,
+            labels_text=labels_text,
+            numbers_text=numbers_text,
+            narration_text=narration_text,
+        )
 
     overview_text = ""
     if page_type == "overview_dashboard":
@@ -394,48 +457,24 @@ Style:
 
     hero_note = ""
     if is_web_hero:
-        hero_note = "This image is the web hero / overview image. Make it feel like a complete one-page overview, but keep text sparse."
+        hero_note = "This image is the web hero / overview image. Make it feel like a complete one-page overview with sparse, readable text."
 
-    return f"""
-Create a Traditional Chinese macro visual note in a clean hand-drawn editorial style.
-
-Purpose:
-- Generate a viewer-facing visual, not an internal analysis document.
-- Keep the conclusion visually clear and not buried.
-- Evidence may appear as short labels inside blocks; do not create a separate dense news list.
-
-Weekly context:
-- Theme: {forest.get("weekly_main_theme", "")}
-- Verdict: {forest.get("one_sentence_verdict", "")}
-- Transmission: {storyline.get("market_transmission", "")}
-- Revision/noise: {storyline.get("revision_or_noise", "")}
-
-Internal diagnosis reference:
-{compact_json(diagnosis, max_chars=1800)}
-
-Current visual:
-- Source layer: {source_layer}
-- Page type: {page_type}
-- Title: {title}
-- Viewer message: {purpose}
-- Core concept / conclusion: {concept}
-- Key labels: {labels_text}
-- Blocks:
-{blocks_text}
-
-Overview structure if applicable:
-{overview_text}
-
-Style:
-- Light cream/off-white background.
-- Hand-drawn black outlines, soft beige/yellow blocks, rounded boxes, simple doodle icons, clear arrows.
-- Business-simple, forum-style macro explainer.
-- For presentation_pages: use a clean title, 2-3 large content blocks, and one visually separated conclusion area.
-- Keep text readable and not too dense.
-- Avoid long paragraphs, financial terminal style, WEF style, logos, watermarks.
-- {hero_note}
-""".strip()
-
+    return OVERVIEW_IMAGE_PROMPT_TEMPLATE.format(
+        theme=forest.get("weekly_main_theme", ""),
+        verdict=forest.get("one_sentence_verdict", ""),
+        transmission=storyline.get("market_transmission", ""),
+        revision_noise=storyline.get("revision_or_noise", ""),
+        diagnosis_text=compact_json(diagnosis, max_chars=1800),
+        source_layer=source_layer,
+        page_type=page_type,
+        title=title,
+        purpose=purpose,
+        concept=concept,
+        labels_text=labels_text,
+        blocks_text=blocks_text,
+        overview_text=overview_text,
+        hero_note=hero_note,
+    )
 
 def main() -> None:
     parser = argparse.ArgumentParser()
@@ -485,7 +524,7 @@ def main() -> None:
     force_rebuild = env_bool("FORCE_REBUILD_VISUALS", "false")
     target_id = os.getenv("TARGET_VISUAL_ID", "").strip()
     retries = env_int("GEMINI_IMAGE_RETRIES", 2)
-    temperature = env_float("IMAGE_TEMPERATURE", 0.9)
+    temperature = env_float("IMAGE_TEMPERATURE", 0.35)
 
     print(f"[INFO] Generating visual images with model: {model}")
     print(f"[INFO] Week dir: {week_dir}")
