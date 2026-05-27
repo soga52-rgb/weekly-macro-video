@@ -7,20 +7,15 @@
   },
   "images": [
     {
-      "visual_id": "overview_01",
-      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/overview_01.png",
-      "source_layer": "overview_visual",
-      "source_segment_id": "",
-      "visual_title": "本週總經傳遞總覽",
-      "visual_purpose": "市場在『政策緊縮』與『地緣避險』中尋找平衡。",
+      "visual_id": "scene_01",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/scene_01.png",
+      "source_layer": "video_visual_scenes",
+      "source_segment_id": "scene_01",
+      "visual_title": "本週總經主線：鷹派定價 vs 避險分歧",
+      "visual_purpose": "利率創高與油價崩跌同時發生，市場邏輯出現分裂。",
       "status": "created_or_existing"
     }
   ],
   "failed_images": [],
-  "web_hero_visual_id": "overview_01",
-  "web_hero_output": {
-    "source_visual_id": "overview_01",
-    "weekly_web_hero": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/weekly_web_hero.png",
-    "weekly_macro_diagram_compat": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/weekly_macro_diagram.png"
-  }
+  "web_hero_visual_id": "overview_01"
 }
