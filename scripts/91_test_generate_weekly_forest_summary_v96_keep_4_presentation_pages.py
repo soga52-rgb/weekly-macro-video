@@ -169,7 +169,7 @@ USER_PROMPT_TEMPLATE = """
    - 這一層的風格是「簡潔圖解式總經導讀」。
    - 每一幕應像一張清楚的分析圖卡，使用簡單圖形、箭頭、框線、因果路徑、分岔結構、上下方向、強弱對比、少量關鍵標籤與必要數字，呈現市場變數之間的傳導、分歧、抵銷或觀察重點。
    - 每一幕聚焦一個清楚的市場概念，讓觀眾能快速理解本週市場邏輯如何形成、哪些變數正在互相影響、哪裡出現分歧，以及下一步需要觀察什麼。
-   - visual_metaphor 應描述圖解構圖方向與邏輯關係，讓產圖流程能產出簡單、清楚、分析型的畫面。
+   - diagram_structure_brief 應描述本幕圖解的構圖邏輯與市場變數關係，包括區塊位置、箭頭流向、分岔路徑、上下壓力、支撐 / 阻力、對比框架與觀察節點，讓產圖流程能產出簡單、清楚、分析型的總經圖解畫面。
 
 5. narration_outline：
    旁白重點層，用來整理本幕要講清楚的因果、新聞線索與數據驗證，必須完全依照 scene_control_list 輸出。
@@ -346,7 +346,7 @@ JSON 結構請維持並擴充如下：
       "single_message": "",
       "on_screen_labels": [],
       "must_show_numbers": [],
-      "visual_metaphor": "",
+      "diagram_structure_brief": "",
       "voiceover_link": "narration_01"
     }
   ],
@@ -711,7 +711,7 @@ def align_scene_layers(summary: Dict[str, Any]) -> Dict[str, Any]:
         visual["single_message"] = visual.get("single_message") or single_message
         visual.setdefault("on_screen_labels", [])
         visual.setdefault("must_show_numbers", [])
-        visual.setdefault("visual_metaphor", "")
+        visual.setdefault("diagram_structure_brief", visual.get("visual_metaphor", ""))
         visual.setdefault("voiceover_link", f"narration_{idx:02d}")
         aligned_visuals.append(visual)
 
@@ -734,7 +734,7 @@ def align_scene_layers(summary: Dict[str, Any]) -> Dict[str, Any]:
         dialogue["screen_title"] = dialogue.get("screen_title") or screen_title
         dialogue["dialogue_topic"] = dialogue.get("dialogue_topic") or single_message or screen_title
         visual_anchor = dialogue.get("visual_anchor") if isinstance(dialogue.get("visual_anchor"), dict) else {}
-        visual_anchor.setdefault("what_the_image_shows", visual.get("visual_metaphor", ""))
+        visual_anchor.setdefault("what_the_image_shows", visual.get("diagram_structure_brief") or visual.get("visual_metaphor", ""))
         visual_anchor.setdefault(
             "must_align_with",
             as_list(visual.get("on_screen_labels")) + as_list(visual.get("must_show_numbers"))
@@ -816,7 +816,7 @@ def normalize_scene_dialogue_context(summary: Dict[str, Any]) -> Dict[str, Any]:
             "screen_title": scene.get("screen_title", ""),
             "dialogue_topic": scene.get("single_message", "") or scene.get("screen_title", ""),
             "visual_anchor": {
-                "what_the_image_shows": scene.get("visual_metaphor", ""),
+                "what_the_image_shows": scene.get("diagram_structure_brief") or scene.get("visual_metaphor", ""),
                 "must_align_with": as_list(scene.get("on_screen_labels")) + as_list(scene.get("must_show_numbers")),
                 "do_not_expand": []
             },
