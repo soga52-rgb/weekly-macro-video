@@ -1,134 +1,134 @@
 {
   "meta": {
-    "source": "weekly_market_series.json + weekly_news_context.json + macro_background_context.json",
-    "data_status_note": "Data covers May 15 to May 21, 2026. Key drivers include Fed minutes revealing rate hike options, 30Y yield hitting 5.1%, and US-Iran peace rumors crashing oil prices.",
+    "source": "weekly_market_series.json + weekly_news_context.json",
+    "data_status_note": "Data complete. Covers the transition from reflation pricing to geopolitical safe-haven divergence.",
     "week_range": "2026-05-15 to 2026-05-21",
     "days_observed": "7",
     "scene_alignment_status": {
-      "scene_count": 6,
+      "scene_count": 5,
       "control_scene_ids": [
         "scene_01",
         "scene_02",
         "scene_03",
         "scene_04",
-        "scene_05",
-        "scene_06"
+        "scene_05"
       ],
-      "video_visual_scenes_count": 6,
-      "narration_outline_count": 6,
-      "scene_dialogue_context_count": 6,
+      "video_visual_scenes_count": 5,
+      "narration_outline_count": 5,
+      "scene_dialogue_context_count": 5,
       "status": "aligned_with_scene_control_list"
     }
   },
   "forest_summary": {
-    "weekly_main_theme": "鷹派政策預期與地緣避險情緒的拉鋸戰",
-    "main_question": "當長天期美債殖利率創下19年新高，原油卻因和平傳聞大跌，市場的通膨與定價邏輯出現了什麼分歧？",
-    "one_sentence_verdict": "Fed重提升息選項推升長端利率，但地緣政治降溫引發油價重挫，導致資產傳導鏈在「高利率」與「避險/放緩」間劇烈拉鋸。",
+    "weekly_main_theme": "鷹派定價與避險情緒的拉鋸：長債殖利率飆升下的資產分歧",
+    "main_question": "當美債30年期殖利率創下19年新高，為何油價卻出現崩跌？高利率環境下黃金為何依然堅挺？",
+    "one_sentence_verdict": "Fed重啟升息選項推升長端利率，但美伊和平協議傳聞與經濟降溫擔憂引發避險情緒，導致能源與避險資產走勢與利率預期脫鉤。",
     "overall_verdict": "分歧待觀察",
-    "narrative_arc": "從擔憂通膨黏性，轉向震驚於Fed的鷹派表態（30年期美債殖利率破5.1%），隨後又因美伊和平傳聞導致油價大跌，市場焦點在政策風險與地緣風險間快速切換。",
-    "why_it_matters": "這種結構性分歧意味著傳統的「通膨升溫→利率升→美元強」單向傳導被打破。油價下跌抵銷了部分通膨預期，而房市數據疲軟也限制了美元的絕對強勢，這將決定下半年大類資產的配置方向。"
+    "narrative_arc": "本週市場起初受Fed會議紀錄偏鷹與長債標售影響，推升利率預期；隨後美伊和平協議傳聞發酵，油價重挫，加上房市數據疲軟引發成長擔憂，市場焦點轉向避險，導致美元高檔震盪、黃金抗跌、亞幣持續承壓。",
+    "why_it_matters": "這標誌著市場定價邏輯的轉換：從單純的「通膨黏性」轉向「政策緊縮極限」與「地緣/經濟雙重尾部風險」的複雜博弈，傳統的股債油金連動關係正在失效。"
   },
   "common_judgment_funnel": {
     "attention_signal": {
       "dominant_topics": [
         "Fed會議紀錄與升息選項",
-        "30年期美債殖利率創19年新高",
-        "美伊和平協議傳聞與油價重挫",
-        "美國房市數據疲軟與成長擔憂"
+        "30年期美債殖利率突破5.1%",
+        "美伊和平協議傳聞",
+        "房市數據疲軟與成長擔憂"
       ],
-      "natural_news_weight_note": "本週新聞高度集中在Fed的意外鷹派訊號與突發的地緣政治降溫，兩者形成強烈的多空對沖。"
+      "natural_news_weight_note": "市場關注度高度集中在長端利率的突破與地緣政治對油價的突發性打擊。"
     },
     "direction_consistency": {
       "inflation": "mixed",
       "rates": "bullish",
       "dollar": "bullish",
       "asia_fx": "pressure",
-      "gold": "mixed"
+      "gold": "supportive"
     },
     "price_validation": [
-      "US10Y維持在4.6%高位震盪，長端30Y突破5.1%。",
-      "WTI原油從105美元重挫至97美元，Brent跌破105美元。",
-      "DXY美元指數維持在99上方，USDJPY逼近159關卡。",
-      "黃金在4480至4570美元間劇烈震盪，未隨利率飆升而崩盤。"
+      "US10Y維持在4.57%-4.66%高檔震盪，30年期創高。",
+      "WTI由105.4重挫至97.7，Brent由111.2跌至104.5。",
+      "DXY美元指數維持在99之上強勢震盪。",
+      "USDJPY逼近159，USDKRW突破1506，亞幣全面承壓。",
+      "Gold在4480-4577高檔震盪，未受高利率顯著擊垮。"
     ],
     "high_weight_event_adjustments": [
-      "Fed會議紀錄明確提及升息選項，大幅推升長端利率的期限溢價。",
-      "美伊和平協議傳聞直接抽離了原油的地緣政治溢價。"
+      "Fed會議紀錄（鷹派）：覆蓋了部分經濟降溫帶來的降息預期。",
+      "美伊和平協議傳聞（避險/供給增加）：強制修正了原先的再通膨油價定價。"
     ],
-    "final_rule_note": "利率上行趨勢明確，但通膨預期因油價大跌而受壓，美元受制於經濟放緩擔憂未能全面爆發，整體市場呈現高度的邏輯分歧。"
+    "final_rule_note": "利率與美元方向明確（偏強），但通膨預期因油價重挫而混亂，黃金則因避險需求與高利率形成拉鋸，整體呈現結構性分歧。"
   },
   "macro_storyline": {
-    "story_start": "過去幾週，市場原本預期Fed將維持現狀，並在通膨與經濟成長間尋找平衡。",
+    "story_start": "市場原本預期通膨黏性將使Fed維持現狀，長端利率緩步墊高。",
     "main_drivers": [
-      "Fed會議紀錄釋放可能重啟升息的鷹派訊號",
-      "30年期美債殖利率飆升至5.1%的19年新高",
-      "美伊和平協議傳聞引發原油市場拋售",
-      "美國房市數據疲軟引發對經濟硬著陸的擔憂"
+      "Fed會議紀錄釋出官員考慮升息的選項，打破市場對「下一步必然是降息」的預期。",
+      "30年期美債殖利率突破5.1%，期限溢價急遽攀升。",
+      "美伊和平協議傳聞突襲，大幅削減原油的地緣政治溢價。"
     ],
-    "market_transmission": "Fed鷹派訊號 → 長端美債殖利率飆升 → 美元利差優勢擴大 → 亞幣（如日圓）承壓；同時，和平傳聞 → 油價重挫 → 抵銷部分通膨預期 → 限制了美債殖利率進一步失控的風險。",
-    "revision_or_noise": "油價的大跌與房市數據的疲軟，成為本週最重要的修正因子，阻止了市場走向極端的「停滯性通膨」定價。",
-    "story_end": "市場暫時卡在「高利率維持更久」與「經濟/地緣風險降溫」的夾縫中，等待下週更多官員談話與數據來指引方向。"
+    "market_transmission": "鷹派訊號推升長端利率 -> 美元獲得利差支撐 -> 亞幣（日圓、韓圜）被動貶值；同時，地緣降溫預期 -> 油價崩跌 -> 抵銷部分通膨預期；房市疲軟 -> 成長擔憂 -> 支撐黃金避險需求。",
+    "revision_or_noise": "油價的下跌並非來自實體需求崩壞，而是地緣政治風險溢價的快速擠出，這對通膨預期的降溫是「修正」而非「趨勢反轉」。",
+    "story_end": "市場陷入「高利率維持更久」與「經濟/地緣尾部風險」的雙向押注，資產間的傳統負相關性被打破。"
   },
   "macro_variables": {
-    "inflation_view": "受油價重挫影響，短期通膨預期降溫，但服務業與核心通膨黏性仍存。",
-    "rate_view": "長端利率受Fed鷹派指引與期限溢價重估推升，創下多年新高。",
-    "dollar_fx_view": "受惠於利差優勢維持偏強，但上行空間被經濟放緩擔憂所限制。",
-    "asia_fx_view": "在強美元與高美債殖利率的雙重壓迫下，日圓、台幣、韓圜全面承壓。",
-    "gold_view": "面臨高實質利率的上方壓力與避險需求的下方支撐，呈現寬幅震盪。",
-    "energy_view": "地緣政治溢價快速消退，美伊和平傳聞主導了本週的暴跌行情。"
+    "inflation_view": "短期因油價重挫而降溫，但核心服務通膨擔憂仍在，呈現拉鋸。",
+    "rate_view": "長端利率受政策指引與期限溢價雙重推升，市場重新定價尾部升息風險。",
+    "dollar_fx_view": "受惠於絕對利差優勢，但上行空間受制於美國本土經濟降溫的初步訊號。",
+    "asia_fx_view": "日圓（159）與韓圜（1506）在強美元與美債高殖利率下持續面臨沉重貶值壓力，台幣相對具韌性但仍偏弱。",
+    "gold_view": "在實質利率攀升的逆風中，依靠地緣政治與經濟硬著陸的避險買盤維持高檔。",
+    "energy_view": "受美伊談判消息主導，供給端風險溢價大幅回吐，掩蓋了基本面供需現況。"
   },
   "transmission_diagnosis": {
     "inflation_expectation": {
       "signal_strength": "mixed",
       "supporting_signals": [
-        "Fed會議紀錄顯示官員對通膨黏性的擔憂"
+        "Fed會議紀錄對通膨黏性的擔憂"
       ],
       "offsetting_signals": [
-        "WTI與Brent原油單週大幅下跌",
-        "美國房市數據疲軟暗示需求降溫"
+        "WTI與Brent原油單週跌幅顯著",
+        "房市數據疲軟暗示內需降溫"
       ],
-      "judgment": "通膨預期出現分歧，能源端的通縮力量暫時抵銷了政策端的通膨擔憂。"
+      "judgment": "通膨預期因能源價格突發性下挫而暫時失去上行動能，但並未形成通縮預期。"
     },
     "rate_expectation": {
       "main_driver": "policy_guidance",
       "signals": [
-        "Fed會議紀錄提及升息選項",
-        "30年期美債殖利率突破5.1%"
+        "30年期美債殖利率突破5.1%",
+        "US10Y維持在4.6%高位",
+        "Fed官員將升息列入選項"
       ],
-      "judgment": "市場正在重新定價長天期債券的期限溢價，反映對「Higher for Longer」甚至進一步升息的恐懼。"
+      "judgment": "長端利率的攀升主要來自對Fed政策尾部風險（升息）的重新定價，以及長債供需帶來的期限溢價。"
     },
     "sync_checks": [
       {
         "check_id": "check_01",
-        "pair": "長端利率 vs 原油價格",
+        "pair": "US10Y vs WTI",
         "status": "divergent",
-        "market_signal": "30Y美債殖利率創高，但WTI原油重挫",
-        "interpretation": "傳統上再通膨交易會使兩者同向，本週的背離顯示利率上升是由政策恐懼驅動，而非實質通膨預期升溫。",
+        "market_signal": "美債殖利率創高，但油價重挫。",
+        "interpretation": "傳統上再通膨交易會使兩者同向，本週分歧顯示油價下跌是獨立的地緣事件（美伊協議），而非總經需求驅動。",
         "evidence": [
-          "30Y yield hit 5.1%",
-          "WTI dropped from 105 to 97"
+          "US10Y 4.59% -> 4.66%",
+          "WTI 105.4 -> 97.7"
         ],
-        "watch_point": "油價下跌是否能實質改變Fed官員的鷹派態度。"
+        "watch_point": "油價下跌是否會傳導至下個月的通膨預期數據。"
       },
       {
         "check_id": "check_02",
-        "pair": "美元指數 vs 亞洲貨幣",
-        "status": "sync",
-        "market_signal": "DXY維持99上方，USDJPY逼近159",
-        "interpretation": "利差邏輯依然主導匯市，高利率環境持續抽乾亞洲市場流動性。",
+        "pair": "Real Rates vs Gold",
+        "status": "divergent",
+        "market_signal": "長端利率飆升，但黃金維持在4500美元以上高檔。",
+        "interpretation": "黃金無視持有成本上升，反映市場對經濟硬著陸或未知地緣風險的防禦性配置正在增加。",
         "evidence": [
-          "DXY at 99.19",
-          "USDJPY at 159.01"
+          "30Y Yield > 5.1%",
+          "Gold 4555 -> 4542"
         ],
-        "watch_point": "日本央行是否在160關卡前進行實質干預。"
+        "watch_point": "黃金是否能在美元進一步突破時守住支撐。"
       }
     ],
     "macro_evidence": [
       {
         "evidence_id": "evidence_01",
-        "type": "news",
-        "title": "Fed會議紀錄重提升息選項",
-        "supports": "rate_expectation",
+        "type": "market_data",
+        "title": "原油價格單週重挫",
+        "supports": "地緣政治溢價消退",
         "related_checks": [
           "check_01"
         ]
@@ -136,88 +136,86 @@
       {
         "evidence_id": "evidence_02",
         "type": "news",
-        "title": "美伊和平協議傳聞",
-        "supports": "inflation_expectation (downward)",
+        "title": "Fed會議紀錄偏鷹",
+        "supports": "長端利率攀升與美元強勢",
         "related_checks": [
-          "check_01"
+          "check_01",
+          "check_02"
         ]
       }
     ],
     "watch_points": [
-      "Fed官員對升息選項的後續澄清",
-      "美伊談判的實質進展",
-      "亞洲央行的匯率防線"
+      "美伊和平協議的實質進展",
+      "Fed官員對『升息選項』的後續發言頻率",
+      "日本央行在USDJPY逼近160關卡時的口頭或實質干預"
     ]
   },
   "web_visual_pages": [
     {
       "page_id": "web_01",
       "page_type": "overview",
-      "page_title": "本週市場主線：鷹派政策與地緣避險的拉鋸",
-      "viewer_question": "為什麼債券殖利率創高，油價卻在暴跌？",
-      "viewer_message": "市場邏輯出現分歧，政策恐懼推升利率，但地緣降溫壓抑油價。",
+      "page_title": "本週市場傳導：鷹派逆襲與避險分歧",
+      "viewer_question": "為什麼利率創新高，油價卻崩跌？",
+      "viewer_message": "市場定價邏輯已從單純的通膨預期，分裂為『政策緊縮』與『地緣避險』雙主線。",
       "blocks": [
         {
-          "block_title": "利率端的恐懼",
-          "block_body": "Fed會議紀錄意外提及升息選項，導致長端美債遭到拋售，30年期殖利率突破5.1%創19年新高。",
-          "evidence_hint": "US30Y > 5.1%"
+          "block_title": "利率端：尾部風險重估",
+          "block_body": "Fed會議紀錄重啟升息討論，推升30年期美債殖利率突破5.1%，帶動美元指數站穩99。",
+          "evidence_hint": "US10Y 4.6%, DXY 99.2"
         },
         {
-          "block_title": "能源端的降溫",
-          "block_body": "美伊和平協議傳聞引發多頭獲利了結，WTI原油單週重挫，抵銷了部分通膨預期。",
-          "evidence_hint": "WTI跌破100美元"
+          "block_title": "商品端：地緣溢價擠出",
+          "block_body": "美伊和平協議傳聞導致WTI原油單週重挫至97美元，與高漲的利率預期形成強烈背離。",
+          "evidence_hint": "WTI 105 -> 97"
+        },
+        {
+          "block_title": "亞幣端：強美元壓制",
+          "block_body": "利差劣勢持續擴大，日圓逼近159，韓圜突破1500大關，面臨嚴峻考驗。",
+          "evidence_hint": "USDJPY 159.0, USDKRW 1506"
         }
       ],
-      "conclusion": "資產走勢不再單向連動，需分別檢視政策面與基本面的傳導路徑。",
-      "visual_density": "medium"
+      "conclusion": "資產走勢分化顯示市場正在為『高利率維持更久』與『經濟/地緣突發風險』同時買保險。",
+      "visual_density": "high"
     }
   ],
   "scene_control_list": [
     {
       "scene_id": "scene_01",
       "scene_type": "overview",
-      "screen_title": "市場主線：鷹派突襲 vs 地緣降溫",
-      "single_message": "本週市場在Fed升息恐懼與油價暴跌之間劇烈拉鋸。",
+      "screen_title": "本週總經主線：鷹派定價 vs 避險分歧",
+      "single_message": "利率創高與油價崩跌同時發生，市場邏輯出現分裂。",
       "role_in_video": "opening",
       "next_scene_id": "scene_02"
     },
     {
       "scene_id": "scene_02",
       "scene_type": "rate_expectation",
-      "screen_title": "利率風暴：30年期美債創19年新高",
-      "single_message": "Fed會議紀錄重提升息，引發長端債券期限溢價重新定價。",
+      "screen_title": "利率預期：Fed重啟升息選項",
+      "single_message": "30年期美債殖利率突破5.1%，市場重新定價政策尾部風險。",
       "role_in_video": "explanation",
       "next_scene_id": "scene_03"
     },
     {
       "scene_id": "scene_03",
       "scene_type": "inflation_expectation",
-      "screen_title": "油價重挫：通膨預期的意外煞車",
-      "single_message": "美伊和平傳聞抽離地緣溢價，WTI跌破100美元大關。",
+      "screen_title": "能源背離：地緣溢價的快速擠出",
+      "single_message": "美伊協議傳聞擊潰油價，WTI重挫脫鉤利率走勢。",
       "role_in_video": "explanation",
       "next_scene_id": "scene_04"
     },
     {
       "scene_id": "scene_04",
-      "scene_type": "dollar_index",
-      "screen_title": "強勢美元與亞幣的壓力測試",
-      "single_message": "高利率支撐美元，日圓逼近159，但美國經濟隱憂限制了美元漲幅。",
+      "scene_type": "asia_fx_gold",
+      "screen_title": "匯率與避險：亞幣承壓與黃金韌性",
+      "single_message": "強美元重壓日圓韓圜，但黃金無視高利率維持高檔。",
       "role_in_video": "explanation",
       "next_scene_id": "scene_05"
     },
     {
       "scene_id": "scene_05",
-      "scene_type": "asia_fx_gold",
-      "screen_title": "黃金的夾縫求生",
-      "single_message": "高利率壓抑與避險需求同時作用，黃金陷入寬幅震盪。",
-      "role_in_video": "explanation",
-      "next_scene_id": "scene_06"
-    },
-    {
-      "scene_id": "scene_06",
       "scene_type": "next_week_roadmap",
-      "screen_title": "下週觀察重點",
-      "single_message": "關注Fed官員談話、中東局勢進展與亞幣防線。",
+      "screen_title": "下週觀察節點",
+      "single_message": "關注Fed官員談話、中東局勢與亞幣防線。",
       "role_in_video": "conclusion",
       "next_scene_id": ""
     }
@@ -226,201 +224,171 @@
     {
       "scene_id": "scene_01",
       "scene_type": "overview",
-      "screen_title": "市場主線：鷹派突襲 vs 地緣降溫",
-      "single_message": "本週市場在Fed升息恐懼與油價暴跌之間劇烈拉鋸。",
+      "screen_title": "本週總經主線：鷹派定價 vs 避險分歧",
+      "single_message": "利率創高與油價崩跌同時發生，市場邏輯出現分裂。",
       "on_screen_labels": [
-        "Fed升息選項",
-        "美債殖利率飆升",
-        "美伊和平傳聞",
-        "油價重挫"
+        "長端利率飆升",
+        "油價重挫",
+        "資產分歧"
       ],
-      "must_show_numbers": [],
-      "diagram_structure_brief": "中央放置一個天平圖形。左側托盤為紅色向上箭頭，標示『Fed鷹派/利率升』；右側托盤為綠色向下箭頭，標示『地緣降溫/油價跌』。呈現兩股力量互相拉扯的對立佈局。",
+      "must_show_numbers": [
+        "US30Y > 5.1%",
+        "WTI 97.7"
+      ],
+      "diagram_structure_brief": "中央震盪區間：左側顯示向上的紅色箭頭（美債殖利率），右側顯示向下的綠色箭頭（原油價格），中間以閃電符號表示邏輯斷裂與分歧。",
       "voiceover_link": "narration_01"
     },
     {
       "scene_id": "scene_02",
       "scene_type": "rate_expectation",
-      "screen_title": "利率風暴：30年期美債創19年新高",
-      "single_message": "Fed會議紀錄重提升息，引發長端債券期限溢價重新定價。",
+      "screen_title": "利率預期：Fed重啟升息選項",
+      "single_message": "30年期美債殖利率突破5.1%，市場重新定價政策尾部風險。",
       "on_screen_labels": [
         "Fed會議紀錄",
         "升息選項",
-        "期限溢價重估"
+        "期限溢價"
       ],
       "must_show_numbers": [
-        "5.1%"
+        "US10Y 4.66%",
+        "US30Y 5.1%"
       ],
-      "diagram_structure_brief": "左側為『Fed會議紀錄』圖示，拉出一條強烈的紅色垂直向上箭頭至右側，右側顯示『30年期美債殖利率 5.1%』，並標註『19年新高』的壓力層。",
+      "diagram_structure_brief": "垂直傳導：上方為Fed建築圖示（標註鷹派會議紀錄），向下傳導至美債殖利率曲線，特別突顯長端（30Y）的陡升突破壓力層。",
       "voiceover_link": "narration_02"
     },
     {
       "scene_id": "scene_03",
       "scene_type": "inflation_expectation",
-      "screen_title": "油價重挫：通膨預期的意外煞車",
-      "single_message": "美伊和平傳聞抽離地緣溢價，WTI跌破100美元大關。",
+      "screen_title": "能源背離：地緣溢價的快速擠出",
+      "single_message": "美伊協議傳聞擊潰油價，WTI重挫脫鉤利率走勢。",
       "on_screen_labels": [
         "美伊和平傳聞",
         "地緣溢價消退",
-        "通膨預期降溫"
+        "通膨預期干擾"
       ],
       "must_show_numbers": [
-        "105",
-        "97"
+        "WTI 105.4 -> 97.7"
       ],
-      "diagram_structure_brief": "上方為『美伊和平傳聞』的事件節點，向下發射藍色箭頭擊穿一條水平支撐線，下方顯示『WTI原油』區塊，數字從105跌至97，呈現垂直傳導的破底佈局。",
+      "diagram_structure_brief": "分岔路徑：左側為高懸的利率預期，右側為油桶圖示伴隨急墜的折線圖，中間標註『美伊協議』作為切斷兩者連動的觀察節點。",
       "voiceover_link": "narration_03"
     },
     {
       "scene_id": "scene_04",
-      "scene_type": "dollar_index",
-      "screen_title": "強勢美元與亞幣的壓力測試",
-      "single_message": "高利率支撐美元，日圓逼近159，但美國經濟隱憂限制了美元漲幅。",
+      "scene_type": "asia_fx_gold",
+      "screen_title": "匯率與避險：亞幣承壓與黃金韌性",
+      "single_message": "強美元重壓日圓韓圜，但黃金無視高利率維持高檔。",
       "on_screen_labels": [
-        "利差優勢",
-        "美元指數",
-        "亞洲貨幣承壓",
-        "房市數據疲軟"
+        "利差壓制",
+        "日圓/韓圜貶值",
+        "防禦性配置"
       ],
       "must_show_numbers": [
-        "99",
-        "159"
+        "DXY 99.3",
+        "USDJPY 159",
+        "Gold 4542"
       ],
-      "diagram_structure_brief": "上方為巨大的『美元指數 (DXY)』區塊，受左側『高利率』箭頭支撐，但被右側『房市疲軟』的向下箭頭壓制。美元區塊下方壓著三個小區塊：JPY (159)、TWD、KRW，呈現上下壓力結構。",
+      "diagram_structure_brief": "水平對立：左側為強勢美元（DXY）重壓下方的亞幣（JPY, KRW）；右側為黃金圖示，在實質利率的壓力層下依然獲得下方『避險需求』的支撐。",
       "voiceover_link": "narration_04"
     },
     {
       "scene_id": "scene_05",
-      "scene_type": "asia_fx_gold",
-      "screen_title": "黃金的夾縫求生",
-      "single_message": "高利率壓抑與避險需求同時作用，黃金陷入寬幅震盪。",
-      "on_screen_labels": [
-        "高實質利率",
-        "黃金震盪",
-        "避險/地緣需求"
-      ],
-      "must_show_numbers": [
-        "4480",
-        "4570"
-      ],
-      "diagram_structure_brief": "中央為『黃金』震盪區間。上方有一層厚重的紅色壓力層標示『高實質利率』向下壓；下方有一層藍色支撐層標示『避險需求』向上頂。呈現水平對立與中央震盪的佈局。",
-      "voiceover_link": "narration_05"
-    },
-    {
-      "scene_id": "scene_06",
       "scene_type": "next_week_roadmap",
-      "screen_title": "下週觀察重點",
-      "single_message": "關注Fed官員談話、中東局勢進展與亞幣防線。",
+      "screen_title": "下週觀察節點",
+      "single_message": "關注Fed官員談話、中東局勢與亞幣防線。",
       "on_screen_labels": [
-        "Fed官員態度",
-        "美伊談判進展",
-        "亞幣干預風險"
+        "Fed官員定調",
+        "中東實質進展",
+        "央行干預風險"
       ],
       "must_show_numbers": [],
-      "diagram_structure_brief": "畫面左側為一個起始節點，向右分岔出三條路徑，分別指向『Fed政策指引』、『地緣政治變化』與『央行匯率防線』，每個路徑末端帶有一個觀察放大鏡圖示。",
-      "voiceover_link": "narration_06"
+      "diagram_structure_brief": "三節點時間軸：由左至右排列三個觀察節點，分別對應政策面、地緣面與外匯面，並帶有回流箭頭指向整體的市場風險偏好。",
+      "voiceover_link": "narration_05"
     }
   ],
   "narration_outline": [
     {
       "narration_id": "narration_01",
       "scene_id": "scene_01",
-      "voiceover_goal": "點出本週市場最大的矛盾：利率與油價的背離。",
+      "voiceover_goal": "點出本週市場最反常的現象：利率與油價的嚴重背離。",
       "key_points": [
-        "市場原本預期平穩，卻被Fed會議紀錄打亂。",
-        "長端利率因升息恐懼而飆升。",
-        "同時，中東和平傳聞卻讓油價大跌。",
-        "這兩股力量讓市場定價邏輯出現嚴重分歧。"
+        "本週市場出現了罕見的撕裂。",
+        "一方面，長天期美債殖利率創下19年新高。",
+        "另一方面，原油價格卻出現崩跌。",
+        "這代表市場的定價邏輯，已經從單一的通膨劇本，分裂成兩條不同的主線。"
       ],
       "evidence_to_mention": [
-        "Fed會議紀錄",
-        "美伊和平傳聞"
+        "30年期美債殖利率突破5.1%",
+        "WTI原油跌破98美元"
       ],
       "avoid_saying": [
-        "通膨已經失控",
-        "Fed確定會升息"
+        "通膨已經結束",
+        "市場即將崩盤"
       ]
     },
     {
       "narration_id": "narration_02",
       "scene_id": "scene_02",
-      "voiceover_goal": "解釋為什麼長端美債殖利率會創下19年新高。",
+      "voiceover_goal": "解釋利率飆升的原因：Fed會議紀錄的鷹派驚嚇。",
       "key_points": [
-        "Fed會議紀錄中，多位官員提及若通膨不降，願意考慮升息。",
-        "這句話打破了市場『頂多不降息』的底線。",
-        "導致長天期債券的期限溢價被大幅重新定價。",
-        "30年期美債殖利率直接突破5.1%。"
+        "過去幾週，市場還在猜測什麼時候降息。",
+        "但本週的Fed會議紀錄直接掀牌：多數官員把『升息』重新放回了選項清單。",
+        "這個預期外的尾部風險，直接引爆了長債的拋售潮。",
+        "30年期殖利率突破5.1%，這不僅是通膨預期，更是市場在要求更高的期限溢價。"
       ],
       "evidence_to_mention": [
-        "30年期美債殖利率突破5.1%",
-        "Fed會議紀錄的升息選項"
+        "Fed會議紀錄",
+        "US10Y逼近4.66%"
       ],
       "avoid_saying": [
-        "短期利率已經上升"
+        "Fed已經決定升息"
       ]
     },
     {
       "narration_id": "narration_03",
       "scene_id": "scene_03",
-      "voiceover_goal": "解釋油價為何在通膨擔憂中逆勢大跌。",
+      "voiceover_goal": "解釋油價崩跌的獨立因果：地緣政治的干擾。",
       "key_points": [
-        "如果利率是因為通膨而升，油價應該要漲。",
-        "但本週WTI原油卻從105美元重挫到97美元。",
-        "主因是美伊和平協議的傳聞，抽離了市場的地緣政治溢價。",
-        "這反而成為了壓抑通膨預期的一股意外力量。"
+        "既然利率在反映通膨擔憂，為什麼油價會單週重挫？",
+        "因為本週主導油價的不是總經需求，而是『美伊和平協議』的傳聞。",
+        "這個消息瞬間擠出了原油市場裡的地緣政治溢價。",
+        "所以油價下跌是供給端風險的解除，而不是經濟衰退導致的需求崩壞。"
       ],
       "evidence_to_mention": [
-        "WTI跌破100美元",
-        "美伊和平協議傳聞"
+        "WTI從105跌到97",
+        "美伊協議傳聞"
       ],
       "avoid_saying": [
-        "原油需求已經崩潰"
+        "油價下跌代表經濟衰退"
       ]
     },
     {
       "narration_id": "narration_04",
       "scene_id": "scene_04",
-      "voiceover_goal": "分析強美元對亞幣的壓迫，以及美元自身的隱憂。",
+      "voiceover_goal": "解析強美元下的亞幣災情與黃金的異常韌性。",
       "key_points": [
-        "美債殖利率飆升，讓美元指數穩穩撐在99上方。",
-        "巨大的利差讓亞洲貨幣喘不過氣，日圓逼近159關卡。",
-        "但美元沒有全面爆發，因為美國房市數據疲軟，引發了經濟放緩的擔憂。",
-        "市場在『利差優勢』與『衰退風險』之間猶豫。"
+        "高利率直接支撐了美元，這讓亞洲貨幣喘不過氣，日圓逼近159，韓圜也突破1500。",
+        "但最有趣的是黃金。按理說，殖利率這麼高，不孳息的黃金應該大跌。",
+        "但黃金依然穩在4500美元之上。",
+        "這說明市場資金除了買美元收息，也在買黃金防禦『經濟降溫』或『未知地緣衝突』的尾部風險。"
       ],
       "evidence_to_mention": [
-        "DXY維持99",
-        "USDJPY逼近159",
-        "美國房市數據疲軟"
+        "DXY 99.3",
+        "USDJPY 159",
+        "Gold 4542"
       ],
       "avoid_saying": [
-        "亞幣即將崩盤"
+        "黃金與利率完全脫鉤"
       ]
     },
     {
       "narration_id": "narration_05",
       "scene_id": "scene_05",
-      "voiceover_goal": "解釋黃金為何在利空與利多中劇烈震盪。",
+      "voiceover_goal": "總結並給出下週的觀察重點。",
       "key_points": [
-        "30年期殖利率破5.1%，這對不孳息的黃金是巨大的上方壓力。",
-        "但黃金跌到4480美元後又迅速拉回。",
-        "因為市場對經濟放緩的擔憂，以及地緣政治的不確定性，提供了下方的避險支撐。",
-        "黃金現在完全卡在兩股力量中間。"
-      ],
-      "evidence_to_mention": [
-        "黃金在4480至4570間震盪"
-      ],
-      "avoid_saying": [
-        "黃金即將大漲或大跌"
-      ]
-    },
-    {
-      "narration_id": "narration_06",
-      "scene_id": "scene_06",
-      "voiceover_goal": "總結並給出下週的觀察指標。",
-      "key_points": [
-        "下週第一看Fed官員出來講話，會不會收回升息的恐嚇。",
-        "第二看中東和平協議是真有其事，還是只是傳聞。",
-        "第三看日圓如果貶破160，日本央行會不會出手干預。"
+        "總結來說，現在的市場是一手押注高利率，一手買進避險資產。",
+        "下週我們必須盯緊三個節點：",
+        "第一，Fed官員出來講話時，會不會繼續強化『升息』這個選項？",
+        "第二，美伊協議是真有其事，還是只是市場傳聞？這決定了油價會不會報復性反彈。",
+        "第三，日圓逼近160大關，亞洲央行隨時可能出手干預。"
       ],
       "evidence_to_mention": [],
       "avoid_saying": []
@@ -430,415 +398,329 @@
     {
       "scene_id": "scene_01",
       "scene_type": "overview",
-      "screen_title": "市場主線：鷹派突襲 vs 地緣降溫",
-      "dialogue_topic": "本週市場為何出現利率與油價的嚴重背離？",
+      "screen_title": "本週總經主線：鷹派定價 vs 避險分歧",
+      "dialogue_topic": "市場定價邏輯的撕裂",
       "visual_anchor": {
-        "what_the_image_shows": "畫面中央的天平顯示左側『Fed鷹派/利率升』與右側『地緣降溫/油價跌』的拉鋸。",
+        "what_the_image_shows": "畫面上呈現美債殖利率向上與油價向下的強烈對比，中間有斷裂符號。",
         "must_align_with": [
-          "天平的兩端對立"
+          "US30Y > 5.1%",
+          "WTI 97.7"
         ],
-        "do_not_expand": []
+        "do_not_expand": [
+          "個別公司的財報表現"
+        ]
       },
-      "prior_market_impression": "過去幾週，市場原本以為Fed的政策路徑已經很明確，就是『維持高利率，但不升息』，大家都在等通膨慢慢降溫。",
-      "this_week_catalyst": "但本週Fed會議紀錄突然丟出『升息選項』的震撼彈；同一時間，中東卻傳出美伊和平協議的風聲。",
-      "data_validation": "這導致30年期美債殖利率狂飆，但WTI原油卻單週重挫跌破100美元。",
-      "causal_interpretation": "這兩件事把市場撕裂了。一邊是政策恐懼推升利率，另一邊是地緣降溫壓抑油價，傳統的『通膨升→利率升』邏輯被打破。",
-      "offset_or_risk": "目前這兩股力量互相牽制，導致大盤方向感非常混亂。",
-      "foreshadow_next": "我們先來拆解左邊這個最嚇人的訊號：為什麼債券市場會恐慌到讓30年期殖利率創下19年新高？",
-      "tom_question_angle": "Tom可以從觀眾的困惑切入：『這週看盤真的很痛苦，債券殖利率在狂飆，感覺通膨要失控了，但轉頭一看，油價卻在暴跌。這兩個訊號不是互相矛盾嗎？市場到底在怕什麼？』",
-      "miranda_talk_track": "Miranda解釋這是一個『政策預期』與『基本面』脫鉤的禮拜。先點出Fed會議紀錄的意外鷹派，打破了市場的安全感；接著說明油價下跌是因為突發的地緣政治傳聞，這兩件事剛好撞在一起，形成了天平兩端的拉鋸。",
+      "prior_market_impression": "過去幾週市場認為通膨雖然黏滯，但總體趨勢還是會走向降息，資產多空連動相對一致。",
+      "this_week_catalyst": "Fed會議紀錄的鷹派表態與美伊和平協議傳聞同時發生。",
+      "data_validation": "30年期美債殖利率創19年新高，但WTI原油卻單週重挫近8美元。",
+      "causal_interpretation": "市場同時在消化『貨幣政策可能更緊』與『地緣風險可能降溫』兩個截然不同的劇本。",
+      "offset_or_risk": "利率預期與通膨預期（油價）出現了短暫的脫鉤與抵銷。",
+      "foreshadow_next": "究竟是什麼推升了這麼高的利率？我們來看Fed到底說了什麼。",
+      "tom_question_angle": "等等，如果市場真的這麼擔心通膨，甚至把長債殖利率推到19年新高，那為什麼最能代表通膨的油價，這週反而出現崩跌？這不是很矛盾嗎？",
+      "miranda_talk_track": "這正是本週市場最精彩的分歧點。過去我們習慣『油價漲、通膨起、利率升』的單向傳導。但這週，利率和油價是被兩個完全獨立的事件驅動的。利率反映的是Fed的政策底線，而油價反映的是中東地緣政治的突發消息。兩者脫鉤，代表市場正在同時為不同的尾部風險重新定價。",
       "miranda_deep_dive_points": [
-        "Fed會議紀錄的意外性",
-        "地緣政治傳聞對油價的瞬間打擊",
-        "資產定價邏輯的分歧"
+        "解釋長端利率創高背後的期限溢價重估。",
+        "點出油價下跌並非需求破滅，而是供給端風險溢價的擠出。",
+        "說明這種分歧如何導致跨資產配置的困難。"
       ],
       "expected_dialogue_seconds": "60-90",
       "key_news_lines": [
-        "Fed會議紀錄",
-        "美伊和平傳聞"
+        "30年期美債殖利率突破5.1%"
       ],
-      "key_numbers": [],
+      "key_numbers": [
+        "5.1%",
+        "97.7"
+      ],
       "avoid_saying": [
-        "市場已經崩盤"
+        "市場完全失控"
       ],
-      "image_alignment_note": "語音需強調天平兩端的拉扯感。"
+      "image_alignment_note": "當Miranda提到『兩個獨立事件』時，畫面應強調左右兩側驅動力的不同。"
     },
     {
       "scene_id": "scene_02",
       "scene_type": "rate_expectation",
-      "screen_title": "利率風暴：30年期美債創19年新高",
-      "dialogue_topic": "Fed重提升息選項如何引發長債拋售？",
+      "screen_title": "利率預期：Fed重啟升息選項",
+      "dialogue_topic": "Fed會議紀錄與長債拋售",
       "visual_anchor": {
-        "what_the_image_shows": "畫面左側的Fed會議紀錄引發紅色箭頭向上，推升右側30年期美債殖利率至5.1%。",
+        "what_the_image_shows": "Fed圖示向下施壓，導致殖利率曲線長端大幅陡升。",
         "must_align_with": [
-          "5.1%的數字",
-          "向上的壓力箭頭"
+          "US10Y 4.66%"
         ],
-        "do_not_expand": []
+        "do_not_expand": [
+          "短端利率的微小波動"
+        ]
       },
-      "prior_market_impression": "市場原本的共識是，Fed這輪升息循環已經結束，最差的情況就是『Higher for Longer』（高利率維持更久）。",
-      "this_week_catalyst": "但本週公佈的Fed會議紀錄裡，多位官員明確表示，如果通膨風險上升，他們願意進一步收緊政策。這等於把『升息』重新放回了桌面上。",
-      "data_validation": "這個訊號嚇壞了債券市場，特別是長天期債券。30年期美債殖利率直接飆破5.1%，創下19年來的新高。",
-      "causal_interpretation": "這在總經上叫做『期限溢價（Term Premium）重估』。投資人發現持有長債的風險比想像中大，因為Fed可能還沒打完通膨仗，所以要求更高的殖利率來補償風險。",
-      "offset_or_risk": "不過，這麼高的利率對實體經濟的殺傷力很大，這也是為什麼後來房市數據開始出現疲態。",
-      "foreshadow_next": "但有趣的是，就在Fed擔心通膨、債市狂跌的時候，通膨的源頭之一——原油，卻在偷偷跳水。這是怎麼回事？",
-      "tom_question_angle": "Tom可以問：『Fed只是在會議紀錄裡提了一下升息的可能，有必要嚇成這樣嗎？30年期殖利率創19年新高，這聽起來像是要出大事了。』",
-      "miranda_talk_track": "Miranda解釋市場的『底線』被打破了。原本大家以為最壞就是不降息，現在變成可能升息，這導致長債投資人要求更高的風險補償（期限溢價）。強調5.1%這個數字對市場心理的震撼。",
+      "prior_market_impression": "市場原本確信Fed的下一步只會是降息，只是時間早晚的問題。",
+      "this_week_catalyst": "Fed會議紀錄明確指出，多數官員願意在必要時進一步緊縮政策（升息）。",
+      "data_validation": "US10Y衝上4.66%，30年期更是突破5.1%。",
+      "causal_interpretation": "『升息選項』的重啟打破了市場的安逸，投資人要求更高的期限溢價來持有長債。",
+      "offset_or_risk": "房市數據的疲軟稍微限制了利率進一步噴出的幅度，但整體依然偏強。",
+      "foreshadow_next": "利率這麼高，照理說會壓抑所有大宗商品，但油價的崩跌真的是因為高利率嗎？",
+      "tom_question_angle": "Fed只是在會議紀錄裡『討論』了升息選項，連真的動作都還沒有，為什麼債券市場的反應會這麼劇烈，直接把30年期殖利率推破5.1%？",
+      "miranda_talk_track": "因為這打破了市場的『信仰』。之前華爾街的共識是『高利率維持更久 (Higher for longer)』，底線是『不降息』。但現在Fed把『升息』這個尾部風險重新端上桌。對於持有30年期長債的機構來說，這代表未來的通膨與政策不確定性大增，他們必須要求更高的『期限溢價』才願意抱住債券，這就引發了長端的拋售潮。",
       "miranda_deep_dive_points": [
-        "打破『不升息』的市場共識",
-        "期限溢價的重新定價",
-        "長端利率創高的意義"
+        "區分『政策指引』與『期限溢價』對長債的不同影響。",
+        "解釋為何會議紀錄的文字威力大於實際數據。",
+        "點出這對企業長期融資成本的實質打擊。"
       ],
       "expected_dialogue_seconds": "60-90",
       "key_news_lines": [
-        "Fed會議紀錄提及升息選項"
+        "Fed會議紀錄顯示多數官員主張將升息列入選項"
       ],
       "key_numbers": [
+        "4.66%",
         "5.1%"
       ],
       "avoid_saying": [
         "Fed下個月就會升息"
       ],
-      "image_alignment_note": "語音需配合畫面中向上的紅色箭頭，強調殖利率飆升的力道。"
+      "image_alignment_note": "配合Miranda解釋『期限溢價』，畫面應突顯長端曲線的陡峭化。"
     },
     {
       "scene_id": "scene_03",
       "scene_type": "inflation_expectation",
-      "screen_title": "油價重挫：通膨預期的意外煞車",
-      "dialogue_topic": "美伊和平傳聞如何擊穿油價支撐？",
+      "screen_title": "能源背離：地緣溢價的快速擠出",
+      "dialogue_topic": "美伊協議傳聞與油價重挫",
       "visual_anchor": {
-        "what_the_image_shows": "畫面顯示美伊和平傳聞的藍色箭頭向下擊穿支撐線，WTI原油從105跌至97。",
+        "what_the_image_shows": "油價折線圖急墜，旁邊標註美伊協議傳聞作為切斷點。",
         "must_align_with": [
-          "向下的藍色箭頭",
-          "105跌至97的數字"
+          "WTI 105.4 -> 97.7"
         ],
-        "do_not_expand": []
+        "do_not_expand": [
+          "OPEC+的長期產能細節"
+        ]
       },
-      "prior_market_impression": "過去幾個月，中東局勢緊張一直給油價提供了一個很強的『地緣政治溢價』，讓WTI原油撐在100美元以上。",
-      "this_week_catalyst": "但本週市場突然傳出美國與伊朗可能達成某種和平協議的風聲。",
-      "data_validation": "這個消息一出來，多頭立刻獲利了結，WTI原油單週從105美元重挫到97美元，Brent也跌破了105美元。",
-      "causal_interpretation": "這對總經的影響很大。油價大跌等於是給通膨預期踩了煞車。這也是為什麼雖然Fed很鷹派，但市場並沒有全面恐慌，因為能源端的通縮力量抵銷了一部分政策端的壓力。",
-      "offset_or_risk": "當然，這只是傳聞，如果下週談判破裂，油價隨時可能報復性反彈。",
-      "foreshadow_next": "在這種『利率升、油價跌』的詭異環境下，外匯市場的反應最直接。我們來看看美元和亞幣發生了什麼事。",
-      "tom_question_angle": "Tom可以問：『既然Fed這麼怕通膨，那油價大跌不是剛好幫了Fed一個大忙嗎？為什麼油價會突然跌這麼多，從105直接摔到97？』",
-      "miranda_talk_track": "Miranda解釋油價下跌不是因為經濟衰退導致需求消失，而是因為『地緣政治溢價』被抽離。說明美伊和平傳聞如何引發多頭踩踏，並指出這股力量剛好對沖了Fed的鷹派壓力。",
+      "prior_market_impression": "中東局勢緊張，油價包含了極高的地緣政治風險溢價，支撐通膨預期。",
+      "this_week_catalyst": "市場傳出美伊和平協議的談判消息。",
+      "data_validation": "WTI原油單週從105.4美元重挫至97.7美元，Brent也跌破105美元。",
+      "causal_interpretation": "和平協議預期使得原本擔憂荷姆茲海峽封鎖的『恐慌性溢價』被快速擠出市場。",
+      "offset_or_risk": "這抵銷了部分由Fed鷹派言論帶來的通膨恐慌，但這屬於供給端的消息面波動，並非實質需求下降。",
+      "foreshadow_next": "油價跌了，但高利率還在，這對亞洲貨幣和避險資產造成了什麼極端現象？",
+      "tom_question_angle": "所以油價從105塊跌到97塊，完全是因為美伊和平協議的傳聞？這會不會讓Fed覺得通膨警報解除了？",
+      "miranda_talk_track": "這正是Fed最頭痛的地方。油價這週的崩跌，純粹是因為『地緣政治溢價』的消退，而不是因為美國人少開車、少消費了。對Fed來說，這種因為中東消息面造成的油價下跌是不可靠的。如果下週談判破裂，油價馬上就會彈回去。所以，雖然油價跌了，但Fed看重的『核心服務通膨』並沒有因此降溫，這也是為什麼利率預期依然居高不下。",
       "miranda_deep_dive_points": [
-        "地緣政治溢價的消退",
-        "油價下跌對通膨預期的緩解作用",
-        "傳聞驅動的脆弱性"
+        "解析原油價格中的『基本面供需』與『地緣溢價』比例。",
+        "說明為何這種油價下跌無法改變Fed的緊縮路徑。",
+        "提醒傳聞證偽後的報復性反彈風險。"
       ],
       "expected_dialogue_seconds": "60-90",
       "key_news_lines": [
-        "美伊和平協議傳聞"
+        "美伊和平協議傳聞引發避險情緒，導致油價逆轉收挫"
       ],
       "key_numbers": [
-        "105",
-        "97"
+        "105.4",
+        "97.7"
       ],
       "avoid_saying": [
-        "通膨危機已經解除"
+        "通膨已經被油價拉下來了"
       ],
-      "image_alignment_note": "語音需強調向下擊穿支撐線的動作，對應油價的重挫。"
+      "image_alignment_note": "強調『傳聞』標籤，暗示這是不穩定的驅動因素。"
     },
     {
       "scene_id": "scene_04",
-      "scene_type": "dollar_index",
-      "screen_title": "強勢美元與亞幣的壓力測試",
-      "dialogue_topic": "高利率如何支撐美元並壓迫亞幣？",
+      "scene_type": "asia_fx_gold",
+      "screen_title": "匯率與避險：亞幣承壓與黃金韌性",
+      "dialogue_topic": "強美元下的亞幣災情與黃金防禦",
       "visual_anchor": {
-        "what_the_image_shows": "畫面顯示巨大的美元區塊壓在JPY、TWD、KRW上方，但美元上方也有房市疲軟的壓制。",
+        "what_the_image_shows": "強美元壓制亞幣，但黃金在另一側獲得避險支撐。",
         "must_align_with": [
-          "美元壓制亞幣的結構",
-          "房市疲軟的向下壓制"
+          "USDJPY 159",
+          "Gold 4542"
         ],
-        "do_not_expand": []
+        "do_not_expand": [
+          "個別新興市場國家的外匯存底細節"
+        ]
       },
-      "prior_market_impression": "美元指數之前一直在99附近震盪，市場在等一個明確的突破方向。",
-      "this_week_catalyst": "本週美債殖利率飆升，原本應該給美元一劑強心針，讓它大幅突破。",
-      "data_validation": "美元確實維持強勢，把日圓逼到了159的危險邊緣，台幣和韓圜也全面承壓。但奇怪的是，美元指數並沒有衝破天際，還是卡在99點多。",
-      "causal_interpretation": "這是因為『利差優勢』雖然支撐了美元，但本週公佈的美國房市數據非常疲軟。市場開始擔心，這麼高的利率，美國經濟真的撐得住嗎？這種『衰退擔憂』限制了美元的漲幅。",
-      "offset_or_risk": "所以美元現在是『對亞幣很強，但自身缺乏絕對上漲動能』的狀態。",
-      "foreshadow_next": "既然美元和美債都在高檔，那對利率最敏感的黃金，這週是不是被殺得很慘？",
-      "tom_question_angle": "Tom可以問：『美債殖利率都創19年新高了，美元應該要飛天了吧？我看日圓都被壓到159了，但為什麼美元指數本身好像漲不太動？』",
-      "miranda_talk_track": "Miranda解釋匯率的雙重驅動力。一方面，高利率確實讓美元對低息的亞洲貨幣（如日圓）形成碾壓；但另一方面，疲軟的房市數據喚醒了市場對美國經濟硬著陸的恐懼，這股力量壓制了美元的絕對強勢。",
+      "prior_market_impression": "高利率會壓垮不孳息的黃金，同時美元強勢會讓亞幣持續走貶。",
+      "this_week_catalyst": "美債殖利率創高加上美國房市數據疲軟引發的成長擔憂。",
+      "data_validation": "日圓逼近159，韓圜突破1506；但黃金維持在4500美元以上的高檔。",
+      "causal_interpretation": "利差優勢讓美元無懸念地壓制亞幣；但黃金的買盤看重的是『經濟硬著陸』與『地緣政治』的尾部風險，選擇無視高昂的持有成本。",
+      "offset_or_risk": "黃金在高利率與避險需求之間形成強烈拉鋸，呈現高檔震盪。",
+      "foreshadow_next": "面對這樣分裂的市場，下週我們該盯住哪些關鍵訊號？",
+      "tom_question_angle": "美元強勢把日圓壓到159我可以理解，畢竟利差擺在那裡。但黃金呢？殖利率都破5%了，把錢放在銀行生息不好嗎？為什麼黃金還能撐在4500美元這麼高的位置？",
+      "miranda_talk_track": "這就是現在市場心理最微妙的地方。傳統教科書說，實質利率上升，黃金必跌。但現在的資金買黃金，買的不是抗通膨，而是『買保險』。市場一方面相信Fed會維持高利率，但另一方面，本週疲軟的房市數據讓大家開始害怕：如果高利率真的把經濟搞到硬著陸怎麼辦？加上中東局勢反覆無常，大型機構寧願放棄那5%的利息，也要抱著黃金來防禦未知的尾部風險。這是一種極度缺乏安全感的市場定價。",
       "miranda_deep_dive_points": [
-        "利差優勢對亞幣的壓迫",
-        "房市數據疲軟引發的成長擔憂",
-        "美元指數的雙向拉扯"
+        "解釋利差如何機械式地壓迫日圓與韓圜。",
+        "拆解黃金定價模型中『實質利率』與『避險情緒』的權重翻轉。",
+        "點出房市數據疲軟如何觸發初步的成長擔憂。"
       ],
       "expected_dialogue_seconds": "60-90",
       "key_news_lines": [
-        "美國房市數據疲軟"
+        "房市數據疲軟引發成長降溫擔憂"
       ],
       "key_numbers": [
-        "99",
-        "159"
+        "159",
+        "1506",
+        "4542"
       ],
       "avoid_saying": [
-        "美元即將反轉向下"
+        "黃金即將大跌"
       ],
-      "image_alignment_note": "語音需清楚描述畫面中美元『上不去也下不來』，但依然重壓亞幣的結構。"
+      "image_alignment_note": "畫面需清楚對比亞幣的『向下承壓』與黃金的『向上支撐』。"
     },
     {
       "scene_id": "scene_05",
-      "scene_type": "asia_fx_gold",
-      "screen_title": "黃金的夾縫求生",
-      "dialogue_topic": "黃金為何在高利率下仍能維持震盪？",
-      "visual_anchor": {
-        "what_the_image_shows": "畫面顯示黃金在中央震盪，上方有高實質利率的紅線壓制，下方有避險需求的藍線支撐。",
-        "must_align_with": [
-          "上方的紅色壓力",
-          "下方的藍色支撐",
-          "中央的震盪區間"
-        ],
-        "do_not_expand": []
-      },
-      "prior_market_impression": "傳統總經教科書說，當實質利率飆升時，不孳息的黃金應該要大跌。",
-      "this_week_catalyst": "這週30年期美債殖利率破5.1%，黃金確實一度嚇到跌破4500美元，來到4480。",
-      "data_validation": "但它沒有崩盤，反而又頑強地拉回到4540美元以上，呈現劇烈的寬幅震盪。",
-      "causal_interpretation": "這張圖完美解釋了黃金現在的處境。上方是『高實質利率』的泰山壓頂；但下方，因為市場擔心美國經濟放緩（房市數據），加上中東局勢依然撲朔迷離，『避險需求』提供了強大的支撐。",
-      "offset_or_risk": "只要這兩股力量沒有分出勝負，黃金就會繼續在這個夾縫中劇烈洗盤。",
-      "foreshadow_next": "面對這麼多互相矛盾的訊號，我們下週到底該盯著什麼看？",
-      "tom_question_angle": "Tom可以問：『我最看不懂的就是黃金。利率這麼高，持有黃金根本不划算，它週中也確實跌了，但為什麼最後又拉回來？是誰在買？』",
-      "miranda_talk_track": "Miranda用畫面中的上下夾擊結構來解釋。承認高利率確實是黃金的致命傷（上方壓力），但點出市場深層的恐懼（經濟衰退與地緣政治）促使資金尋求避風港（下方支撐），導致黃金跌不下去。",
-      "miranda_deep_dive_points": [
-        "高實質利率對黃金的傳統壓制",
-        "避險需求與地緣政治的底層支撐",
-        "寬幅震盪的市場心理"
-      ],
-      "expected_dialogue_seconds": "60-90",
-      "key_news_lines": [],
-      "key_numbers": [
-        "4480",
-        "4570"
-      ],
-      "avoid_saying": [
-        "黃金已經失去避險功能"
-      ],
-      "image_alignment_note": "語音需引導觀眾看見畫面中上下兩股力量的對抗。"
-    },
-    {
-      "scene_id": "scene_06",
       "scene_type": "next_week_roadmap",
-      "screen_title": "下週觀察重點",
-      "dialogue_topic": "下週市場的破局點在哪裡？",
+      "screen_title": "下週觀察節點",
+      "dialogue_topic": "未來一週的市場驗證點",
       "visual_anchor": {
-        "what_the_image_shows": "畫面顯示三條分岔路徑：Fed政策指引、地緣政治變化、央行匯率防線。",
-        "must_align_with": [
-          "三條分岔的觀察路徑"
-        ],
+        "what_the_image_shows": "三個觀察節點的時間軸：Fed發言、中東局勢、央行干預。",
+        "must_align_with": [],
         "do_not_expand": []
       },
-      "prior_market_impression": "",
-      "this_week_catalyst": "",
-      "data_validation": "",
-      "causal_interpretation": "",
-      "offset_or_risk": "",
-      "foreshadow_next": "",
-      "tom_question_angle": "Tom可以總結：『這週真的是多空大亂鬥，利率、油價、美元都在走自己的路。那下週我們要怎麼在這種混亂中找到方向？』",
-      "miranda_talk_track": "Miranda給出三個清晰的觀察節點：第一，Fed官員出來講話時，會不會試圖安撫債市，收回升息的恐嚇？第二，美伊和平協議到底有沒有實質進展，這決定了油價會不會報復性反彈。第三，日圓如果真的碰到160，日本央行會不會進場干預，這會引發外匯市場的大地震。",
+      "prior_market_impression": "市場處於單一方向的趨勢中。",
+      "this_week_catalyst": "本週的數據與新聞打破了單一趨勢，進入多空拉鋸。",
+      "data_validation": "各資產價格停留在關鍵的支撐或壓力位（如日圓160關卡）。",
+      "causal_interpretation": "市場需要新的催化劑來決定是回歸基本面定價，還是繼續擴大避險交易。",
+      "offset_or_risk": "若Fed官員淡化升息，利率可能回落；若美伊談判破裂，油價將反撲。",
+      "foreshadow_next": "這將決定下週資金板塊的移動方向。",
+      "tom_question_angle": "既然現在市場這麼分裂，一手防通膨一手防衰退，那我們下週到底該看什麼數據或新聞，才能知道哪一邊會贏？",
+      "miranda_talk_track": "下週有三個決戰點。第一，盯緊Fed官員的麥克風。會議紀錄是過去式，我們要看他們『現在』是不是還把升息掛在嘴邊。第二，美伊和平協議的進度。如果只是假消息，油價的報復性反彈會立刻把通膨恐慌帶回來。第三，日圓已經逼近160的生死線，日本央行隨時可能進場干預，這會引發外匯市場的劇烈震盪。在這些訊號明朗前，保持防禦性配置是比較穩健的選擇。",
       "miranda_deep_dive_points": [
-        "Fed官員的預期管理",
-        "地緣政治的實質落地",
-        "亞洲央行的干預風險"
+        "預判Fed官員可能的言論微調。",
+        "評估油價反彈對整體市場情緒的殺傷力。",
+        "分析日本央行干預的可能時機與影響力。"
       ],
-      "expected_dialogue_seconds": "60-90",
+      "expected_dialogue_seconds": "45-60",
       "key_news_lines": [],
       "key_numbers": [
         "160"
       ],
-      "avoid_saying": [],
-      "image_alignment_note": "語音需依序帶出畫面上的三個觀察節點。"
+      "avoid_saying": [
+        "給出明確的買賣建議"
+      ],
+      "image_alignment_note": "畫面節點應與Miranda提到的三個重點依序亮起對應。"
     }
   ],
   "overview_visual": {
     "visual_id": "overview_01",
     "page_type": "overview_dashboard",
     "visual_title": "本週總經傳遞總覽",
-    "viewer_message": "政策恐懼與地緣降溫的拉鋸",
+    "viewer_message": "市場在『政策緊縮』與『地緣避險』中尋找平衡。",
     "main_diagram": {
-      "diagram_title": "資產傳導分歧",
+      "diagram_title": "資產定價分歧圖",
       "drivers": [
         "Fed升息選項",
-        "美伊和平傳聞"
+        "美伊協議傳聞"
       ],
       "main_flow": [
-        "Fed鷹派 -> 利率飆升 -> 美元強勢 -> 亞幣承壓"
+        "鷹派訊號 -> 長債拋售 -> 美元強勢 -> 亞幣承壓"
       ],
       "divergence_points": [
-        "和平傳聞 -> 油價重挫 (抵銷通膨預期)",
-        "房市疲軟 -> 限制美元漲幅 (支撐黃金避險)"
+        "地緣降溫 -> 油價重挫 (脫鉤利率)",
+        "成長擔憂 -> 黃金抗跌 (脫鉤實質利率)"
       ]
     },
     "summary_block": {
-      "headline": "市場邏輯出現斷層",
-      "body": "長端利率創高反映政策恐懼，但油價大跌與房市疲軟顯示基本面正在降溫，資產走勢不再單向連動。"
+      "headline": "鷹派定價與避險情緒的拉鋸",
+      "body": "長端利率受Fed會議紀錄推升創高，但油價受地緣消息打擊重挫，黃金則因避險需求維持高檔，傳統資產連動性暫時失效。"
     },
     "transmission_chain_block": {
       "headline": "關鍵傳導路徑",
       "steps": [
-        "Fed會議紀錄 -> 30Y美債破5.1%",
-        "和平傳聞 -> WTI跌破100",
-        "利差優勢 -> USDJPY逼近159"
+        "政策尾部風險重估推升30年期美債殖利率。",
+        "強美元環境持續榨取日圓與韓圜的流動性。",
+        "地緣政治溢價的消退掩蓋了基本面的通膨黏性。"
       ]
     },
-    "validation_cards": [],
+    "validation_cards": [
+      "US30Y > 5.1%",
+      "WTI 跌破 98",
+      "USDJPY 逼近 159"
+    ],
     "watch_items": [
       "Fed官員談話",
-      "美伊談判進展",
-      "日圓160防線"
+      "中東談判進展",
+      "日本央行干預"
     ]
   },
   "presentation_pages": [
     {
       "page_id": "page_01",
       "page_type": "inflation_expectation",
-      "page_title": "通膨預期訊號明不明確？",
-      "viewer_question": "通膨到底是在升溫還是降溫？",
-      "viewer_message": "政策面擔憂通膨，但能源面正在通縮。",
+      "page_title": "通膨預期的雜音：油價重挫的真相",
+      "viewer_question": "油價大跌代表通膨結束了嗎？",
+      "viewer_message": "油價下跌來自地緣溢價擠出，而非需求降溫，核心通膨壓力仍在。",
       "blocks": [
         {
-          "block_title": "政策面的恐懼",
-          "block_body": "Fed會議紀錄顯示官員對通膨黏性感到不安，甚至願意考慮升息。",
-          "evidence_hint": "Fed會議紀錄"
+          "block_title": "地緣政治的突襲",
+          "block_body": "美伊和平協議傳聞導致WTI單週大跌，這屬於供給端風險的解除。",
+          "evidence_hint": "WTI 105.4 -> 97.7"
         },
         {
-          "block_title": "能源面的降溫",
-          "block_body": "美伊和平傳聞導致油價單週重挫，實質上壓抑了短期的通膨預期。",
-          "evidence_hint": "WTI跌破100"
+          "block_title": "Fed的真實擔憂",
+          "block_body": "會議紀錄顯示官員更關注服務業通膨的黏性，而非單一商品價格的波動。",
+          "evidence_hint": "Fed會議紀錄偏鷹"
         }
       ],
-      "conclusion": "通膨預期出現分歧，需觀察油價下跌是否能改變Fed的鷹派態度。",
+      "conclusion": "不要被油價的短期重挫誤導，長端利率的攀升才是市場對通膨與政策真實態度的反映。",
       "visual_brief": {
-        "layout": "two_signals_plus_conclusion",
-        "style_note": "日報總經傳遞圖解風格，簡潔、少字、手繪感",
-        "key_labels": []
-      }
-    },
-    {
-      "page_id": "page_02",
-      "page_type": "rate_expectation",
-      "page_title": "利率預期為何偏強？",
-      "viewer_question": "為什麼債券殖利率會創下19年新高？",
-      "viewer_message": "市場正在重新定價長天期債券的風險溢價。",
-      "blocks": [
-        {
-          "block_title": "打破不升息共識",
-          "block_body": "Fed重提升息選項，讓市場意識到『維持現狀』可能不是最壞情況。",
-          "evidence_hint": "升息選項"
-        },
-        {
-          "block_title": "期限溢價飆升",
-          "block_body": "投資人要求更高的殖利率來補償長期持有債券的政策風險。",
-          "evidence_hint": "30Y > 5.1%"
-        }
-      ],
-      "conclusion": "長端利率的飆升反映的是政策恐懼，而非單純的經濟過熱。",
-      "visual_brief": {
-        "layout": "two_signals_plus_conclusion",
-        "style_note": "日報總經傳遞圖解風格，簡潔、少字、手繪感",
-        "key_labels": []
-      }
-    },
-    {
-      "page_id": "page_03",
-      "page_type": "dollar_index",
-      "page_title": "美元指數為何維持偏強？",
-      "viewer_question": "美元為什麼強，但又沒有全面爆發？",
-      "viewer_message": "利差優勢支撐下限，但衰退擔憂限制上限。",
-      "blocks": [
-        {
-          "block_title": "利差優勢的支撐",
-          "block_body": "美債殖利率創高，持續吸引資金流入美元，壓迫低息貨幣。",
-          "evidence_hint": "DXY > 99"
-        },
-        {
-          "block_title": "經濟放緩的隱憂",
-          "block_body": "美國房市數據疲軟，讓市場不敢過度押注美國經濟能承受如此高的利率。",
-          "evidence_hint": "房市數據"
-        }
-      ],
-      "conclusion": "美元處於『對亞幣強勢，但自身缺乏上漲動能』的矛盾狀態。",
-      "visual_brief": {
-        "layout": "two_signals_plus_conclusion",
-        "style_note": "日報總經傳遞圖解風格，簡潔、少字、手繪感",
-        "key_labels": []
-      }
-    },
-    {
-      "page_id": "page_04",
-      "page_type": "asia_fx_gold",
-      "page_title": "亞洲貨幣與黃金為何分化？",
-      "viewer_question": "為什麼亞幣一直跌，黃金卻跌不下去？",
-      "viewer_message": "兩者面對的底層邏輯不同。",
-      "blocks": [
-        {
-          "block_title": "亞幣的純粹利差壓迫",
-          "block_body": "日圓等亞幣主要受制於美日利差擴大，在強美元環境下缺乏抵抗力。",
-          "evidence_hint": "USDJPY逼近159"
-        },
-        {
-          "block_title": "黃金的避險屬性",
-          "block_body": "黃金雖然受高利率壓抑，但經濟放緩擔憂與地緣政治不確定性提供了強大支撐。",
-          "evidence_hint": "黃金寬幅震盪"
-        }
-      ],
-      "conclusion": "亞幣反映的是流動性枯竭，黃金反映的是市場對未來的恐懼。",
-      "visual_brief": {
-        "layout": "two_signals_plus_conclusion",
-        "style_note": "日報總經傳遞圖解風格，簡潔、少字、手繪感",
-        "key_labels": []
+        "layout": "左側顯示油價急跌折線，右側顯示Fed關注的核心通膨文字雲。",
+        "style_note": "強調兩者的對比與不對稱性。",
+        "key_labels": [
+          "地緣溢價消退",
+          "核心通膨黏性"
+        ]
       }
     }
   ],
   "evidence": {
     "most_important_evidence": [
       "30年期美債殖利率突破5.1%",
-      "WTI原油跌破100美元",
-      "Fed會議紀錄提及升息選項"
+      "WTI原油由105.4重挫至97.7",
+      "Fed會議紀錄顯示多數官員主張將升息列入選項"
     ],
     "insufficient_evidence": [
-      "美伊和平協議的具體細節與真實性仍待確認"
+      "房市數據疲軟是否足以構成全面的經濟衰退擔憂（需更多數據驗證）"
     ],
-    "watch_items_from_daily_summaries": [],
+    "watch_items_from_daily_summaries": [
+      "美伊和平協議的後續發展"
+    ],
     "watch_items_from_news_context": [
-      "Fed官員對通膨路徑的進一步表態",
-      "美伊和平協議的談判進展",
-      "亞洲央行是否會採取干預措施"
+      "Fed官員對升息選項的具體細節",
+      "亞洲央行是否採取干預措施"
     ]
   },
   "video_planning": {
-    "suggested_video_title": "利率狂飆 vs 油價暴跌！Fed鷹派突襲，市場定價邏輯為何大亂？",
+    "suggested_video_title": "美債殖利率創19年新高，為何油價卻崩跌？解析Fed掀牌後的資產大分歧",
     "target_duration": "6-8 minutes",
-    "video_thesis": "本週市場在Fed升息恐懼與地緣政治降溫之間劇烈拉鋸，導致傳統的資產傳導鏈出現結構性分歧。",
-    "opening_hook": "債券殖利率創下19年新高，感覺通膨要失控了，但轉頭一看，油價卻在暴跌。這週的市場到底在怕什麼？",
+    "video_thesis": "本週市場定價邏輯發生斷裂，Fed重啟升息選項推升長端利率，但地緣政治與成長擔憂引發的避險情緒，讓油價與黃金走出了完全脫鉤的獨立行情。",
+    "opening_hook": "當美債30年期殖利率飆破5.1%創下19年新高時，最能代表通膨的油價，這週竟然出現了崩跌。市場到底在害怕什麼？",
     "video_segments": [
-      "Scene 1: 市場主線矛盾",
-      "Scene 2: 利率風暴解析",
-      "Scene 3: 油價重挫原因",
-      "Scene 4: 美元與亞幣壓力",
-      "Scene 5: 黃金夾縫求生",
-      "Scene 6: 下週觀察重點"
+      "開場：點出利率與油價的極端背離 (Scene 01)",
+      "解析一：Fed會議紀錄如何引爆長債拋售 (Scene 02)",
+      "解析二：美伊傳聞如何擊潰原油地緣溢價 (Scene 03)",
+      "解析三：強美元下的亞幣悲歌與黃金的異常防禦 (Scene 04)",
+      "結語：下週三大觀察指標 (Scene 05)"
     ],
     "visual_sequence": [
-      "天平拉鋸圖",
-      "利率向上突破圖",
-      "油價向下擊穿圖",
-      "美元上下壓力圖",
-      "黃金區間震盪圖",
-      "三岔路徑圖"
+      "scene_01",
+      "scene_02",
+      "scene_03",
+      "scene_04",
+      "scene_05"
     ],
     "web_hero_visual": {
       "source_visual_id": "overview_01",
-      "purpose": "呈現本週市場多空交錯的複雜傳導路徑",
-      "reason": "能一眼看出利率與油價的背離現象"
+      "purpose": "提供全週市場傳導的鳥瞰圖",
+      "reason": "能一眼看出利率、油價、匯率與黃金之間的分歧關係。"
     },
-    "diagram_sequence_brief": [],
-    "diagram_component_brief": [],
+    "diagram_sequence_brief": [
+      "先展示矛盾現象（利率上、油價下）",
+      "放大解釋利率端（Fed鷹派施壓）",
+      "放大解釋商品端（地緣消息切斷連動）",
+      "展示外溢效應（美元壓亞幣、黃金獲避險支撐）",
+      "收斂至未來時間軸"
+    ],
+    "diagram_component_brief": [
+      "箭頭：表示價格方向與傳導路徑",
+      "閃電/斷裂符號：表示邏輯脫鉤",
+      "壓力層/支撐層：表示資產價格的技術或心理關卡"
+    ],
     "next_week_questions": [
-      "Fed官員會不會收回升息言論？",
-      "美伊和平協議是真的嗎？",
-      "日本央行會不會在160出手？"
+      "Fed官員會不會收回升息的恐嚇？",
+      "油價會不會因為談判破裂而報復性反彈？",
+      "日本央行會在160關卡出手嗎？"
     ]
   }
 }
