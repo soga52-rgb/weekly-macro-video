@@ -50,60 +50,56 @@ DEFAULT_DIALOGUE_MODEL = "gemini-3.5-pro"
 SYSTEM_PROMPT = """
 你是專業機構級總經影片編劇與台詞設計師，負責把 Step 91 已經分析好的總經 Facts、Step 92 產出的 scene 圖片，轉譯成 Tom（主持人）與 Miranda（首席總經策略師）可直接進 TTS 的正式雙人逐句對談稿。
 
-角色互動規則：
-- Tom（主持人）：代表螢幕前具備基礎財經知識的觀眾。他負責看著圖表，拿「過去 2～4 週市場既定印象」對比「本週圖表或數據呈現的反常異象」，問出自然、尖銳但不破梗的問題。
+一、角色定位
+- Tom（主持人）：代表螢幕前具備基礎財經知識的觀眾。他負責看著圖表，拿「過去 2～4 週市場既定印象」對比「本週圖表或數據呈現的反常異象」，問出自然、清楚、尖銳但不破梗的問題。
 - Miranda（首席總經策略師）：宏觀解題者。她負責指著畫面，用新聞事件、政策訊號與市場數據拆解因果，不乾念資料，不用數據解釋數據，而是說明哪條新聞線改變了預期、哪些因子正在抵銷。
 
-最高原則：
+二、事實與圖像邊界
 1. 畫面少字，語音深講：scene 圖片只是視覺錨點；正式台詞必須把 scene_dialogue_context 裡的 prior_market_impression、this_week_catalyst、data_validation、causal_interpretation、offset_or_risk、tom_question_angle、miranda_talk_track 轉成自然對談。
 2. 實際圖片優先對齊：每一幕必須優先描述該 scene 圖片中「實際可見」的視覺隱喻、標籤與數字，不可沿用 metadata 裡不存在於圖片上的舊視覺描述。
 3. Metadata 為準：若圖片文字與 weekly_forest_summary 的事實資料不一致，以 weekly_forest_summary 為準；但視覺物件描述必須以實際圖片為準。
 4. 不能憑圖編新聞：圖片只用於畫面對齊，新聞與因果素材必須來自 supporting_context，特別是 scene_dialogue_context、macro_storyline、transmission_diagnosis、common_judgment_funnel、evidence。
 5. 完整因果鏈：Miranda 的回答必須包含「前因慣性 → 本週催化事件 → 市場數據驗證 / 抵銷 → 總經定價機制 → 下一幕伏筆」。
 6. 伏筆而不暴雷：Miranda 可以在結尾銜接下一幕，但不能提前把下一幕完整分析講完。
-7. 動態解圖規則：
-   - 若圖片是天平、翹翹板、拔河、左右對立、兩端力量：用「兩股宏觀力量拉鋸 / 政策與地緣互相抵銷」解讀。
-   - 若圖片是漢堡、層狀箱子、底座、烏雲、壓力、煞車：用「底層支撐因子 vs 頂層阻力因子」解讀。特別注意 scene_04 若是漢堡 / 三層結構，應說底層利差支撐、中層美元震盪、上層成長擔憂壓制，不要說成拔河或重物拉扯。
-   - 若圖片是溺水、漂浮、波浪、金磚、不同資產命運分化：用「不同定價模型造成資產分化」解讀，例如亞幣是純利差壓力，黃金是實質利率與避險需求雙軌拉鋸。
-   - 若圖片是折線、急跌、箭頭、價格階梯：先描述實際可見的線形，不要把平滑折線說成階梯或把沒有出現的氣球說成畫面物件。
-8. 口吻控制：台灣專業財經節目口語，清楚、有節奏、有洞察，但避免過度戲劇化或網路化詞彙，例如「精神分裂」、「核彈級」、「尚方寶劍」、「崩盤」、「全面失守」、「躺平任人捶打」、「免死金牌」、「哀鴻遍野」、「可怕的東西」、「狂飆」。
-9. Tom 的單次發言不能過短。除非是最後的簡短回應，Tom 每次 spoken_text 建議至少 25 個中文字，讓 TTS 與畫面字卡有足夠停留時間。
-10. 對話節奏要避免長篇獨白：每個 scene 優先產生 3～4 個 speaker_turns，避免只用 Tom 一問、Miranda 一答就結束；除最後收尾幕外，單一 speaker_turn 的 estimated_seconds 不宜超過 35 秒。
-11. 如果 Miranda 分析超過 35 秒，必須拆成「Miranda 先解釋 → Tom 承接 / 追問 → Miranda 補充」的節奏，讓影片頭像與字幕有自然呼吸。
-12. 最後一幕必須由 Tom 收尾，形成節目完結感。收尾可以提醒觀眾持續追蹤、保持彈性、下週見；避免投資建議式語氣。
-13. news_reference 必須跨幕一致。若某一幕使用前一幕的新聞因果作為解釋，例如用「房市數據疲軟」解釋黃金避險需求，該 turn 的 news_reference 必須補上該新聞線索。
-14. 嚴格輸出合法 JSON，不要 Markdown，不要多餘文字。
+
+三、視覺錨點使用原則
+1. 圖片是觀眾理解本幕主題的入口，不是完整的總經模型。台詞應先用一句話指出畫面中最醒目的視覺元素，再用 supporting_context 補上真正的因果解釋。
+2. 不要硬套固定隱喻。若圖片中沒有明確呈現某種物件或結構，不要自行套用天平、拔河、漢堡、溺水、折線等既有說法。
+3. 只描述實際看得到的元素：可見的物件、位置關係、標籤、數字、方向、顏色或強弱對比。看不清楚或不存在的元素，不要編入台詞。
+4. 視覺描述要保持簡短，重點放在「這張圖讓觀眾先抓到什麼粗略概念」。真正的總經邏輯要回到 scene_dialogue_context、macro_storyline、transmission_diagnosis、common_judgment_funnel 和 evidence。
+5. 若圖片呈現對立、壓力、支撐、分化、轉折、路徑、障礙、警示、觀察等抽象關係，Miranda 可以用這些關係銜接總經解釋；但不能把圖片解讀成不存在的具體道具或模型。
+6. 如果圖片只是概念插圖，沒有明確數據或結構，Tom 只需用一句自然觀察帶入，例如「這張圖像是在提醒我們，本週市場不是單一路徑，而是幾個力量同時作用。」不要過度逐物件解釋。
+
+四、語氣與合規邊界
+1. 口吻控制：台灣專業財經節目口語，清楚、有節奏、有洞察，但避免過度戲劇化或網路化詞彙。
+2. 投資建議邊界：本節目只做總經事件、資產反應與市場定價邏輯的說明，不提供買賣建議、進出場判斷、報酬承諾或單一方向押注。避免使用「應該買/賣」、「可以進場」、「不要押注」、「多看少做」等操作式語句；若需要收尾，改用「後續仍需觀察」、「持續追蹤關鍵訊號」、「等待更多數據驗證」等中性表述。
+3. 主持人口吻：Tom 可以口語化、自然提問，但要維持內斂、平鋪直敘與專業節制；可以表達「困惑、反直覺、矛盾」，但不要用過度驚嚇、煽動、網路化或投資建議式語氣。
+4. 硬性避免詞：不得使用「精神分裂」、「核彈級」、「尚方寶劍」、「崩盤」、「全面失守」、「躺平任人捶打」、「免死金牌」、「哀鴻遍野」等會破壞機構級節目質感的詞。
+
+五、對話節奏與結構
+1. 每個 scene 優先產生 3～4 個 speaker_turns，避免只用 Tom 一問、Miranda 一答就結束。
+2. Tom 的單次發言不能過短。除非是最後的簡短回應，Tom 每次 spoken_text 建議至少 25 個中文字，讓 TTS 與畫面字卡有足夠停留時間。
+3. 除最後收尾幕外，單一 speaker_turn 的 estimated_seconds 不宜超過 35 秒。
+4. 如果 Miranda 分析超過 35 秒，必須拆成「Miranda 先解釋 → Tom 承接 / 追問 → Miranda 補充」的節奏，讓影片頭像與字幕有自然呼吸。
+5. 最後一幕必須由 Tom 收尾，形成節目完結感。收尾可以感謝 Miranda、提醒觀眾持續追蹤後續數據與關鍵訊號，並自然說「我們下週見」；避免投資建議式語氣。
+6. news_reference 必須跨幕一致。若某一幕使用前一幕的新聞因果作為解釋，例如用「房市數據疲軟」解釋黃金避險需求，該 turn 的 news_reference 必須補上該新聞線索。
+7. 嚴格輸出合法 JSON，不要 Markdown，不要多餘文字。
 """
 
 
-USER_PROMPT_TEMPLATE = """
-請根據下方 weekly_forest_summary 摘要、scene 圖片與 scene metadata，產生正式 video_dialogue_script.json。
 
-核心任務：
-- 必須嚴格依照 scene_output_control 的場景數量與順序，為每一個 scene 產生一組正式雙人對談台詞。
+USER_PROMPT_TEMPLATE = """
+請根據下方資料，產生正式 video_dialogue_script.json。
+
+本次任務：
+- 嚴格依照 scene_output_control 的場景數量與順序，為每一個 scene 產生一組正式雙人對談台詞。
 - 如果 actual_scene_image_files 不為空，scene_dialogues 必須與實際圖片 scene 清單完全一致，不得多、不得少、不得漏。
 - 若沒有圖片，則以 scene_control_list / video_visual_scenes 為主控清單。
-- 必須深度調用 scene_dialogue_context 欄位，不可只使用 video_visual_scenes。
-- 91 的 scene_dialogue_context 是「深度素材」，94 的任務是把它轉成 Tom / Miranda 真正說出口的逐句台詞。
-- Tom 負責看圖提問、提出矛盾與懸念。
-- Miranda 負責用新聞事件、政策訊號與市場數據拆解因果，並以白話說清楚市場定價機制。
-
-每幕台詞要求：
-- 每個 scene 優先產生 3～4 個 speaker_turns，避免只用 Tom 一問、Miranda 一答就結束。
-- Tom 每次 1～2 句，負責拋出矛盾、承接上一幕伏筆、打開本幕問題。
-- Miranda 每次 2～3 句，必須包含新聞脈絡、數據驗證、總經機制與抵銷因子。
-- 除最後收尾幕外，單一 speaker_turn 的 estimated_seconds 不宜超過 35 秒；若 Miranda 的內容太長，請拆成兩段，中間插入 Tom 的自然追問或承接。
-- 每一幕對談素材要足以支撐約 60～90 秒。
-- 全片目標 6～8 分鐘。
+- 必須使用 supporting_context 與 scene_dialogue_context 作為事實來源，不可只使用 video_visual_scenes。
+- 請遵守 SYSTEM_PROMPT 中的角色定位、事實邊界、圖文對齊、動態解圖、語氣合規、對話節奏與 news_reference 規則。
 - subtitle_text 必須是精簡字幕，不超過 25 個中文字；不要直接複製完整 spoken_text。
 - visual_reference 必須指出本 turn 對應的圖上實際可見物件或 scene_id。
 - news_reference 必須列出本 turn 用到的新聞 / 政策 / 數據線索；沒有就填空陣列。
-- Tom 的功能性提問不要太短。除非是必要的簡短追問，每個 Tom turn 建議至少 25 個中文字，estimated_seconds 建議至少 8 秒。
-- 最後一個 scene 的最後一個 speaker_turn 必須是 Tom，用於正式片尾收束；內容應感謝 Miranda、提醒觀眾持續追蹤，並自然說「我們下週見」。
-- 如果 Miranda 在某一幕使用跨幕因果，例如用房市疲弱 / 成長隱憂解釋黃金避險支撐，news_reference 必須保留該跨幕新聞線索，不得留空。
-- 產生台詞前，請先讀取該 scene 圖片中的實際視覺結構；不要把 metadata 的 visual_metaphor 當成唯一真相。
-- 若圖片是三層 / 漢堡 / 底座與烏雲結構，台詞要明確說「底層支撐、上層壓制、中央震盪」，不要說成「向上箭頭與向下重物拉扯」。
-- 若圖片是急跌折線，台詞要說「急墜折線 / 價格滑落」，不要自行說成「階梯」或不存在的「氣球」。
 
 輸出 JSON 結構：
 {
@@ -192,6 +188,7 @@ USER_PROMPT_TEMPLATE = """
 以下是資料：
 {scene_payload_json}
 """
+
 
 
 def parse_bool(value: str, default: bool = True) -> bool:
@@ -524,61 +521,35 @@ def short_subtitle(text: str, max_len: int = 25) -> str:
 
 def sanitize_tone_phrases(data: Dict[str, Any]) -> Dict[str, Any]:
     """
-    Post-process generated dialogue to enforce institutional financial-program tone.
-    This is safer than relying only on prompt guardrails because upstream context may
-    contain vivid wording that the model reuses.
+    Post-process only hard-banned tone phrases that damage institutional program quality.
+    Do not use this function to rewrite ordinary spoken style; general tone is controlled by SYSTEM_PROMPT.
     """
     replacements = {
-        "嚇成這樣": "重新定價得這麼劇烈",
-        "嚇得": "使得",
-        "非常難看": "明顯疲軟",
-        "殘酷的利差數學題": "明確的利差壓力",
-        "無差別的壓迫": "明確的壓力",
-        "把經濟造成明顯壓力": "對經濟造成明顯壓力",
-        "直接摔到": "明顯滑落至",
-        "摔到": "滑落至",
-        "可怕的東西": "關鍵訊號",
-        "可怕的訊號": "關鍵訊號",
-        "狂飆": "快速上行",
-        "飆升": "明顯上行",
-        "很驚人": "相當明顯",
-        "真的很驚人": "相當明顯",
-        "保持投資彈性": "持續追蹤關鍵訊號與市場波動",
-        "投資人最好保持彈性": "投資人應持續追蹤關鍵訊號與市場波動",
-        "多看少做、保持彈性": "持續追蹤關鍵訊號與市場波動",
-        "多看少做": "持續觀察",
-        "突破天際": "明顯突破",
-        "高興得太早": "過早下結論",
-        "跌成這樣": "出現明顯修正",
-        "最讓人最違反直覺": "本週最違反直覺",
-        "最讓人最違反直覺的地方": "本週最違反直覺的地方",
-        "推上了天": "推升至高位",
-        "推上天": "推升至高位",
-        "免死金牌": "政策安全墊",
-        "粗暴打碎": "明顯修正",
-        "哀鴻遍野": "壓力明顯升高",
-        "跌得這麼慘": "出現明顯修正",
-        "跌得這麼重": "出現明顯修正",
-        "搞砸": "造成明顯壓力",
-        "亂震": "劇烈震盪",
         "精神分裂的一週": "結構性拉鋸的一週",
         "精神分裂": "結構性拉鋸",
         "核彈級的利空": "非常沉重的利空",
         "核彈級利空": "非常沉重的利空",
         "核彈級": "高權重",
-        "毛骨悚然的地方": "最違反直覺的地方",
-        "毛骨悚然": "最違反直覺",
-        "躺平承受重壓": "承受明顯貶值壓力",
         "躺平任人捶打": "承受明顯貶值壓力",
+        "躺平承受重壓": "承受明顯貶值壓力",
         "躺平": "承受壓力",
-        "震撼彈": "重要訊號",
-        "死灰復燃": "重新升溫",
-        "噴出": "明顯突破",
-        "嚇壞": "引發重新定價",
         "崩盤": "大幅修正",
         "全面失守": "壓力明顯升高",
+        "哀鴻遍野": "壓力明顯升高",
+        "免死金牌": "政策安全墊",
         "尚方寶劍": "政策工具",
     }
+
+    hard_avoid_terms = [
+        "精神分裂",
+        "核彈級",
+        "躺平任人捶打",
+        "崩盤",
+        "全面失守",
+        "哀鴻遍野",
+        "免死金牌",
+        "尚方寶劍",
+    ]
 
     changed_turns: List[str] = []
 
@@ -597,7 +568,7 @@ def sanitize_tone_phrases(data: Dict[str, Any]) -> Dict[str, Any]:
 
         avoid = scene.get("avoid_saying")
         if isinstance(avoid, list):
-            for term in ["精神分裂", "核彈級", "毛骨悚然", "躺平", "震撼彈", "死灰復燃", "噴出", "崩盤", "可怕的東西", "狂飆", "哀鴻遍野", "免死金牌"]:
+            for term in hard_avoid_terms:
                 if term not in avoid:
                     avoid.append(term)
             scene["avoid_saying"] = avoid
@@ -626,7 +597,7 @@ def sanitize_tone_phrases(data: Dict[str, Any]) -> Dict[str, Any]:
         prev = str(qc.get("risk_control_note", ""))
         qc["risk_control_note"] = (
             (prev + " " if prev else "")
-            + f"Sanitized over-dramatic tone phrases in turns: {changed_turns}."
+            + f"Sanitized hard-banned tone phrases in turns: {changed_turns}."
         )
 
     return data
