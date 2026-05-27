@@ -416,14 +416,14 @@ def build_compact_scenes(summary: Dict[str, Any], week_dir: Path, use_image_inpu
             scene_payload.update({
                 "on_screen_labels": [],
                 "must_show_numbers": [],
-                "visual_metaphor": "",
+                "diagram_structure_brief": "",
                 "visual_metadata_policy": "actual image is authoritative; Step 91 visual metadata omitted when image is available",
             })
         else:
             scene_payload.update({
                 "on_screen_labels": scene.get("on_screen_labels", []),
                 "must_show_numbers": scene.get("must_show_numbers", []),
-                "visual_metaphor": scene.get("visual_metaphor", ""),
+                "diagram_structure_brief": scene.get("diagram_structure_brief") or scene.get("visual_metaphor", ""),
                 "visual_metadata_policy": "no image available; Step 91 visual metadata used as fallback guidance",
             })
 
