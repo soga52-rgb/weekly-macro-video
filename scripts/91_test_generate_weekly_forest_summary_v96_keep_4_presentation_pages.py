@@ -66,7 +66,7 @@ SYSTEM_PROMPT = """
 
 整體影片風格是「簡潔圖解式總經導讀」。視覺 scene 概念會交給後續產圖流程使用，畫面應讓觀眾一看就清楚本幕核心概念；每幕對話素材會交給後續正式對話稿生成流程使用，語音內容應深入解析畫面背後的總經傳導過程。
 
-請讓視覺素材與對話素材共享同一條市場主線：畫面負責清楚呈現核心關係，語音負責說明新聞、政策、數據與資產價格之間的因果傳導。
+請讓視覺素材與對話素材共享同一條市場主線：畫面負責用清楚的圖解佈局呈現核心關係，語音負責說明新聞、政策、數據與資產價格之間的因果傳導。
 
 weekly_forest_summary.json 必須同時產生三個彼此對齊的內容層：
 
@@ -74,14 +74,15 @@ weekly_forest_summary.json 必須同時產生三個彼此對齊的內容層：
    負責判斷市場主線、因果傳導、數據驗證與風險分歧。
 
 2. 視覺呈現層：
-   負責把分析結果轉成適合影片畫面的 scene。每一個 scene 應少字、單一主題、圖形簡單清楚，讓觀眾一眼理解本幕核心概念。
+   負責把分析結果轉成結構化的圖解佈局。每一個 scene 應少字、單一主題、圖形簡單清楚，並用區塊位置、箭頭流向、分岔路徑、上下壓力、支撐 / 阻力、對比框架與觀察節點，讓觀眾一眼理解本幕核心概念。
 
 3. 語音對話素材層：
    負責把每一個 scene 背後的因果、新聞、數據、轉折與伏筆，整理成 Tom / Miranda 可展開的深度對話素材。
 
 最高原則是「畫面少字，語音深講」：
 
-- video_visual_scenes 是給產圖流程使用的主要視覺素材，重點是呈現市場變數之間的關係。
+- video_visual_scenes 是給產圖流程使用的主要視覺素材，重點是定義本幕的 diagram_structure_brief：以幾何佈局與邏輯構圖描述市場變數之間的關係。
+- diagram_structure_brief 應使用分析圖卡語言，例如左側 / 右側區塊、上方壓力層、下方支撐層、中央震盪區間、水平對立、垂直傳導、分岔路徑、回流箭頭與觀察節點。
 - scene_dialogue_context 是給正式對話稿生成流程使用的主要語音素材，必須比畫面深入，能支撐每個主題約 60～90 秒的講解。
 - scene_dialogue_context 應提供對話素材與分析路徑，讓正式對話稿能自然展開總經傳導過程。
 
@@ -90,7 +91,7 @@ weekly_forest_summary.json 必須同時產生三個彼此對齊的內容層：
 - scene_control_list 是本週影片分鏡主控清單。
 - video_visual_scenes、narration_outline、scene_dialogue_context 必須完全依照 scene_control_list 的數量、順序、scene_id、scene_type、screen_title 輸出。
 - 影片 scene 數量由本週內容自然決定，通常可為 5～7 幕；所有影片相關層必須一致。
-- 每一幕都應形成一致的敘事鏈：畫面核心概念 → Tom 的觀眾疑問 → Miranda 的因果解析 → 本幕小結或下一幕伏筆。
+- 每一幕都應形成一致的敘事鏈：畫面核心佈局 → Tom 的觀眾疑問 → Miranda 的因果解析 → 本幕小結或下一幕伏筆。
 
 請製作一支約 6～8 分鐘的總經說明影片素材，條理分明地呈現市場數據、新聞事件與資產價格變化之間的關聯性。
 
@@ -106,8 +107,8 @@ USER_PROMPT_TEMPLATE = """
 核心原則：
 1. 本任務最終用途是生成影片；分析邏輯、靜態網頁呈現、動態影片畫面、旁白 / 對話邏輯必須分層且彼此對齊。
 2. 最高原則是「畫面少字，語音深講」：video_visual_scenes 要少字、單一主題、圖形清楚；scene_dialogue_context 要深入、完整、能支撐 Tom / Miranda 6～8 分鐘對談。
-3. 三層內容應維持同一種「簡潔圖解式總經導讀」風格：分析層負責判斷，視覺層負責圖解，語音對話層負責把因果講清楚。
-4. 提示語應以正面表述為主，優先描述目標風格、目標結構與目標輸出品質。需要控管語氣時，請說明希望採用的專業分析語言與清楚敘事方式。
+3. 三層內容應維持同一種「簡潔圖解式總經導讀」風格：分析層負責判斷，視覺層負責圖解佈局，語音對話層負責把因果講清楚。
+4. 提示語應以正面表述為主，優先描述目標風格、幾何佈局、傳導結構與輸出品質。需要控管語氣時，請說明希望採用的專業分析語言與清楚敘事方式。
 5. 分析層可以完整、專業；靜態網頁可以保留較多資訊；影片畫面只呈現單一主訊息；語音對話層負責說清楚因果、轉折、反向證據、總經邏輯與伏筆。
 6. 網頁圖與影片圖共用同一套分析邏輯，但依照不同用途設計不同畫面。
 7. 所有推論必須錨定來源資料；市場押注、新聞解讀或模型推論，應清楚呈現為市場定價或分析判斷。
@@ -167,9 +168,9 @@ USER_PROMPT_TEMPLATE = """
    視覺層，影片畫面用，必須完全依照 scene_control_list 輸出。
    - 這一層是後續產圖流程的主要輸入。
    - 這一層的風格是「簡潔圖解式總經導讀」。
-   - 每一幕應像一張清楚的分析圖卡，使用簡單圖形、箭頭、框線、因果路徑、分岔結構、上下方向、強弱對比、少量關鍵標籤與必要數字，呈現市場變數之間的傳導、分歧、抵銷或觀察重點。
+   - 每一幕應像一張清楚的分析圖卡，使用區塊、箭頭、框線、因果路徑、分岔結構、上下方向、強弱對比、少量關鍵標籤與必要數字，呈現市場變數之間的傳導、分歧、抵銷或觀察重點。
    - 每一幕聚焦一個清楚的市場概念，讓觀眾能快速理解本週市場邏輯如何形成、哪些變數正在互相影響、哪裡出現分歧，以及下一步需要觀察什麼。
-   - diagram_structure_brief 應描述本幕圖解的構圖邏輯與市場變數關係，包括區塊位置、箭頭流向、分岔路徑、上下壓力、支撐 / 阻力、對比框架與觀察節點，讓產圖流程能產出簡單、清楚、分析型的總經圖解畫面。
+   - diagram_structure_brief 應描述本幕圖解的構圖邏輯與市場變數關係。請使用分析圖卡語言，例如左側 / 右側區塊、上方壓力層、下方支撐層、中央震盪區間、水平對立、垂直傳導、分岔路徑、回流箭頭、支撐 / 阻力與觀察節點，讓產圖流程能產出簡單、清楚、分析型的總經圖解畫面。
 
 5. narration_outline：
    旁白重點層，用來整理本幕要講清楚的因果、新聞線索與數據驗證，必須完全依照 scene_control_list 輸出。
@@ -204,7 +205,7 @@ USER_PROMPT_TEMPLATE = """
 1. scene_control_list 是本週影片分鏡主控清單，依本週市場主線自然安排 5～7 幕，使影片敘事順序能完整呈現主要驅動、修正因子、資產反應與下週觀察重點。
 2. video_visual_scenes、narration_outline、scene_dialogue_context 必須完全依照 scene_control_list 的數量、順序、scene_id、scene_type、screen_title 輸出。
 3. scene_control_list 決定影片實際分鏡；video_visual_scenes 是產圖流程主要輸入；narration_outline 是旁白重點素材；scene_dialogue_context 是正式 Tom / Miranda 對話稿使用的素材層。
-4. 每一幕必須以 video_visual_scenes 的畫面主題為邊界，讓觀眾能從該幕畫面理解本幕要處理的市場概念。
+4. 每一幕必須以 video_visual_scenes 的圖解佈局為邊界，讓觀眾能從該幕畫面理解本幕要處理的市場概念。
 5. 最高原則是「畫面少字，語音深講」：video_visual_scenes 只呈現單一主題；scene_dialogue_context 必須提供足夠深度，支撐每幕約 60～90 秒對談。
 6. 每一幕要補足跨期敘事：
    - prior_market_impression：過去 2～4 週市場原本怎麼想。
@@ -218,7 +219,7 @@ USER_PROMPT_TEMPLATE = """
 9. Miranda 的 talk track 應提供清楚的解釋路徑：前因慣性 → 本週催化事件 → 數據驗證 / 抵銷 → 總經定價機制 → 下一幕伏筆。Miranda 應以新聞、政策訊號與市場數據解釋因果，而不是只列數字。
 10. 每一幕的上下邏輯必須能對應得上：
     - scene_control_list 決定本幕在全片中的位置與任務。
-    - video_visual_scenes 負責把本幕核心概念轉成清楚的圖形畫面。
+    - video_visual_scenes 負責把本幕核心概念轉成清楚的圖解佈局。
     - narration_outline 負責整理本幕要講的重點。
     - scene_dialogue_context 負責提供 Tom / Miranda 可展開的對話素材。
     - foreshadow_next 必須銜接下一個 scene 的主題，讓觀眾能自然理解為什麼下一幕會接到那個變數或市場反應。
@@ -346,7 +347,7 @@ JSON 結構請維持並擴充如下：
       "single_message": "",
       "on_screen_labels": [],
       "must_show_numbers": [],
-      "diagram_structure_brief": "",
+      "diagram_structure_brief": "請描述抽象圖解佈局：區塊位置、箭頭流向、分岔路徑、上下壓力、支撐 / 阻力、中央震盪區間或觀察節點。",
       "voiceover_link": "narration_01"
     }
   ],
@@ -367,7 +368,7 @@ JSON 結構請維持並擴充如下：
       "screen_title": "",
       "dialogue_topic": "",
       "visual_anchor": {
-        "what_the_image_shows": "",
+        "what_the_image_shows": "請對齊本幕 diagram_structure_brief 的圖解佈局與實際可見元素。",
         "must_align_with": [],
         "do_not_expand": []
       },
@@ -509,8 +510,8 @@ JSON 結構請維持並擴充如下：
       "purpose": "",
       "reason": ""
     },
-    "six_scene_outline": [],
-    "image_card_brief": [],
+    "diagram_sequence_brief": [],
+    "diagram_component_brief": [],
     "next_week_questions": []
   }
 }
@@ -711,7 +712,9 @@ def align_scene_layers(summary: Dict[str, Any]) -> Dict[str, Any]:
         visual["single_message"] = visual.get("single_message") or single_message
         visual.setdefault("on_screen_labels", [])
         visual.setdefault("must_show_numbers", [])
-        visual.setdefault("diagram_structure_brief", visual.get("visual_metaphor", ""))
+        if not visual.get("diagram_structure_brief"):
+            visual.setdefault("diagram_structure_brief", "")
+        visual.pop("visual_metaphor", None)
         visual.setdefault("voiceover_link", f"narration_{idx:02d}")
         aligned_visuals.append(visual)
 
@@ -734,7 +737,7 @@ def align_scene_layers(summary: Dict[str, Any]) -> Dict[str, Any]:
         dialogue["screen_title"] = dialogue.get("screen_title") or screen_title
         dialogue["dialogue_topic"] = dialogue.get("dialogue_topic") or single_message or screen_title
         visual_anchor = dialogue.get("visual_anchor") if isinstance(dialogue.get("visual_anchor"), dict) else {}
-        visual_anchor.setdefault("what_the_image_shows", visual.get("diagram_structure_brief") or visual.get("visual_metaphor", ""))
+        visual_anchor.setdefault("what_the_image_shows", visual.get("diagram_structure_brief", ""))
         visual_anchor.setdefault(
             "must_align_with",
             as_list(visual.get("on_screen_labels")) + as_list(visual.get("must_show_numbers"))
@@ -816,7 +819,7 @@ def normalize_scene_dialogue_context(summary: Dict[str, Any]) -> Dict[str, Any]:
             "screen_title": scene.get("screen_title", ""),
             "dialogue_topic": scene.get("single_message", "") or scene.get("screen_title", ""),
             "visual_anchor": {
-                "what_the_image_shows": scene.get("diagram_structure_brief") or scene.get("visual_metaphor", ""),
+                "what_the_image_shows": scene.get("diagram_structure_brief", ""),
                 "must_align_with": as_list(scene.get("on_screen_labels")) + as_list(scene.get("must_show_numbers")),
                 "do_not_expand": []
             },
@@ -900,32 +903,32 @@ def normalize_video_planning(summary: Dict[str, Any]) -> Dict[str, Any]:
     segments = as_list(video.get("video_segments"))
     visuals = as_list(video.get("visual_sequence"))
 
-    if not video.get("six_scene_outline") and segments:
-        legacy_scenes = []
+    if not video.get("diagram_sequence_brief") and segments:
+        diagram_scenes = []
         for idx, segment in enumerate(segments, start=1):
             if not isinstance(segment, dict):
                 continue
-            legacy_scenes.append({
+            diagram_scenes.append({
                 "scene_id": f"scene_{idx:02d}",
                 "scene_title": segment.get("segment_title", ""),
                 "scene_question": segment.get("segment_question", ""),
                 "main_point": segment.get("main_point") or segment.get("narration_focus", ""),
-                "visual_hint": segment.get("visual_concept", ""),
+                "diagram_layout_hint": segment.get("visual_concept", ""),
             })
-        video["six_scene_outline"] = legacy_scenes
+        video["diagram_sequence_brief"] = diagram_scenes
 
-    if not video.get("image_card_brief") and visuals:
-        image_cards = []
+    if not video.get("diagram_component_brief") and visuals:
+        diagram_cards = []
         for idx, visual in enumerate(visuals, start=1):
             if not isinstance(visual, dict):
                 continue
-            image_cards.append({
-                "card_id": f"card_{idx:02d}",
+            diagram_cards.append({
+                "component_id": f"component_{idx:02d}",
                 "headline": visual.get("visual_title", ""),
                 "short_labels": as_list(visual.get("key_labels")),
                 "visual_concept": visual.get("visual_concept", ""),
             })
-        video["image_card_brief"] = image_cards
+        video["diagram_component_brief"] = diagram_cards
 
     video.setdefault("target_duration", "6-8 minutes")
 
@@ -944,8 +947,8 @@ def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: 
         "systemInstruction": {"parts": [{"text": system_prompt}]},
         "contents": [{"role": "user", "parts": [{"text": user_prompt}]}],
         "generationConfig": {
-            "temperature": 0.2,
-            "topP": 0.85,
+            "temperature": 0.1,
+            "topP": 0.75,
             "responseMimeType": "application/json",
         },
     }
