@@ -33,6 +33,7 @@ import base64
 import json
 import mimetypes
 import os
+import re
 import socket
 import urllib.error
 import urllib.parse
@@ -67,9 +68,11 @@ SYSTEM_PROMPT = """
    - 若圖片是折線、急跌、箭頭、價格階梯：先描述實際可見的線形，不要把平滑折線說成階梯或把沒有出現的氣球說成畫面物件。
 8. 口吻控制：台灣專業財經節目口語，清楚、有節奏、有洞察，但避免過度戲劇化或網路化詞彙，例如「精神分裂」、「核彈級」、「尚方寶劍」、「崩盤」、「全面失守」、「躺平任人捶打」、「免死金牌」、「哀鴻遍野」、「可怕的東西」、「狂飆」。
 9. Tom 的單次發言不能過短。除非是最後的簡短回應，Tom 每次 spoken_text 建議至少 25 個中文字，讓 TTS 與畫面字卡有足夠停留時間。
-10. 最後一幕必須由 Tom 收尾，形成節目完結感。收尾可以提醒觀眾持續追蹤、保持彈性、下週見；避免投資建議式語氣。
-11. news_reference 必須跨幕一致。若某一幕使用前一幕的新聞因果作為解釋，例如用「房市數據疲軟」解釋黃金避險需求，該 turn 的 news_reference 必須補上該新聞線索。
-12. 嚴格輸出合法 JSON，不要 Markdown，不要多餘文字。
+10. 對話節奏要避免長篇獨白：每個 scene 優先產生 3～4 個 speaker_turns，避免只用 Tom 一問、Miranda 一答就結束；除最後收尾幕外，單一 speaker_turn 的 estimated_seconds 不宜超過 35 秒。
+11. 如果 Miranda 分析超過 35 秒，必須拆成「Miranda 先解釋 → Tom 承接 / 追問 → Miranda 補充」的節奏，讓影片頭像與字幕有自然呼吸。
+12. 最後一幕必須由 Tom 收尾，形成節目完結感。收尾可以提醒觀眾持續追蹤、保持彈性、下週見；避免投資建議式語氣。
+13. news_reference 必須跨幕一致。若某一幕使用前一幕的新聞因果作為解釋，例如用「房市數據疲軟」解釋黃金避險需求，該 turn 的 news_reference 必須補上該新聞線索。
+14. 嚴格輸出合法 JSON，不要 Markdown，不要多餘文字。
 """
 
 
@@ -86,9 +89,10 @@ USER_PROMPT_TEMPLATE = """
 - Miranda 負責用新聞事件、政策訊號與市場數據拆解因果，並以白話說清楚市場定價機制。
 
 每幕台詞要求：
-- 每個 scene 產生 4～6 個 speaker_turns。
+- 每個 scene 優先產生 3～4 個 speaker_turns，避免只用 Tom 一問、Miranda 一答就結束。
 - Tom 每次 1～2 句，負責拋出矛盾、承接上一幕伏筆、打開本幕問題。
-- Miranda 每次 2～4 句，必須包含新聞脈絡、數據驗證、總經機制與抵銷因子。
+- Miranda 每次 2～3 句，必須包含新聞脈絡、數據驗證、總經機制與抵銷因子。
+- 除最後收尾幕外，單一 speaker_turn 的 estimated_seconds 不宜超過 35 秒；若 Miranda 的內容太長，請拆成兩段，中間插入 Tom 的自然追問或承接。
 - 每一幕對談素材要足以支撐約 60～90 秒。
 - 全片目標 6～8 分鐘。
 - subtitle_text 必須是精簡字幕，不超過 25 個中文字；不要直接複製完整 spoken_text。
@@ -525,6 +529,14 @@ def sanitize_tone_phrases(data: Dict[str, Any]) -> Dict[str, Any]:
     contain vivid wording that the model reuses.
     """
     replacements = {
+        "嚇成這樣": "重新定價得這麼劇烈",
+        "嚇得": "使得",
+        "非常難看": "明顯疲軟",
+        "殘酷的利差數學題": "明確的利差壓力",
+        "無差別的壓迫": "明確的壓力",
+        "把經濟造成明顯壓力": "對經濟造成明顯壓力",
+        "直接摔到": "明顯滑落至",
+        "摔到": "滑落至",
         "可怕的東西": "關鍵訊號",
         "可怕的訊號": "關鍵訊號",
         "狂飆": "快速上行",
@@ -723,6 +735,125 @@ def enrich_cross_scene_news_references(data: Dict[str, Any]) -> Dict[str, Any]:
                 if all(k in spoken for k in keywords) and ref not in refs:
                     refs.append(ref)
             turn["news_reference"] = refs
+
+    return data
+
+
+
+def split_sentences_for_turn(text: str) -> List[str]:
+    """Split Chinese spoken text into sentence-like chunks while keeping punctuation."""
+    cleaned = (text or "").strip()
+    if not cleaned:
+        return []
+    parts = re.split(r"(?<=[。！？?!])", cleaned)
+    return [p.strip() for p in parts if p and p.strip()]
+
+
+def bridge_text_for_scene(scene_type: str, scene_title: str) -> str:
+    """Create a short, stable Tom bridge when a Miranda monologue needs to be split."""
+    scene_type = str(scene_type or "")
+    if scene_type == "inflation_expectation":
+        return "所以關鍵不是油價跌了就代表通膨問題結束，而是要分清楚能源端和核心通膨的訊號，對嗎？"
+    if scene_type == "rate_expectation":
+        return "也就是說，債市真正害怕的不是單一數據，而是政策路徑重新被定價，這點很關鍵。"
+    if scene_type == "dollar_index":
+        return "所以美元不是沒有支撐，而是上方同時被成長疑慮壓住，這才形成高檔震盪。"
+    if scene_type == "asia_fx_gold":
+        return "這樣看起來，亞幣和黃金其實不是同一套定價邏輯，分化反而是合理的結果。"
+    if scene_type == "next_week_roadmap":
+        return "所以下週其實不是猜單一方向，而是要驗證這兩條線索哪一條會被市場確認。"
+    return "所以這裡的重點，是把畫面上的市場現象拆成不同驅動因子來看，不能只看單一數字。"
+
+
+def rebalance_long_speaker_turns(data: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Prevent 2-turn scenes with very long Miranda monologues.
+    If a scene has too few turns and a Miranda turn is too long, split it into:
+    Miranda first half -> Tom bridge -> Miranda second half.
+    """
+    changed_scenes: List[str] = []
+
+    for scene in data.get("scene_dialogues", []) or []:
+        if not isinstance(scene, dict):
+            continue
+
+        turns = [t for t in as_list(scene.get("speaker_turns")) if isinstance(t, dict)]
+        if len(turns) >= 3:
+            continue
+
+        new_turns: List[Dict[str, Any]] = []
+        changed = False
+        scene_id = str(scene.get("scene_id", "scene"))
+        scene_type = str(scene.get("scene_type", ""))
+        scene_title = str(scene.get("screen_title", ""))
+
+        for turn in turns:
+            speaker = str(turn.get("speaker", ""))
+            spoken = str(turn.get("spoken_text", "")).strip()
+            estimated = int(turn.get("estimated_seconds") or estimate_seconds(spoken))
+
+            if speaker == "Miranda" and estimated > 35:
+                sentences = split_sentences_for_turn(spoken)
+                if len(sentences) >= 4:
+                    midpoint = max(2, len(sentences) // 2)
+                    first_text = "".join(sentences[:midpoint]).strip()
+                    second_text = "".join(sentences[midpoint:]).strip()
+
+                    first = dict(turn)
+                    first["spoken_text"] = first_text
+                    first["subtitle_text"] = short_subtitle(str(first.get("subtitle_text") or first_text))
+                    first["estimated_seconds"] = estimate_seconds(first_text)
+
+                    bridge_text = bridge_text_for_scene(scene_type, scene_title)
+                    bridge = {
+                        "turn_id": "",
+                        "speaker": "Tom",
+                        "display_name": "Tom",
+                        "role_label": "主持人",
+                        "spoken_text": bridge_text,
+                        "subtitle_text": short_subtitle(bridge_text),
+                        "speaker_label_text": "Tom｜主持人",
+                        "estimated_seconds": max(8, estimate_seconds(bridge_text)),
+                        "news_reference": [],
+                        "visual_reference": turn.get("visual_reference", scene_id),
+                    }
+
+                    second = dict(turn)
+                    second["spoken_text"] = second_text
+                    second["subtitle_text"] = short_subtitle(second_text)
+                    second["estimated_seconds"] = estimate_seconds(second_text)
+
+                    new_turns.extend([first, bridge, second])
+                    changed = True
+                    continue
+
+            new_turns.append(turn)
+
+        if changed:
+            for idx, turn in enumerate(new_turns, start=1):
+                speaker = str(turn.get("speaker") or "Miranda")
+                role = "主持人" if speaker == "Tom" else "總經策略師"
+                spoken = str(turn.get("spoken_text", "")).strip()
+                turn["turn_id"] = f"{scene_id}_turn_{idx:02d}"
+                turn["speaker"] = speaker
+                turn["display_name"] = speaker
+                turn["role_label"] = role
+                turn["speaker_label_text"] = f"{speaker}｜{role}"
+                turn["subtitle_text"] = short_subtitle(str(turn.get("subtitle_text") or spoken))
+                turn["estimated_seconds"] = int(turn.get("estimated_seconds") or estimate_seconds(spoken))
+                turn.setdefault("news_reference", [])
+                turn.setdefault("visual_reference", scene_id)
+
+            scene["speaker_turns"] = new_turns
+            changed_scenes.append(scene_id)
+
+    if changed_scenes:
+        qc = data.setdefault("quality_checks", {})
+        prev = str(qc.get("dialogue_naturalness_note", ""))
+        qc["dialogue_naturalness_note"] = (
+            (prev + " " if prev else "")
+            + f"Rebalanced long Miranda turns in scenes: {changed_scenes}."
+        )
 
     return data
 
@@ -941,7 +1072,9 @@ def main() -> None:
     data = sanitize_tone_phrases(data)
     data = ensure_minimum_tom_turns(data)
     data = normalize_dialogue(data, summary, week_dir, effective_image_input)
+    data = rebalance_long_speaker_turns(data)
     data = sanitize_tone_phrases(data)
+    data = ensure_minimum_tom_turns(data)
 
     json_path = week_dir / "video_dialogue_script.json"
     md_path = week_dir / "video_dialogue_script.md"
