@@ -1,0 +1,385 @@
+{
+  "meta": {
+    "source": "Google News RSS",
+    "week_range": "2026-05-15 ～ 2026-05-21",
+    "lookback_days": 30,
+    "query_count": 37,
+    "raw_count": 233,
+    "ranked_count": 40,
+    "sources_preferred": [
+      "site:udn.com",
+      "site:money.udn.com",
+      "site:cnyes.com",
+      "site:ctee.com.tw",
+      "site:moneydj.com",
+      "site:marketwatch.com",
+      "site:investing.com",
+      "site:bloomberg.com",
+      "site:reuters.com"
+    ],
+    "use_source_filters": false,
+    "items_per_query": 8
+  },
+  "items": [
+    {
+      "theme": "inflation_energy_background",
+      "query": "WTI Brent 原油 油價 when:30d",
+      "title": "〈能源盤後〉地緣衝突+UAE退OPEC 原油漲逾6% Brent油價8連漲突破120美元 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE0zSmpjTnFxZFlpYjZxYmQ1MVBrM0FlVlZZMFJRTEZKRXUzUTJabEZBVzRXOVN5S2Z1UzZ1YS1IbGMteEwxb09MZVN3Mk1EdVk?oc=5",
+      "published_at": "2026-04-30 07:00:00 UTC",
+      "score": 22
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "WTI Brent 原油 油價 when:30d",
+      "title": "油價失控！WTI 原油狂飆 7% 衝破 109 美元、Brent 衝上 $111！美伊衝突持續引爆供應恐慌 - 動區動趨",
+      "source": "動區動趨",
+      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOQ2w2Z0ZrekdqQ20wNThPeGFVek9tNEpoemFsUkpjbktUdXFQZnNoWjRjaExmbVNkUkp0V2RKSFVkc3pWWlhzWWJLOV9Ocm9kcDFucHV0N0xxR2EtN2ZtRHpfd09lS2l0VjFEZjVtdjdGV2pBX0dSSHlLbkVMdm9WdDYta1NnYUlFSFVVdndESE1hNDNH?oc=5",
+      "published_at": "2026-04-30 07:00:00 UTC",
+      "score": 19
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "WTI Brent 原油 油價 when:30d",
+      "title": "原油：油價逼近120美元 美伊戰爭仍未見結束跡象 - Yahoo 財經",
+      "source": "Yahoo 財經",
+      "url": "https://news.google.com/rss/articles/CBMiyAJBVV95cUxPcTczQlUwSXUzSXNMTjZfS1h6TWJyTFVlUVdJcnRoLTIzSTg5TXNWdWNwQlUwN1ptNWZLakdLU1RNM3NmT2Z5QmlzZW1ZWUh1YUpCZi1xMlpJbHF0ajc4S0lMeVdMMWZiN09fVmxXSmpJQTFSaHhTM19zWk5WQk5PR0tmMEVLWGxZM2FsZU9Xby1rd0x3NUY2anZUSzZBckFvQ1FHNlFzaFBDalpRc2Y5R25vTWlsRmNyZ0wyVlBDMVNobzhDSHBtc05YUWVEZzRRQy1icHR2T0ZHQnI5dk43enAyRGJ2d09YTnJUbm5OVEhBcFJJWklGM0llQnVaTFVIT29XTmQ2SWljTlF6d1lYVmh2eFJkbFAxbnFiM3pEUFBSblpxMG9OUUlxZ2tINUlGdFBVSUt1YmxBR3g5ODdobFJTNGdvX2Q0?oc=5",
+      "published_at": "2026-04-29 07:00:00 UTC",
+      "score": 19
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "WTI Brent 原油 油價 when:30d",
+      "title": "WTI 油價開盤續漲 布蘭特漲至108美元 傳川普對伊朗提案持懷疑態度 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBGbTBwRVdHajFhZjRnQXlFMU8xTU1jUHFOX3ZJNnZMUkhOU3BSVE9xYW9KNjk0STl2SjE5V2dpZ3ZqMkRsU0JaXzIxeTMtbmxtY3QzdVB0bGl0Z9IBX0FVX3lxTE1WcXJUZ2JHWjhiZl9YMEY4V1I1dHJIYXBXNmN0T0lrTGo3M2lJcFQzdm5HVkhEeWZMODFzdHNUajkxNDlsVVY0a1k3SUJ2cmh0eHV3cHJnNldnb2FLYUQ0?oc=5",
+      "published_at": "2026-04-28 07:00:00 UTC",
+      "score": 18
+    },
+    {
+      "theme": "geopolitics_commodity_background",
+      "query": "中東 伊朗 原油 when:30d",
+      "title": "從「封鎖」變「控制」！中東這2國與伊朗達成能源協議 獲准石油、天然氣通過荷姆茲海峽 - 自由財經",
+      "source": "自由財經",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE05R3FkUUVDaThldXUxeUV2X051WG8tcnM0Y2VxRUwyOVdvcGJWN3lMTkZGNjhFYW1JT0c2Smw3TEN6QzJKUl9ZT283cnY1NzdFSERQeU12dFhtTXdEMVlN0gFkQVVfeXFMUHl3ZTZYU0N1bGxOTHRZRDlBSm15emtiYTJTOFVBVEJiYWQwWVQ5dWYzSWhPS0hyOC1aWERZLTRCTTk3WG1lMDlkcFZ2MlZqLV83eUYyVVQyMDREeXdLVHlha09fOA?oc=5",
+      "published_at": "2026-05-13 07:00:00 UTC",
+      "score": 18
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "WTI Brent 原油 油價 when:30d",
+      "title": "〈能源盤後〉美伊談判陷僵局 荷姆茲海峽受阻衝擊供應 油價飆升至兩週高點 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE53aHpWOW5fNFNFSG9jbkFmYVY3a3FhbUNRZmZhUTNRNWxZMmdNdm5nYjhyaFctTlF6N1ctMlphSkRhNGZvUWttNUxkRFR0TVE?oc=5",
+      "published_at": "2026-04-28 07:00:00 UTC",
+      "score": 17
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "油價 原油 能源 通膨 when:30d",
+      "title": "《油價》伊朗提出談判建議 NYMEX原油下跌3% - MoneyDJ",
+      "source": "MoneyDJ",
+      "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxPLWhHZjBJd1JuSzRkVFZTdC1fTGV3X3NGaUs0WjctNEY1bHN6S1lJcUs4M0FCaWwwQ0hJWG93YmZqODJYUjM1aGdfcEdLeGtpY04xOHNoNjFpRTBoODRsSXFEYS00cjlVQXMxLUFDVU9zUWlhclVOSGJvZ25ZTnRkQ3RUV2ExT0l2Z2cwekZGWXBqQQ?oc=5",
+      "published_at": "2026-05-04 07:00:00 UTC",
+      "score": 16
+    },
+    {
+      "theme": "dollar_fx_gold_background",
+      "query": "日圓 韓圜 台幣 美元 when:30d",
+      "title": "美伊即將達成協議？美元跳水 新台幣勁揚逾1角收31.488元 - 自由財經",
+      "source": "自由財經",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5QRHJQbkg5NS00eXd3YTNIX3pOa0dMaVExcWRPMHZlYXFXbHZ0ZVlqbTVOVXhDOEg4RW5mYmp5Q1VDaHE0UTVkc2RYNWVXRTZIelpkNUtuZjNVTXV3MmhV0gFkQVVfeXFMTS1hSi1QMVRyRTVWYXFPNUpnUjR2Y3padmNfMUFudUxJWEQ4Rm5QbTJVQzl0TElPX1Q5T3dDVm8tVzFZaHQ5aHdzb2U4MVItM2FBdFU4Rm9rSUplbDN1QlNsVGhhNA?oc=5",
+      "published_at": "2026-05-06 07:00:00 UTC",
+      "score": 16
+    },
+    {
+      "theme": "inflation_background",
+      "query": "通膨 黏性 預期 when:30d",
+      "title": "美通膨超預期、伊朗停火生變！美元強勢走升 川普將會習近平談台海 - 民視新聞網",
+      "source": "民視新聞網",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTFBCa2pBSXF5NU5DdGNiRHBkYllGTGk1RmtCQzVOZW5NLWRnUWlTOFNWNXY2cTZCSDQ4am1zNmFVOUZzOFZGMk80aVczLVBEa0xaZ3QxRWl4UFhLUUd6VUlvSw?oc=5",
+      "published_at": "2026-05-13 07:00:00 UTC",
+      "score": 15
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "油價 原油 能源 通膨 when:30d",
+      "title": "〈能源盤後〉油價回落 市場緊盯川習會與Fed升息風險 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE0tX1Azc2dNTm9VeURPWVczTkFqQWw3cmlBUzFNWXRPWGFod0doRTZsaHNLNHZyQ3d2UDFULTBob19QUjAxWFRVdFlJaVd6SGc?oc=5",
+      "published_at": "2026-05-14 07:00:00 UTC",
+      "score": 15
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "energy prices oil inflation when:30d",
+      "title": "U.S.–Iran Talks Collapse Again, Oil Prices Surge, Gold Gaps Lower as Markets Focus on U.S. CPI Data This Week! - TMGM",
+      "source": "TMGM",
+      "url": "https://news.google.com/rss/articles/CBMiqgFBVV95cUxOOHgxNk1HWHMtNjE0NzRLSXBQUDFZTDJMQVdZVHpLeGxWLVh5RWZEMlByU2dzUlRqYXBodzRSb2phc3lQOGVLN2x5WE9nczBRblh0ckxYbXpoS0k2QmtUbFk2bkYyd0dTWEY4YUVsXzdVZXFOR1laQjdSY0JfMnVfMGt5b1dmOWFLaWtkdkRUcWZjQW13T1kwQnVEY0UzTGJDSl91WktqdFRHdw?oc=5",
+      "published_at": "2026-05-11 07:00:00 UTC",
+      "score": 15
+    },
+    {
+      "theme": "geopolitics_commodity_background",
+      "query": "地緣政治 油價 能源 when:30d",
+      "title": "川普拒絕伊朗停火提議 國際油價飆升逾4% 全球能源與市場動盪加劇 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE96ak5LMkxsVWlSM01TQWNyRXZSSnRLMGtqbFRMSndLQ1RsRDFoaHZjWDVsaGQ5VlRya25vc0xudmZsMFRwbGdQOE1CM2lIY2c?oc=5",
+      "published_at": "2026-05-11 07:00:00 UTC",
+      "score": 15
+    },
+    {
+      "theme": "geopolitics_commodity_background",
+      "query": "美伊 談判 油價 when:30d",
+      "title": "伊朗戰爭：美伊可能達成終戰協議，油價股市作出快速反應 - BBC",
+      "source": "BBC",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE1pN2luTXc0MEFHRWV6T2hhT1p3Yi1sSktURVkyMXdKYnN4a2liUXE2NnlBbWRHWUlNcHIybEhZaE1sU1VIcmliRXAweUdONHY2RElHUHdETmdOQ2hmNThvNUpBcFh4QdIBa0FVX3lxTFAwbWoyd3F5YU16NF9wM2xlNE1pOU0zODROZkx6SHl3SVRXamtuR1M1WDd1QV9QeTlfcmZjOG1MMzlxbXJoZHBJdTg1WF9nM0hXS3JCR0xGZFM5MFhoRFZKVkxCd09QREp4enh3?oc=5",
+      "published_at": "2026-05-07 07:00:00 UTC",
+      "score": 15
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "油價 原油 能源 通膨 when:30d",
+      "title": "油價推升通膨！中國4月PPI年增2.8%創近1年新高 CPI也優於預期 - 財訊",
+      "source": "財訊",
+      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1BcWRpWUxCOUdJQjhEeVNVVV9DR1FRY1NtMjNTRVUwT2MycncxUmNoTHBsVHNRamZtSnQ4VG9qeVdBMWpwNGJOVFMtWVBkVWhpT0dmWU41U1NXcm5QdTlDQmE4VG5GZ08wX2lMQWxpbndzRWVUNjc2aVZUVQ?oc=5",
+      "published_at": "2026-05-22 09:39:53 UTC",
+      "score": 14
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "crude oil prices inflation expectations when:30d",
+      "title": "Oil Prices Rise After Trump Warns 'No More Mr Nice Guy' in Iran War, OPEC Fractures - Moomoo",
+      "source": "Moomoo",
+      "url": "https://news.google.com/rss/articles/CBMimgFBVV95cUxNNlZzcWVjdzhTdHlqWFJlYkx1NklUcTBwSUwwNlNBUnU3QmtmQUZ4WDJpMWZkY3huZ3lXb1VISWRYbFdybjJOakZTRGl6bThfUmxaSzFLZWNva2ItOW00c2VPU0ZjNnpzY01ka1F5V1lEQVBoeE9zbmZFazhoNVdKbTN4ZlQzY2FEX2RSdzUtR0ZpdU1ZMFJJVHhR?oc=5",
+      "published_at": "2026-04-29 07:00:00 UTC",
+      "score": 14
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "crude oil prices inflation expectations when:30d",
+      "title": "Trump Prepares Long-Term Blockade on Iran as Brent Crude Surges Above $110 - TMGM",
+      "source": "TMGM",
+      "url": "https://news.google.com/rss/articles/CBMinwFBVV95cUxNWDhGaG0xdElia1ZVSFNEUGwtVTM5TGtLcDl3WTBERlN3NGpGaHFfQ2lpeEt6SEpVdWFxSU1BbDU5bElndlZ3V0dCUGpFcTdkNExFY3RrV3RudWYzNWprZmNZd0R4RWc0V3FRSUZQbm9lQmZtNXFUaDIyRTFmUlo5MUVGWVBFdzlRVzFocU1yandBYlJXMVZrYTl5YVIxcWc?oc=5",
+      "published_at": "2026-04-29 07:00:00 UTC",
+      "score": 14
+    },
+    {
+      "theme": "fed_policy_background",
+      "query": "升息 降息 高利率 when:30d",
+      "title": "通膨恐逼Fed維持高利率 金價跌破4500美元、中東衝突後已重挫15% - 民報",
+      "source": "民報",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9aU19OM0pUMkl3YzV5ajU4WDljQVJGNFVrY1U2UTc2eFZhNDZ2bzVXNF9RQ0hOQkpvRXh0UmlnLS1YZkh2by16WTVCTVVjNnp1X0dKSk5oR21HQUFlbGRvbWVjRmo?oc=5",
+      "published_at": "2026-05-20 10:32:45 UTC",
+      "score": 14
+    },
+    {
+      "theme": "geopolitics_commodity_background",
+      "query": "美伊 談判 油價 when:30d",
+      "title": "美伊談判現曙光？傳停火協議草案內容曝國際油價大跌- 國際 - 工商時報",
+      "source": "工商時報",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE5oalhmeHROX3U0UzlkVTBwLVNMQ3pfeVFYUVZYTTZsSExnakpnLWZCa3g3c3V5TlRhUWZVdFJnc29aTlJCTU9BM1BXMU1GcXFETV9uUVB1Q3E4YVlOOVFF?oc=5",
+      "published_at": "2026-05-21 23:10:00 UTC",
+      "score": 14
+    },
+    {
+      "theme": "dollar_fx_gold_background",
+      "query": "美元指數 亞幣 黃金 when:30d",
+      "title": "美元續強、主要亞幣跳水新台幣震盪轉升- 日報 - 工商時報",
+      "source": "工商時報",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFAySkVaa0k3a1kxXzhqa19QZzVqVkM4aHYtZXQ4VTRSUFphYk5hZ1FmZWlnUkcyRjRlNlJKaFBfcGlDcUdVdVpoanU3WW5TYkRZVjdFN1ZZQUl2S3B3WVFF?oc=5",
+      "published_at": "2026-05-18 19:00:00 UTC",
+      "score": 14
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "crude oil prices inflation expectations when:30d",
+      "title": "Canadian Dollar declines as oil prices ease on rising US-Iran peace hopes - TMGM",
+      "source": "TMGM",
+      "url": "https://news.google.com/rss/articles/CBMi3AFBVV95cUxPbXoxT0gxRi1kVWgzV2tXQlpLRXc3RmN5a3N2RURJYS1qZmN5dl9wU0VtbXNhcHN2NE9pektHQWlZTnN0UWpoMXZ1Y3ZaNE9nUmljWUZ0RklBdDlkdUo5cXJHRnlpSVNqbHBLLUVGSWx3dlUtaTg2RXRJN0NpX1NkblUyVmdES2VZcmxkdnZSYjh6LVdTV3VnSm5ILWtMeDRHYW9DaTJ0RGdDaEE1SkVLeGdTdFg1bW44V2E0aFVFN3IyOGtoeVBPLXFTeHBfQ3A4V3dkaGJCOXR0WHFq?oc=5",
+      "published_at": "2026-05-22 02:53:56 UTC",
+      "score": 13
+    },
+    {
+      "theme": "bond_market_stress",
+      "query": "美債 殖利率 長債 when:30d",
+      "title": "《美債》4月PPI年增高達6% 長債殖利率攀高- 新聞 - MoneyDJ",
+      "source": "MoneyDJ",
+      "url": "https://news.google.com/rss/articles/CBMikgFBVV95cUxQVTZUOEpUYlpQUkNRajNLb3U4bEwzQlBLNWFSM0FJZHpxLWJ3bGlQVU9JaGxVczF5NHdDVWNRV0ZDdUZRVHQwWGFqTmVPZ2VSc1lEeVlZOUNoamY0UlpoZjdMeXNjMlZEMnZrSTdGaEZ1Tzk2RkNESVVMV3FjNFM5MGRlOHp0WWZLQ1pGdjU5Q3psUQ?oc=5",
+      "published_at": "2026-05-14 07:00:00 UTC",
+      "score": 13
+    },
+    {
+      "theme": "dollar_fx_gold_background",
+      "query": "美元指數 亞幣 黃金 when:30d",
+      "title": "油價漲勢再起 新台幣貶破31.6元後升0.6分作收 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9sZWhVWGlqUlZqNW4yZWhxSDRPRl9LcEhZcHNqYnY5bnhvT2tGb3ZoRHZ0aVhmSVpKbjBTczN2d1FkMndhdHQtdm9CTmN2Nkg2Q0Q4VEtWN2tkd9IBX0FVX3lxTE5CSFpZLUt6NzFxUTcwc2lHazIwQWExdHBvenE1UXlaLXVoZlhVM05JclRsTGFIajBLakdSSmJlbGxFUXVKVmhyTFgzdTZCdFVYVU9oY1o5V3FXWFFYakNj?oc=5",
+      "published_at": "2026-05-18 07:00:00 UTC",
+      "score": 13
+    },
+    {
+      "theme": "inflation_background",
+      "query": "通膨 CPI when:30d",
+      "title": "美國CPI高於預期觸發美元指數飆升 市場調降聯準會降息預期 - Yahoo股市",
+      "source": "Yahoo股市",
+      "url": "https://news.google.com/rss/articles/CBMijANBVV95cUxOQy1sbEFTd1oxTVNieEdMUVp3a29rbVFIcDFLM202OVkwTno5R0dMQ0pLSnlKczUxa0N2UVhzQ0U1X3pzTzhlQkFLd0ZfUFp3dWIzWEZraUhZZVZTZlVmZ2xZcHNSZFBxTWEzWkN3Z210ZHVQYm9tZmJvWlY4S3VwNXFYUVRFdDJFM3RIUklUM1ZSQi13Smp3NGFvUWdBZ3lENGxZX2J0RHctZ1BDZTlSMUtXcWxjdTN6UmJhc2NRdWVMX05sVnZQcUlzU0VpdEtfWnVkMzY0VVhfTmRpc3NuMHBBc3FkcEdEQ3FvTmRsZjBMSGZaa1c2bHdSa19uVWdSYnlHXzVzOXc3cDhuTUdYRXl3enVFWS1pRmtrMEJHVXNGTjEwWTRDSVN1TWdBaHIxbHRWeExlcWVMckJwQ2pRLVBHUy1KVWw1R1hXeW1ZMjJaaERJd3YtVVNKOTRIQ1Jhai1YSGtFUnM4WDk5YmptaXJOZDAtY3B0RzMxT3NpR211SklLNFA5czQ1R0s?oc=5",
+      "published_at": "2026-05-12 07:00:00 UTC",
+      "score": 12
+    },
+    {
+      "theme": "inflation_background",
+      "query": "通膨 黏性 預期 when:30d",
+      "title": "美國CPI高於預期觸發美元指數飆升 市場調降聯準會降息預期 - 樂聯網",
+      "source": "樂聯網",
+      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1WazhMdmQ1b3YwOTNwUnFLMkplNGVNa2JaMDVUZkozSnFldVlLRS1MdUJTejQ5bkQtRzBwSEJVVjBiOHhEMFc1VlpFZw?oc=5",
+      "published_at": "2026-05-12 23:49:11 UTC",
+      "score": 12
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "油價 原油 能源 通膨 when:30d",
+      "title": "油價震盪恐上修CPI？央行：6月公布預測、通膨評估-中央社-觀點新聞 - 商周財富網",
+      "source": "商周財富網",
+      "url": "https://news.google.com/rss/articles/CBMidkFVX3lxTFBfb0l5aG1mX3lqSWs1RXlEMzF2d2hiS1prRkRzSG9RS2pkblc1REI4VEx1RG95VjJ6RHFHOG13R0NSeUpFVXZkcEJDeVZjQVhHX0RJX0NYUjlSbU5GZHNyVzMtRzZMQXNDZHlGOXJLNFlsTjJUbVE?oc=5",
+      "published_at": "2026-05-20 04:17:22 UTC",
+      "score": 12
+    },
+    {
+      "theme": "fed_policy_background",
+      "query": "Fed 官員 鷹派 會議紀錄 when:30d",
+      "title": "美聯準會會議紀錄曝光！官員憂關稅與能源價格恐推升通膨壓力 - 四季線上4gTV",
+      "source": "四季線上4gTV",
+      "url": "https://news.google.com/rss/articles/CBMibkFVX3lxTE5zWXdUMTJFcmJ4NDdkTXNUM19kOFdKbGNiSV9IYlRkOXFfSzRuQ2tZc0RBXzZIX2RyVGw2QnRoUzk1c2ZKSGdwYklTczl0emJWZC02a1FVa0kwVUp3eVNqS0NFTFRHRzZPVjhna1RB?oc=5",
+      "published_at": "2026-05-20 19:23:13 UTC",
+      "score": 12
+    },
+    {
+      "theme": "geopolitics_commodity_background",
+      "query": "中東 伊朗 原油 when:30d",
+      "title": "〈能源盤後〉伊朗攻擊UAE和波灣船隻 停火恐破局 原油飆漲6% - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBSdUsxYkh5eUlKNnFHWFozV3YxTFhPYjE5ZTJzMndkQ3ZpUzNZdWVOa1ZmQmFpMWdvOUJod3hPTnhnUFZZMmIyNjJ1ZkVXNzA?oc=5",
+      "published_at": "2026-05-05 07:00:00 UTC",
+      "score": 12
+    },
+    {
+      "theme": "geopolitics_commodity_background",
+      "query": "美伊 談判 油價 when:30d",
+      "title": "〈能源盤後〉川普稱美伊談判傳進入最後階段 油價重挫近6% 創近一個月最大日跌幅 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5sTE1vVldtSlNqNDQtMkdjLWl0YmZXSHctNWI1N3ZnN1l1M241NzFEODI3bGw3TjNybkhQWU9MYU0yQy1vYThuekk3WXVIOGc?oc=5",
+      "published_at": "2026-05-20 21:32:29 UTC",
+      "score": 12
+    },
+    {
+      "theme": "dollar_fx_gold_background",
+      "query": "美元指數 亞幣 黃金 when:30d",
+      "title": "美元強彈、亞幣全倒！新台幣連4貶收31.551元 - 自由財經",
+      "source": "自由財經",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFAyaWpzREpaaWozQUZmYnpMc2V5N0d0Tk5fT09tQjBIc2RwcUxUOE9lbm5TQmw1bTA2WGxPTUJHb3Fud183T3ZTc1ctb3NmNXlJTW5YdFBMLUdxYlBCUXNr0gFkQVVfeXFMTV9qWU9QTEd5SVY4WUM0c3dSWHE3cUMxemFVUmh0N2U2cVlmaUFFTDhVS0JXTm9fSENrdHJqcVlPa0xJa2dDeEIxQ1NFd2I0dnJQNlhQS213UlNsN2VSNWJhTjdYaA?oc=5",
+      "published_at": "2026-05-15 07:00:00 UTC",
+      "score": 12
+    },
+    {
+      "theme": "dollar_fx_gold_background",
+      "query": "美元指數 亞幣 黃金 when:30d",
+      "title": "美元指數衝破99 新台幣連4貶、 週線翻黑 - MSN",
+      "source": "MSN",
+      "url": "https://news.google.com/rss/articles/CBMinwJBVV95cUxNaGRkRGc0Vlg0Z0FXNkxKY0hiXzlaQ29EOGhKM1UxMXBtU3hNbWZqUjMwNmM5WDBvdkYxSzIxai0xWGJCX29UYXZIaGFpYzZMYXd1MkpBNkNsY2VULWFVLThRX3FCY3NCVEpXa3hQd0tlZHRta0hUUW1FTk1rMnlicVRBZ2N6TjJSQmV2TXp5Ym43cVBCeldaX215WE9jWWY4M3ZNTHpnXzE3SzFnNkdUNjZRakhCWkxEMldNSktlNXpfUmE2alhBT0hGeXFJUkVZZmUxMzVtazBUOFNua2QwRGpJYmFObEZLUHNxMWxHVVVSeFNlUmNrdlgxQVFVZENoM3FlLVNwTzlneDJRUkJpbGtXM2JXNDR5TUtjSjhMQQ?oc=5",
+      "published_at": "2026-05-26 14:38:32 UTC",
+      "score": 12
+    },
+    {
+      "theme": "dollar_fx_gold_background",
+      "query": "日圓 韓圜 台幣 美元 when:30d",
+      "title": "美元指數站穩99 新台幣早盤貶破31.6元 - 財經新聞 - PChome Online 新聞 - PChome Online 新聞",
+      "source": "PChome Online 新聞",
+      "url": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPbnMxS2RmUGRqeFV3VE5oSnE1WWh0a3BIVUlNS1hxTmZBNzRYUy0wT0Y1aDk0c2thaU1mVXJ4U0pJWUQ5WS1UYVpTZWNqTVFLUjhBdUVJNl9Mb1RoMWdLMkV2eWJaWnd5T3RSekVqdUk3S3ZNLUlIZG9pbHdGSGY4U1V0TlB0ckx2RXU0?oc=5",
+      "published_at": "2026-05-18 07:00:00 UTC",
+      "score": 12
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "WTI Brent 原油 油價 when:30d",
+      "title": "全球惡夢成真！伊朗24小時狂轟港口油輪 國際油價暴漲破百鎂 - TVBS新聞網",
+      "source": "TVBS新聞網",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5GNUY5bXdTbGZyMmJnSW4yVDJ2bURHWFFDVF83U3VHQU9tS2k4RlFKc3IyZlBJYkNDSldpVFRObU9McUhYYXVVa29IRHVFQTg?oc=5",
+      "published_at": "2026-05-05 07:00:00 UTC",
+      "score": 11
+    },
+    {
+      "theme": "fed_policy_background",
+      "query": "升息 降息 高利率 when:30d",
+      "title": "貝萊德：通膨將延長高利率環境 持續看好美股及新興股市 不看好長債 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9IYWtMY1VYXy1mY0ZsUF9JOXNhVUFaaTBOeEJ3emozajBGejFGYkZ5Nnppb0pnakdDWE1acUpyaUFiY0pEbm9SSmxjZTY0c3MzanhwSjJxZDNTZ9IBX0FVX3lxTE03bWFMbE9aVUFUMjJWRWJ0XzJTRExmNGs4WlJyRlY5cGNJU05WVTF2dlpvUm1UR2ltMklRemRHTmh0eWV6YnJBOEp1NDVrVndvaWg3LUdWb0RiQzRNT3Vr?oc=5",
+      "published_at": "2026-04-29 07:00:00 UTC",
+      "score": 11
+    },
+    {
+      "theme": "bond_market_stress",
+      "query": "Treasury yields bond selloff when:30d",
+      "title": "U.S. Bond Market: Treasury Yields Rise Amid Rising Oil Prices and Accelerating Inflation - 富途牛牛",
+      "source": "富途牛牛",
+      "url": "https://news.google.com/rss/articles/CBMioAFBVV95cUxOSndiY3QtM0xkRzl5QzVZa2pWQVJkWHFuSXJNUEp6akFlRnRkUnZYRzdOellMRm1MLVcxVGU4aGpYUXN6U3pCTmNtc1c4aGFYZWtmeUM2bHhwSmFudmZ3WXVCc2hWXzBiRVh6Q3F0UDZ1RjlzbVducTQ1a1paU2Vta0ZzWU83ZHdCOGFacUNJZFJMR2JQLWo4QmN3enlBTmg0?oc=5",
+      "published_at": "2026-05-12 21:20:08 UTC",
+      "score": 11
+    },
+    {
+      "theme": "geopolitics_commodity_background",
+      "query": "地緣政治 油價 能源 when:30d",
+      "title": "地緣政治衝擊能源供需 黃金油價波動、深海資源成焦點 - Yahoo股市",
+      "source": "Yahoo股市",
+      "url": "https://news.google.com/rss/articles/CBMi8gJBVV95cUxOdnM2NXhhUi1PUWU0Q3dzX2FDOS1Va0VRbm1fUGw3S1dGcDRnTnMyMUJKMnFaa29mdm9BMVEzYktaeFVSbG5HcEdKaHJVbkhBYmUwOS1PVVVEZHpWY3otanA2STFHNGVLRzFuREJnblNBNTlDazN1TGFnYUdKX2dwX29ZR01sZExCcEJmUWdYUUdHZmx3MFdMeHZVWnE2SWVnRGMzUW9FSWFjXzFCbWxqUHJRRnoxZHNLTlB6SlU0UU5WZkRuT0VwRm8yZVJZblZZdWZIcjk3NlZlWnpsaGUzZlJRbmtXOXpiX1FQNkx6c3o2d2hCckRPLWloLWJibzZFZXU0SENKdWRUWWtVTk1JYU1GRWxCRUFKZE5RMmdGNUZjNmVJZzYyN2NXYTE1MmRjb0ZsSTZVd0dGOVJ0bzNKQVh3a0drX09DbUN5b0tEMFRRdWdMU1MyTVpxeXhoWVkzVldlZ3UtbTVQcl84R25NUjRn?oc=5",
+      "published_at": "2026-04-28 07:00:00 UTC",
+      "score": 11
+    },
+    {
+      "theme": "dollar_fx_gold_background",
+      "query": "日圓 韓圜 台幣 美元 when:30d",
+      "title": "美伊談判卡關轉看川習會！新台幣小貶1分、暫收31.425元 - 自由財經",
+      "source": "自由財經",
+      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBaVlRhWHdDel8tcUZiUUZ4QWNmTm5wckNETjhONU5iU195b3k0ckw0WEtIRFRGVkxZNks2RGl0Nmg1eXcyMXFUR0xsSnUySXliOFR4NFdvYTV0MXZ4UTZr0gFkQVVfeXFMUG82QW1QOHhQZUZfYzNsNDg1NkNmM3lid2JnNHRBWUtmeDVzN1F5V01KR3FlRGhLTzdFaE1EMUZpR3hZeDhVS1VMeGtPVzFNamRfZHRXeEpvczBIekVqODRGUlY0ZA?oc=5",
+      "published_at": "2026-05-12 07:00:00 UTC",
+      "score": 11
+    },
+    {
+      "theme": "inflation_background",
+      "query": "通膨 CPI when:30d",
+      "title": "美國通膨再升溫！4月CPI超預期年升3.8% Fed降息夢又被潑冷水 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBxakg4ejhzc3QwZGRRMUpWOE1aVlZqYTVkazNBZUVqMlFPdkVaQWlyTlNiMkg0MldqaHdXbWw2dE1lNVA4OGcxZTQ4VkhrSGM?oc=5",
+      "published_at": "2026-05-12 07:00:00 UTC",
+      "score": 10
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "油價 原油 能源 通膨 when:30d",
+      "title": "油價若續漲 中國恐現停滯性通膨 - 自由時報",
+      "source": "自由時報",
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE0yQUgyNWVqakVXcjhXNnp0S05qc3FxeU1SNmVwU2FzR1Jpb3VuV29KZ3poT2hYM19zMmV6ajRPTy0zNjE2bHphVHlGTlk5QkVtMTBoMEFwSGs?oc=5",
+      "published_at": "2026-05-22 00:00:44 UTC",
+      "score": 10
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "油價 原油 能源 通膨 when:30d",
+      "title": "國際油價突破 120 美元，供應破壞史上最大 - TechNews 科技新報",
+      "source": "TechNews 科技新報",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTFBfTkx2YUdSOWZuaFJ0TGlTM0JtQUNWU20zUE8tNmExQk1heG1yNjNPWWczZTFINGRLZ1huWmJhYllmOWttVlpabFl6M1d3WmREU3JWSnZMTlhEMDBfVFc1Q25Rekg?oc=5",
+      "published_at": "2026-04-30 07:00:00 UTC",
+      "score": 10
+    },
+    {
+      "theme": "inflation_energy_background",
+      "query": "energy prices oil inflation when:30d",
+      "title": "Euro rises against Canadian Dollar due to lower oil prices, risk-on mood - TMGM",
+      "source": "TMGM",
+      "url": "https://news.google.com/rss/articles/CBMi2gFBVV95cUxOVVltbFJqNUtkQlh4cnpIcHNiRkFERTIxWWhLb3RCR2lOTUlBeFAtVWs4YmdmazZNZFNmNnNvQndQM3IteldGWlBZbHlISlphcnNSSUVXQ1R3dXF4NEJndDBNNk9mNW9laTVHNlM3YVZaWHRkb3JubE4taWtsNExab3Bsd0F3dnBnMjc5ODd2Q0JHX3VIVVUtNXMzeVVwc2I4b3liT09vU00ySEZnNHp0eVAxTDhGQ3M0dWg1elg3ZEpsVmhjeXp1ZXhaQ0VGOWJnaDg4NmVnSDdidw?oc=5",
+      "published_at": "2026-05-25 10:28:24 UTC",
+      "score": 10
+    }
+  ]
+}
