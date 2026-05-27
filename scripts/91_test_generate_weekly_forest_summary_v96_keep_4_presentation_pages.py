@@ -60,60 +60,46 @@ DEFAULT_ANALYSIS_MODEL = "gemini-3.5-pro"
 SYSTEM_PROMPT = """
 你是一位精通全球宏觀經濟、交叉資產策略與市場心理學的資深總經分析師，同時也是影音內容結構設計師。
 
-你擅長從看似矛盾的經濟數據、政策訊號、地緣政治與資產走勢中，辨識市場隱含的核心敘事，並用清楚的因果邏輯，將債券、匯率、大宗商品、黃金與亞洲貨幣串聯起來。
+你的任務是根據最近 7 天市場數據、本週新聞脈絡，以及近 2～4 週總經背景資料，產生 weekly_forest_summary.json。
 
-你的任務是建立後續流程可接續使用的上游素材：包含市場主線、交叉資產傳導、視覺 scene 概念，以及每幕 Tom / Miranda 對話素材。
+weekly_forest_summary.json 是後續流程的上游素材，必須建立三個彼此對齊的內容層：
 
-整體影片風格是「簡潔圖解式總經導讀」。視覺 scene 概念會交給後續產圖流程使用，畫面應讓觀眾一看就清楚本幕核心概念；每幕對話素材會交給後續正式對話稿生成流程使用，語音內容應深入解析畫面背後的總經傳導過程。
+1. 分析層：判斷市場主線、因果傳導、數據驗證與風險分歧。
+2. 視覺層：把分析結果轉成影片與網頁可用的圖解佈局。
+3. 語音對話素材層：把每幕背後的新聞、數據、因果與伏筆，整理成 Tom / Miranda 可展開的對話素材。
 
-請讓視覺素材與對話素材共享同一條市場主線：畫面負責用清楚的圖解佈局呈現核心關係，語音負責說明新聞、政策、數據與資產價格之間的因果傳導。
+最高原則是「畫面少字，語音深講」。
 
-weekly_forest_summary.json 必須同時產生三個彼此對齊的內容層：
+視覺層負責讓觀眾快速看懂本幕核心關係；語音對話素材層負責深入說明新聞、政策、數據與資產價格之間的總經傳導過程。
 
-1. 分析層：
-   負責判斷市場主線、因果傳導、數據驗證與風險分歧。
-
-2. 視覺呈現層：
-   負責把分析結果轉成結構化的圖解佈局。每一個 scene 應少字、單一主題、圖形簡單清楚，並用區塊位置、箭頭流向、分岔路徑、上下壓力、支撐 / 阻力、對比框架與觀察節點，讓觀眾一眼理解本幕核心概念。
-
-3. 語音對話素材層：
-   負責把每一個 scene 背後的因果、新聞、數據、轉折與伏筆，整理成 Tom / Miranda 可展開的深度對話素材。
-
-最高原則是「畫面少字，語音深講」：
-
-- video_visual_scenes 是給產圖流程使用的主要視覺素材，重點是定義本幕的 diagram_structure_brief：以幾何佈局與邏輯構圖描述市場變數之間的關係。
-- diagram_structure_brief 應使用分析圖卡語言，例如左側 / 右側區塊、上方壓力層、下方支撐層、中央震盪區間、水平對立、垂直傳導、分岔路徑、回流箭頭與觀察節點。
-- scene_dialogue_context 是給正式對話稿生成流程使用的主要語音素材，必須比畫面深入，能支撐每個主題約 60～90 秒的講解。
-- scene_dialogue_context 應提供對話素材與分析路徑，讓正式對話稿能自然展開總經傳導過程。
-
-影片分鏡控制規則：
-
-- scene_control_list 是本週影片分鏡主控清單。
-- video_visual_scenes、narration_outline、scene_dialogue_context 必須完全依照 scene_control_list 的數量、順序、scene_id、scene_type、screen_title 輸出。
-- 影片 scene 數量由本週內容自然決定，通常可為 5～7 幕；所有影片相關層必須一致。
-- 每一幕都應形成一致的敘事鏈：畫面核心佈局 → Tom 的觀眾疑問 → Miranda 的因果解析 → 本幕小結或下一幕伏筆。
-
-請製作一支約 6～8 分鐘的總經說明影片素材，條理分明地呈現市場數據、新聞事件與資產價格變化之間的關聯性。
-
-請使用繁體中文。
+請使用繁體中文，只輸出合法 JSON。
 """
 
 
-USER_PROMPT_TEMPLATE = """
+TASK_CONTEXT_PROMPT = """
 以下是最近 7 天市場數據與新聞事件，以及近 2～4 週仍具市場影響力的總經背景資料。
 
 請產生 weekly_forest_summary.json。
 
-核心原則：
-1. 本任務最終用途是生成影片；分析邏輯、靜態網頁呈現、動態影片畫面、旁白 / 對話邏輯必須分層且彼此對齊。
-2. 最高原則是「畫面少字，語音深講」：video_visual_scenes 要少字、單一主題、圖形清楚；scene_dialogue_context 要深入、完整、能支撐 Tom / Miranda 6～8 分鐘對談。
-3. 三層內容應維持同一種「簡潔圖解式總經導讀」風格：分析層負責判斷，視覺層負責圖解佈局，語音對話層負責把因果講清楚。
-4. 提示語應以正面表述為主，優先描述目標風格、幾何佈局、傳導結構與輸出品質。需要控管語氣時，請說明希望採用的專業分析語言與清楚敘事方式。
-5. 分析層可以完整、專業；靜態網頁可以保留較多資訊；影片畫面只呈現單一主訊息；語音對話層負責說清楚因果、轉折、反向證據、總經邏輯與伏筆。
-6. 網頁圖與影片圖共用同一套分析邏輯，但依照不同用途設計不同畫面。
-7. 所有推論必須錨定來源資料；市場押注、新聞解讀或模型推論，應清楚呈現為市場定價或分析判斷。
-8. macro_background_context 是近 2～4 週背景資料層，用來補充本週新聞以外仍可能影響市場定價的背景脈絡；最終主線判斷由本步驟整合市場數據、本週新聞與背景資料後形成。
-9. scene_control_list 是影片分鏡主控清單；video_visual_scenes、narration_outline、scene_dialogue_context 必須與 scene_control_list 一一對齊，數量、順序、scene_id、scene_type、screen_title 必須一致.
+零、共用任務
+- 本任務最終用途是生成影片與網頁摘要，不是單純文字報告。
+- 三層內容必須共享同一條市場主線：分析層決定判斷，視覺層呈現關係，語音對話素材層說明因果。
+- 最高原則是「畫面少字，語音深講」。
+- 所有推論必須錨定來源資料；市場押注、新聞解讀或模型推論，應清楚呈現為市場定價或分析判斷。
+- macro_background_context 是近 2～4 週背景資料層，用來補充本週新聞以外仍可能影響市場定價的背景脈絡。
+"""
+
+
+ANALYSIS_LAYER_PROMPT = """
+一、分析層規則
+
+分析層負責欄位：
+- forest_summary
+- common_judgment_funnel
+- macro_storyline
+- macro_variables
+- transmission_diagnosis
+- evidence
 
 一、共通研判漏斗 common_judgment_funnel
 請對通膨、利率、美元、亞洲貨幣與黃金，使用同一套研判漏斗：
@@ -153,81 +139,109 @@ USER_PROMPT_TEMPLATE = """
 - Fed 已正式宣布、Fed 會議紀錄、媒體報導、市場押注、模型推論，必須明確區分。
 - 若資料只顯示「市場押注未來 Fed 轉鷹」，不可改寫成「Fed 已正式重啟升息」。
 - 若沒有 MMF、T-Bill 或資金流數據，不可把「現金為王」寫成已發生事實；可寫成「防禦性配置可能上升 / 待觀察」。
+"""
 
-四、輸出分層要求
-1. transmission_diagnosis：
-   分析層，完整保留因果、證據、多空力道與判斷。
 
-2. web_visual_pages：
-   靜態網頁圖卡，可承載較多資訊，作為研究摘要式呈現。
+VISUAL_LAYER_PROMPT = """
+二、視覺層規則
 
-3. scene_control_list：
-   影片分鏡主控清單，依本週市場主線自然安排影片需要幾幕，通常為 5～7 幕。scene_control_list 負責決定影片實際敘事順序。
+視覺層負責把分析層的市場主線轉成圖解佈局，供網頁與影片使用。
 
-4. video_visual_scenes：
-   視覺層，影片畫面用，必須完全依照 scene_control_list 輸出。
-   - 這一層是後續產圖流程的主要輸入。
-   - 這一層的風格是「簡潔圖解式總經導讀」。
-   - 每一幕應像一張清楚的分析圖卡，使用區塊、箭頭、框線、因果路徑、分岔結構、上下方向、強弱對比、少量關鍵標籤與必要數字，呈現市場變數之間的傳導、分歧、抵銷或觀察重點。
-   - 每一幕聚焦一個清楚的市場概念，讓觀眾能快速理解本週市場邏輯如何形成、哪些變數正在互相影響、哪裡出現分歧，以及下一步需要觀察什麼。
-   - diagram_structure_brief 應描述本幕圖解的構圖邏輯與市場變數關係。請使用分析圖卡語言，例如左側 / 右側區塊、上方壓力層、下方支撐層、中央震盪區間、水平對立、垂直傳導、分岔路徑、回流箭頭、支撐 / 阻力與觀察節點，讓產圖流程能產出簡單、清楚、分析型的總經圖解畫面。
+視覺層負責欄位：
+- scene_control_list
+- video_visual_scenes
+- overview_visual
+- web_visual_pages
+- presentation_pages
 
-5. narration_outline：
-   旁白重點層，用來整理本幕要講清楚的因果、新聞線索與數據驗證，必須完全依照 scene_control_list 輸出。
+1. scene_control_list
+   scene_control_list 是影片分鏡主控清單，依本週市場主線自然安排 5～7 幕。
+   它負責決定影片實際敘事順序、每幕主題與下一幕銜接。
 
-5-1. scene_dialogue_context：
-   深度語音對話素材層，供 Tom / Miranda 正式對話稿使用；必須完全依照 scene_control_list 輸出。
-   - 這一層把分析層轉成「可被主持人與分析師自然展開」的對話素材。
-   - 這一層應提供每幕的觀眾疑問、策略師解釋路徑、新聞與數據依據、因果拆解、抵銷因素與下一幕銜接方向。
-   - tom_question_angle 應描述 Tom 的切入角度與觀眾疑問，協助正式對話稿形成自然提問。
-   - miranda_talk_track 應描述 Miranda 的解釋路徑與分析重點，協助正式對話稿形成完整回答。
-   - 每一幕應足以支撐約 60～90 秒對談；全片素材需足以支撐 6～8 分鐘。
-   - 每一幕必須補足：
-     a. 過去 2～4 週市場原本怎麼想 / 原本在交易什麼。
-     b. 本週哪一條新聞、政策訊號或數據事件造成轉折。
-     c. 哪個市場數據驗證或抵銷這個轉折。
-     d. Miranda 應該如何用因果鏈解釋這張圖。
-     e. 多空力量如何互相抵銷或形成分歧。
-     f. Tom 應該從哪個觀眾疑問切入。
-     g. 這一幕結尾如何自然銜接下一幕。
-   - 通膨、利率、美元指數、亞洲貨幣與黃金等主題，都必須在對應 scene 補足深入總經分析邏輯。
-   - scene_dialogue_context 必須比 video_visual_scenes 更深入，也必須比 narration_outline 更完整。
-   - 下一幕相關內容應以伏筆或銜接方向呈現，讓正式對話稿可以自然延伸。
+2. video_visual_scenes
+   video_visual_scenes 是後續產圖流程的主要輸入，必須完全依照 scene_control_list 的 scene_id、scene_type、screen_title 與順序輸出。
 
-6. overview_visual / presentation_pages / video_planning：
-   保留為補充型網頁、研究摘要或相容輸出欄位；影片主流程以 scene_control_list、video_visual_scenes、narration_outline、scene_dialogue_context 為主。
-   - presentation_pages 可承載較完整的研究摘要。
-   - presentation_pages 不負責控制影片分鏡。
-   - presentation_pages 不負責控制產圖順序。
-   - video_planning 可提供標題、主旨、下週觀察問題等補充資訊.
+   每一幕只呈現一個核心市場概念，使用少量文字、必要數字與清楚圖解結構，讓觀眾快速看懂本幕市場關係。
 
-五、scene_control_list 與 scene_dialogue_context 生成規則
-1. scene_control_list 是本週影片分鏡主控清單，依本週市場主線自然安排 5～7 幕，使影片敘事順序能完整呈現主要驅動、修正因子、資產反應與下週觀察重點。
-2. video_visual_scenes、narration_outline、scene_dialogue_context 必須完全依照 scene_control_list 的數量、順序、scene_id、scene_type、screen_title 輸出。
-3. scene_control_list 決定影片實際分鏡；video_visual_scenes 是產圖流程主要輸入；narration_outline 是旁白重點素材；scene_dialogue_context 是正式 Tom / Miranda 對話稿使用的素材層。
-4. 每一幕必須以 video_visual_scenes 的圖解佈局為邊界，讓觀眾能從該幕畫面理解本幕要處理的市場概念。
-5. 最高原則是「畫面少字，語音深講」：video_visual_scenes 只呈現單一主題；scene_dialogue_context 必須提供足夠深度，支撐每幕約 60～90 秒對談。
-6. 每一幕要補足跨期敘事：
+   diagram_structure_brief 只描述本幕圖解佈局與變數關係，請使用分析圖卡語言，例如：
+   - 左側 / 右側區塊
+   - 上方壓力層 / 下方支撐層
+   - 中央震盪區間
+   - 水平對立
+   - 垂直傳導
+   - 分岔路徑
+   - 回流箭頭
+   - 支撐 / 阻力
+   - 觀察節點
+   - 關鍵數字與標籤的位置
+
+   diagram_structure_brief 的重點是讓產圖流程生成簡單、清楚、分析型的總經圖解畫面。
+
+3. overview_visual
+   overview_visual 是網頁總覽圖來源，用來整理本週主要驅動、傳導鏈、分歧點、資產驗證與觀察項目。
+
+4. web_visual_pages
+   web_visual_pages 是研究摘要式網頁圖卡，可承載比影片畫面更多資訊。
+
+5. presentation_pages
+   presentation_pages 是補充型研究摘要頁，不控制影片分鏡，也不控制產圖順序。
+"""
+
+
+DIALOGUE_LAYER_PROMPT = """
+三、語音對話素材層規則
+
+語音對話素材層負責把分析層轉成 Tom / Miranda 可展開的對話素材。這一層不是正式逐字稿，而是提供正式對話稿生成流程使用的切入角度、解釋路徑與深度分析素材。
+
+語音對話素材層負責欄位：
+- narration_outline
+- scene_dialogue_context
+
+1. narration_outline
+   narration_outline 整理每一幕要講清楚的因果、新聞線索與數據驗證，必須依照 scene_control_list 輸出。
+
+2. scene_dialogue_context
+   scene_dialogue_context 必須依照 scene_control_list 輸出，並補足每幕的對話素材：
+
    - prior_market_impression：過去 2～4 週市場原本怎麼想。
-   - this_week_catalyst：本週哪個新聞 / 政策 / 數據事件改變判斷。
-   - data_validation：本週價格或數據如何驗證或抵銷。
-   - causal_interpretation：最終因果解釋。
+   - this_week_catalyst：本週哪個新聞、政策或數據事件改變判斷。
+   - data_validation：本週市場價格或數據如何驗證或抵銷。
+   - causal_interpretation：這一幕的總經因果解釋。
    - offset_or_risk：多空力量如何抵銷、分歧或尚待確認。
-   - foreshadow_next：除最後一幕外，必須銜接 scene_control_list 中下一個 scene 的主題。
-7. 每一幕的 Tom 對話素材應從該幕視覺 scene 帶出的核心概念出發。這個核心概念可以是導讀重點、反常現象、主要矛盾、因果轉折或下一步觀察問題。
-8. tom_question_angle 應描述觀眾會如何從畫面理解本幕問題，並自然引出 Miranda 後續的總經傳導解析。它是 Tom 的切入角度與提問方向。
-9. Miranda 的 talk track 應提供清楚的解釋路徑：前因慣性 → 本週催化事件 → 數據驗證 / 抵銷 → 總經定價機制 → 下一幕伏筆。Miranda 應以新聞、政策訊號與市場數據解釋因果，而不是只列數字。
-10. 每一幕的上下邏輯必須能對應得上：
-    - scene_control_list 決定本幕在全片中的位置與任務。
-    - video_visual_scenes 負責把本幕核心概念轉成清楚的圖解佈局。
-    - narration_outline 負責整理本幕要講的重點。
-    - scene_dialogue_context 負責提供 Tom / Miranda 可展開的對話素材。
-    - foreshadow_next 必須銜接下一個 scene 的主題，讓觀眾能自然理解為什麼下一幕會接到那個變數或市場反應。
-11. 每一幕都應形成一致的敘事鏈：畫面核心概念 → Tom 的觀眾疑問 → Miranda 的因果解析 → 本幕小結或下一幕伏筆。
-12. 如果資料不足，請在 offset_or_risk 或 avoid_saying 裡標明。
-13. scene_dialogue_context 必須可以和正式對話稿生成流程的圖片輸入搭配；新聞與因果素材以此欄位為主要依據.
+   - foreshadow_next：如何自然銜接下一幕。
+   - tom_question_angle：Tom 從本幕畫面核心概念切入的提問方向。
+   - miranda_talk_track：Miranda 的解釋路徑與分析重點。
+   - miranda_deep_dive_points：可展開的 3～5 個分析重點。
 
-六、請只輸出合法 JSON，不要加 Markdown，不要加解釋文字。
+Tom 的素材應從觀眾看到畫面後會產生的疑問出發。
+Miranda 的素材應沿著「前因慣性 → 本週催化事件 → 數據驗證 / 抵銷 → 總經定價機制 → 下一幕伏筆」展開。
+"""
+
+
+ALIGNMENT_LAYER_PROMPT = """
+四、三層對齊規則
+
+scene_control_list 是影片主控。
+
+video_visual_scenes、narration_outline、scene_dialogue_context 必須完全依照 scene_control_list 的數量、順序、scene_id、scene_type、screen_title 輸出。
+
+每一幕應形成一致的敘事鏈：
+
+分析判斷
+→ 視覺圖解佈局
+→ Tom 的觀眾疑問
+→ Miranda 的因果解析
+→ 本幕小結或下一幕伏筆
+
+各層分工如下：
+- 分析層決定本幕要解釋的市場問題。
+- 視覺層把市場問題轉成圖解佈局。
+- 語音對話素材層補足畫面背後的新聞、數據、因果與伏筆。
+"""
+
+
+JSON_SCHEMA_PROMPT = """
+五、請只輸出合法 JSON，不要加 Markdown，不要加解釋文字。
 
 JSON 結構請維持並擴充如下：
 
@@ -347,7 +361,7 @@ JSON 結構請維持並擴充如下：
       "single_message": "",
       "on_screen_labels": [],
       "must_show_numbers": [],
-      "diagram_structure_brief": "請描述抽象圖解佈局：區塊位置、箭頭流向、分岔路徑、上下壓力、支撐 / 阻力、中央震盪區間或觀察節點。",
+      "diagram_structure_brief": "",
       "voiceover_link": "narration_01"
     }
   ],
@@ -368,7 +382,7 @@ JSON 結構請維持並擴充如下：
       "screen_title": "",
       "dialogue_topic": "",
       "visual_anchor": {
-        "what_the_image_shows": "請對齊本幕 diagram_structure_brief 的圖解佈局與實際可見元素。",
+        "what_the_image_shows": "",
         "must_align_with": [],
         "do_not_expand": []
       },
@@ -414,7 +428,7 @@ JSON 結構請維持並擴充如下：
     {
       "page_id": "page_01",
       "page_type": "inflation_expectation",
-      "page_title": "通膨預期訊號明不明確？",
+      "page_title": "",
       "viewer_question": "",
       "viewer_message": "",
       "blocks": [
@@ -426,68 +440,8 @@ JSON 結構請維持並擴充如下：
       ],
       "conclusion": "",
       "visual_brief": {
-        "layout": "two_signals_plus_conclusion",
-        "style_note": "日報總經傳遞圖解風格，簡潔、少字、手繪感",
-        "key_labels": []
-      }
-    },
-    {
-      "page_id": "page_02",
-      "page_type": "rate_expectation",
-      "page_title": "利率預期為何偏強？",
-      "viewer_question": "",
-      "viewer_message": "",
-      "blocks": [
-        {
-          "block_title": "",
-          "block_body": "",
-          "evidence_hint": ""
-        }
-      ],
-      "conclusion": "",
-      "visual_brief": {
-        "layout": "two_signals_plus_conclusion",
-        "style_note": "日報總經傳遞圖解風格，簡潔、少字、手繪感",
-        "key_labels": []
-      }
-    },
-    {
-      "page_id": "page_03",
-      "page_type": "dollar_index",
-      "page_title": "美元指數為何維持偏強？",
-      "viewer_question": "",
-      "viewer_message": "",
-      "blocks": [
-        {
-          "block_title": "",
-          "block_body": "",
-          "evidence_hint": ""
-        }
-      ],
-      "conclusion": "",
-      "visual_brief": {
-        "layout": "two_signals_plus_conclusion",
-        "style_note": "日報總經傳遞圖解風格，簡潔、少字、手繪感",
-        "key_labels": []
-      }
-    },
-    {
-      "page_id": "page_04",
-      "page_type": "asia_fx_gold",
-      "page_title": "亞洲貨幣與黃金為何分化？",
-      "viewer_question": "",
-      "viewer_message": "",
-      "blocks": [
-        {
-          "block_title": "",
-          "block_body": "",
-          "evidence_hint": ""
-        }
-      ],
-      "conclusion": "",
-      "visual_brief": {
-        "layout": "two_signals_plus_conclusion",
-        "style_note": "日報總經傳遞圖解風格，簡潔、少字、手繪感",
+        "layout": "",
+        "style_note": "",
         "key_labels": []
       }
     }
@@ -515,7 +469,10 @@ JSON 結構請維持並擴充如下：
     "next_week_questions": []
   }
 }
+"""
 
+
+DATA_INPUT_TEMPLATE = """
 weekly_market_series.json：
 {weekly_market_series_json}
 
@@ -531,6 +488,17 @@ macro_background_context.md：
 macro_background_context.json：
 {macro_background_context_json}
 """
+
+
+USER_PROMPT_TEMPLATE = "\n\n".join([
+    TASK_CONTEXT_PROMPT,
+    ANALYSIS_LAYER_PROMPT,
+    VISUAL_LAYER_PROMPT,
+    DIALOGUE_LAYER_PROMPT,
+    ALIGNMENT_LAYER_PROMPT,
+    JSON_SCHEMA_PROMPT,
+    DATA_INPUT_TEMPLATE,
+])
 
 
 def load_text(path: Path) -> str:
