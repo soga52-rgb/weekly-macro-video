@@ -308,6 +308,8 @@ def build_timeline_frames(
     chars_per_chunk: int,
     min_chunk_seconds: float,
     frames_dir: Path,
+    turn_pause_seconds: float,
+    scene_pause_seconds: float,
 ) -> Tuple[List[Tuple[Path, float]], Dict[str, Any]]:
     turns = manifest.get("turns", [])
     if not isinstance(turns, list) or not turns:
@@ -316,6 +318,8 @@ def build_timeline_frames(
     frame_items: List[Tuple[Path, float]] = []
     scene_missing: List[str] = []
     total_duration = 0.0
+    pause_added_seconds = 0.0
+    pause_event_count = 0
 
     for turn_index, turn in enumerate(turns, start=1):
         scene_id = str(turn.get("scene_id", ""))
@@ -358,10 +362,35 @@ def build_timeline_frames(
             frame_items.append((frame_path, chunk_duration))
             total_duration += chunk_duration
 
+        # Step 95 full_dialogue.wav includes short silences between turns and scenes.
+        # Add matching freeze-frames so the visual timeline stays aligned with audio.
+        if turn_index < len(turns):
+            next_turn = turns[turn_index]
+            next_scene_id = str(next_turn.get("scene_id", ""))
+            pause_duration = scene_pause_seconds if next_scene_id and next_scene_id != scene_id else turn_pause_seconds
+            if pause_duration > 0:
+                pause_frame_path = frames_dir / f"frame_{turn_index:03d}_pause_{speaker}.jpg"
+                last_subtitle = chunks[-1] if chunks else ""
+                create_frame(
+                    output_path=pause_frame_path,
+                    scene_image_path=scene_image,
+                    speaker=speaker,
+                    subtitle_text=last_subtitle,
+                    scene_title=scene_title,
+                )
+                frame_items.append((pause_frame_path, pause_duration))
+                total_duration += pause_duration
+                pause_added_seconds += pause_duration
+                pause_event_count += 1
+
     info = {
         "frame_count": len(frame_items),
         "scene_missing": sorted(set(scene_missing)),
         "timeline_duration_seconds": round(total_duration, 2),
+        "pause_added_seconds": round(pause_added_seconds, 2),
+        "pause_event_count": pause_event_count,
+        "turn_pause_seconds": round(turn_pause_seconds, 3),
+        "scene_pause_seconds": round(scene_pause_seconds, 3),
     }
     return frame_items, info
 
@@ -437,6 +466,9 @@ def main() -> None:
 
     manifest = load_json(manifest_path)
     dialogue = load_json(dialogue_path)
+    tts_meta = manifest.get("meta") if isinstance(manifest.get("meta"), dict) else {}
+    turn_pause_seconds = float(tts_meta.get("turn_pause_ms", 0) or 0) / 1000.0
+    scene_pause_seconds = float(tts_meta.get("scene_pause_ms", 0) or 0) / 1000.0
 
     final_dir = week_dir / "final"
     frames_dir = final_dir / "_frames_96"
@@ -447,6 +479,8 @@ def main() -> None:
     print(f"[INFO] Week dir: {week_dir}")
     print(f"[INFO] Subtitle source: {args.subtitle_source}")
     print(f"[INFO] Full audio: {full_audio}")
+    print(f"[INFO] Turn pause seconds: {turn_pause_seconds:.3f}")
+    print(f"[INFO] Scene pause seconds: {scene_pause_seconds:.3f}")
     print(f"[INFO] Tom avatar exists: {(ASSETS_DIR / 'tom.png').exists()}")
     print(f"[INFO] Miranda avatar exists: {(ASSETS_DIR / 'miranda.png').exists()}")
 
@@ -457,6 +491,8 @@ def main() -> None:
         chars_per_chunk=args.chars_per_chunk,
         min_chunk_seconds=args.min_chunk_seconds,
         frames_dir=frames_dir,
+        turn_pause_seconds=turn_pause_seconds,
+        scene_pause_seconds=scene_pause_seconds,
     )
 
     concat_file = frames_dir / "slides.txt"
@@ -481,6 +517,8 @@ def main() -> None:
             "fps": FPS,
             "subtitle_source": args.subtitle_source,
             "add_waveform": parse_bool(args.add_waveform, default=True),
+            "turn_pause_seconds": round(turn_pause_seconds, 3),
+            "scene_pause_seconds": round(scene_pause_seconds, 3),
         },
         "inputs": {
             "dialogue_script": safe_rel(dialogue_path, ROOT_DIR),
