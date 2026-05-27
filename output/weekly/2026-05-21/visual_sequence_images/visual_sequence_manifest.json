@@ -7,12 +7,12 @@
   },
   "images": [
     {
-      "visual_id": "scene_01",
-      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/scene_01.png",
+      "visual_id": "scene_02",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/visual_sequence_images/scene_02.png",
       "source_layer": "video_visual_scenes",
-      "source_segment_id": "scene_01",
-      "visual_title": "本週總經主線：鷹派定價 vs 避險分歧",
-      "visual_purpose": "利率創高與油價崩跌同時發生，市場邏輯出現分裂。",
+      "source_segment_id": "scene_02",
+      "visual_title": "利率預期：Fed重啟升息選項",
+      "visual_purpose": "30年期美債殖利率突破5.1%，市場重新定價政策尾部風險。",
       "status": "created_or_existing"
     }
   ],
