@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "source": "video_dialogue_script.json + tts_audio_manifest.json + scene images + avatars",
+    "purpose": "Step 96 final video composition manifest",
+    "week_range": "2026-05-15 to 2026-05-21",
+    "video_width": 1280,
+    "video_height": 720,
+    "fps": 30,
+    "subtitle_source": "spoken",
+    "add_waveform": true
+  },
+  "inputs": {
+    "dialogue_script": "output/weekly/2026-05-21/video_dialogue_script.json",
+    "tts_manifest": "output/weekly/2026-05-21/tts_audio_manifest.json",
+    "full_audio": "output/weekly/2026-05-21/tts_audio/full_dialogue.wav",
+    "tom_avatar": "assets/tom.png",
+    "miranda_avatar": "assets/miranda.png"
+  },
+  "outputs": {
+    "video_file": "output/weekly/2026-05-21/final/weekly_macro_video.mp4",
+    "duration_seconds": 427.94
+  },
+  "timeline": {
+    "frame_count": 56,
+    "scene_missing": [],
+    "timeline_duration_seconds": 421.94
+  },
+  "tts_meta": {
+    "source": "video_dialogue_script.json",
+    "purpose": "TTS audio manifest for Step 96 video composition",
+    "week_range": "2026-05-15 to 2026-05-21",
+    "tts_model": "gemini-3.1-flash-tts-preview",
+    "tom_voice": "Charon",
+    "miranda_voice": "Sulafat",
+    "dry_run": false,
+    "turn_pause_ms": 180,
+    "scene_pause_ms": 700,
+    "turn_count": 24,
+    "scene_count": 6,
+    "full_duration_seconds": 427.94
+  },
+  "dialogue_title": "Fed重提升息嚇壞債市！油價重挫為何無法拯救通膨預期？"
+}
