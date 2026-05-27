@@ -51,8 +51,31 @@ SYSTEM_PROMPT = """
 你是專業機構級總經影片編劇與台詞設計師，負責把 Step 91 已經分析好的總經 Facts、Step 92 產出的 scene 圖片，轉譯成 Tom（主持人）與 Miranda（首席總經策略師）可直接進 TTS 的正式雙人逐句對談稿。
 
 一、角色定位
-- Tom（主持人）：代表螢幕前具備基礎財經知識的觀眾。他負責看著圖表，拿「過去 2～4 週市場既定印象」對比「本週圖表或數據呈現的反常異象」，問出自然、清楚、尖銳但不破梗的問題。
-- Miranda（首席總經策略師）：宏觀解題者。她負責指著畫面，用新聞事件、政策訊號與市場數據拆解因果，不乾念資料，不用數據解釋數據，而是說明哪條新聞線改變了預期、哪些因子正在抵銷。
+- Tom（主持人）：
+  Tom 代表螢幕前具備基礎財經知識的觀眾，也是當前 scene 圖片的導讀者；他不是情緒化財經網紅，也不是單純提問機器。
+
+  Tom 的任務是先看著當前 scene 圖片，用一句話指出畫面中實際可見、最醒目的視覺元素，帶出本幕的核心概念。這個核心概念可以是導讀重點、反常現象、主要矛盾、因果轉折或下一步觀察問題，但必須圍繞本幕主題，不要為了製造張力而硬把每一幕寫成衝突。
+
+  Tom 可以有自己的觀察與困惑，但不能提前替 Miranda 下結論。Tom 的問題要自然、清楚、尖銳但不破梗，不要發散到下一幕或整週總結。
+
+  Tom 的轉場應靠追問、承接或自然感想，不使用章節標題式轉場，不喊段落名稱，不使用播報式語句。
+
+  Tom 的語氣可以口語化，但必須內斂、平鋪直敘、專業節制。他可以表達「困惑、反直覺、矛盾」，但不能使用驚嚇、煽動、網路化或投資建議式語氣。
+
+  Tom 不做買賣建議、不引導進出場、不使用「押注」、「可以進場」、「多看少做」、「最好保持彈性」、「投資朋友要注意」等操作式說法。
+
+- Miranda（首席總經策略師）：
+  Miranda 是首席總經策略師，語氣接近機構策略會議，而不是社群財經解說。
+
+  Miranda 的任務是回答 Tom 在本幕帶出的核心概念或問題，並指著畫面，用新聞事件、政策訊號與市場數據拆解因果。
+
+  Miranda 不乾念資料，也不用數據解釋數據。她要說明哪條新聞線改變了預期、哪些因子正在抵銷，以及市場為什麼會重新定價。
+
+  Miranda 的回答必須包含「前因慣性 → 本週催化事件 → 市場數據驗證 / 抵銷 → 總經定價機制 → 下一幕伏筆」。
+
+  Miranda 要保留不確定空間，不說市場一定會如何，不預測單一方向，不提供操作建議。
+
+  Miranda 可以在段尾銜接下一幕，但只能留一個自然伏筆，不可提前把下一幕完整分析講完。
 
 二、事實與圖像邊界
 1. 畫面少字，語音深講：scene 圖片只是視覺錨點；正式台詞必須把 scene_dialogue_context 裡的 prior_market_impression、this_week_catalyst、data_validation、causal_interpretation、offset_or_risk、tom_question_angle、miranda_talk_track 轉成自然對談。
@@ -71,10 +94,9 @@ SYSTEM_PROMPT = """
 6. 如果圖片只是概念插圖，沒有明確數據或結構，Tom 只需用一句自然觀察帶入，例如「這張圖像是在提醒我們，本週市場不是單一路徑，而是幾個力量同時作用。」不要過度逐物件解釋。
 
 四、語氣與合規邊界
-1. 口吻控制：台灣專業財經節目口語，清楚、有節奏、有洞察，但避免過度戲劇化或網路化詞彙。
-2. 投資建議邊界：本節目只做總經事件、資產反應與市場定價邏輯的說明，不提供買賣建議、進出場判斷、報酬承諾或單一方向押注。避免使用「應該買/賣」、「可以進場」、「不要押注」、「多看少做」等操作式語句；若需要收尾，改用「後續仍需觀察」、「持續追蹤關鍵訊號」、「等待更多數據驗證」等中性表述。
-3. 主持人口吻：Tom 可以口語化、自然提問，但要維持內斂、平鋪直敘與專業節制；可以表達「困惑、反直覺、矛盾」，但不要用過度驚嚇、煽動、網路化或投資建議式語氣。
-4. 硬性避免詞：不得使用「精神分裂」、「核彈級」、「尚方寶劍」、「崩盤」、「全面失守」、「躺平任人捶打」、「免死金牌」、「哀鴻遍野」等會破壞機構級節目質感的詞。
+1. 全片口吻：台灣專業財經節目口語，清楚、有節奏、有洞察，但保持冷靜與專業，不使用過度戲劇化或網路化詞彙。
+2. 投資建議邊界：本節目只做總經事件、資產反應與市場定價邏輯的說明，不提供買賣建議、進出場判斷、報酬承諾或單一方向押注。若需要收尾，使用「後續仍需觀察」、「持續追蹤關鍵訊號」、「等待更多數據驗證」等中性表述。
+3. 硬性避免詞：不得使用「精神分裂」、「核彈級」、「尚方寶劍」、「崩盤」、「全面失守」、「躺平任人捶打」、「免死金牌」、「哀鴻遍野」等會破壞機構級節目質感的詞。
 
 五、對話節奏與結構
 1. 每個 scene 優先產生 3～4 個 speaker_turns，避免只用 Tom 一問、Miranda 一答就結束。
@@ -375,19 +397,37 @@ def build_compact_scenes(summary: Dict[str, Any], week_dir: Path, use_image_inpu
             continue
         scene_id = str(scene.get("scene_id", ""))
         image_path = find_scene_image(week_dir, scene_id)
-        compact.append({
+        has_actual_image = bool(image_path and use_image_input)
+
+        scene_payload = {
             "scene_id": scene_id,
             "scene_type": scene.get("scene_type", ""),
             "screen_title": scene.get("screen_title", ""),
             "single_message": scene.get("single_message", ""),
-            "on_screen_labels": scene.get("on_screen_labels", []),
-            "must_show_numbers": scene.get("must_show_numbers", []),
-            "visual_metaphor": scene.get("visual_metaphor", ""),
             "image_file": str(image_path.relative_to(week_dir)) if image_path else "",
-            "image_available": bool(image_path and use_image_input),
+            "image_available": has_actual_image,
             "scene_dialogue_context": dialogue_context.get(scene_id, {}),
             "narration_outline": narration.get(scene_id, {}),
-        })
+        }
+
+        if has_actual_image:
+            # When the real scene image is available, do not feed Step 91 visual metadata
+            # that can override or distort what is actually visible in the image.
+            scene_payload.update({
+                "on_screen_labels": [],
+                "must_show_numbers": [],
+                "visual_metaphor": "",
+                "visual_metadata_policy": "actual image is authoritative; Step 91 visual metadata omitted when image is available",
+            })
+        else:
+            scene_payload.update({
+                "on_screen_labels": scene.get("on_screen_labels", []),
+                "must_show_numbers": scene.get("must_show_numbers", []),
+                "visual_metaphor": scene.get("visual_metaphor", ""),
+                "visual_metadata_policy": "no image available; Step 91 visual metadata used as fallback guidance",
+            })
+
+        compact.append(scene_payload)
     return compact
 
 
