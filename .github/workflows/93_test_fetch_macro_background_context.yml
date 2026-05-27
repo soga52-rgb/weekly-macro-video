@@ -20,6 +20,9 @@ on:
         required: false
         default: "40"
 
+permissions:
+  contents: write
+
 jobs:
   fetch-macro-background-context:
     runs-on: ubuntu-latest
@@ -47,6 +50,22 @@ jobs:
             python scripts/93_test_fetch_macro_background_context.py --lookback-days "${{ inputs.lookback_days }}" --max-items "${{ inputs.max_items }}"
           fi
 
+      - name: Commit macro background context
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add output/weekly/**/macro_background_context.json || true
+          git add output/weekly/**/macro_background_context.md || true
+          git add data/macro_background_raw.json || true
+
+          if git diff --cached --quiet; then
+            echo "No macro background context changes to commit."
+          else
+            git commit -m "Test macro background context"
+            git push
+          fi
+
       - name: Upload macro background output artifact
         uses: actions/upload-artifact@v4
         with:
@@ -55,3 +74,4 @@ jobs:
             output/weekly/**/macro_background_context.json
             output/weekly/**/macro_background_context.md
             data/macro_background_raw.json
+          if-no-files-found: warn
