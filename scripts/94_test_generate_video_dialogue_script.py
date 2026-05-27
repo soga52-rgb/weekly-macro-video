@@ -504,7 +504,7 @@ def call_gemini_json(parts: List[Dict[str, Any]], model: str, api_key: str, temp
 
 
 def estimate_seconds(text: str) -> int:
-    return max(3, min(32, round(len(text or "") / 5.2)))
+    return max(3, min(50, round(len(text or "") / 4.7)))
 
 
 def short_subtitle(text: str, max_len: int = 25) -> str:
