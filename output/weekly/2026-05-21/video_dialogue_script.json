@@ -5,7 +5,7 @@
     "week_range": "2026-05-15 to 2026-05-21",
     "scene_count": 6,
     "used_image_input": true,
-    "dialogue_model_note": "Strictly aligned with actual images, avoided restricted words, maintained professional tone, and ensured clear causal links."
+    "dialogue_model_note": "Strictly adhered to visual anchors, avoided forbidden words, maintained professional tone, and ensured proper turn-taking and length constraints."
   },
   "title": "Fed重提升息嚇壞債市！油價重挫為何無法拯救通膨預期？",
   "opening_hook": "油價大跌，照理說通膨壓力減輕，債券殖利率應該往下掉對吧？但這週，30年期美債殖利率卻創下了19年新高！市場到底在怕什麼？",
@@ -31,9 +31,9 @@
       "single_message": "市場邏輯斷裂：利率因Fed轉鷹創高，油價卻因地緣緩和重挫。",
       "visual_anchor": {
         "visible_elements_used": [
-          "天平",
-          "Fed建築",
-          "油桶"
+          "天平兩端",
+          "左側代表Fed的建築與創高的長端利率",
+          "右側下跌的油桶與和平鴿"
         ],
         "must_align_with": [
           "Fed重提升息",
@@ -44,8 +44,8 @@
         ]
       },
       "source_material_used": [
-        "macro_storyline",
-        "scene_dialogue_context"
+        "scene_dialogue_context.scene_01",
+        "transmission_diagnosis.sync_checks"
       ],
       "speaker_turns": [
         {
@@ -53,57 +53,42 @@
           "speaker": "Tom",
           "display_name": "Tom",
           "role_label": "主持人",
-          "spoken_text": "歡迎收看本週總經解碼。過去兩到四週，市場的共識很明確，通膨很黏，降息要延後，大家都在交易「再通膨」的劇本。但這週看盤真的會讓人有點錯亂。就像畫面上這個天平，一端是Fed重提升息嚇得長端利率創高，另一端卻是油價重挫跌破100美元。Miranda，這兩個訊號不是互相矛盾嗎？",
-          "subtitle_text": "這週市場邏輯斷裂，利率創高但油價卻重挫？",
+          "spoken_text": "這週的市場走勢真的讓人覺得充滿矛盾。我們看畫面上這個天平，一端是代表Fed的建築和創高的長端利率，另一端卻是重挫的油桶。這兩個訊號不是互相衝突的嗎？",
+          "subtitle_text": "天平兩端力量拉扯，利率創高與油價重挫同時發生。",
           "speaker_label_text": "Tom｜主持人",
-          "estimated_seconds": 33,
-          "news_reference": [
-            "Fed會議紀錄重啟升息討論",
-            "美伊和平協議傳聞"
-          ],
-          "visual_reference": "畫面中央的天平，左側Fed建築與右側油桶的對比"
+          "estimated_seconds": 16,
+          "news_reference": [],
+          "visual_reference": "畫面中央的天平，以及兩端的Fed建築與油桶"
         },
         {
           "turn_id": "scene_01_turn_02",
           "speaker": "Miranda",
           "display_name": "Miranda",
           "role_label": "總經策略師",
-          "spoken_text": "沒錯，Tom，這就是本週市場最核心的邏輯斷裂。過去一個月，油價上漲和利率上升是綁在一起的，因為大家怕通膨。但這週，這兩個變數脫鉤了。Fed會議紀錄裡那句不排除升息選項，直接把長端利率推上了天；但同一時間，美伊和平協議的傳聞，卻像一盆冷水澆熄了原油市場的地緣溢價。",
-          "subtitle_text": "Fed偏鷹推升利率，和平傳聞澆熄原油溢價。",
+          "spoken_text": "沒錯，Tom，這就是本週市場最核心的邏輯斷裂。過去一個月，大家都在交易再通膨，油價和利率是同向上升的。但這週，Fed會議紀錄重啟了升息討論，直接把長端利率推高；同時，美伊和平協議的傳聞卻澆熄了原油的地緣溢價。",
+          "subtitle_text": "Fed鷹派訊號推升利率，美伊和平傳聞澆熄原油溢價。",
           "speaker_label_text": "Miranda｜總經策略師",
-          "estimated_seconds": 33,
+          "estimated_seconds": 22,
           "news_reference": [
             "Fed會議紀錄重啟升息討論",
             "美伊和平協議傳聞"
           ],
-          "visual_reference": "天平兩端的具體事件標籤"
+          "visual_reference": "天平左側的鷹派政策預期與右側的地緣避險情緒"
         },
         {
           "turn_id": "scene_01_turn_03",
           "speaker": "Tom",
           "display_name": "Tom",
           "role_label": "主持人",
-          "spoken_text": "所以這代表市場原本單一的通膨驅動邏輯被打破了？現在主導市場的已經不是單純的通膨數據，而是政策預期跟地緣消息在互相拉扯了嗎？",
-          "subtitle_text": "單一通膨邏輯被打破，政策與消息互相拉扯？",
+          "spoken_text": "所以這張圖上的天平，其實反映了市場現在被政策恐慌和地緣消息這兩股完全不同的力量拉扯。既然油價大跌是打破原本劇本的關鍵，我們是不是該先來看看能源市場發生了什麼事？",
+          "subtitle_text": "政策恐慌與地緣消息拉扯，油價大跌成破局關鍵。",
           "speaker_label_text": "Tom｜主持人",
-          "estimated_seconds": 15,
+          "estimated_seconds": 18,
           "news_reference": [],
           "visual_reference": "天平下方的「資產結構性分歧」標籤"
-        },
-        {
-          "turn_id": "scene_01_turn_04",
-          "speaker": "Miranda",
-          "display_name": "Miranda",
-          "role_label": "總經策略師",
-          "spoken_text": "是的。現在利率上升不是因為大家覺得通膨會失控，而是因為Fed的政策態度比想像中更硬。政策面的緊縮預期與地緣政治的降溫在這裡互相抵銷。既然油價大跌是打破再通膨劇本的關鍵，我們就先來看看能源市場到底發生了什麼事。",
-          "subtitle_text": "政策緊縮與地緣降溫互相抵銷，先看能源市場。",
-          "speaker_label_text": "Miranda｜總經策略師",
-          "estimated_seconds": 26,
-          "news_reference": [],
-          "visual_reference": "畫面右側的油桶與通膨預期降溫"
         }
       ],
-      "scene_summary": "點出本週市場出現了罕見的邏輯分歧，利率與油價走勢脫鉤。",
+      "scene_summary": "點出本週市場出現了罕見的邏輯分歧，利率因為Fed轉鷹而創高，油價卻大跌。",
       "avoid_saying": [
         "通膨危機已經解除",
         "精神分裂",
@@ -123,9 +108,9 @@
       "single_message": "美伊和平協議傳聞發酵，WTI原油重挫跌破100美元。",
       "visual_anchor": {
         "visible_elements_used": [
+          "WTI原油走勢圖",
           "陡峭向下的階梯",
-          "WTI 105到97",
-          "和平鴿"
+          "背景的和平鴿與談判桌"
         ],
         "must_align_with": [
           "WTI原油重挫",
@@ -136,8 +121,8 @@
         ]
       },
       "source_material_used": [
-        "transmission_diagnosis",
-        "scene_dialogue_context"
+        "scene_dialogue_context.scene_02",
+        "transmission_diagnosis.inflation_expectation"
       ],
       "speaker_turns": [
         {
@@ -145,55 +130,55 @@
           "speaker": "Tom",
           "display_name": "Tom",
           "role_label": "主持人",
-          "spoken_text": "看到畫面上WTI原油呈現陡峭向下的階梯，從105塊直接摔到97塊，跌破100美元大關，這跌幅真的很驚人。Miranda，這純粹是因為背景這隻和平鴿代表的美伊和平協議傳聞嗎？這對我們最擔心的通膨來說，是不是個好消息？",
-          "subtitle_text": "WTI原油跌破100美元，通膨壓力減輕了嗎？",
+          "spoken_text": "看到畫面上這張WTI原油走勢圖，從105塊直接摔到97塊，這向下的階梯跌幅真的很驚人。Miranda，這純粹是因為背景畫的這個和平鴿，也就是美伊和平協議的傳聞嗎？",
+          "subtitle_text": "WTI原油重挫跌破百元，美伊和平傳聞是主因嗎？",
           "speaker_label_text": "Tom｜主持人",
-          "estimated_seconds": 27,
+          "estimated_seconds": 18,
           "news_reference": [
             "美伊和平協議傳聞"
           ],
-          "visual_reference": "陡峭向下的折線與背景的和平鴿"
+          "visual_reference": "WTI原油走勢圖上從105到97的向下箭頭與背景的和平鴿"
         },
         {
           "turn_id": "scene_02_turn_02",
           "speaker": "Miranda",
           "display_name": "Miranda",
           "role_label": "總經策略師",
-          "spoken_text": "這絕對是本週商品市場最大的震撼彈。Tom，你要知道，之前油價撐在100塊以上，裡面有很大一部分是害怕戰爭擴大的保險費。當美伊可能坐下來談的消息一出來，這筆保險費瞬間就被市場抽走了。",
-          "subtitle_text": "和平協議傳聞發酵，市場抽走戰爭溢價。",
+          "spoken_text": "這絕對是本週商品市場最大的震撼彈。之前油價撐在100塊以上，很大一部分是害怕戰爭擴大的保險費。當美伊可能坐下來談的消息一出來，這筆戰爭溢價瞬間就被市場抽走了。",
+          "subtitle_text": "美伊談判消息傳出，市場瞬間抽走原油戰爭溢價。",
           "speaker_label_text": "Miranda｜總經策略師",
-          "estimated_seconds": 23,
+          "estimated_seconds": 19,
           "news_reference": [
-            "美伊和平協議傳聞"
+            "美伊和平協議傳聞引發避險情緒消退"
           ],
-          "visual_reference": "向下的箭頭與地緣降溫標籤"
+          "visual_reference": "圖上的「美伊和平傳聞」與「地緣降溫」標籤"
         },
         {
           "turn_id": "scene_02_turn_03",
           "speaker": "Tom",
           "display_name": "Tom",
           "role_label": "主持人",
-          "spoken_text": "那這樣一來，未來的通膨壓力是不是就大幅減輕了？Fed是不是也能稍微鬆一口氣，不用再那麼緊繃了？",
-          "subtitle_text": "通膨壓力減輕，Fed能鬆一口氣嗎？",
+          "spoken_text": "那這樣看來，能源價格大跌，對我們最擔心的通膨數據來說，應該會有明顯的降溫作用吧？這是不是個好消息？",
+          "subtitle_text": "能源價格大跌，是否意味著通膨壓力明顯降溫？",
           "speaker_label_text": "Tom｜主持人",
           "estimated_seconds": 12,
           "news_reference": [],
-          "visual_reference": "右下角削弱再通膨敘事的標籤"
+          "visual_reference": "右下角洩氣的通膨預期氣球"
         },
         {
           "turn_id": "scene_02_turn_04",
           "speaker": "Miranda",
           "display_name": "Miranda",
           "role_label": "總經策略師",
-          "spoken_text": "從總經角度來看，能源價格下跌會直接壓低未來的名目通膨數據，這當然是個好消息。但我們不能高興得太早，因為這只是供給面的風險解除，美國國內的服務業通膨依然很頑固。這也是為什麼，即便油價跌成這樣，債券市場的殖利率不但沒掉，反而還創下新高。我們得看看Fed到底說了什麼。",
-          "subtitle_text": "僅是能源端降溫，服務業通膨依然頑固。",
+          "spoken_text": "從總經角度來看，能源價格下跌確實會直接壓低未來的名目通膨數據。但我們不能高興得太早，因為這只是供給面的風險解除，美國國內的服務業通膨依然很頑固。這也是為什麼Fed官員依然不敢掉以輕心。",
+          "subtitle_text": "能源跌價壓低名目通膨，但服務業通膨依然頑固。",
           "speaker_label_text": "Miranda｜總經策略師",
-          "estimated_seconds": 33,
+          "estimated_seconds": 21,
           "news_reference": [],
-          "visual_reference": "整體油價下跌的趨勢圖"
+          "visual_reference": "整體向下的趨勢線"
         }
       ],
-      "scene_summary": "解釋油價大跌的原因及其對通膨預期的影響，並區分能源通膨與核心通膨。",
+      "scene_summary": "解釋油價大跌的原因及其對通膨預期的影響，強調只是供給面降溫。",
       "avoid_saying": [
         "油價下跌代表Fed馬上會降息",
         "核心通膨也降溫了",
@@ -214,9 +199,9 @@
       "single_message": "Fed會議紀錄重啟「升息」選項，30年期美債創19年新高。",
       "visual_anchor": {
         "visible_elements_used": [
-          "Fed建築",
-          "紅色折線向上",
-          "US10Y 4.66%"
+          "紅色的折線圖向上飆升",
+          "US10Y: 4.66% 的標籤",
+          "左上角30年期美債創高的圖示"
         ],
         "must_align_with": [
           "30年期美債破5.1%",
@@ -227,8 +212,8 @@
         ]
       },
       "source_material_used": [
-        "transmission_diagnosis",
-        "scene_dialogue_context"
+        "scene_dialogue_context.scene_03",
+        "transmission_diagnosis.rate_expectation"
       ],
       "speaker_turns": [
         {
@@ -236,61 +221,58 @@
           "speaker": "Tom",
           "display_name": "Tom",
           "role_label": "主持人",
-          "spoken_text": "這就是最讓人困惑的地方了。油價明明跌了，通膨壓力稍微減輕，結果畫面上這條紅色折線卻一路往上衝，30年期美債殖利率居然突破5.1%，創下19年新高！Miranda，Fed會議紀錄裡到底寫了什麼，讓債券市場嚇成這樣？難道真的要重啟升息了嗎？",
-          "subtitle_text": "油價跌但長債殖利率狂飆，Fed說了什麼？",
+          "spoken_text": "這就是最讓人覺得反直覺的地方了。油價明明跌了，但我們看這張圖，代表利率的紅色折線卻是一路往上衝，30年期美債殖利率甚至創下19年新高。Miranda，Fed會議紀錄裡到底寫了什麼，讓債券市場反應這麼劇烈？",
+          "subtitle_text": "油價下跌利率卻狂飆，Fed會議紀錄引發債市震盪。",
           "speaker_label_text": "Tom｜主持人",
-          "estimated_seconds": 30,
-          "news_reference": [
-            "Fed會議紀錄顯示多數官員主張將升息列入選項",
-            "Fed會議紀錄重啟升息討論"
-          ],
-          "visual_reference": "Fed建築前大幅向上的紅色折線"
+          "estimated_seconds": 22,
+          "news_reference": [],
+          "visual_reference": "中央向上飆升的紅色折線與左上角30年期美債標籤"
         },
         {
           "turn_id": "scene_03_turn_02",
           "speaker": "Miranda",
           "display_name": "Miranda",
           "role_label": "總經策略師",
-          "spoken_text": "Tom，這就是市場預期被粗暴打碎的結果。大家原本以為Powell之前排除了升息的可能性，就等於吃了定心丸。結果會議紀錄一翻開，裡面赫然寫著多數官員認為應該保留升息選項。這對債市來說是極大的利空。",
-          "subtitle_text": "會議紀錄保留升息選項，打破市場預期。",
+          "spoken_text": "這就是市場預期被打破的結果。大家原本以為Powell之前說過下一步不太可能是升息，就等於拿到了不升息的保證。結果會議紀錄一翻開，裡面赫然寫著多數官員認為應該保留升息選項。這對債市來說是極大的震撼。",
+          "subtitle_text": "會議紀錄保留升息選項，打破市場不升息預期。",
           "speaker_label_text": "Miranda｜總經策略師",
-          "estimated_seconds": 24,
+          "estimated_seconds": 22,
           "news_reference": [
             "Fed會議紀錄顯示多數官員主張將升息列入選項",
             "Fed會議紀錄重啟升息討論"
           ],
-          "visual_reference": "畫面右側的Fed升息選項標籤"
+          "visual_reference": "右側的「Fed升息選項」與官員圖示"
         },
         {
           "turn_id": "scene_03_turn_03",
           "speaker": "Tom",
           "display_name": "Tom",
           "role_label": "主持人",
-          "spoken_text": "所以投資人現在是要求更高的補償，來應對這種政策的不確定性嗎？這是不是代表市場定價的核心已經完全改變了？",
-          "subtitle_text": "投資人要求更高補償，定價核心改變了嗎？",
+          "spoken_text": "所以對於買長天期債券的投資人來說，現在最擔心的，其實就是這種政策方向的突發改變，對嗎？",
+          "subtitle_text": "長債投資人擔憂政策方向突變，要求更高期限溢價。",
           "speaker_label_text": "Tom｜主持人",
-          "estimated_seconds": 13,
+          "estimated_seconds": 10,
           "news_reference": [],
-          "visual_reference": "畫面左側的30年期美債創高標籤"
+          "visual_reference": "左下角的「鷹派指引推升美債殖利率」標籤"
         },
         {
           "turn_id": "scene_03_turn_04",
           "speaker": "Miranda",
           "display_name": "Miranda",
           "role_label": "總經策略師",
-          "spoken_text": "完全正確。買30年期長債的人，最怕的就是政策方向的不確定性。當Fed連升息這個詞都敢重新放回桌面上，投資人當然會要求更高的期限溢價來保護自己。所以這次利率創高，驅動力已經從數據面轉向政策指引。不過，利率飆得這麼高，按理說美元應該要一飛衝天了，但我們看美元指數，似乎遇到了一些阻力。",
-          "subtitle_text": "驅動力轉向政策指引，但美元卻遇阻力？",
+          "spoken_text": "完全正確。當Fed連升息這個詞都敢重新放回桌面上，投資人當然會要求更高的期限溢價來保護自己。所以這次長端利率創高，不是因為今天的通膨數據有多糟，而是市場在為未來可能更激進的Fed重新定價。",
+          "subtitle_text": "長端利率創高反映市場為更激進的政策重新定價。",
           "speaker_label_text": "Miranda｜總經策略師",
-          "estimated_seconds": 35,
+          "estimated_seconds": 21,
           "news_reference": [],
-          "visual_reference": "下方結構性分歧的標籤"
+          "visual_reference": "中央的US10Y: 4.66%標籤"
         }
       ],
-      "scene_summary": "解釋為何在油價下跌時，長端利率反而飆升，指出市場對Fed長期政策路徑的重新定價。",
+      "scene_summary": "解釋為何在油價下跌時，長端利率反而飆升，主因是Fed會議紀錄重啟升息選項。",
       "avoid_saying": [
         "Fed下個月一定會升息",
-        "精神分裂",
         "核彈級",
+        "精神分裂",
         "躺平任人捶打",
         "崩盤",
         "全面失守",
@@ -306,9 +288,9 @@
       "single_message": "利差優勢支撐美元，但房市疲軟引發的成長隱憂限制了漲幅。",
       "visual_anchor": {
         "visible_elements_used": [
-          "美元符號",
-          "上方烏雲",
-          "下方箱子"
+          "中間的美元符號",
+          "上方代表成長擔憂的烏雲",
+          "下方代表利差優勢的箱子"
         ],
         "must_align_with": [
           "利差支撐",
@@ -320,8 +302,8 @@
         ]
       },
       "source_material_used": [
-        "macro_storyline",
-        "scene_dialogue_context"
+        "scene_dialogue_context.scene_04",
+        "macro_storyline.revision_or_noise"
       ],
       "speaker_turns": [
         {
@@ -329,55 +311,53 @@
           "speaker": "Tom",
           "display_name": "Tom",
           "role_label": "主持人",
-          "spoken_text": "Miranda，這裡我就看不懂了。既然美債殖利率都創19年新高了，照理說美元指數應該要跟著噴出才對啊？為什麼畫面上DXY只在99.3附近震盪，好像被上面這片寫著「成長擔憂」的烏雲給壓住了一樣？",
-          "subtitle_text": "利率創高美元卻沒噴出，被成長擔憂壓住？",
+          "spoken_text": "既然美債殖利率都創19年新高了，照理說美元指數應該要跟著噴出才對。但看這張圖，美元似乎被上下兩股力量夾擊，DXY只在99.3附近震盪。下方是利差優勢，但上方這片烏雲代表的成長擔憂，是怎麼拖住美元的？",
+          "subtitle_text": "美債殖利率創高，美元為何僅在高位震盪？",
           "speaker_label_text": "Tom｜主持人",
-          "estimated_seconds": 24,
-          "news_reference": [
-            "房市數據疲軟引發成長降溫擔憂"
-          ],
-          "visual_reference": "美元符號上方的烏雲與成長擔憂標籤"
+          "estimated_seconds": 23,
+          "news_reference": [],
+          "visual_reference": "畫面中央被烏雲和箱子夾擊的美元符號"
         },
         {
           "turn_id": "scene_04_turn_02",
           "speaker": "Miranda",
           "display_name": "Miranda",
           "role_label": "總經策略師",
-          "spoken_text": "這是一個非常敏銳的觀察，Tom。這張圖上的上下拉扯，完美解釋了美元現在的處境。底下的支撐力量當然是極端高利率帶來的利差優勢；但上面那片烏雲，則是經濟成長的隱憂。本週美國公佈的房市數據意外疲軟，這讓外匯市場的交易員開始警覺。",
-          "subtitle_text": "利差提供支撐，但房市疲軟引發成長隱憂。",
+          "spoken_text": "這是一個非常敏銳的觀察。向上的力量當然是極端高利率帶來的利差優勢。但上方那片烏雲，反映的是本週美國意外疲軟的房市數據。這讓外匯市場開始警覺，如果Fed把利率維持在這麼高的水準，美國經濟真的撐得住嗎？",
+          "subtitle_text": "高利率帶來利差優勢，但房市疲軟引發經濟隱憂。",
           "speaker_label_text": "Miranda｜總經策略師",
-          "estimated_seconds": 28,
+          "estimated_seconds": 22,
           "news_reference": [
             "房市數據疲軟引發成長降溫擔憂"
           ],
-          "visual_reference": "下方利差優勢的箱子與上方烏雲的對比"
+          "visual_reference": "上方的烏雲與「成長擔憂」標籤"
         },
         {
           "turn_id": "scene_04_turn_03",
           "speaker": "Tom",
           "display_name": "Tom",
           "role_label": "主持人",
-          "spoken_text": "意思是說，市場開始擔心高利率維持太久，會反噬實體經濟嗎？如果經濟真的降溫，美元的優勢是不是就不在了？",
-          "subtitle_text": "高利率反噬實體經濟，美元優勢將減弱？",
+          "spoken_text": "也就是說，市場現在不只看利差，也開始擔心高利率維持太久，最終會反噬實體經濟，對嗎？",
+          "subtitle_text": "市場擔憂高利率維持過久，恐將反噬實體經濟。",
           "speaker_label_text": "Tom｜主持人",
-          "estimated_seconds": 13,
+          "estimated_seconds": 10,
           "news_reference": [],
-          "visual_reference": "畫面中央受壓迫的美元符號"
+          "visual_reference": "下方的「利差提供支撐，但經濟降溫隱憂限制了漲幅」文字"
         },
         {
           "turn_id": "scene_04_turn_04",
           "speaker": "Miranda",
           "display_name": "Miranda",
           "role_label": "總經策略師",
-          "spoken_text": "沒錯。如果Fed真的把利率維持在這麼高的水準，甚至還要升息，經濟硬著陸的風險就會上升。如果經濟衰退，美元的吸引力就會大打折扣。所以，現在的美元是利差優勢與成長隱憂在互相抵銷，導致它呈現強勢但缺乏向上突破的動能。不過，雖然美元自己漲不太動，維持在99以上的高位，對亞洲貨幣來說已經是泰山壓頂了。",
-          "subtitle_text": "利差與成長隱憂互相抵銷，美元高檔震盪。",
+          "spoken_text": "沒錯。如果經濟硬著陸的風險上升，美元的吸引力就會大打折扣。所以現在的美元是利差優勢與衰退擔憂在互相抵銷，導致它雖然維持強勢，卻遲遲缺乏向上突破的動能。",
+          "subtitle_text": "利差優勢與衰退擔憂互相抵銷，限制美元向上突破。",
           "speaker_label_text": "Miranda｜總經策略師",
-          "estimated_seconds": 37,
+          "estimated_seconds": 18,
           "news_reference": [],
-          "visual_reference": "整體的上下拉扯視覺意象"
+          "visual_reference": "右側的 DXY: 99.30 標籤"
         }
       ],
-      "scene_summary": "說明美元為何沒有隨利率大幅噴出，而是受到經濟成長隱憂的壓抑呈現高位震盪。",
+      "scene_summary": "說明美元為何沒有隨利率大幅噴出，而是受制於成長隱憂在高位震盪。",
       "avoid_saying": [
         "美國經濟已經進入衰退",
         "美元即將反轉向下",
@@ -398,9 +378,8 @@
       "single_message": "日圓逼近159大關，黃金在「高利率」與「避險買盤」中劇烈震盪。",
       "visual_anchor": {
         "visible_elements_used": [
-          "日圓與韓元硬幣",
-          "水面下的重壓",
-          "金條"
+          "沉在水裡的日圓與韓元硬幣",
+          "在波浪中浮沉的金條"
         ],
         "must_align_with": [
           "日圓承壓",
@@ -412,8 +391,9 @@
         ]
       },
       "source_material_used": [
-        "macro_variables",
-        "scene_dialogue_context"
+        "scene_dialogue_context.scene_05",
+        "macro_variables.asia_fx_view",
+        "macro_variables.gold_view"
       ],
       "speaker_turns": [
         {
@@ -421,65 +401,65 @@
           "speaker": "Tom",
           "display_name": "Tom",
           "role_label": "主持人",
-          "spoken_text": "美元雖然沒噴出，但維持在高位已經讓亞洲貨幣喘不過氣了。畫面上日圓和韓元雙雙被壓在水面下，日圓眼看著又要去挑戰159，韓元也破了1500。但最讓我困惑的是右邊的黃金，利率飆這麼高，黃金不是應該大跌嗎？為什麼它還能在波浪中撐著？",
-          "subtitle_text": "亞幣承受重壓，高利率下黃金為何沒跌？",
+          "spoken_text": "美元雖然沒有向上突破，但維持在高位已經讓亞洲貨幣面臨龐大壓力。畫面上日圓和韓元都沉在水底，日圓逼近159，韓元也破了1500。但最讓我困惑的是右邊的黃金，利率飆這麼高，黃金不是應該大跌嗎？為什麼它還能在水面上浮沉？",
+          "subtitle_text": "亞幣沉水底面臨重壓，黃金為何能在高利率下撐住？",
           "speaker_label_text": "Tom｜主持人",
-          "estimated_seconds": 28,
+          "estimated_seconds": 24,
           "news_reference": [
             "美元指數在利率預期支撐下維持強勢，持續壓抑亞洲貨幣"
           ],
-          "visual_reference": "左側被壓在水面下的日圓與韓元硬幣，以及右側的金條"
+          "visual_reference": "左側沉水的日圓與韓元硬幣，以及右側波浪上的金條"
         },
         {
           "turn_id": "scene_05_turn_02",
           "speaker": "Miranda",
           "display_name": "Miranda",
           "role_label": "總經策略師",
-          "spoken_text": "Tom，你點出了這張圖上最核心的兩個現象：無差別的壓迫與矛盾的支撐。對於日圓和韓元來說，這完全是殘酷的利差數學題。當美國30年期公債殖利率飆破5.1%，資金根本沒有理由留在亞洲，所以亞幣只能承受巨大的貶值壓力。",
-          "subtitle_text": "美亞利差擴大，亞幣面臨殘酷的貶值壓力。",
+          "spoken_text": "對於日圓和韓元來說，這完全是殘酷的利差數學題。當美國長天期公債殖利率飆高，資金自然會流出亞洲，所以亞幣只能承受巨大的貶值壓力。但黃金的故事就複雜多了，它現在正處於兩股力量的拉扯中。",
+          "subtitle_text": "亞幣受制於殘酷利差劣勢，黃金則處於兩股力量拉扯。",
           "speaker_label_text": "Miranda｜總經策略師",
-          "estimated_seconds": 26,
+          "estimated_seconds": 21,
           "news_reference": [],
-          "visual_reference": "日圓與韓元向下的箭頭"
+          "visual_reference": "左下角的 USDJPY: 159.01 與 USDKRW: 1506 標籤"
         },
         {
           "turn_id": "scene_05_turn_03",
           "speaker": "Tom",
           "display_name": "Tom",
           "role_label": "主持人",
-          "spoken_text": "那黃金呢？實質利率創高，不孳息的黃金應該要面臨強大的逆風才對吧？為什麼它還能展現出這麼強的韌性？",
-          "subtitle_text": "實質利率創高，黃金為何還能展現韌性？",
+          "spoken_text": "按傳統邏輯，實質利率創高，不孳息的黃金應該會遭到拋售，那支撐它的另一股力量到底是什麼？",
+          "subtitle_text": "實質利率創高不利黃金，支撐金價的另一股力量為何？",
           "speaker_label_text": "Tom｜主持人",
-          "estimated_seconds": 12,
+          "estimated_seconds": 11,
           "news_reference": [],
-          "visual_reference": "右側在波浪中浮沉的金條"
+          "visual_reference": "右下角的「黃金展現韌性」標籤"
         },
         {
           "turn_id": "scene_05_turn_04",
           "speaker": "Miranda",
           "display_name": "Miranda",
           "role_label": "總經策略師",
-          "spoken_text": "按教科書說是這樣沒錯。但為什麼黃金沒有崩跌？因為我們剛剛提到的經濟成長隱憂。當市場開始害怕Fed會把經濟搞砸時，有一部分資金就會躲進黃金裡避險。所以黃金現在是被高利率的引力往下扯，同時又被避險的浮力往上推，這才造就了它劇烈震盪的走勢。面對這麼混亂的市場訊號，下週我們到底該盯著什麼看？",
-          "subtitle_text": "高利率引力與避險浮力拉扯，黃金劇烈震盪。",
+          "spoken_text": "支撐它的就是我們剛剛提到的經濟成長隱憂，以及地緣政治的不確定性。當市場開始害怕Fed會把經濟搞砸時，部分資金就會躲進黃金裡避險。所以黃金現在是被高利率往下扯，同時又被避險需求往上推，這才造就了它劇烈震盪的走勢。",
+          "subtitle_text": "經濟隱憂與避險需求支撐黃金，形成劇烈震盪走勢。",
           "speaker_label_text": "Miranda｜總經策略師",
-          "estimated_seconds": 36,
+          "estimated_seconds": 23,
           "news_reference": [
             "房市數據疲軟引發成長降溫擔憂",
             "經濟成長隱憂支撐黃金避險需求"
           ],
-          "visual_reference": "金條展現韌性的標籤"
+          "visual_reference": "金條在波浪中上下浮沉的意象"
         }
       ],
-      "scene_summary": "分析強美元環境下亞幣的慘況，以及黃金在利率壓抑與避險需求中的矛盾處境。",
+      "scene_summary": "分析強美元環境下亞幣的貶值壓力，以及黃金在利率與避險需求中的矛盾處境。",
       "avoid_saying": [
         "日本央行明天就會進場干預",
         "黃金失去避險功能",
+        "哀鴻遍野",
         "精神分裂",
         "核彈級",
         "躺平任人捶打",
         "崩盤",
         "全面失守",
-        "哀鴻遍野",
         "免死金牌",
         "尚方寶劍"
       ]
@@ -492,9 +472,8 @@
       "visual_anchor": {
         "visible_elements_used": [
           "望遠鏡",
-          "日曆",
-          "Fed官員表態",
-          "美伊談判"
+          "日曆上的下週重點",
+          "Fed官員表態與美伊談判標籤"
         ],
         "must_align_with": [
           "Fed官員談話",
@@ -505,8 +484,8 @@
         ]
       },
       "source_material_used": [
-        "evidence",
-        "scene_dialogue_context"
+        "scene_dialogue_context.scene_06",
+        "evidence.watch_items_from_daily_summaries"
       ],
       "speaker_turns": [
         {
@@ -514,72 +493,69 @@
           "speaker": "Tom",
           "display_name": "Tom",
           "role_label": "主持人",
-          "spoken_text": "經歷了這麼錯亂的一週，利率創高、油價大跌、黃金亂震。Miranda，就像畫面上這個望遠鏡一樣，下週我們到底該把焦點對準哪裡，才能看清市場真正的方向？",
-          "subtitle_text": "市場錯亂，下週該把焦點對準哪裡？",
+          "spoken_text": "經歷了這麼充滿矛盾的一週，利率創高、油價大跌、黃金亂震。Miranda，看著畫面上這個望遠鏡，下週我們到底該把焦點對準日曆上的哪些事件，才能看清市場接下來的真正方向？",
+          "subtitle_text": "市場充滿矛盾與震盪，下週該把焦點對準哪些事件？",
           "speaker_label_text": "Tom｜主持人",
           "estimated_seconds": 19,
           "news_reference": [],
-          "visual_reference": "畫面左側看向日曆的望遠鏡"
+          "visual_reference": "畫面左側的望遠鏡與右側的日曆"
         },
         {
           "turn_id": "scene_06_turn_02",
           "speaker": "Miranda",
           "display_name": "Miranda",
           "role_label": "總經策略師",
-          "spoken_text": "Tom，下週的任務很簡單，就是驗證本週的兩個極端。第一，盯緊Fed官員的麥克風。會議紀錄丟出了升息這個震撼彈，下週一定會有官員出來接受媒體訪問。我們要聽的是，他們是試圖淡化這個說法，還是確認這真的是個選項？這將決定長端利率會不會繼續往上衝。",
-          "subtitle_text": "驗證兩大極端：Fed官員表態與升息選項。",
+          "spoken_text": "下週的任務很簡單，就是驗證本週的兩個極端。第一，盯緊Fed官員的談話。會議紀錄丟出了升息選項，下週我們要聽的是，官員們是試圖淡化這個說法，還是確認這真的是個選項？這將決定長端利率會不會繼續往上衝。",
+          "subtitle_text": "驗證Fed官員談話，確認是否淡化或保留升息選項。",
           "speaker_label_text": "Miranda｜總經策略師",
-          "estimated_seconds": 30,
+          "estimated_seconds": 22,
           "news_reference": [
             "Fed 官員對通膨路徑的進一步表態",
             "Fed會議紀錄重啟升息討論"
           ],
-          "visual_reference": "日曆上的Fed官員表態標籤"
+          "visual_reference": "日曆上的「Fed官員表態」標籤"
         },
         {
           "turn_id": "scene_06_turn_03",
           "speaker": "Tom",
           "display_name": "Tom",
           "role_label": "主持人",
-          "spoken_text": "那地緣政治方面呢？美伊和平協議的傳聞也需要進一步確認對吧？如果消息反覆，市場是不是又要大洗牌了？",
-          "subtitle_text": "美伊和平協議若反覆，市場將再洗牌？",
+          "spoken_text": "那地緣政治方面呢？美伊談判的消息，下週也需要進一步確認對吧？",
+          "subtitle_text": "美伊談判消息，下週是否也需要進一步確認進展？",
           "speaker_label_text": "Tom｜主持人",
-          "estimated_seconds": 12,
-          "news_reference": [
-            "美伊和平協議的談判進展",
-            "美伊和平協議傳聞"
-          ],
-          "visual_reference": "日曆上的美伊談判標籤"
+          "estimated_seconds": 8,
+          "news_reference": [],
+          "visual_reference": "日曆上的「美伊談判」標籤"
         },
         {
           "turn_id": "scene_06_turn_04",
           "speaker": "Miranda",
           "display_name": "Miranda",
           "role_label": "總經策略師",
-          "spoken_text": "沒錯。第二個重點就是盯緊中東的新聞頭條。美伊和平協議到底是真有其事，還是只是市場的一廂情願？如果談判破裂，本週跌掉的油價會立刻報復性反彈，到時候通膨預期又會死灰復燃。在這些訊號明朗之前，目前的資產價格分歧將難以維持。",
-          "subtitle_text": "盯緊中東局勢，若談判破裂油價恐反彈。",
+          "spoken_text": "是的。美伊和平協議到底是真有其事，還是市場的一廂情願？如果談判破裂，本週跌掉的油價可能會報復性反彈，通膨預期又會死灰復燃。在這些訊號明朗之前，市場的波動可能還會持續。",
+          "subtitle_text": "確認美伊談判真偽，防範油價報復性反彈風險。",
           "speaker_label_text": "Miranda｜總經策略師",
-          "estimated_seconds": 27,
+          "estimated_seconds": 19,
           "news_reference": [
             "美伊和平協議的談判進展",
             "美伊和平協議傳聞"
           ],
-          "visual_reference": "日曆上的美伊談判標籤"
+          "visual_reference": "日曆上的「美伊談判」標籤"
         },
         {
           "turn_id": "scene_06_turn_05",
           "speaker": "Tom",
           "display_name": "Tom",
           "role_label": "主持人",
-          "spoken_text": "看來下週的市場依然充滿變數，不論是Fed官員的後續定調，還是中東局勢的實質進展，都將是決定下一步走向的關鍵。投資朋友在這些訊號明朗前，最好保持彈性，持續追蹤關鍵數據。感謝 Miranda 的精闢分析，我們下週見！",
-          "subtitle_text": "保持彈性追蹤關鍵數據，我們下週見！",
+          "spoken_text": "看來下週的市場依然充滿挑戰，我們必須持續追蹤Fed官員的後續定調以及中東局勢的實質進展，等待更多數據來驗證。感謝 Miranda 的精采分析，我們下週見。",
+          "subtitle_text": "持續追蹤Fed定調與中東局勢，等待更多數據驗證。",
           "speaker_label_text": "Tom｜主持人",
-          "estimated_seconds": 26,
+          "estimated_seconds": 16,
           "news_reference": [],
           "visual_reference": "整體的下週觀察重點畫面"
         }
       ],
-      "scene_summary": "總結本週留下的兩大懸念，並給出下週觀察Fed官員談話與中東局勢的具體判斷標準。",
+      "scene_summary": "總結本週留下的兩大懸念，給出下週觀察Fed官員談話與美伊談判的具體指標。",
       "avoid_saying": [
         "下週股市一定會大跌",
         "給出明確的下週漲跌預測",
@@ -601,11 +577,11 @@
     "subtitle_mode": "turn_by_turn"
   },
   "quality_checks": {
-    "scene_alignment_note": "6 scenes strictly aligned with provided actual image files. Aligned scene_dialogues to control ids: ['scene_01', 'scene_02', 'scene_03', 'scene_04', 'scene_05', 'scene_06'].",
-    "image_grounding_note": "Visual anchors accurately describe visible elements like the scale, downward steps, red line, clouds, underwater coins, and telescope.",
-    "dialogue_naturalness_note": "Conversational tone maintained, avoiding restricted dramatic words while keeping the analytical depth.",
-    "news_driven_logic_note": "Causal links clearly established between news events (Fed minutes, Iran peace rumors) and market reactions.",
-    "continuity_note": "Smooth transitions between scenes, foreshadowing the next topic at the end of each Miranda explanation.",
-    "risk_control_note": "No investment advice provided; concluded with a neutral recommendation to stay flexible and monitor data."
+    "scene_alignment_note": "All 6 scenes match the output control and actual images perfectly. Aligned scene_dialogues to control ids: ['scene_01', 'scene_02', 'scene_03', 'scene_04', 'scene_05', 'scene_06'].",
+    "image_grounding_note": "Visual references strictly point to visible elements like the scale, stairs, line chart, clouds, submerged coins, and telescope.",
+    "dialogue_naturalness_note": "Conversations flow naturally with Tom asking clarifying questions based on visuals, and Miranda providing macro explanations.",
+    "news_driven_logic_note": "The dialogue is heavily driven by the Fed minutes and US-Iran peace rumors as requested.",
+    "continuity_note": "Each scene transitions smoothly to the next by picking up on a specific unresolved point or related asset.",
+    "risk_control_note": "No investment advice given. Kept tone objective and analytical. Replaced forbidden words with professional alternatives."
   }
 }
