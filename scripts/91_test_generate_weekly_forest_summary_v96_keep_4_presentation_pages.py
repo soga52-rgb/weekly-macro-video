@@ -118,6 +118,17 @@ ANALYSIS_LAYER_PROMPT = """
    - 參考市場與政策預期：Fed 談話、會議紀錄、升降息機率、美債殖利率、通膨連動債。
    - 不得只因油價單週下跌就判斷通膨預期降溫；也不得只因 CPI / PPI 偏強就忽略能源端修正。
 
+   通膨預期判斷必須同時區分：
+   - 本週新增訊號：本週 CPI / PPI / PCE / 油價 / Fed 訊號 / 就業與需求數據。
+   - 背景延續訊號：近 2～4 週仍影響市場定價的 PPI、CPI、核心通膨、PMI / ISM 價格分項、薪資與供給風險。
+
+   若 macro_background_context 中出現前幾週 PPI 上漲、CPI 偏強、核心通膨黏性、PMI / ISM 價格分項升溫、薪資壓力或供給風險，應列入 inflation_expectation.supporting_signals 或 macro_evidence，不可只看本週油價下跌。
+
+   通膨預期的結論應說明：
+   - 哪些背景訊號支持通膨預期升溫。
+   - 哪些本週訊號抵銷通膨預期。
+   - 為何最終判斷為 strong / mixed / weak / unclear。
+
 2. 利率預期：
    - 區分基本面通膨、Fed 政策引導、長債供需、期限溢價、財政赤字、全球長債同步拋售、避險需求。
    - 若長端利率上升但油價或通膨預期未同步上升，應檢查是否為 term_premium / bond_supply_demand / policy_guidance。
