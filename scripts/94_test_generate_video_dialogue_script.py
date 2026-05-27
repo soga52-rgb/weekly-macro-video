@@ -529,37 +529,29 @@ def sanitize_tone_phrases(data: Dict[str, Any]) -> Dict[str, Any]:
     contain vivid wording that the model reuses.
     """
     replacements = {
-        "投資人最好保持彈性": "後續仍應持續觀察",
-        "多看少做、保持彈性": "持續觀察後續發展",
-        "保持投資彈性": "持續觀察後續發展",
-        "多看少做": "持續觀察",
-        "直接摔到": "直接跌到",
-        "摔到": "跌到",
-        "最讓人最違反直覺的地方": "最讓人跌破眼鏡的地方",
-        "最讓人最違反直覺": "最讓人跌破眼鏡",
-        "毛骨悚然的地方": "最讓人跌破眼鏡的地方",
-        "毛骨悚然": "最讓人跌破眼鏡",
-        "核彈級的利空": "非常沉重的利空",
-        "核彈級利空": "非常沉重的利空",
-        "核彈級": "高權重",
-        "躺平任人捶打": "承受明顯貶值壓力",
-        "躺平承受重壓": "承受明顯貶值壓力",
-        "躺平": "承受壓力",
-        "嚇成這樣": "反應這麼劇烈",
+        "嚇成這樣": "重新定價得這麼劇烈",
         "嚇得": "使得",
         "非常難看": "明顯疲軟",
         "殘酷的利差數學題": "明確的利差壓力",
-        "無差別的壓迫": "全面性的壓力",
+        "無差別的壓迫": "明確的壓力",
         "把經濟造成明顯壓力": "對經濟造成明顯壓力",
-        "可怕的東西": "讓人不安的訊號",
-        "可怕的訊號": "讓人不安的訊號",
-        "狂飆": "大幅走高",
-        "飆升": "大幅走高",
-        "很驚人": "相當驚人",
-        "真的很驚人": "相當驚人",
+        "直接摔到": "明顯滑落至",
+        "摔到": "滑落至",
+        "可怕的東西": "關鍵訊號",
+        "可怕的訊號": "關鍵訊號",
+        "狂飆": "快速上行",
+        "飆升": "明顯上行",
+        "很驚人": "相當明顯",
+        "真的很驚人": "相當明顯",
+        "保持投資彈性": "持續追蹤關鍵訊號與市場波動",
+        "投資人最好保持彈性": "投資人應持續追蹤關鍵訊號與市場波動",
+        "多看少做、保持彈性": "持續追蹤關鍵訊號與市場波動",
+        "多看少做": "持續觀察",
         "突破天際": "明顯突破",
-        "高興得太早": "不能高興得太早",
+        "高興得太早": "過早下結論",
         "跌成這樣": "出現明顯修正",
+        "最讓人最違反直覺": "本週最違反直覺",
+        "最讓人最違反直覺的地方": "本週最違反直覺的地方",
         "推上了天": "推升至高位",
         "推上天": "推升至高位",
         "免死金牌": "政策安全墊",
@@ -571,9 +563,17 @@ def sanitize_tone_phrases(data: Dict[str, Any]) -> Dict[str, Any]:
         "亂震": "劇烈震盪",
         "精神分裂的一週": "結構性拉鋸的一週",
         "精神分裂": "結構性拉鋸",
-        "震撼彈": "重大訊號",
+        "核彈級的利空": "非常沉重的利空",
+        "核彈級利空": "非常沉重的利空",
+        "核彈級": "高權重",
+        "毛骨悚然的地方": "最違反直覺的地方",
+        "毛骨悚然": "最違反直覺",
+        "躺平承受重壓": "承受明顯貶值壓力",
+        "躺平任人捶打": "承受明顯貶值壓力",
+        "躺平": "承受壓力",
+        "震撼彈": "重要訊號",
         "死灰復燃": "重新升溫",
-        "噴出": "大幅突破",
+        "噴出": "明顯突破",
         "嚇壞": "引發重新定價",
         "崩盤": "大幅修正",
         "全面失守": "壓力明顯升高",
@@ -1067,13 +1067,23 @@ def main() -> None:
         api_key=api_key,
         temperature=temperature,
     )
-    data = ensure_final_tom_closing(data)
-    data = enrich_cross_scene_news_references(data)
-    data = sanitize_tone_phrases(data)
-    data = ensure_minimum_tom_turns(data)
-    data = normalize_dialogue(data, summary, week_dir, effective_image_input)
+    # === Core post-processing pipeline ===
+    # 1. Rebalance long monologues before adding final closing, so the last scene can also be split if needed.
     data = rebalance_long_speaker_turns(data)
+
+    # 2. Ensure the final scene ends with Tom after possible turn rebalancing.
+    data = ensure_final_tom_closing(data)
+
+    # 3. Normalize scene alignment, speaker labels, turn IDs, subtitles, and estimated seconds.
+    data = normalize_dialogue(data, summary, week_dir, effective_image_input)
+
+    # 4. Add cross-scene news references after all turns are finalized.
+    data = enrich_cross_scene_news_references(data)
+
+    # 5. Apply the existing hard-tone sanitizer once only, after the final structure is stable.
     data = sanitize_tone_phrases(data)
+
+    # 6. Final QC note for very short Tom turns.
     data = ensure_minimum_tom_turns(data)
 
     json_path = week_dir / "video_dialogue_script.json"
