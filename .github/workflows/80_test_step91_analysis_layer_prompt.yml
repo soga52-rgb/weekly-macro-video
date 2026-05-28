@@ -1,0 +1,63 @@
+name: 80 Test Step91 Analysis Layer Prompt
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_dir:
+        description: "Optional week folder under output/weekly, e.g. 2026-05-21. Leave blank to use latest."
+        required: false
+        default: ""
+      analysis_model:
+        description: "Gemini analysis model"
+        required: false
+        default: "gemini-3.5-pro"
+
+permissions:
+  contents: write
+
+jobs:
+  test-step91-analysis-layer:
+    runs-on: ubuntu-latest
+
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_ANALYSIS_MODEL: ${{ inputs.analysis_model }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run 80 test step91 analysis layer prompt
+        run: |
+          if [ -n "${{ inputs.week_dir }}" ]; then
+            python scripts/80_test_step91_analysis_layer_prompt.py --week-dir "${{ inputs.week_dir }}"
+          else
+            python scripts/80_test_step91_analysis_layer_prompt.py
+          fi
+
+      - name: Commit analysis layer test output
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add output/weekly/**/weekly_forest_summary_analysis_layer_test.json || true
+
+          if git diff --cached --quiet; then
+            echo "No analysis layer test output changes to commit."
+          else
+            git commit -m "Test step91 analysis layer prompt"
+            git push
+          fi
+
+      - name: Upload analysis layer test artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: step91-analysis-layer-test-output
+          path: |
+            output/weekly/**/weekly_forest_summary_analysis_layer_test.json
+          if-no-files-found: warn
