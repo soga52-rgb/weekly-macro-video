@@ -1,27 +1,19 @@
-name: 82 Test Generate Dialogue Script
+name: 82 Test Generate Story-only Dialogue v8
 
 on:
   workflow_dispatch:
     inputs:
       week_dir:
-        description: "Optional week folder under output/weekly, e.g. 2026-05-21. Leave blank to use latest."
+        description: "Optional week directory, e.g. output/weekly/2026-05-21. Leave blank to use latest."
         required: false
         default: ""
-      dialogue_model:
-        description: "Gemini dialogue model"
-        required: false
-        default: "gemini-3.5-pro"
 
 permissions:
   contents: write
 
 jobs:
-  generate-dialogue-script:
+  generate-story-dialogue:
     runs-on: ubuntu-latest
-
-    env:
-      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      GEMINI_DIALOGUE_MODEL: ${{ inputs.dialogue_model }}
 
     steps:
       - name: Checkout repository
@@ -32,47 +24,34 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run 82 dialogue script test
+      - name: Generate story-only dialogue
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-3.5-flash' }}
+          WEEK_DIR: ${{ github.event.inputs.week_dir }}
         run: |
-          if [ ! -f "scripts/82_test_generate_dialogue_script.py" ]; then
-            echo "Missing scripts/82_test_generate_dialogue_script.py"
-            echo "Available 82 scripts:"
-            ls -la scripts/82* || true
-            exit 1
-          fi
+          python scripts/82_test_generate_dialogue_script.py
 
-          if [ -n "${{ inputs.week_dir }}" ]; then
-            python scripts/82_test_generate_dialogue_script.py --week-dir "${{ inputs.week_dir }}"
-          else
-            python scripts/82_test_generate_dialogue_script.py
-          fi
-
-      - name: Commit dialogue script test outputs
+      - name: Commit outputs
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-
-          git add output/weekly/**/weekly_dialogue_scene_inputs_debug.json || true
-          git add output/weekly/**/weekly_dialogue_source_context_debug.json || true
-          git add output/weekly/**/weekly_dialogue_market_series_context_debug.json || true
-          git add output/weekly/**/weekly_dialogue_script_analysis_layer_test.json || true
-          git add output/weekly/**/weekly_dialogue_script_analysis_layer_test.md || true
-
+          git add output/weekly/**/weekly_dialogue_story_only_v8.json || true
+          git add output/weekly/**/weekly_dialogue_story_only_v8.md || true
+          git add output/weekly/**/weekly_dialogue_story_only_v8_prompt_debug.txt || true
           if git diff --cached --quiet; then
-            echo "No dialogue script output changes to commit."
+            echo "No changes to commit."
           else
-            git commit -m "Test dialogue script generation"
+            git commit -m "Generate Step 82 v8 story-only dialogue"
             git push
           fi
 
-      - name: Upload dialogue script artifact
+      - name: Upload outputs
         uses: actions/upload-artifact@v4
         with:
-          name: dialogue-script-test-output
+          name: step82-v8-story-dialogue
           path: |
-            output/weekly/**/weekly_dialogue_scene_inputs_debug.json
-            output/weekly/**/weekly_dialogue_source_context_debug.json
-            output/weekly/**/weekly_dialogue_market_series_context_debug.json
-            output/weekly/**/weekly_dialogue_script_analysis_layer_test.json
-            output/weekly/**/weekly_dialogue_script_analysis_layer_test.md
+            output/weekly/**/weekly_dialogue_story_only_v8.json
+            output/weekly/**/weekly_dialogue_story_only_v8.md
+            output/weekly/**/weekly_dialogue_story_only_v8_prompt_debug.txt
           if-no-files-found: warn
