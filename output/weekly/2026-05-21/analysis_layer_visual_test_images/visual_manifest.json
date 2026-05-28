@@ -4,10 +4,10 @@
   "temperature": 0.55,
   "scenes": [
     {
-      "scene_id": "scene_04_rate_driver",
-      "title": "利率驅動來源",
-      "image_path": "output/weekly/2026-05-21/analysis_layer_visual_test_images/scene_04_rate_driver.jpg",
-      "prompt_path": "output/weekly/2026-05-21/analysis_layer_visual_test_images/scene_04_rate_driver_prompt.txt",
+      "scene_id": "scene_01_news_context",
+      "title": "新聞資訊",
+      "image_path": "output/weekly/2026-05-21/analysis_layer_visual_test_images/scene_01_news_context.jpg",
+      "prompt_path": "output/weekly/2026-05-21/analysis_layer_visual_test_images/scene_01_news_context_prompt.txt",
       "mime_type": "image/jpeg",
       "text_note": "",
       "status": "generated"
