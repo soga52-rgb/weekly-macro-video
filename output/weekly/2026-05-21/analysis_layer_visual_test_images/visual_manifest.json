@@ -1,0 +1,16 @@
+{
+  "source": "output/weekly/2026-05-21/weekly_forest_summary_analysis_layer_test.json",
+  "image_model": "gemini-3-pro-image-preview",
+  "temperature": 0.55,
+  "scenes": [
+    {
+      "scene_id": "scene_01_news_context",
+      "title": "新聞脈絡",
+      "image_path": "output/weekly/2026-05-21/analysis_layer_visual_test_images/scene_01_news_context.jpg",
+      "prompt_path": "output/weekly/2026-05-21/analysis_layer_visual_test_images/scene_01_news_context_prompt.txt",
+      "mime_type": "image/jpeg",
+      "text_note": "",
+      "status": "generated"
+    }
+  ]
+}
