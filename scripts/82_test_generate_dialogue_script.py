@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Step 82 v8 - Story-only Dialogue Generator
+Step 82 v8.1.1 - Story-only Dialogue Generator
 
 Purpose:
 - Generate a complete Tom / Miranda macro dialogue story first.
@@ -91,7 +91,7 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
 
 
 USER_PROMPT_TEMPLATE = """
-請根據下方資料，產生 Step 82 v8 Story-only Tom / Miranda 總經訪談稿。
+請根據下方資料，產生 Step 82 v8.1 Story-only Tom / Miranda 總經訪談稿。
 
 資料：
 {input_bundle_json}
@@ -399,11 +399,26 @@ def build_markdown(result: Dict[str, Any]) -> str:
 
 def main() -> None:
     week_dir_arg = os.environ.get("WEEK_DIR", "").strip()
-    week_dir = Path(week_dir_arg) if week_dir_arg else latest_week_dir()
-    if not week_dir.is_absolute():
-        week_dir = ROOT_DIR / week_dir
+
+    if not week_dir_arg:
+        week_dir = latest_week_dir()
+    else:
+        raw_week_dir = Path(week_dir_arg)
+        if raw_week_dir.is_absolute():
+            week_dir = raw_week_dir
+        else:
+            if re.fullmatch(r"\d{4}-\d{2}-\d{2}", week_dir_arg):
+                week_dir = OUTPUT_WEEKLY_DIR / week_dir_arg
+            else:
+                week_dir = ROOT_DIR / raw_week_dir
+
     if not week_dir.exists():
-        raise FileNotFoundError(f"Week directory not found: {week_dir}")
+        raise FileNotFoundError(
+            "Week directory not found: "
+            f"{week_dir}\n"
+            "Please use WEEK_DIR as either YYYY-MM-DD, "
+            "output/weekly/YYYY-MM-DD, or leave it blank to use the latest folder."
+        )
 
     api_key = os.environ.get("GEMINI_API_KEY", "").strip()
     if not api_key:
