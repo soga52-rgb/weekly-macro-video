@@ -1,4 +1,4 @@
-name: 82 Test Generate Story-only Dialogue v8.1
+name: 82 Test Generate Story-only Dialogue v8.3.2
 
 on:
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
       - name: Generate story-only dialogue
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-3.1-pro-preview' }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-3.5-flash' }}
           WEEK_DIR: ${{ github.event.inputs.week_dir }}
         run: |
           python scripts/82_test_generate_dialogue_script.py
