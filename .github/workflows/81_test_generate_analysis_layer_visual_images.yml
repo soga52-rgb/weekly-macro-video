@@ -1,0 +1,99 @@
+name: 81 Test Generate Analysis Layer Visual Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_dir:
+        description: "Optional week folder under output/weekly, e.g. 2026-05-21. Leave blank to use latest."
+        required: false
+        default: ""
+      image_model:
+        description: "Gemini image model"
+        required: false
+        default: "gemini-3-pro-image-preview"
+      image_temperature:
+        description: "Gemini image temperature"
+        required: false
+        default: "0.55"
+      target_scene:
+        description: "Optional: generate only one scene_id, e.g. scene_01_news_context"
+        required: false
+        default: ""
+      force_rebuild_visuals:
+        description: "Force rebuild existing visual images"
+        required: false
+        type: boolean
+        default: false
+      image_retries:
+        description: "Gemini image generation retries"
+        required: false
+        default: "1"
+
+permissions:
+  contents: write
+
+jobs:
+  generate-analysis-layer-visuals:
+    runs-on: ubuntu-latest
+
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_IMAGE_MODEL: ${{ inputs.image_model }}
+      IMAGE_TEMPERATURE: ${{ inputs.image_temperature }}
+      TARGET_SCENE_ID: ${{ inputs.target_scene }}
+      FORCE_REBUILD_VISUALS: ${{ inputs.force_rebuild_visuals }}
+      GEMINI_IMAGE_RETRIES: ${{ inputs.image_retries }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run 81 test analysis layer visual images
+        run: |
+          if [ ! -f "scripts/81_test_generate_analysis_layer_visual_images.py" ]; then
+            echo "Missing scripts/81_test_generate_analysis_layer_visual_images.py"
+            echo "Available 81 scripts:"
+            ls -la scripts/81* || true
+            exit 1
+          fi
+
+          if [ -n "${{ inputs.week_dir }}" ]; then
+            python scripts/81_test_generate_analysis_layer_visual_images.py --week-dir "${{ inputs.week_dir }}"
+          else
+            python scripts/81_test_generate_analysis_layer_visual_images.py
+          fi
+
+      - name: Commit analysis layer visual outputs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add output/weekly/**/analysis_layer_visual_test_images/*.png || true
+          git add output/weekly/**/analysis_layer_visual_test_images/*.jpg || true
+          git add output/weekly/**/analysis_layer_visual_test_images/*.webp || true
+          git add output/weekly/**/analysis_layer_visual_test_images/*_prompt.txt || true
+          git add output/weekly/**/analysis_layer_visual_test_images/visual_manifest.json || true
+
+          if git diff --cached --quiet; then
+            echo "No analysis layer visual output changes to commit."
+          else
+            git commit -m "Test analysis layer visual images"
+            git push
+          fi
+
+      - name: Upload analysis layer visual artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: analysis-layer-visual-test-output
+          path: |
+            output/weekly/**/analysis_layer_visual_test_images/*.png
+            output/weekly/**/analysis_layer_visual_test_images/*.jpg
+            output/weekly/**/analysis_layer_visual_test_images/*.webp
+            output/weekly/**/analysis_layer_visual_test_images/*_prompt.txt
+            output/weekly/**/analysis_layer_visual_test_images/visual_manifest.json
+          if-no-files-found: warn
