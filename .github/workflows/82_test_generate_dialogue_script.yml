@@ -54,6 +54,7 @@ jobs:
 
           git add output/weekly/**/weekly_dialogue_scene_inputs_debug.json || true
           git add output/weekly/**/weekly_dialogue_source_context_debug.json || true
+          git add output/weekly/**/weekly_dialogue_market_series_context_debug.json || true
           git add output/weekly/**/weekly_dialogue_script_analysis_layer_test.json || true
           git add output/weekly/**/weekly_dialogue_script_analysis_layer_test.md || true
 
@@ -71,6 +72,7 @@ jobs:
           path: |
             output/weekly/**/weekly_dialogue_scene_inputs_debug.json
             output/weekly/**/weekly_dialogue_source_context_debug.json
+            output/weekly/**/weekly_dialogue_market_series_context_debug.json
             output/weekly/**/weekly_dialogue_script_analysis_layer_test.json
             output/weekly/**/weekly_dialogue_script_analysis_layer_test.md
           if-no-files-found: warn
