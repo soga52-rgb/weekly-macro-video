@@ -36,12 +36,15 @@ from typing import Any, Dict, List
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
+DATA_DIR = ROOT_DIR / "data"
 OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
 
 DEFAULT_MODEL = "gemini-3.5-pro"
 
 ANALYSIS_FILENAME = "weekly_forest_summary_analysis_layer_test.json"
 VISUAL_MANIFEST_PATH = "analysis_layer_visual_test_images/visual_manifest.json"
+WEEKLY_SOURCE_JSON_PATH = DATA_DIR / "weekly_video_source.json"
+WEEKLY_SOURCE_TEXT_FILENAME = "weekly_source_text.md"
 OUT_JSON_FILENAME = "weekly_dialogue_script_analysis_layer_test.json"
 OUT_MD_FILENAME = "weekly_dialogue_script_analysis_layer_test.md"
 
@@ -99,17 +102,17 @@ CANONICAL_ANALYSIS_SCENES = [
 SYSTEM_PROMPT = """
 你是專業機構級總經影片編劇與台詞設計師，負責把 Step 80 已經分析好的「本週主線分析過程」，轉譯成 Tom（主持人）與 Miranda（首席總經策略師）可直接進 TTS 的正式雙人逐句對談稿。
 
-本次是 Step 82 v5 測試版：
+本次是 Step 82 v6 測試版：
 - 核心任務是先產出一支完整、可聽、順暢的 voice-first 總經故事。
 - 圖片只是後續加強觀感，不是語音稿的主控。
-- 資料來源是 scene_inputs，每一幕都有自己的 primary_material。
+- 資料來源是 scene_inputs，每一幕都有自己的 primary_material；同時可使用 Step 00 endpoint source_context_bundle 補強新聞脈絡、每日事件流、傳導鏈與市場驗證。
 - 不重新分析市場，不自由創作新聞，只把 Step 80 的分析推導過程故事化。
 - 不產生音檔，只產生正式雙人逐句對談稿 JSON / MD。
 
 最重要的主控規則：
 - scene_inputs 是本次語音稿的 scene 主控清單。
 - scene 數量、順序與 scene_id 必須嚴格依照 scene_inputs。
-- 每個 scene 的主要素材只能使用該 scene 的 primary_material 與 allowed_supporting_material。
+- 每個 scene 的主要素材必須以該 scene 的 primary_material 與 allowed_supporting_material 為主；source_context_bundle 只能補強故事脈絡、新聞事件流、傳導鏈、market snapshot、divergence、watchpoints，不可推翻 Step 80 分析層判斷。
 - forest_summary 只能在「本週主線結論」scene 使用；前面 scene 不得拿 forest_summary 回頭改寫。
 - visual_manifest 只用來補充已生成圖片的 image_path，不可決定 scene 數量。
 - 即使 visual_manifest 只有一張測試圖，也不得只產一段語音稿，更不得把後續所有分析塞進第一段。
@@ -179,7 +182,30 @@ SYSTEM_PROMPT = """
    根據本段中間判斷，自然帶出下一幕要分析的問題。
 
 ━━━━━━━━━━━━━━━━━━━━
-四、Narrative Architecture
+四、Endpoint source_context_bundle 使用原則
+━━━━━━━━━━━━━━━━━━━━
+
+source_context_bundle 來自 Step 00 weekly_video_source endpoint，內容可能包含：
+- daily_summaries：每日主線、Executive Summary、market_signals、macro_chain、divergence、market_snapshot、news_evidence、watchpoints
+- weekly_source_text.md：由 endpoint 整理出的週報來源文字
+- range / generated_at / data_status 等 metadata
+
+使用方式：
+1. source_context_bundle 是「故事與脈絡補強資料」，不是最終判斷來源。
+2. 每一幕仍以 primary_material 的分析段落為主。
+3. 當 primary_material 太濃縮時，可以從 source_context_bundle 補充：
+   - 本週事件流
+   - 多日反覆出現的訊號
+   - 哪一天或哪則新聞造成轉折
+   - 市場數據如何驗證
+   - divergence / anomaly / watchpoints
+4. 不要逐日照念 source_context_bundle。
+5. 不要把 source_context_bundle 中與本幕無關的新聞塞入該幕。
+6. 若 source_context_bundle 與 Step 80 分析層判斷不一致，以 Step 80 分析層為準。
+7. 使用 source_context_bundle 的目的，是讓語音稿更像完整市場故事，而不是把摘要改寫成對話。
+
+━━━━━━━━━━━━━━━━━━━━
+五、Narrative Architecture
 ━━━━━━━━━━━━━━━━━━━━
 
 每個 scene 只回答一個核心問題。
@@ -275,7 +301,7 @@ SYSTEM_PROMPT = """
 - 新增資料外觀察主題
 
 ━━━━━━━━━━━━━━━━━━━━
-五、寫作準則
+六、寫作準則
 ━━━━━━━━━━━━━━━━━━━━
 
 - 每段先講市場 narrative，不要先報數字。
@@ -290,7 +316,7 @@ SYSTEM_PROMPT = """
 - 即使沒有圖片，也要讓語音稿有畫面感。
 
 ━━━━━━━━━━━━━━━━━━━━
-六、語氣與合規邊界
+七、語氣與合規邊界
 ━━━━━━━━━━━━━━━━━━━━
 
 全片口吻：
@@ -316,7 +342,7 @@ SYSTEM_PROMPT = """
 - 改用「分歧」、「抵銷」、「不同方向力量」、「訊號交錯」、「尚未形成單一方向」。
 
 ━━━━━━━━━━━━━━━━━━━━
-七、對話節奏與結構
+八、對話節奏與結構
 ━━━━━━━━━━━━━━━━━━━━
 
 1. 每個 scene 優先產生 4～7 個 speaker_turns，避免只用 Tom 一問、Miranda 一答就結束。
@@ -342,6 +368,7 @@ USER_PROMPT_TEMPLATE = """
 - visual_manifest 只負責提供已生成圖檔的路徑與 scene 對應，不可用來減少 scene 數量。
 - 若 visual_manifest 只有部分圖片，仍必須依 scene_inputs 完整產生所有 scene 的語音稿。
 - 每個 scene 的主要事實來源是該 scene 的 primary_material。
+- 可使用 source_context_bundle 補強新聞事件流、每日脈絡、傳導鏈、market snapshot、divergence 與 watchpoints，但不得推翻 primary_material。
 - 每個 scene 必須明確產生 core_question、allowed_scope、do_not_expand、section_hook、visual_brief、market_data_to_show。
 - allowed_supporting_material 只可用來輔助轉場或補充，不可喧賓奪主。
 - forest_summary 只可在 scene_06_weekly_main_theme 使用。
@@ -359,7 +386,7 @@ USER_PROMPT_TEMPLATE = """
     "source": "scene_inputs derived from weekly_forest_summary_analysis_layer_test.json + visual_manifest.json",
     "week_range": "",
     "script_type": "video_dialogue_script_test",
-    "version_note": "Step 82 v5 test version: voice-first story script with narrative architecture"
+    "version_note": "Step 82 v6 test version: voice-first story script with narrative architecture"
   },
   "dialogue_structure": {
     "total_scenes": 0,
@@ -408,6 +435,9 @@ USER_PROMPT_TEMPLATE = """
 
 scene_inputs：
 {scene_inputs_json}
+
+source_context_bundle：
+{source_context_bundle_json}
 """
 
 
@@ -645,6 +675,72 @@ def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: 
     return extract_json_from_text(text)
 
 
+
+def shorten_text(text: str, max_chars: int = 12000) -> str:
+    text = text or ""
+    return text if len(text) <= max_chars else text[:max_chars] + "\n...（內容過長，已截斷）"
+
+
+def slim_day_summary(day: Dict[str, Any]) -> Dict[str, Any]:
+    if not isinstance(day, dict):
+        return {}
+
+    keys = [
+        "date",
+        "headline",
+        "executive_summary",
+        "macro_chain",
+        "divergence",
+        "market_signals",
+        "market_snapshot",
+        "news_evidence",
+        "watchpoints",
+        "visual_note",
+        "raw_daily_summary_package",
+    ]
+
+    slim: Dict[str, Any] = {}
+    for key in keys:
+        value = day.get(key)
+        if not has_content(value):
+            continue
+        if isinstance(value, str):
+            slim[key] = shorten_text(value, 3500)
+        else:
+            slim[key] = value
+
+    return slim
+
+
+def build_source_context_bundle(week_dir: Path) -> Dict[str, Any]:
+    endpoint_json = load_json(WEEKLY_SOURCE_JSON_PATH, {})
+    source_text_path = week_dir / WEEKLY_SOURCE_TEXT_FILENAME
+    source_text = source_text_path.read_text(encoding="utf-8") if source_text_path.exists() else ""
+
+    daily_summaries = endpoint_json.get("daily_summaries", []) if isinstance(endpoint_json, dict) else []
+    slim_days = []
+    if isinstance(daily_summaries, list):
+        slim_days = [slim_day_summary(day) for day in daily_summaries if isinstance(day, dict)]
+
+    context = {
+        "source": "Step 00 weekly_video_source endpoint",
+        "endpoint_json_available": bool(endpoint_json),
+        "weekly_source_text_available": bool(source_text),
+        "range": endpoint_json.get("range", {}) if isinstance(endpoint_json, dict) else {},
+        "generated_at": endpoint_json.get("generated_at", "") if isinstance(endpoint_json, dict) else "",
+        "data_status": endpoint_json.get("data_status", "") if isinstance(endpoint_json, dict) else "",
+        "daily_summaries": slim_days,
+        "weekly_source_text_excerpt": shorten_text(source_text, 60000),
+        "usage_rule": (
+            "Use this bundle only to enrich event flow, market narrative, transmission path, "
+            "market validation, divergence and watchpoints. Step 80 scene primary_material remains the source of final judgment."
+        ),
+    }
+
+    return context
+
+
+
 def build_prompt(week_dir: Path) -> str:
     analysis = load_json(week_dir / ANALYSIS_FILENAME, {})
     if not analysis:
@@ -652,8 +748,11 @@ def build_prompt(week_dir: Path) -> str:
 
     visual_manifest = load_json(week_dir / VISUAL_MANIFEST_PATH, {})
     scene_inputs = build_scene_inputs(analysis, visual_manifest)
+    source_context_bundle = build_source_context_bundle(week_dir)
 
     print(f"[INFO] Scene input count: {scene_inputs.get('total_scenes', 0)}")
+    print(f"[INFO] Endpoint source context available: {source_context_bundle.get('endpoint_json_available')}")
+    print(f"[INFO] Weekly source text available: {source_context_bundle.get('weekly_source_text_available')}")
     for scene in scene_inputs.get("scenes", []):
         print(
             f"[INFO] Scene: {scene.get('scene_id')} | "
@@ -662,12 +761,16 @@ def build_prompt(week_dir: Path) -> str:
             f"visual_file={scene.get('visual_file') or '(none)'}"
         )
 
-    # Save scene inputs for debugging, without requiring another API call to inspect.
+    # Save prompt inputs for debugging, without requiring another API call to inspect.
     save_json(week_dir / "weekly_dialogue_scene_inputs_debug.json", scene_inputs)
+    save_json(week_dir / "weekly_dialogue_source_context_debug.json", source_context_bundle)
 
     return USER_PROMPT_TEMPLATE.replace(
         "{scene_inputs_json}",
         compact_json(scene_inputs, max_chars=100000),
+    ).replace(
+        "{source_context_bundle_json}",
+        compact_json(source_context_bundle, max_chars=90000),
     )
 
 
