@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Step 82 v8.6.2.1 - Story-only Dialogue Generator
+Step 82 v8.7.2.1 - Story-only Dialogue Generator
 
 Purpose:
 - Generate a complete Tom / Miranda macro dialogue story first.
@@ -74,7 +74,8 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
 7. 不要一開始就總結本週主線。先讓聽眾跟著事件與價格一步一步形成理解。
 8. 本週主線應在後段自然收斂，不要在開頭提前講完。
 9. 下週觀察不能突然出現，必須回扣前面已經鋪陳過的未解事件或價格線。
-10. 主要事件線至少挑一個代表性價格走勢做「口語化走勢解讀」：不要只說價格到哪裡，要說它是快速回落、先上攻後回落、先受壓後反彈、高位震盪，或區間反覆，並解釋這代表市場在重新定價什麼。
+10. 全片最後必須有正式收尾，不能停在 Miranda 的分析清單。最後一個 speaker_turn 必須由 Tom 收尾，內容要包含：回扣本集主線、感謝 Miranda 的分析、提醒觀眾下週持續追蹤關鍵訊號，並自然說「我們下週見」。
+11. 主要事件線至少挑一個代表性價格走勢做「口語化走勢解讀」：不要只說價格到哪裡，要說它是快速回落、先上攻後回落、先受壓後反彈、高位震盪，或區間反覆，並解釋這代表市場在重新定價什麼。
 11. Tom 的開場白不要先報新聞清單，也不要先下本週結論；Tom 要用主持人的方式打開問題，請 Miranda 先從本週市場價格走勢切入分析。
     Tom 開場請使用自然節目開場，再請 Miranda 從本週市場價格走勢切入。
     建議句型：
@@ -118,7 +119,7 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
 
 
 USER_PROMPT_TEMPLATE = """
-請根據下方資料，產生 Step 82 v8.6.2 Story-only Tom / Miranda 總經訪談稿。
+請根據下方資料，產生 Step 82 v8.7.2 Story-only Tom / Miranda 總經訪談稿。
 
 資料：
 {input_bundle_json}
@@ -171,6 +172,12 @@ USER_PROMPT_TEMPLATE = """
       "why_it_matters": "為什麼要追蹤"
     }}
   ],
+  "closing_turn": {
+    "speaker": "Tom",
+    "spoken_text": "正式收尾台詞，必須回扣主線、感謝 Miranda、提醒下週追蹤，並自然說我們下週見",
+    "subtitle_text": "25字以內字幕",
+    "estimated_seconds": 15
+  },
   "full_script_plain_text": "[Tom]: ...\\n[Miranda]: ..."
 }}
 
@@ -183,7 +190,10 @@ USER_PROMPT_TEMPLATE = """
 - Miranda 負責解釋事件、價格與總經傳導；使用專業術語後，必須補一句白話翻譯。
 - 價格走勢必須服務故事，不要變成數字清單。
 - 如果某個事件最後列為 next_week_watch，前面故事中必須已經鋪陳過。
-- full_script_plain_text 必須由 speaker_turns 重新組成，保留 [Tom] / [Miranda] 標籤。
+- 最後一個 section 的 speaker_turns 必須在 Miranda 講完下週觀察後，追加 Tom 的正式收尾。
+- closing_turn 必須與最後一個 Tom speaker_turn 內容一致。
+- full_script_plain_text 必須由 speaker_turns 重新組成，保留 [Tom] / [Miranda] 標籤，且最後一行必須是 Tom 的正式收尾。
+- sections 未來會交給圖片層使用，所以每個 section 的 story_purpose、event_setup、price_reaction、macro_interpretation 要保持清楚，但不要在這版生成圖片提示詞。
 """
 
 
@@ -341,6 +351,50 @@ def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: 
     raise RuntimeError(f"Gemini call failed after retries: {last_error}")
 
 
+
+def ensure_closing_turn(result: Dict[str, Any]) -> None:
+    sections = result.get("sections")
+    closing = result.get("closing_turn")
+
+    if not isinstance(sections, list) or not sections:
+        return
+    if not isinstance(closing, dict):
+        return
+
+    speaker = str(closing.get("speaker", "")).strip() or "Tom"
+    text = str(closing.get("spoken_text", "")).strip()
+    if not text:
+        return
+
+    last_section = None
+    for section in reversed(sections):
+        if isinstance(section, dict):
+            last_section = section
+            break
+    if not isinstance(last_section, dict):
+        return
+
+    turns = last_section.get("speaker_turns")
+    if not isinstance(turns, list):
+        turns = []
+        last_section["speaker_turns"] = turns
+
+    if turns:
+        last_turn = turns[-1]
+        if isinstance(last_turn, dict):
+            last_speaker = str(last_turn.get("speaker", "")).strip()
+            last_text = str(last_turn.get("spoken_text", "")).strip()
+            if last_speaker == speaker and last_text == text:
+                return
+
+    turns.append({
+        "speaker": speaker,
+        "spoken_text": text,
+        "subtitle_text": closing.get("subtitle_text", "下週持續追蹤，我們下週見"),
+        "estimated_seconds": closing.get("estimated_seconds", 15),
+    })
+
+
 def rebuild_full_script(result: Dict[str, Any]) -> None:
     lines: List[str] = []
     sections = result.get("sections")
@@ -463,6 +517,7 @@ def main() -> None:
 
     print("[INFO] Generating story-only dialogue...")
     result = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
+    ensure_closing_turn(result)
     rebuild_full_script(result)
 
     save_json(week_dir / OUT_JSON_FILENAME, result)
