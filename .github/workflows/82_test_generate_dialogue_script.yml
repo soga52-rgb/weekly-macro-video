@@ -52,6 +52,7 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
+          git add output/weekly/**/weekly_dialogue_scene_inputs_debug.json || true
           git add output/weekly/**/weekly_dialogue_script_analysis_layer_test.json || true
           git add output/weekly/**/weekly_dialogue_script_analysis_layer_test.md || true
 
@@ -67,6 +68,7 @@ jobs:
         with:
           name: dialogue-script-test-output
           path: |
+            output/weekly/**/weekly_dialogue_scene_inputs_debug.json
             output/weekly/**/weekly_dialogue_script_analysis_layer_test.json
             output/weekly/**/weekly_dialogue_script_analysis_layer_test.md
           if-no-files-found: warn
