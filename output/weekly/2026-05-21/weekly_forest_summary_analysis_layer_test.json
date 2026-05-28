@@ -1,0 +1,181 @@
+{
+  "meta": {
+    "source": "weekly_news_context + macro_background_context + weekly_market_series",
+    "data_status_note": "資料覆蓋完整，涵蓋通膨、利率、美元與地緣政治的交錯影響，但就業與財政背景資料不足。",
+    "week_range": "2026-05-15 至 2026-05-21"
+  },
+  "main_theme_analysis_process": {
+    "news_context": {
+      "current_week_news": {
+        "inflation": [
+          {
+            "news": "美伊和平協議傳聞引發避險情緒，導致油價逆轉收挫。",
+            "effect": "抵銷",
+            "target_section": "通膨預期綜合研判"
+          }
+        ],
+        "rates": [
+          {
+            "news": "30年期美債殖利率突破5.1%並創下19年新高。",
+            "effect": "強化",
+            "target_section": "利率驅動來源"
+          },
+          {
+            "news": "Fed會議紀錄顯示多數官員主張將升息列入選項。",
+            "effect": "強化",
+            "target_section": "利率驅動來源"
+          },
+          {
+            "news": "房市數據疲軟引發成長降溫擔憂。",
+            "effect": "抵銷",
+            "target_section": "利率驅動來源"
+          }
+        ],
+        "dollar_fx_gold": [
+          {
+            "news": "美元指數在利率預期支撐下維持強勢，持續壓抑亞洲貨幣。",
+            "effect": "強化",
+            "target_section": "美元與黃金、亞洲貨幣"
+          }
+        ]
+      },
+      "background_news": {
+        "inflation": [
+          {
+            "news": "美國4月CPI超預期年升3.8%，PPI年增高達6%。",
+            "effect": "強化",
+            "target_section": "通膨預期綜合研判"
+          },
+          {
+            "news": "美伊談判反覆，油價飆升後重挫。",
+            "effect": "分歧",
+            "target_section": "通膨預期綜合研判"
+          }
+        ],
+        "rates": [
+          {
+            "news": "美聯準會官員憂關稅與能源價格恐推升通膨壓力。",
+            "effect": "強化",
+            "target_section": "利率驅動來源"
+          }
+        ],
+        "dollar_fx_gold": [
+          {
+            "news": "美元強彈、亞幣全倒，新台幣連4貶。",
+            "effect": "強化",
+            "target_section": "亞洲貨幣"
+          }
+        ]
+      },
+      "context_summary": "本週新聞脈絡顯示，前期強勁的通膨數據與 Fed 鷹派指引奠定了高利率維持更久的基礎，但當週美伊和平曙光引發的油價下跌與房市疲軟帶來的成長擔憂，形成了顯著的抵銷與分歧力量。"
+    },
+    "market_validation": {
+      "inflation_energy": "WTI 原油從 105.4 美元跌至 97.7 美元，Brent 原油從 109.2 美元跌至 104.5 美元，反映美伊和平協議傳聞帶來的能源通膨壓力降溫。",
+      "rates": "美國10年期公債殖利率 (US10Y) 在 4.57% 至 4.66% 之間高位震盪，反映高利率預期與成長放緩擔憂的交錯，並未跟隨油價同步大幅放鬆。",
+      "dollar": "美元指數 (DXY) 維持在 98.9 至 99.3 的高位，顯示其仍受高利率預期支撐，但受成長擔憂影響略有震盪。",
+      "gold": "黃金價格在 4480 至 4577 美元/盎司之間寬幅震盪，反映高利率壓抑與避險需求的交錯。",
+      "asia_fx": {
+        "twd": "USDTWD 貶至 31.64 後微幅回落至 31.55，呈現受強美元壓抑的貶值壓力。",
+        "jpy": "USDJPY 升至 159.08，日圓持續面臨顯著貶值壓力。",
+        "krw": "USDKRW 升破 1506 關卡，韓圜面臨一致的貶值壓力。"
+      },
+      "validation_summary": "市場價格驗證了新聞脈絡中的分歧：能源價格顯著回落，但美債殖利率與美元仍維持高位，亞幣全面承壓，黃金則呈現多空交戰。"
+    },
+    "inflation_expectation_judgment": {
+      "signal_strength": "mixed",
+      "supporting_signals": [
+        "4月CPI超預期年升3.8%",
+        "4月PPI年增高達6%"
+      ],
+      "offsetting_signals": [
+        "美伊和平協議傳聞引發油價重挫",
+        "能源價格壓力短期緩解"
+      ],
+      "judgment": "前期 CPI 與 PPI 偏強奠定了通膨壓力的背景，但本週美伊和平曙光導致油價顯著走跌，能源端通膨壓力出現修正。兩股不同方向力量造成訊號交錯，通膨預期尚未形成單一方向。"
+    },
+    "rate_driver_diagnosis": {
+      "main_driver": "mixed",
+      "fed_policy_signal": "Fed 會議紀錄顯示多數官員主張將升息列入選項，且官員擔心關稅與能源價格推升通膨，支撐高利率維持更久，不容易快速轉向寬鬆。",
+      "cpi_ppi_background": "4月 CPI 與 PPI 大幅超預期，打擊降息預期，為高利率提供基本面支撐。",
+      "long_end_yield_term_premium": "30年期美債殖利率突破5.1%創19年新高，確認市場對長期利率風險與期限溢價的重新定價。",
+      "market_validation": "US10Y 殖利率維持在 4.57% 以上高位，但受房市數據疲軟引發的成長放緩擔憂影響，未能持續向上突破。",
+      "judgment": "利率偏強主要來自前期通膨數據超預期、Fed 官員重啟升息選項的鷹派指引，以及長天期債券期限溢價重估。但成長放緩擔憂形成部分抵銷力量，導致利率高位震盪。"
+    },
+    "dollar_gold_reaction": {
+      "dollar": {
+        "news_signal": "美元指數在利率預期支撐下維持強勢，但房市數據疲軟導致部分交易日失去利差支撐。",
+        "background_context": "高利率維持更久的預期確立了美元的利差優勢。",
+        "market_validation": "DXY 於 98.9 至 99.3 區間高位震盪。",
+        "driver_explanation": "高利率與利差優勢是支撐美元的核心動力，但經濟硬著陸擔憂限制了進一步上漲空間。",
+        "judgment": "偏強但受成長擔憂干擾，呈現高位震盪。"
+      },
+      "gold": {
+        "news_signal": "美伊和平協議傳聞引發避險情緒，在特定時點抵銷了利率上升對金價的壓制。",
+        "background_context": "高利率環境增加持有黃金的機會成本，導致金價承壓。",
+        "market_validation": "金價於 4480 至 4577 美元/盎司之間寬幅震盪。",
+        "driver_explanation": "高利率的壓抑作用與地緣政治/成長放緩的避險需求同時存在，形成兩股不同方向力量。",
+        "judgment": "分歧 (mixed)，受高利率壓抑與避險需求交錯影響。"
+      }
+    },
+    "asia_fx_reaction": {
+      "twd": {
+        "news_signal": "美元指數維持強勢，持續壓抑亞洲貨幣。",
+        "background_context": "強勢美元與利差優勢持續對新台幣施加貶值壓力，引發資金流出效應。",
+        "market_validation": "USDTWD 貶至 31.64 後微幅回落至 31.55。",
+        "driver_explanation": "台美利差劣勢與外資動向主導台幣走勢。",
+        "judgment": "面臨強美元壓抑，呈現貶值壓力。"
+      },
+      "jpy": {
+        "news_signal": "美元指數維持強勢，持續壓抑亞洲貨幣。",
+        "background_context": "高利率預期下美元利差優勢顯著。",
+        "market_validation": "USDJPY 逼近 159.08 高位。",
+        "driver_explanation": "美日利差持續擴大，日圓缺乏實質支撐。",
+        "judgment": "貶值壓力顯著，受制於絕對利差劣勢。"
+      },
+      "krw": {
+        "news_signal": "美元指數維持強勢，持續壓抑亞洲貨幣。",
+        "background_context": "強勢美元環境下亞幣全倒。",
+        "market_validation": "USDKRW 升破 1506 關卡。",
+        "driver_explanation": "受強美元與全球貿易/成長擔憂雙重影響，韓圜承壓。",
+        "judgment": "呈現顯著貶值趨勢。"
+      }
+    },
+    "weekly_main_theme_conclusion": {
+      "weekly_main_theme": "鷹派政策定價與地緣/成長避險的交錯博弈",
+      "main_question": "在 Fed 重啟升息選項與美伊和平曙光交錯下，市場將由通膨預期主導還是轉向避險定價？",
+      "one_sentence_verdict": "高利率維持更久的預期支撐了美債殖利率與美元，但地緣政治緩和與成長放緩擔憂引發了資產表現的結構性分歧。",
+      "overall_verdict": "分歧待觀察",
+      "narrative_arc": "本週市場從前期強烈的再通膨定價，轉入複雜的拉鋸戰。一方面，Fed 鷹派指引與長債期限溢價重估推升利率；另一方面，美伊談判進展導致油價重挫，加上房市數據疲軟，喚醒了市場的避險與成長擔憂，使得美元高位震盪、黃金多空交戰，亞幣則持續承壓。",
+      "why_it_matters": "這意味著單一的再通膨交易已無法完全解釋市場動態，投資人需防範高利率對實體經濟的滯後衝擊，以及地緣政治反轉帶來的突發波動。"
+    },
+    "next_week_watch": [
+      "Fed 官員對通膨路徑的進一步表態，特別是關於升息選項的具體細節。",
+      "美伊和平協議的談判進展，及其對能源價格與地緣政治溢價的影響。",
+      "亞洲貨幣在強美元環境下的抵抗力，以及各國央行是否會採取實質干預措施。"
+    ]
+  },
+  "forest_summary": {
+    "weekly_main_theme": "鷹派政策定價與地緣/成長避險的交錯博弈",
+    "main_question": "在 Fed 重啟升息選項與美伊和平曙光交錯下，市場將由通膨預期主導還是轉向避險定價？",
+    "one_sentence_verdict": "高利率維持更久的預期支撐了美債殖利率與美元，但地緣政治緩和與成長放緩擔憂引發了資產表現的結構性分歧。",
+    "overall_verdict": "分歧待觀察",
+    "narrative_arc": "本週市場從前期強烈的再通膨定價，轉入複雜的拉鋸戰。一方面，Fed 鷹派指引與長債期限溢價重估推升利率；另一方面，美伊談判進展導致油價重挫，加上房市數據疲軟，喚醒了市場的避險與成長擔憂，使得美元高位震盪、黃金多空交戰，亞幣則持續承壓。",
+    "why_it_matters": "這意味著單一的再通膨交易已無法完全解釋市場動態，投資人需防範高利率對實體經濟的滯後衝擊，以及地緣政治反轉帶來的突發波動。"
+  },
+  "evidence": {
+    "most_important_evidence": [
+      "30年期美債殖利率突破5.1%",
+      "Fed會議紀錄顯示多數官員主張將升息列入選項",
+      "WTI原油單週顯著下跌至97.7美元"
+    ],
+    "insufficient_evidence": [
+      "就業市場最新數據",
+      "財政與期限溢價的具體政策背景"
+    ],
+    "watch_items_from_news_context": [
+      "Fed 官員對通膨路徑的進一步表態",
+      "美伊和平協議的談判進展",
+      "亞洲貨幣在強美元環境下的抵抗力"
+    ]
+  }
+}
