@@ -45,6 +45,7 @@ ANALYSIS_FILENAME = "weekly_forest_summary_analysis_layer_test.json"
 VISUAL_MANIFEST_PATH = "analysis_layer_visual_test_images/visual_manifest.json"
 WEEKLY_SOURCE_JSON_PATH = DATA_DIR / "weekly_video_source.json"
 WEEKLY_SOURCE_TEXT_FILENAME = "weekly_source_text.md"
+WEEKLY_MARKET_SERIES_FILENAME = "weekly_market_series.json"
 OUT_JSON_FILENAME = "weekly_dialogue_script_analysis_layer_test.json"
 OUT_MD_FILENAME = "weekly_dialogue_script_analysis_layer_test.md"
 
@@ -102,17 +103,17 @@ CANONICAL_ANALYSIS_SCENES = [
 SYSTEM_PROMPT = """
 你是專業機構級總經影片編劇與台詞設計師，負責把 Step 80 已經分析好的「本週主線分析過程」，轉譯成 Tom（主持人）與 Miranda（首席總經策略師）可直接進 TTS 的正式雙人逐句對談稿。
 
-本次是 Step 82 v6 測試版：
+本次是 Step 82 v7.3 測試版：
 - 核心任務是先產出一支完整、可聽、順暢的 voice-first 總經故事。
 - 圖片只是後續加強觀感，不是語音稿的主控。
-- 資料來源是 scene_inputs，每一幕都有自己的 primary_material；同時可使用 Step 00 endpoint source_context_bundle 補強新聞脈絡、每日事件流、傳導鏈與市場驗證。
+- 資料來源是 scene_inputs，每一幕都有自己的 primary_material；同時可使用 Step 00 endpoint source_context_bundle 補強新聞脈絡、每日事件流、傳導鏈與市場驗證，並使用 market_series_context 補強各項市場數據的一週走勢語言。
 - 不重新分析市場，不自由創作新聞，只把 Step 80 的分析推導過程故事化。
 - 不產生音檔，只產生正式雙人逐句對談稿 JSON / MD。
 
 最重要的主控規則：
 - scene_inputs 是本次語音稿的 scene 主控清單。
 - scene 數量、順序與 scene_id 必須嚴格依照 scene_inputs。
-- 每個 scene 的主要素材必須以該 scene 的 primary_material 與 allowed_supporting_material 為主；source_context_bundle 只能補強故事脈絡、新聞事件流、傳導鏈、market snapshot、divergence、watchpoints，不可推翻 Step 80 分析層判斷。
+- 每個 scene 的主要素材必須以該 scene 的 primary_material 與 allowed_supporting_material 為主；source_context_bundle 只能補強故事脈絡、新聞事件流、傳導鏈、market snapshot、divergence、watchpoints，不可推翻 Step 80 分析層判斷；market_series_context 只能補強價格走勢與數據畫面，不可單獨推導新結論。
 - forest_summary 只能在「本週主線結論」scene 使用；前面 scene 不得拿 forest_summary 回頭改寫。
 - visual_manifest 只用來補充已生成圖片的 image_path，不可決定 scene 數量。
 - 即使 visual_manifest 只有一張測試圖，也不得只產一段語音稿，更不得把後續所有分析塞進第一段。
@@ -205,7 +206,79 @@ source_context_bundle 來自 Step 00 weekly_video_source endpoint，內容可能
 7. 使用 source_context_bundle 的目的，是讓語音稿更像完整市場故事，而不是把摘要改寫成對話。
 
 ━━━━━━━━━━━━━━━━━━━━
-五、Narrative Architecture
+五、Market series 價格走勢總經解讀原則
+━━━━━━━━━━━━━━━━━━━━
+
+market_series_context 來自 weekly_market_series.json，目的不是讓語音稿多念數字，也不是讓語音稿做技術分析，而是讓語音稿能解釋「價格為什麼這樣走」。
+
+核心原則：
+- 不要描述走勢，要解釋走勢。
+- 走勢人人能看，解讀原因才是洞察。
+- 每次提到市場數據，都必須完成「走勢 → 轉折原因 → 驗證 / 抵銷的總經判斷 → 對下一段分析的含義」。
+- 如果只能說出「黃金呈現 V 型反轉」、「美元高位震盪」、「亞幣承壓」，但說不出為什麼，就不要使用這個走勢描述。
+- 走勢型態名稱只能作為輔助語言，不能成為分析本身。
+
+標準解讀鏈：
+1. 當週數據怎麼走。
+2. 哪一天、哪則新聞、哪個政策訊號或哪個市場事件造成轉折。
+3. 這個走勢驗證或抵銷了哪個總經判斷。
+4. 這對下一段分析代表什麼。
+
+使用方式：
+1. 不要把市場數據列成清單。
+2. 每個 scene 只挑與本幕主題相關的市場變數。
+3. 數據要服務於當前分析問題，用來建立價格畫面、驗證新聞訊號或說明背離。
+4. 請優先使用「走勢型態 + 轉折原因 + 總經含義 + 下一步問題」的語言，而不是只講單一數值。
+   走勢型態只是輔助語言，不是技術分析；不要為了套用名稱而硬分類。
+   所有走勢語言都必須貼著當週實際數據變化解讀，必須由 market_series_context 的 start、end、high、low、trend_shape、points 或 daily_summaries 中的市場數據支撐。
+   若資料不足以判斷走勢型態，不得自行命名型態；請改用「資料顯示為區間震盪」、「資料不足以判斷明確型態」等中性表述。
+   每次使用走勢型態時，必須說明該走勢背後的事件脈絡或總經含義，例如：哪一天、哪則新聞、哪個政策訊號或哪個市場價格驗證造成轉折。
+   不合格寫法：「黃金呈現 V 型反轉。」
+   合格寫法：「黃金前段受高利率壓抑回落，但後段在房市疲軟與避險需求升溫後重新回升，這代表市場沒有單純交易利率，也在為成長與地緣風險買保護。」
+5. 常用走勢語言包括：
+   - 先漲後跌
+   - 先跌後漲
+   - 一路走高
+   - 一路走低
+   - 高位震盪
+   - 低位震盪
+   - 區間震盪
+   - V 型反轉：先快速下跌，後快速反彈
+   - 倒 V 型反轉：先快速上攻，後快速回落
+   - L 型整理：急跌後低位橫盤，沒有明顯反彈
+   - U 型修復：先下跌，底部整理後逐步回升
+   - 階梯式走高：不是直線上漲，而是回檔後再創高
+   - 階梯式走低：反彈無力，逐步下探
+   - 高位盤整：維持在高檔區間，沒有明顯突破
+   - 低位盤整：維持在低檔區間，反彈力道不足
+   - 先受壓、後反彈
+   - 先被利差支撐、後被成長擔憂抵銷
+6. Tom 或 Miranda 每段都應自然帶入與本幕主題相關的價格走勢，但不可硬塞無關數據。
+7. 每段最多聚焦 2～3 個市場變數，避免變成數字播報。
+8. 如果 market_series_context 中有 high、low、start、end、direction、trend_shape、turning_point，請優先用它來說明「本週怎麼走」。
+   但不要只唸 start / end / high / low；必須把它轉成「本週先怎麼走、後來怎麼變、為什麼變、這代表什麼」。
+9. 如果只有日資料，請根據每日序列整理為口語走勢，且必須保留實際方向與事件脈絡，例如：
+   - 「油價前段仍有地緣風險支撐，但後段因和平協議傳聞快速回落。」
+   - 「十年期殖利率先上攻、後回落，但整週仍維持在高位，代表市場沒有完全放棄高利率定價。」
+   - 「美元指數不是一路單邊走強，而是在利差支撐與成長擔憂之間高位震盪。」
+   - 「黃金先受高利率壓抑，後因避險需求回升，顯示市場並非只交易利率，也在為不確定性買保護。」
+10. 走勢解讀順序必須是：
+   當週數據怎麼走 → 哪個事件或訊號造成轉折 → 這個走勢驗證或抵銷了什麼總經判斷 → 對下一段分析代表什麼。
+11. 每個 scene 至少要有一處「價格走勢總經解讀」，但不可平均塞數字；只挑本幕最能支撐分析問題的 1～3 個變數。
+12. Tom 可以用走勢提出疑問，Miranda 必須回答該走勢背後的總經原因；不要讓 Tom 和 Miranda 互相丟數字。
+13. Miranda 的回答不能停在「資產上漲 / 下跌 / 震盪」，必須說明市場定價機制：是通膨預期、利差、期限溢價、避險需求、成長擔憂、資金流，還是政策訊號造成。
+
+各 scene 的數據帶入方向：
+- scene_01_news_context：用 WTI / Brent、US10Y / 30Y、DXY 建立本週價格畫面。
+- scene_02_inflation_expectation：用 CPI / PPI 背景與 WTI / Brent 走勢說明通膨訊號為何不單一。
+- scene_03_rate_driver：用 US10Y / 30Y 走勢說明利率高位震盪與期限溢價重估。
+- scene_04_dollar_gold：用 DXY 與 Gold 走勢說明美元利差支撐與黃金避險需求如何同時存在。
+- scene_05_asia_fx：用 USDTWD、USDJPY、USDKRW 走勢說明台、日、韓貨幣壓力差異。
+- scene_06_weekly_main_theme：只用前面已講過的價格走勢收斂本週主線，不新增數據。
+- scene_07_next_week_watch：只用 watchpoints 對應的市場變數作為後續觀察，不新增預測。
+
+━━━━━━━━━━━━━━━━━━━━
+六、Narrative Architecture
 ━━━━━━━━━━━━━━━━━━━━
 
 每個 scene 只回答一個核心問題。
@@ -301,7 +374,7 @@ source_context_bundle 來自 Step 00 weekly_video_source endpoint，內容可能
 - 新增資料外觀察主題
 
 ━━━━━━━━━━━━━━━━━━━━
-六、寫作準則
+七、寫作準則
 ━━━━━━━━━━━━━━━━━━━━
 
 - 每段先講市場 narrative，不要先報數字。
@@ -316,7 +389,7 @@ source_context_bundle 來自 Step 00 weekly_video_source endpoint，內容可能
 - 即使沒有圖片，也要讓語音稿有畫面感。
 
 ━━━━━━━━━━━━━━━━━━━━
-七、語氣與合規邊界
+八、語氣與合規邊界
 ━━━━━━━━━━━━━━━━━━━━
 
 全片口吻：
@@ -342,7 +415,7 @@ source_context_bundle 來自 Step 00 weekly_video_source endpoint，內容可能
 - 改用「分歧」、「抵銷」、「不同方向力量」、「訊號交錯」、「尚未形成單一方向」。
 
 ━━━━━━━━━━━━━━━━━━━━
-八、對話節奏與結構
+九、對話節奏與結構
 ━━━━━━━━━━━━━━━━━━━━
 
 1. 每個 scene 優先產生 4～7 個 speaker_turns，避免只用 Tom 一問、Miranda 一答就結束。
@@ -369,7 +442,9 @@ USER_PROMPT_TEMPLATE = """
 - 若 visual_manifest 只有部分圖片，仍必須依 scene_inputs 完整產生所有 scene 的語音稿。
 - 每個 scene 的主要事實來源是該 scene 的 primary_material。
 - 可使用 source_context_bundle 補強新聞事件流、每日脈絡、傳導鏈、market snapshot、divergence 與 watchpoints，但不得推翻 primary_material。
-- 每個 scene 必須明確產生 core_question、allowed_scope、do_not_expand、section_hook、visual_brief、market_data_to_show。
+- 可使用 market_series_context 補強每一幕的價格走勢語言；數據必須服務於本幕主題，不可變成數字清單。
+- 每個 scene 必須明確產生 core_question、allowed_scope、do_not_expand、section_hook、visual_brief、market_data_to_show、price_action_interpretation。
+- price_action_interpretation 必須說明本幕最重要的價格走勢如何驗證或抵銷總經判斷，不可只寫走勢型態名稱。
 - allowed_supporting_material 只可用來輔助轉場或補充，不可喧賓奪主。
 - forest_summary 只可在 scene_06_weekly_main_theme 使用。
 - 不要把 forest_summary 或本週主線結論拿到前面 scene 當開頭。
@@ -386,7 +461,7 @@ USER_PROMPT_TEMPLATE = """
     "source": "scene_inputs derived from weekly_forest_summary_analysis_layer_test.json + visual_manifest.json",
     "week_range": "",
     "script_type": "video_dialogue_script_test",
-    "version_note": "Step 82 v6 test version: voice-first story script with narrative architecture"
+    "version_note": "Step 82 v7.3 test version: voice-first story script with narrative architecture"
   },
   "dialogue_structure": {
     "total_scenes": 0,
@@ -406,6 +481,7 @@ USER_PROMPT_TEMPLATE = """
       "section_hook": "",
       "visual_brief": "",
       "market_data_to_show": [],
+      "price_action_interpretation": "",
       "scene_narrative_role": "主題導入 / 分析展開 / 小結提問 / 轉場",
       "speaker_turns": [
         {
@@ -438,6 +514,9 @@ scene_inputs：
 
 source_context_bundle：
 {source_context_bundle_json}
+
+market_series_context：
+{market_series_context_json}
 """
 
 
@@ -741,6 +820,185 @@ def build_source_context_bundle(week_dir: Path) -> Dict[str, Any]:
 
 
 
+
+def _try_float(value: Any):
+    if value is None:
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    text = str(value).strip().replace(",", "")
+    match = re.search(r"-?\d+(?:\.\d+)?", text)
+    if not match:
+        return None
+    try:
+        return float(match.group(0))
+    except ValueError:
+        return None
+
+
+def infer_trend_shape(values: List[float]) -> str:
+    if len(values) < 2:
+        return "資料不足"
+
+    start = values[0]
+    end = values[-1]
+    high = max(values)
+    low = min(values)
+    high_i = values.index(high)
+    low_i = values.index(low)
+
+    scale = max(abs(start), abs(end), abs(high), abs(low), 1.0)
+    tolerance = scale * 0.003
+    range_width = high - low
+    meaningful_range = range_width > scale * 0.01
+    net = end - start
+
+    diffs = [values[i + 1] - values[i] for i in range(len(values) - 1)]
+    up_count = sum(1 for x in diffs if x > tolerance)
+    down_count = sum(1 for x in diffs if x < -tolerance)
+
+    if not meaningful_range:
+        return "區間震盪"
+
+    # V / inverted-V: turning point in the middle with visible recovery or pullback.
+    if 0 < low_i < len(values) - 1:
+        rebound = end - low
+        drop = start - low
+        if drop > range_width * 0.45 and rebound > range_width * 0.45:
+            return "V型反轉"
+        if drop > range_width * 0.45 and rebound <= range_width * 0.25:
+            return "L型整理"
+        if drop > range_width * 0.35 and rebound > range_width * 0.25:
+            return "U型修復"
+
+    if 0 < high_i < len(values) - 1:
+        rise = high - start
+        pullback = high - end
+        if rise > range_width * 0.45 and pullback > range_width * 0.45:
+            return "倒V型反轉"
+
+    if up_count > 0 and down_count == 0:
+        return "一路走高"
+    if down_count > 0 and up_count == 0:
+        return "一路走低"
+
+    # Stair-step moves: net direction clear, but with pauses / counter moves.
+    if net > tolerance and up_count >= down_count:
+        return "階梯式走高"
+    if net < -tolerance and down_count >= up_count:
+        return "階梯式走低"
+
+    if abs(net) <= tolerance:
+        midpoint = (high + low) / 2
+        return "高位盤整" if end >= midpoint else "低位盤整"
+
+    return "高位震盪" if net > 0 else "低位震盪"
+
+def summarize_series_points(points: List[Dict[str, Any]]) -> Dict[str, Any]:
+    parsed = []
+    for p in points:
+        if not isinstance(p, dict):
+            continue
+        value = None
+        for key in ["value", "close", "price", "rate", "level", "last"]:
+            if key in p:
+                value = _try_float(p.get(key))
+                if value is not None:
+                    break
+        if value is None:
+            continue
+        parsed.append({
+            "date": p.get("date") or p.get("time") or p.get("label") or "",
+            "value": value,
+        })
+
+    values = [x["value"] for x in parsed]
+    if not values:
+        return {"points_available": 0}
+
+    high = max(values)
+    low = min(values)
+    high_i = values.index(high)
+    low_i = values.index(low)
+
+    return {
+        "points_available": len(values),
+        "start": values[0],
+        "end": values[-1],
+        "high": high,
+        "low": low,
+        "high_date": parsed[high_i].get("date", ""),
+        "low_date": parsed[low_i].get("date", ""),
+        "trend_shape": infer_trend_shape(values),
+        "turning_point_note": (
+            f"high at {parsed[high_i].get('date', '')}" if high_i not in (0, len(values)-1)
+            else f"low at {parsed[low_i].get('date', '')}" if low_i not in (0, len(values)-1)
+            else ""
+        ),
+        "points": parsed[:14],
+    }
+
+
+def extract_market_series_summary(raw: Any) -> Dict[str, Any]:
+    summary: Dict[str, Any] = {}
+
+    if not isinstance(raw, dict):
+        return {"available": False, "reason": "weekly_market_series.json is not an object"}
+
+    # Common formats:
+    # 1) {"series": [{"asset": "US10Y", "data": [...]}, ...]}
+    # 2) {"US10Y": [...], "DXY": [...]}
+    # 3) {"series": {"US10Y": [...]}}
+
+    series_obj = raw.get("series", raw)
+    items = []
+
+    if isinstance(series_obj, list):
+        for item in series_obj:
+            if isinstance(item, dict):
+                name = (
+                    item.get("asset")
+                    or item.get("symbol")
+                    or item.get("name")
+                    or item.get("ticker")
+                    or item.get("label")
+                )
+                points = item.get("data") or item.get("points") or item.get("values") or item.get("series")
+                if name and isinstance(points, list):
+                    items.append((str(name), points))
+    elif isinstance(series_obj, dict):
+        for name, points in series_obj.items():
+            if isinstance(points, list):
+                items.append((str(name), points))
+            elif isinstance(points, dict):
+                nested = points.get("data") or points.get("points") or points.get("values") or points.get("series")
+                if isinstance(nested, list):
+                    items.append((str(name), nested))
+
+    for name, points in items:
+        summary[name] = summarize_series_points(points)
+
+    return {
+        "available": bool(summary),
+        "source": "weekly_market_series.json",
+        "assets": summary,
+        "usage_rule": (
+            "Use trend_shape/start/end/high/low to speak naturally about price movement. "
+            "Do not list all numbers; convert them into trend-language tied to each scene topic."
+        ),
+    }
+
+
+def build_market_series_context(week_dir: Path) -> Dict[str, Any]:
+    path = week_dir / WEEKLY_MARKET_SERIES_FILENAME
+    raw = load_json(path, {})
+    context = extract_market_series_summary(raw)
+    context["file_available"] = path.exists()
+    context["file_path"] = str(path)
+    return context
+
+
+
 def build_prompt(week_dir: Path) -> str:
     analysis = load_json(week_dir / ANALYSIS_FILENAME, {})
     if not analysis:
@@ -749,10 +1007,12 @@ def build_prompt(week_dir: Path) -> str:
     visual_manifest = load_json(week_dir / VISUAL_MANIFEST_PATH, {})
     scene_inputs = build_scene_inputs(analysis, visual_manifest)
     source_context_bundle = build_source_context_bundle(week_dir)
+    market_series_context = build_market_series_context(week_dir)
 
     print(f"[INFO] Scene input count: {scene_inputs.get('total_scenes', 0)}")
     print(f"[INFO] Endpoint source context available: {source_context_bundle.get('endpoint_json_available')}")
     print(f"[INFO] Weekly source text available: {source_context_bundle.get('weekly_source_text_available')}")
+    print(f"[INFO] Weekly market series available: {market_series_context.get('file_available')} | parsed={market_series_context.get('available')}")
     for scene in scene_inputs.get("scenes", []):
         print(
             f"[INFO] Scene: {scene.get('scene_id')} | "
@@ -764,6 +1024,7 @@ def build_prompt(week_dir: Path) -> str:
     # Save prompt inputs for debugging, without requiring another API call to inspect.
     save_json(week_dir / "weekly_dialogue_scene_inputs_debug.json", scene_inputs)
     save_json(week_dir / "weekly_dialogue_source_context_debug.json", source_context_bundle)
+    save_json(week_dir / "weekly_dialogue_market_series_context_debug.json", market_series_context)
 
     return USER_PROMPT_TEMPLATE.replace(
         "{scene_inputs_json}",
@@ -771,7 +1032,72 @@ def build_prompt(week_dir: Path) -> str:
     ).replace(
         "{source_context_bundle_json}",
         compact_json(source_context_bundle, max_chars=90000),
+    ).replace(
+        "{market_series_context_json}",
+        compact_json(market_series_context, max_chars=50000),
     )
+
+
+
+BANNED_REPLACEMENTS = {
+    "拉鋸戰": "訊號交錯狀態",
+    "拉鋸": "訊號交錯",
+    "多空交戰": "不同方向力量並存",
+    "投資人現在必須": "後續需要",
+    "投資人必須": "後續需要",
+}
+
+
+def replace_in_obj(obj: Any) -> Any:
+    if isinstance(obj, str):
+        text = obj
+        for old, new in BANNED_REPLACEMENTS.items():
+            text = text.replace(old, new)
+        return text
+    if isinstance(obj, list):
+        return [replace_in_obj(x) for x in obj]
+    if isinstance(obj, dict):
+        return {k: replace_in_obj(v) for k, v in obj.items()}
+    return obj
+
+
+
+
+
+def ensure_price_action_interpretation_fields(result: Dict[str, Any]) -> None:
+    scenes = result.get("scene_dialogues")
+    if not isinstance(scenes, list):
+        return
+    for scene in scenes:
+        if not isinstance(scene, dict):
+            continue
+        if "price_action_interpretation" not in scene:
+            scene["price_action_interpretation"] = ""
+
+
+def rebuild_full_script_plain_text(result: Dict[str, Any]) -> None:
+    scenes = result.get("scene_dialogues")
+    if not isinstance(scenes, list):
+        return
+
+    lines = []
+    for scene in scenes:
+        if not isinstance(scene, dict):
+            continue
+        turns = scene.get("speaker_turns")
+        if not isinstance(turns, list):
+            continue
+        for turn in turns:
+            if not isinstance(turn, dict):
+                continue
+            speaker = str(turn.get("speaker", "")).strip()
+            text = str(turn.get("spoken_text", "")).strip()
+            if speaker and text:
+                lines.append(f"[{speaker}]: {text}")
+
+    if lines:
+        result["full_script_plain_text"] = "\n".join(lines)
+
 
 
 def build_markdown(result: Dict[str, Any]) -> str:
@@ -870,6 +1196,9 @@ def main() -> None:
 
     user_prompt = build_prompt(week_dir)
     result = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
+    result = replace_in_obj(result)
+    ensure_price_action_interpretation_fields(result)
+    rebuild_full_script_plain_text(result)
 
     out_json = week_dir / OUT_JSON_FILENAME
     save_json(out_json, result)
