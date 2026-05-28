@@ -1,0 +1,71 @@
+name: 83 Generate Story Visual Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_dir:
+        description: "Optional week directory, e.g. 2026-05-21 or output/weekly/2026-05-21. Leave blank to use latest."
+        required: false
+        default: ""
+      target_scene:
+        description: "Optional single scene to render. Accepts 1, s1, scene_01, vis_01. Leave blank to render all scenes."
+        required: false
+        default: ""
+      preview_only_first:
+        description: "Cheapest preview mode: if true and target_scene is empty, only render the first scene."
+        required: false
+        type: boolean
+        default: false
+      force_rebuild:
+        description: "Force rebuild even if image already exists"
+        required: false
+        default: "false"
+
+permissions:
+  contents: write
+
+jobs:
+  generate-story-visual-images:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Generate story visual images
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_IMAGE_MODEL: ${{ vars.IMAGE_MODEL || 'gemini-3.1-flash-image-preview' }}
+          WEEK_DIR: ${{ github.event.inputs.week_dir }}
+          TARGET_SCENE_ID: ${{ github.event.inputs.target_scene }}
+          PREVIEW_ONLY_FIRST: ${{ github.event.inputs.preview_only_first }}
+          FORCE_REBUILD_VISUALS: ${{ github.event.inputs.force_rebuild }}
+          IMAGE_TEMPERATURE: "0.55"
+          GEMINI_IMAGE_RETRIES: "2"
+        run: |
+          python scripts/83_generate_story_visual_images.py
+
+      - name: Commit outputs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add output/weekly/**/story_visual_images/** || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Generate Step 83 story visual images"
+            git push
+          fi
+
+      - name: Upload outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: step83-story-visual-images
+          path: |
+            output/weekly/**/story_visual_images/**
+          if-no-files-found: warn
