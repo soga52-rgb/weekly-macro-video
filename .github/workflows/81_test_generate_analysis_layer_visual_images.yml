@@ -16,7 +16,7 @@ on:
         required: false
         default: "0.55"
       target_scene:
-        description: "Optional: generate only one scene_id, e.g. scene_01_news_context"
+        description: "Optional: generate only one scene. Accepted: 4 / 04 / scene_04 / full scene_id"
         required: false
         default: ""
       force_rebuild_visuals:
