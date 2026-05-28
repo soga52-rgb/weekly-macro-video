@@ -1,0 +1,72 @@
+name: 82 Test Generate Dialogue Script
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_dir:
+        description: "Optional week folder under output/weekly, e.g. 2026-05-21. Leave blank to use latest."
+        required: false
+        default: ""
+      dialogue_model:
+        description: "Gemini dialogue model"
+        required: false
+        default: "gemini-3.5-pro"
+
+permissions:
+  contents: write
+
+jobs:
+  generate-dialogue-script:
+    runs-on: ubuntu-latest
+
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_DIALOGUE_MODEL: ${{ inputs.dialogue_model }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Run 82 dialogue script test
+        run: |
+          if [ ! -f "scripts/82_test_generate_dialogue_script.py" ]; then
+            echo "Missing scripts/82_test_generate_dialogue_script.py"
+            echo "Available 82 scripts:"
+            ls -la scripts/82* || true
+            exit 1
+          fi
+
+          if [ -n "${{ inputs.week_dir }}" ]; then
+            python scripts/82_test_generate_dialogue_script.py --week-dir "${{ inputs.week_dir }}"
+          else
+            python scripts/82_test_generate_dialogue_script.py
+          fi
+
+      - name: Commit dialogue script test outputs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git add output/weekly/**/weekly_dialogue_script_analysis_layer_test.json || true
+          git add output/weekly/**/weekly_dialogue_script_analysis_layer_test.md || true
+
+          if git diff --cached --quiet; then
+            echo "No dialogue script output changes to commit."
+          else
+            git commit -m "Test dialogue script generation"
+            git push
+          fi
+
+      - name: Upload dialogue script artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dialogue-script-test-output
+          path: |
+            output/weekly/**/weekly_dialogue_script_analysis_layer_test.json
+            output/weekly/**/weekly_dialogue_script_analysis_layer_test.md
+          if-no-files-found: warn
