@@ -27,6 +27,14 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
 7. 不要一開始就總結本週主線。先讓聽眾跟著事件與價格一步一步形成理解。
 8. 本週主線應在後段自然收斂，不要在開頭提前講完。
 9. 下週觀察不能突然出現，必須回扣前面已經鋪陳過的未解事件或價格線。
+10. 主要事件線至少挑一個代表性價格走勢做「口語化走勢解讀」：不要只說價格到哪裡，要說它是快速回落、先上攻後回落、先受壓後反彈、高位震盪，或區間反覆，並解釋這代表市場在重新定價什麼。
+11. Tom 的開場白不要先報新聞清單，也不要先下本週結論；Tom 要用主持人的方式打開問題，請 Miranda 先從本週市場價格走勢切入分析。
+    開場可以類似：「Miranda，這週如果先不看新聞標題，而是先看市場價格本身，有哪些走勢最值得我們注意？它們背後反映的是什麼市場訊號？」
+    Miranda 第一段必須接著用事件脈絡帶出 2～3 個代表性價格走勢，並解釋這些走勢為什麼重要。
+
+價格走勢解讀範例：
+不要寫成：「黃金呈現 V 型反轉，價格在 4480 到 4577 美元之間震盪。」
+應該寫成：「黃金前段受高利率壓抑回落，但後段又因房市疲軟與避險需求升溫重新回升。這代表市場沒有單純交易利率，也在為成長放緩與地緣政治不確定性買保護。」
 
 建議故事推進方式：
 - 先從本週最能形成故事的事件線切入，例如地緣政治、央行政策、長債壓力、房市疲軟、強美元或亞幣壓力。
@@ -41,13 +49,13 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
 不要投資建議，不要買賣指令。
 請輸出合法 JSON，不要 Markdown，不要多餘文字。
 
-請根據下方資料，產生 Step 82 v8.1 Story-only Tom / Miranda 總經訪談稿。
+請根據下方資料，產生 Step 82 v8.3.2 Story-only Tom / Miranda 總經訪談稿。
 
 資料：
 {
   "meta": {
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21",
-    "generated_at": "2026-05-28T13:04:16",
+    "generated_at": "2026-05-28T13:17:15",
     "input_files": {
       "analysis": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/weekly_forest_summary_analysis_layer_test.json",
       "weekly_market_series": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/weekly_market_series.json",
