@@ -60,6 +60,8 @@ SYSTEM_PROMPT = """
 - 不要畫成戰場、決鬥、史詩場景、科幻海報、童書插畫、交易廣告或過度戲劇化角色。
 - 不要用具象物件取代分析邏輯；icon 只作為輔助。
 - 不要產生投資建議。
+- effect、signal、judgment 類欄位可作為構圖參考，但不得原樣顯示在圖片上。
+- 圖片文字不要出現「強化、抵銷、分歧、mixed、整體判斷、觀察重點、重要證據、總結、summary、judgment、effect、signal、watch、evidence」等內部判斷標籤或欄位名稱，除非該詞是本頁核心結論。
 - 若資料不足，畫面應呈現「待觀察 / 資料不足」，不得自行補資料。
 """
 
@@ -69,9 +71,13 @@ GLOBAL_STYLE_GUIDE = """
 - 16:9 橫式影片圖卡。
 - 極淡底色，可接近白底、淡灰、淡藍或淡米色。
 - 金融媒體導讀圖卡風格，不是簡報投影片堆字。
-- 大標題置頂，副標或核心句不超過一行。
+- 大標題置頂，副標或核心句盡量精簡；若該頁指定只留大標題，請不要額外再加副標。
 - 每張圖只保留 1 個核心問題或 1 個核心結論。
-- 以 2～5 個小型 icon / 數據卡 / 標籤卡呈現重點。
+- 畫面要簡潔，寧可少不要滿；若素材過多，請先濃縮成短句，不要全部塞上去。
+- 每頁僅保留必要資訊，避免過多卡片、過多 icon、過多箭頭。
+- 以 2～5 個小型 icon / 數據卡 / 短標籤呈現重點，但不要做底部「重要證據 / 觀察重點」標籤列。
+- 區塊內不要使用厚白色浮卡、重陰影或突兀卡片；請使用極淡同色系底卡、細線框、半透明淺底或直接排在淡色區塊內。
+- 卡片邊界要輕，不能搶過主題區塊外框；整體應像整合式資訊圖，而不是一堆白色便條紙貼上去。
 - 使用簡單箭頭、框線、分區與方向線表達因果。
 - 避免滿版文字；避免長句；避免大量段落。
 - 可以使用固定色彩區隔主題，但整體色彩要克制、淡雅。
@@ -83,20 +89,29 @@ GLOBAL_STYLE_GUIDE = """
 SCENE_DEFINITIONS = [
     {
         "scene_id": "scene_01_news_context",
-        "title": "新聞脈絡",
+        "title": "新聞資訊",
         "section_path": ["main_theme_analysis_process", "news_context"],
         "visual_instruction": """
-本圖呈現「新聞脈絡」，不是最終結論。
+本圖呈現「新聞資訊」，不是最終結論。
+大標題只留「新聞資訊」，不要再放「本週新聞脈絡」、不要放副標、不要放核心問題行。
+
 請用由左至右三個主題區塊：
 1. 通膨
 2. 利率
 3. 美元 / 亞幣 / 黃金
 
-每個區塊使用固定不同顏色外框。
-每個區塊上方放「當週新增新聞」，視覺比重較大。
-每個區塊下方放「前期背景新聞」，視覺比重較小。
-內容可以用 app icon / 小圖示卡片呈現。
+每個區塊使用固定不同顏色外框與極淡同色系背景。
+每個區塊上方放「當週新聞」，視覺比重較大。
+每個區塊下方放「前期新聞」，視覺比重較小。
+文字只使用這兩個名稱，不要寫「當週新增新聞」或「前期背景新聞」。
+
+內容可以用 app icon / 小圖示卡片呈現，但卡片必須融入各自淡色區塊，不要使用突兀白色浮卡或重陰影。
+請優先用淡色同色系底卡、細線框、弱陰影或直接融入區塊。
+每個區塊只保留最重要的 1～2 則當週新聞與 1～2 則前期新聞；若素材過多，請濃縮，不要全部塞滿。
+
 目的：讓觀眾理解本週市場關注哪些消息，以及前期背景是什麼。
+本圖只呈現新聞資訊，不要放「總結」「整體判斷」「重要證據」「觀察重點」等底部區塊或欄位。
+不要在卡片右下角顯示括號標籤，如「（強化）」「（抵銷）」「（分歧）」等。
 """,
     },
     {
@@ -112,6 +127,7 @@ SCENE_DEFINITIONS = [
 
 重點是數據卡與方向箭頭，不是新聞摘要。
 請讓觀眾一眼看出：哪些市場價格同向，哪些出現分歧或未同步。
+畫面要克制，不要塞太多輔助元素。
 """,
     },
     {
@@ -125,8 +141,9 @@ SCENE_DEFINITIONS = [
 - 抵銷或修正能源端通膨壓力的訊號
 
 中央或底部放結論：mixed / 分歧 / 尚未形成單一方向。
-不要使用「拉鋸」字樣。
+不要使用「拉扯」字樣。
 不要把油價單週下跌畫成整體通膨已完全降溫。
+畫面以簡潔分析圖解為主，不要過度裝飾。
 """,
     },
     {
@@ -200,6 +217,10 @@ SCENE_DEFINITIONS = [
 ]
 
 
+SCENE_LOOKUP = {scene["scene_id"]: scene for scene in SCENE_DEFINITIONS}
+SCENE_INDEX_LOOKUP = {f"{index:02d}": scene["scene_id"] for index, scene in enumerate(SCENE_DEFINITIONS, start=1)}
+
+
 def load_json(path: Path, default: Any = None) -> Any:
     if not path.exists():
         return default if default is not None else {}
@@ -248,6 +269,37 @@ def compact_json(data: Any, max_chars: int = 9000) -> str:
     return text[:max_chars] + "\n...（內容過長，已截斷；請只使用可見內容）"
 
 
+def normalize_target_scene(raw: str) -> str:
+    value = (raw or "").strip()
+    if not value:
+        return ""
+
+    if value in SCENE_LOOKUP:
+        return value
+
+    lowered = value.lower()
+    if lowered in SCENE_LOOKUP:
+        return lowered
+
+    m = re.fullmatch(r"(?:scene_)?(\d{1,2})(?:_(.*))?", lowered)
+    if not m:
+        raise ValueError(f"Unknown target scene: {raw}")
+
+    num = f"{int(m.group(1)):02d}"
+    suffix = (m.group(2) or "").strip()
+
+    if suffix:
+        candidate = f"scene_{num}_{suffix}"
+        if candidate in SCENE_LOOKUP:
+            return candidate
+
+    candidate = SCENE_INDEX_LOOKUP.get(num)
+    if candidate:
+        return candidate
+
+    raise ValueError(f"Unknown target scene: {raw}")
+
+
 def build_image_prompt(scene: Dict[str, Any], section_data: Any, full_summary: Dict[str, Any]) -> str:
     forest_summary = full_summary.get("forest_summary", {})
     evidence = full_summary.get("evidence", {})
@@ -267,8 +319,10 @@ def build_image_prompt(scene: Dict[str, Any], section_data: Any, full_summary: D
 本圖對應分析段落：
 {compact_json(section_data, max_chars=7000)}
 
-可參考證據：
+輔助資料：
 {compact_json(evidence, max_chars=1800)}
+
+注意：輔助資料只供理解，不得在圖上以「總結」「重要證據」「觀察重點」等欄位標題或底部標籤列呈現。
 
 全域視覺規則：
 {GLOBAL_STYLE_GUIDE}
@@ -281,6 +335,7 @@ def build_image_prompt(scene: Dict[str, Any], section_data: Any, full_summary: D
 - 圖上文字必須是繁體中文。
 - 不要新增輸入資料沒有的數字或事件。
 - 不要產生長段文字。
+- 不要使用突兀白色浮卡、重陰影或便條紙式卡片；資訊卡應以淡色、細線、低對比方式融入背景。
 - 不要重新判斷市場，只轉譯本段分析。
 """.strip()
 
@@ -382,10 +437,8 @@ def main() -> None:
     output_dir = week_dir / OUTPUT_DIRNAME
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    target_scene = args.target_scene.strip()
-    scenes = [s for s in SCENE_DEFINITIONS if not target_scene or s["scene_id"] == target_scene]
-    if target_scene and not scenes:
-        raise ValueError(f"Unknown target scene: {target_scene}")
+    normalized_target_scene = normalize_target_scene(args.target_scene)
+    scenes = [s for s in SCENE_DEFINITIONS if not normalized_target_scene or s["scene_id"] == normalized_target_scene]
 
     print(f"[INFO] Week dir: {week_dir}")
     print(f"[INFO] Analysis input: {analysis_path}")
@@ -393,6 +446,8 @@ def main() -> None:
     print(f"[INFO] Temperature: {temperature}")
     print(f"[INFO] Retries: {retries}")
     print(f"[INFO] Force rebuild: {force}")
+    print(f"[INFO] Target scene raw: {args.target_scene or '(all)'}")
+    print(f"[INFO] Target scene normalized: {normalized_target_scene or '(all)'}")
 
     manifest: List[Dict[str, Any]] = []
 
