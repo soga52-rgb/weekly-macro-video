@@ -1,4 +1,4 @@
-name: 82 Test Generate Story-only Dialogue v8.8.2
+name: 82 Test Generate Story-only Dialogue v8.9.2
 
 on:
   workflow_dispatch:
