@@ -8,7 +8,7 @@ This version:
 - Uses Step 83 scene images.
 - Uses Step 85 edge-tts segment mp3 files.
 - Uses assets/tom.png and assets/miranda.png as speaker avatars.
-- Shows a larger, sharper active speaker avatar at lower-left with a glowing ring.
+- Shows a compact news-style active speaker avatar tightly aligned beside the bottom subtitle lane, with a subtle glowing ring.
 - Removes waveform.
 - Removes the speaker-name gray label.
 - Shows bottom, single-line, transparent transcript subtitles from spoken_text.
@@ -35,17 +35,17 @@ VIDEO_W = 1280
 VIDEO_H = 720
 FPS = 30
 
-AVATAR_SIZE = 140
-RING_SIZE = 176
-AVATAR_X = 38
-AVATAR_Y = 500
+AVATAR_SIZE = 64
+RING_SIZE = 84
+AVATAR_X = 22
+AVATAR_Y = 934
 RING_X = AVATAR_X - (RING_SIZE - AVATAR_SIZE) // 2
 RING_Y = AVATAR_Y - (RING_SIZE - AVATAR_SIZE) // 2
 
 SUBTITLE_FONT_SIZE = 25
 SUBTITLE_CHARS = 34
-SUBTITLE_X = 220
-SUBTITLE_MARGIN_BOTTOM = 20
+SUBTITLE_X = 108
+SUBTITLE_MARGIN_BOTTOM = 18
 
 FADE_SEC = 0.24
 RING_PERIOD = 1.05
