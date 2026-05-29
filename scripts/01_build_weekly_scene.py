@@ -34,6 +34,9 @@ INPUT_FILES = {
     "news": DATA_DIR / "news_narrative.json",
     "visual_note": DATA_DIR / "visual_note.json",
     "market_snapshot": DATA_DIR / "market_snapshot.json",
+    # Optional file created by Step 00.
+    # Used only to append latest daily market values when history_data.json is one day short.
+    "weekly_video_source": DATA_DIR / "weekly_video_source.json",
 }
 
 
@@ -156,6 +159,231 @@ def format_change(start: Optional[float], end: Optional[float], unit: str = "") 
 
     sign = "+" if change >= 0 else ""
     return f"{sign}{change:.2f}"
+
+
+def normalize_asset_name(value: Any) -> str:
+    text = str(value or "").strip().lower()
+    text = text.replace(" ", "").replace("_", "").replace("-", "")
+    text = text.replace("／", "/")
+    return text
+
+
+ASSET_ALIASES = {
+    "美國10年期公債殖利率": [
+        "美國10年期公債殖利率", "美國10年期公債", "美國10年債", "10年期美債",
+        "us10y", "ust10y", "10y", "^tnx"
+    ],
+    "美元指數": [
+        "美元指數", "dxy", "dollarindex", "dx-y.nyb"
+    ],
+    "美元/台幣": [
+        "美元/台幣", "美元台幣", "台幣", "新台幣", "usdtwd", "usdtwd=x"
+    ],
+    "美元/日圓": [
+        "美元/日圓", "美元日圓", "日圓", "日元", "usdjpy", "usdjpy=x"
+    ],
+    "美元/人民幣": [
+        "美元/人民幣", "美元人民幣", "人民幣", "usdcny", "usdcny=x"
+    ],
+    "黃金": [
+        "黃金", "gold", "xau", "xauusd", "gc=f"
+    ],
+    "原油": [
+        "原油", "wti", "西德州原油", "輕原油", "oil", "cl=f"
+    ],
+}
+
+
+def canonical_asset_name(value: Any) -> str:
+    normalized = normalize_asset_name(value)
+    if not normalized:
+        return ""
+
+    for canonical, aliases in ASSET_ALIASES.items():
+        if normalized == normalize_asset_name(canonical):
+            return canonical
+        for alias in aliases:
+            if normalized == normalize_asset_name(alias):
+                return canonical
+
+    for canonical, aliases in ASSET_ALIASES.items():
+        keywords = [normalize_asset_name(canonical)] + [normalize_asset_name(x) for x in aliases]
+        if any(k and k in normalized for k in keywords):
+            return canonical
+
+    return str(value or "").strip()
+
+
+def extract_value_from_market_item(item: Dict[str, Any]) -> Optional[float]:
+    for key in [
+        "value",
+        "latest_value",
+        "close",
+        "price",
+        "last",
+        "level",
+        "yield",
+        "rate",
+        "current",
+        "current_value",
+        "end_value",
+    ]:
+        parsed = to_float(item.get(key))
+        if parsed is not None:
+            return parsed
+    return None
+
+
+def extract_latest_daily_summary(weekly_video_source: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    summaries = weekly_video_source.get("daily_summaries")
+    if isinstance(summaries, list) and summaries:
+        candidates = [x for x in summaries if isinstance(x, dict)]
+        dated = [x for x in candidates if x.get("date")]
+        if dated:
+            return sorted(dated, key=lambda x: str(x.get("date")))[-1]
+        return candidates[-1] if candidates else None
+
+    daily_summary = weekly_video_source.get("daily_summary")
+    if isinstance(daily_summary, dict):
+        return daily_summary
+
+    return None
+
+
+def extract_today_market_values(weekly_video_source: Dict[str, Any]) -> Dict[str, float]:
+    """
+    Extract latest numeric asset values from Step 00 weekly_video_source / today_daily_source.
+
+    If the source only contains directional text without numeric market values,
+    this returns an empty dict and leaves history_data.json unchanged.
+    """
+    latest = extract_latest_daily_summary(weekly_video_source)
+    if not isinstance(latest, dict):
+        return {}
+
+    raw_snapshot = (
+        latest.get("market_snapshot")
+        or latest.get("market_data")
+        or latest.get("markets")
+        or latest.get("asset_values")
+        or latest.get("assets")
+    )
+
+    values: Dict[str, float] = {}
+
+    if isinstance(raw_snapshot, dict):
+        for raw_name, raw_value in raw_snapshot.items():
+            asset_name = canonical_asset_name(raw_name)
+            parsed = to_float(raw_value)
+            if asset_name and parsed is not None:
+                values[asset_name] = parsed
+        return values
+
+    if isinstance(raw_snapshot, list):
+        for item in raw_snapshot:
+            if not isinstance(item, dict):
+                continue
+
+            raw_name = (
+                item.get("asset_name")
+                or item.get("asset")
+                or item.get("name")
+                or item.get("label")
+                or item.get("title")
+                or item.get("symbol")
+                or item.get("ticker")
+            )
+            asset_name = canonical_asset_name(raw_name)
+            parsed = extract_value_from_market_item(item)
+            if asset_name and parsed is not None:
+                values[asset_name] = parsed
+
+    return values
+
+
+def infer_today_label(weekly_video_source: Dict[str, Any]) -> str:
+    latest = extract_latest_daily_summary(weekly_video_source)
+    if isinstance(latest, dict) and latest.get("date"):
+        return str(latest.get("date"))
+
+    range_data = weekly_video_source.get("range")
+    if isinstance(range_data, dict) and range_data.get("end_date"):
+        return str(range_data.get("end_date"))
+
+    if weekly_video_source.get("end_date"):
+        return str(weekly_video_source.get("end_date"))
+
+    return date.today().isoformat()
+
+
+def append_today_values_to_history(history_data: Dict[str, Any], weekly_video_source: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Append latest numeric market values to history_data.assets if:
+    - weekly_video_source contains numeric value for the same asset
+    - latest date/label is not already in that asset's dates list
+
+    Conservative behavior:
+    - If no numeric values exist, do nothing.
+    - If a date already exists, do not duplicate.
+    """
+    if not isinstance(history_data, dict) or not isinstance(weekly_video_source, dict):
+        return history_data
+
+    today_values = extract_today_market_values(weekly_video_source)
+    if not today_values:
+        print("[INFO] No numeric today market values found in weekly_video_source; history_data unchanged.")
+        return history_data
+
+    today_label = infer_today_label(weekly_video_source)
+    raw_assets = history_data.get("assets")
+
+    if isinstance(raw_assets, list):
+        appended_count = 0
+
+        for item in raw_assets:
+            if not isinstance(item, dict):
+                continue
+
+            asset_name = item.get("asset_name") or item.get("name") or item.get("asset")
+            canonical = canonical_asset_name(asset_name)
+            if canonical not in today_values:
+                continue
+
+            dates = item.setdefault("dates", [])
+            values = item.setdefault("values", [])
+
+            if not isinstance(dates, list) or not isinstance(values, list):
+                continue
+
+            if str(today_label) in [str(x) for x in dates]:
+                continue
+
+            dates.append(today_label)
+            values.append(today_values[canonical])
+            appended_count += 1
+
+        print(f"[INFO] Appended today values to history_data.assets: {appended_count} asset(s).")
+        return history_data
+
+    # Legacy wide format: history_data["美元指數"] = [...]
+    appended_count = 0
+    for asset_name in ASSET_ORDER:
+        values = history_data.get(asset_name)
+        if not isinstance(values, list):
+            continue
+
+        canonical = canonical_asset_name(asset_name)
+        if canonical not in today_values:
+            continue
+
+        if len(values) >= 6:
+            continue
+
+        values.append(today_values[canonical])
+        appended_count += 1
+
+    print(f"[INFO] Appended today values to legacy history_data format: {appended_count} asset(s).")
+    return history_data
 
 
 def extract_asset_series(history_data: Dict[str, Any]) -> List[Dict[str, Any]]:
@@ -509,6 +737,9 @@ def main() -> None:
     news_data = load_json(INPUT_FILES["news"], default={})
     visual_note = load_json(INPUT_FILES["visual_note"], default={})
     market_snapshot = load_json(INPUT_FILES["market_snapshot"], default={})
+    weekly_video_source = load_json(INPUT_FILES["weekly_video_source"], default={})
+
+    history_data = append_today_values_to_history(history_data, weekly_video_source)
 
     weekly_scene = build_weekly_scene(
         history_data=history_data,
@@ -529,4 +760,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
