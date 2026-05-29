@@ -254,14 +254,72 @@ def classify_news_item(item: Dict[str, Any]) -> str:
     return best_category if scores[best_category] > 0 else "其他"
 
 
+
+def normalize_news_title(title: Any) -> str:
+    text = str(title or "").strip().lower()
+    return re.sub(r"\W+", "", text)[:90]
+
+
+def build_news_url_lookup(news_context: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    """
+    Build URL lookup from top_news and data/weekly_news_raw.json.
+
+    Gemini may put good categorized cards into news_categories but omit URL.
+    The original RSS package usually still has URLs, so the web layer can restore
+    clickable links without re-running AI.
+    """
+    lookup: Dict[str, Dict[str, Any]] = {}
+
+    def add_item(item: Any) -> None:
+        if not isinstance(item, dict):
+            return
+        key = normalize_news_title(item.get("title"))
+        url = first_non_empty(item.get("url"), "")
+        if not key or not url:
+            return
+        current = lookup.get(key, {})
+        merged = dict(current)
+        for field in ["title", "url", "source", "published_at", "why_it_matters", "theme", "score"]:
+            if item.get(field) and not merged.get(field):
+                merged[field] = item.get(field)
+        lookup[key] = merged
+
+    for item in as_list(news_context.get("top_news")):
+        add_item(item)
+
+    raw_package = load_json(ROOT_DIR / "data" / "weekly_news_raw.json", {})
+    for item in as_list(raw_package.get("items") if isinstance(raw_package, dict) else []):
+        add_item(item)
+
+    return lookup
+
+
+def enrich_news_items_with_urls(items: List[Dict[str, Any]], lookup: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
+    enriched = []
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+
+        merged = dict(item)
+        if not first_non_empty(merged.get("url"), ""):
+            matched = lookup.get(normalize_news_title(merged.get("title")), {})
+            for field in ["url", "source", "published_at", "theme"]:
+                if matched.get(field) and not merged.get(field):
+                    merged[field] = matched.get(field)
+
+        enriched.append(merged)
+    return enriched
+
+
 def render_news_card(item: Dict[str, Any]) -> str:
     title = first_non_empty(item.get("title"), "未命名新聞")
     source = first_non_empty(item.get("source"), "News")
     why = first_non_empty(item.get("why_it_matters"), item.get("theme"), "")
     url = first_non_empty(item.get("url"), "#")
+    target_attr = ' target="_blank" rel="noopener noreferrer"' if url != "#" else ""
 
     return f"""
-    <a class="news-mini-card" href="{esc(url)}" target="_blank" rel="noopener noreferrer">
+    <a class="news-mini-card" href="{esc(url)}"{target_attr}>
       <div class="news-mini-top">
         <span class="news-source">{esc(source)}</span>
         <span class="open-mark">↗</span>
@@ -313,6 +371,10 @@ def get_categorized_news(news_context: Dict[str, Any]) -> Dict[str, List[Dict[st
 
         for key in categories.keys():
             categories[key] = dedupe_news_items(categories[key], 8)
+
+    url_lookup = build_news_url_lookup(news_context)
+    for key in categories.keys():
+        categories[key] = enrich_news_items_with_urls(categories[key], url_lookup)
 
     return categories
 
@@ -503,11 +565,13 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_la
             <div class="asset-pill">{esc(asset)}</div>
             <div class="chart-direction {direction}">{esc(direction_text)}</div>
           </div>
-          <div class="chart-latest">
-            <span class="chart-latest-value">{esc(fmt_number_only(latest_value))}</span>
-            <span class="chart-latest-unit">{esc(unit)}</span>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">{esc(fmt_number_only(latest_value))}</span>
+              <span class="chart-latest-unit">{esc(unit)}</span>
+            </div>
+            <div class="chart-change">{esc(change_sign)}{change:.3f}｜{change_sign}{pct:.2f}%</div>
           </div>
-          <div class="chart-change">{esc(change_sign)}{change:.3f}｜{change_sign}{pct:.2f}%</div>
           {sparkline_svg(clean_points, unit)}
           <div class="chart-signal">{esc(signal_text or "本週方向待觀察。")}</div>
         </div>
@@ -705,10 +769,11 @@ body {{
   background:var(--accent);
   display:inline-block;
 }}
-.chart-latest {{ color:var(--navy); margin-top:8px; line-height:1.15; letter-spacing:.01em; display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; }}
+.chart-value-row {{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-top:8px; }}
+.chart-latest {{ color:var(--navy); line-height:1.15; letter-spacing:.01em; display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; }}
 .chart-latest-value {{ font-size:34px; font-weight:850; }}
 .chart-latest-unit {{ font-size:17px; font-weight:800; color:#52637a; letter-spacing:0; }}
-.chart-change {{ color:var(--muted); font-size:15px; margin-top:4px; }}
+.chart-change {{ color:var(--muted); font-size:15px; white-space:nowrap; }}
 .chart-direction {{ font-size:14px; font-weight:900; border-radius:999px; padding:4px 12px; background:#f3f4f6; white-space:nowrap; border:1px solid transparent; }}
 .chart-direction.up {{ color:#7c2d12; background:#fff3d1; border-color:#f3d28b; }}
 .chart-direction.down {{ color:#374151; background:#f3f4f6; border-color:#e5e7eb; }}
