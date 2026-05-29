@@ -1,0 +1,83 @@
+name: 86 Compose Story Visual Video
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_directory:
+        description: "Optional week directory, e.g. 2026-05-21 or output/weekly/2026-05-21. Leave blank to use latest."
+        required: false
+        default: ""
+      dialogue_json:
+        description: "Optional explicit dialogue json path under repo or relative to week dir. Leave blank to auto-detect latest story dialogue."
+        required: false
+        default: ""
+      force_rebuild:
+        description: "Force rebuild even if final video already exists"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
+
+jobs:
+  compose-story-visual-video:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg fonts-noto-cjk
+          python -m pip install --upgrade pip
+          pip install pillow
+
+      - name: Compose story visual video
+        run: |
+          CMD=(python scripts/86_compose_story_visual_video.py)
+
+          if [ -n "${{ github.event.inputs.week_directory }}" ]; then
+            CMD+=(--week-dir "${{ github.event.inputs.week_directory }}")
+          fi
+
+          if [ -n "${{ github.event.inputs.dialogue_json }}" ]; then
+            CMD+=(--dialogue-json "${{ github.event.inputs.dialogue_json }}")
+          fi
+
+          if [ "${{ github.event.inputs.force_rebuild }}" = "true" ]; then
+            CMD+=(--force-rebuild)
+          fi
+
+          echo "[INFO] Running: ${CMD[*]}"
+          "${CMD[@]}"
+
+      - name: Commit outputs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add output/weekly || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Compose story visual video test"
+            git push
+          fi
+
+      - name: Upload outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: step86-story-visual-video
+          path: |
+            output/weekly/**/story_video/*.mp4
+            output/weekly/**/story_video/*.json
+            output/weekly/**/story_video/avatars/*
