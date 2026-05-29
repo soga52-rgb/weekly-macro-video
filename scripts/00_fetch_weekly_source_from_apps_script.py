@@ -13,6 +13,7 @@ Input:
 Optional env:
 - WEEKLY_SOURCE_START = YYYY-MM-DD
 - WEEKLY_SOURCE_END   = YYYY-MM-DD
+- TODAY_DAILY_SOURCE_URL = optional separate endpoint for today's daily summary JSON
 - WEEKLY_INCLUDE_TODAY_SOURCE = true / false, default true
 
 Output:
@@ -21,7 +22,8 @@ Output:
 
 Update:
 - Fetch mode=weekly_video_source first.
-- Then fetch mode=today_daily_source from the same Apps Script endpoint.
+- Then fetch TODAY_DAILY_SOURCE_URL if provided.
+- If TODAY_DAILY_SOURCE_URL is not provided, fall back to mode=today_daily_source from the same Apps Script endpoint.
 - If today's daily_summary.date is missing from daily_summaries, append it.
 - De-duplicate by date and sort by date, so weekly history no longer misses the newest day.
 """
@@ -361,6 +363,7 @@ def build_weekly_source_text(data: Dict[str, Any]) -> str:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", type=str, default=os.getenv("WEEKLY_SOURCE_URL", "").strip())
+    parser.add_argument("--today-url", type=str, default=os.getenv("TODAY_DAILY_SOURCE_URL", "").strip())
     parser.add_argument("--start", type=str, default=os.getenv("WEEKLY_SOURCE_START", "").strip())
     parser.add_argument("--end", type=str, default=os.getenv("WEEKLY_SOURCE_END", "").strip())
     parser.add_argument(
@@ -384,10 +387,15 @@ def main() -> None:
     data = fetch_json(weekly_url)
 
     if args.include_today_source:
-        today_url = add_query_params(args.url, {
-            "mode": "today_daily_source",
-        })
-        print("[INFO] Fetching today_daily_source JSON from Apps Script endpoint...")
+        if args.today_url:
+            today_url = args.today_url
+            print("[INFO] Fetching today_daily_source JSON from TODAY_DAILY_SOURCE_URL...")
+        else:
+            today_url = add_query_params(args.url, {
+                "mode": "today_daily_source",
+            })
+            print("[INFO] Fetching today_daily_source JSON from WEEKLY_SOURCE_URL mode=today_daily_source...")
+
         try:
             today_data = fetch_json(today_url)
             data = merge_today_daily_source(data, today_data, start=args.start, end=args.end)
