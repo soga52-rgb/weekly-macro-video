@@ -4,8 +4,8 @@
     "source": "weekly_dialogue_story_only_v8.json",
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21",
     "image_model": "gemini-3.1-flash-image-preview",
-    "generated_at": "2026-05-28T23:59:20",
-    "target_scene": "s1",
+    "generated_at": "2026-05-29T00:26:51",
+    "target_scene": "",
     "preview_only_first": false,
     "style": "whiteboard sketch explainer / minimalist marker doodle / consistent video series"
   },
@@ -15,6 +15,41 @@
       "visual_id": "scene_01",
       "section_title": "油價跌了，為什麼利率不跟著跌？",
       "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/story_visual_images/scene_01.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s2",
+      "visual_id": "scene_02",
+      "section_title": "債市的深層恐懼：期限溢價的重估",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/story_visual_images/scene_02.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s3",
+      "visual_id": "scene_03",
+      "section_title": "聯準會的底牌：寧可錯殺，不能放過",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/story_visual_images/scene_03.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s4",
+      "visual_id": "scene_04",
+      "section_title": "強美元的陰影：亞洲央行的防衛戰",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/story_visual_images/scene_04.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s5",
+      "visual_id": "scene_05",
+      "section_title": "黃金的拉鋸戰：高利率下的避險光環",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/story_visual_images/scene_05.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s6",
+      "visual_id": "scene_06",
+      "section_title": "拉鋸戰的下一章：未完待續的懸念",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-21/story_visual_images/scene_06.jpg",
       "status": "created_or_existing"
     }
   ],
