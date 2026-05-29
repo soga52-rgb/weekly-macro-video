@@ -1,12 +1,12 @@
 {
-  "generated_at": "2026-05-29T21:13:58+08:00",
+  "generated_at": "2026-05-29T21:18:30+08:00",
   "source": "Google Sheets History_Data",
   "mode": "weekly_video_source",
   "data_status": "complete",
   "range": {
     "start_date": "2026-05-22",
     "end_date": "2026-05-28",
-    "days": 6,
+    "days": 5,
     "rule": "last_friday_to_this_thursday"
   },
   "daily_summaries": [
@@ -159,76 +159,6 @@
         "url": "https://drive.google.com/file/d/1Avs0bMkZitOJxYifBtQku3NAcWhBmU_5/view?usp=drivesdk"
       },
       "raw_daily_summary_package": "日期：2026-05-27\n今日主線：避險情緒主導市場，成長擔憂壓抑長債殖利率，強勢美元持續壓制非美資產。\n\nExecutive Summary：\n市場正處於「成長降溫與避險定價」體制。儘管Fed釋出鷹派升息風險，但長債殖利率下行顯示市場更關注經濟衰退風險，美元則因避險需求與非美貨幣弱勢而走強，導致資產傳導出現明顯脫鉤。\n\n今日核心訊號：\n- 美債殖利率下行反映成長擔憂\n- 美元指數受避險買盤支撐走強\n- 黃金與原油同步承壓反映風險偏好\n\n核心資產重點：\nUS10Y｜4.48%｜down｜市場交易成長放緩風險\nDXY｜99.22｜up｜避險需求與非美貨幣疲軟\nGold｜4489｜down｜強勢美元與避險資金分流\n\n矛盾 / 背離：\n今日關鍵背離在於「Fed鷹派預期」與「美債殖利率」的脫鉤。主線為Fed維持高利率的政策壓力，但修正因子為市場對經濟成長動能的疑慮，導致殖利率無法反映升息預期，反而轉向避險買盤，進而推升美元並壓抑黃金。\n\n總經傳導鏈：\n[Fed鷹派升息預期] -> [避險需求推升美債買盤導致殖利率下行] -> [美元因避險與非美疲軟走強] -> [黃金、原油及部分亞洲貨幣承壓]\n\n新聞佐證：\n- Fed理事庫克表示若通膨不緩解將準備升息\n- 美國10年期公債殖利率與鷹派訊號背離下行\n- 美元指數走強與殖利率下行出現脫鉤\n- 日圓與台幣表現疲軟反映區域資金壓力\n\n待觀察問題：\n- 後續就業數據是否進一步惡化以確認成長風險\n- 美元兌日圓匯率是否引發區域性資金流動壓力\n- Fed官員談話是否持續強化升息預期"
-    },
-    {
-      "date": "2026-05-28",
-      "headline": "成長放緩擔憂壓過通膨黏性，市場從高利率敘事轉向避險定價。",
-      "executive_summary": "市場當前處於『成長降溫與停滯性通膨』的拉鋸體制。儘管PCE數據偏強，但GDP下修與油價回落成為主導因子，導致殖利率與美元同步回調，資金轉向黃金避險。",
-      "market_signals": [
-        "美國GDP下修強化衰退預期",
-        "美債殖利率與通膨數據背離",
-        "油價回落削弱通膨推升動能"
-      ],
-      "macro_chain": "[GDP下修與油價回落] -> [美國10年期公債殖利率下行] -> [美元指數走軟] -> [亞洲貨幣獲得支撐、黃金避險買盤湧入]",
-      "divergence": "今日核心在於『成長風險』取代『通膨』成為殖利率的主導因子。油價因地緣政治緩解而下跌，成為修正通膨預期的關鍵因子，進而觸發美元走弱與亞洲貨幣的喘息空間。",
-      "market_snapshot": "US10Y｜4.45%｜down｜成長擔憂壓低期限溢價\nDXY｜98.99｜down｜利差優勢減弱導致走軟\nGold｜4524.3｜up｜避險需求與美元負相關回歸",
-      "news_evidence": [
-        "美國GDP數據下修，引發市場對經濟動能放緩的擔憂。",
-        "PCE數據升溫雖帶來通膨壓力，但被成長風險抵銷。",
-        "美伊停火談判緩解能源供應風險，壓低油價。",
-        "美元指數隨美債殖利率回落，利差優勢邊際減弱。"
-      ],
-      "watchpoints": [
-        "非農就業數據若顯著惡化，將確認衰退交易主線。",
-        "美伊停火談判進展，若反覆將推升油價與通膨預期。",
-        "Fed官員對停滯性通膨的政策立場表態。"
-      ],
-      "visual_note": {
-        "title": "成長放緩主導市場：通膨預期與殖利率的脫鉤分析",
-        "file_id": "1_FWmD1Q38FfS6Es-cJOjdGJHBdgqPtZZ",
-        "url": "https://drive.google.com/file/d/1_FWmD1Q38FfS6Es-cJOjdGJHBdgqPtZZ/view?usp=drivesdk",
-        "model": "gemini-3-pro-image-preview"
-      },
-      "news_narrative": {
-        "title": "成長放緩與避險情緒主導的利率修正",
-        "support_level": "中",
-        "cards": [
-          {
-            "label": "驗證結果",
-            "text": "部分支持"
-          },
-          {
-            "label": "摘要",
-            "text": "市場在通膨黏性與成長降溫之間拉鋸。儘管PCE數據升溫引發停滯性通膨擔憂，但美國GDP下修與房市疲軟強化了成長放緩預期，壓低了美國10年期公債殖利率。地緣政治方面，美伊停火談判緩解了能源供應風險，導致油價回落，進一步削弱了通膨推升利率的動能。美元隨利差優勢減弱而走軟，資金轉向黃金避險，亞洲貨幣則因美元回調而獲得支撐。"
-          },
-          {
-            "label": "支持新聞",
-            "text": "1. 新聞重點：美國GDP下修與PCE數據升溫，引發市場對停滯性通膨的擔憂，同時美伊停火談判露曙光，緩解地緣政治緊張。\n2. 市場影響：壓低美國10年期公債殖利率與美元指數，支撐黃金價格上行，並帶動亞洲貨幣走強。\n3. 驗證結論：資產走勢部分支持成長放緩與避險情緒主導的邏輯，但通膨數據與利率走勢的背離仍需觀察。"
-          },
-          {
-            "label": "異常訊號",
-            "text": "1. 通膨數據偏強與殖利率下行存在分歧，顯示市場目前更關注成長風險（GDP下修）而非單純的通膨定價。\n2. 黃金與美元同步走弱的現象已修正，目前呈現典型的避險資產與美元負相關走勢。"
-          },
-          {
-            "label": "觀察重點",
-            "text": "1. 後續非農就業數據若顯著惡化，可能導致市場焦點從通膨轉向衰退風險。\n2. 美伊停火談判若出現反覆，可能導致油價反彈，重新推升通膨預期。\n3. Fed官員對停滯性通膨風險的表態，將決定高利率維持更久敘事的強弱。\n4. 美國公債標售需求變化，將是觀察期限溢價是否重新回升的關鍵。"
-          }
-        ],
-        "news_links_json": "[\n  {\n    \"rank\": 1,\n    \"theme\": \"Asset｜Gold / 黃金\",\n    \"source\": \"news.cnyes.com\",\n    \"title\": \"〈貴金屬盤後〉美伊停火露曙光 美元、油價回落 黃金自兩個月低點強彈 - news.cnyes.com\",\n    \"url\": \"https://news.google.com/rss/articles/CBMiT0FVX3lxTFBSdloxZWxkSm5Qc1NPQkU1bk5xNzluR2g5Y2ZiS2gyXzhyVjRaSE9CUU5HWjdueFdOWFBwekZqRjhZU0thM01mYl9jQmJmQ2s?oc=5\",\n    \"published_at\": \"Thu, 28 May 2026 22:20:32 GMT\",\n    \"score\": 118.2,\n    \"matched_keywords\": \"能源與原物料:gold | 風險情緒／避險資金:gold | 變數:GOLD | 類型:DATA | 來源角色:CNYES_MACRO\"\n  },\n  {\n    \"rank\": 2,\n    \"theme\": \"Fed Policy｜Fed / 聯準會\",\n    \"source\": \"news.cnyes.com\",\n    \"title\": \"美國GDP下修、PCE升溫！華爾街憂停滯性通膨風險升高 Fed壓力山大 - news.cnyes.com\",\n    \"url\": \"https://news.google.com/rss/articles/CBMiT0FVX3lxTFBOYTlHWm52QVZvZGkydzVneDNyTVBmLVRQem5jOTVLLVF4M0FoZzdhYnZ5YnYxSlZrOTdRTlhaN1FEb2xhdVRybDZBc0FPbUk?oc=5\",\n    \"published_at\": \"Thu, 28 May 2026 15:30:15 GMT\",\n    \"score\": 116.4,\n    \"matched_keywords\": \"通膨數據:pce | 聯準會政策:fed | 就業與成長:gdp | 變數:FED | 類型:DATA | 來源角色:CNYES_MACRO\"\n  },\n  {\n    \"rank\": 3,\n    \"theme\": \"Fed Policy｜Fed / 聯準會\",\n    \"source\": \"news.cnyes.com\",\n    \"title\": \"Fed三把手：利率不急著動 AI正支撐美國經濟 - news.cnyes.com\",\n    \"url\": \"https://news.google.com/rss/articles/CBMiT0FVX3lxTE52SjlmQ1c5bndBUmFVQTBCQlRkUVFpQTBaZDVrT1V0OEkwekM4ZVBUM0RMZk9kNUFOVDljM2xzXzI1SXpWOUZSeE5hTWpGSGs?oc=5\",\n    \"published_at\": \"Thu, 28 May 2026 16:30:19 GMT\",\n    \"score\": 112.4,\n    \"matched_keywords\": \"聯準會政策:fed | 變數:FED | 類型:DATA | 來源角色:CNYES_MACRO\"\n  },\n  {\n    \"rank\": 4,\n    \"theme\": \"FX｜Dollar / FX / 美元與匯率\",\n    \"source\": \"news.cnyes.com\",\n    \"title\": \"〈紐約匯市〉美元小漲 美伊和談前景不明壓抑漲勢 - news.cnyes.com\",\n    \"url\": \"https://news.google.com/rss/articles/CBMiT0FVX3lxTE94Sk1kbHlKNFBRM3JSNC1BTk9DbGh4Vm5odGsxNTRaV0FkV0Vwcm5RTGE5cVFObE05RGY3dUVraXoxQUlRbF9aOGwteFFtVzQ?oc=5\",\n    \"published_at\": \"Wed, 27 May 2026 22:08:17 GMT\",\n    \"score\": 106.6,\n    \"matched_keywords\": \"美元與亞洲匯率:dollar | 變數:DOLLAR_FX | 類型:DATA | 來源角色:CNYES_MACRO\"\n  },\n  {\n    \"rank\": 5,\n    \"theme\": \"Labor｜Initial Jobless Claims / 初領失業金\",\n    \"source\": \"news.cnyes.com\",\n    \"title\": \"美國上周初領失業金人數升至21.5萬 就業市場仍具韌性 - news.cnyes.com\",\n    \"url\": \"https://news.google.com/rss/articles/CBMiT0FVX3lxTE1xMUlYSnRLSjlzZWVvdDZIWGR5QWtQNkNtVno2djlEczBBbm9zX0FmOEJLc3g5dmFpNktXU2ZPdFdRMUJRcGV1akJxQUs4ek0?oc=5\",\n    \"published_at\": \"Thu, 28 May 2026 13:32:36 GMT\",\n    \"score\": 96,\n    \"matched_keywords\": \"變數:JOBLESS_CLAIMS | 類型:DATA | 來源角色:CNYES_MACRO\"\n  },\n  {\n    \"rank\": 6,\n    \"theme\": \"FX｜Dollar / FX / 美元與匯率\",\n    \"source\": \"news.cnyes.com\",\n    \"title\": \"【遠東商銀】等待美國數據，美元普普遍持堅 - news.cnyes.com\",\n    \"url\": \"https://news.google.com/rss/articles/CBMiT0FVX3lxTE4zWldCQlAwUjVKd2x5b1JQTGVidXM1ZlpaNDc1TEl2d20zRUpTN1M5dVFiUUJuX3Z4VDZDUjlLNTVtR0FFNmZqcUJfNEV5ZVU?oc=5\",\n    \"published_at\": \"Thu, 28 May 2026 00:37:08 GMT\",\n    \"score\": 91.6,\n    \"matched_keywords\": \"美元與亞洲匯率:dollar | 變數:DOLLAR_FX | 類型:DATA | 來源角色:CNYES_MACRO\"\n  },\n  {\n    \"rank\": 7,\n    \"theme\": \"Labor｜Initial Jobless Claims / 初領失業金\",\n    \"source\": \"Reuters\",\n    \"title\": \"US weekly jobless claims increase marginally amid low layoffs - Reuters\",\n    \"url\": \"https://news.google.com/rss/articles/CBMiqgFBVV95cUxPSlN6cEVrVTdJa1pya3RlMXJjZFFXdWhZb1Y0aDRQWmgzZlpVN01XSXdwN2R3aVZHVnBOWHZlcUFianlYY05vZjBuQnRTYTVzcHhaRUhXQUQydVJIT2NEdEpqM2Zxb0M5b1pDbnJfOTVKaHJOMGV1bkJYTzlmM056QkVVcThBNjNueURxclJ6Unk3UE5QNG5IUWU5ZXVOX2c5WjlrNFBWa3Fydw?oc=5\",\n    \"published_at\": \"Thu, 28 May 2026 19:11:18 GMT\",\n    \"score\": 86,\n    \"matched_keywords\": \"變數:JOBLESS_CLAIMS | 類型:BACKUP | 來源角色:WIRE_CONFIRMATION\"\n  },\n  {\n    \"rank\": 8,\n    \"theme\": \"Growth｜Housing / 房市數據\",\n    \"source\": \"Reuters\",\n    \"title\": \"US new home sales slump in April amid higher mortgage rates, prices - Reuters\",\n    \"url\": \"https://news.google.com/rss/articles/CBMirAFBVV95cUxQYnZ2d21jVE03WTlwZmNVVXA4R05UcFBEQmY0b2JFdFpLQkttZkxna3U2RjBMNWxLNElNazBSeldHc2RmajBGVm9WS2lmX1pRRnlxSDdXbERQVVp4N29TUDB3eG9mSkxMSTR0ZkdjVktZcnJVSWYtWjhxV0N2Y2V0Nzd6ZWxyTm94QzVYSk1Bek1KT3N2Mm90MTFULS1KS2cwZWNBUkNLcFVoZW0z?oc=5\",\n    \"published_at\": \"Thu, 28 May 2026 19:02:16 GMT\",\n    \"score\": 80.4,\n    \"matched_keywords\": \"通膨數據:prices | 就業與成長:growth | 變數:HOUSING | 類型:BACKUP | 來源角色:WIRE_CONFIRMATION\"\n  }\n]"
-      },
-      "raw_daily_summary_package": "日期：2026-05-28\n今日主線：成長放緩擔憂壓過通膨黏性，市場從高利率敘事轉向避險定價。\n\nExecutive Summary：\n市場當前處於『成長降溫與停滯性通膨』的拉鋸體制。儘管PCE數據偏強，但GDP下修與油價回落成為主導因子，導致殖利率與美元同步回調，資金轉向黃金避險。\n\n今日核心訊號：\n- 美國GDP下修強化衰退預期\n- 美債殖利率與通膨數據背離\n- 油價回落削弱通膨推升動能\n\n核心資產重點：\nUS10Y｜4.45%｜down｜成長擔憂壓低期限溢價\nDXY｜98.99｜down｜利差優勢減弱導致走軟\nGold｜4524.3｜up｜避險需求與美元負相關回歸\n\n矛盾 / 背離：\n今日核心在於『成長風險』取代『通膨』成為殖利率的主導因子。油價因地緣政治緩解而下跌，成為修正通膨預期的關鍵因子，進而觸發美元走弱與亞洲貨幣的喘息空間。\n\n總經傳導鏈：\n[GDP下修與油價回落] -> [美國10年期公債殖利率下行] -> [美元指數走軟] -> [亞洲貨幣獲得支撐、黃金避險買盤湧入]\n\n新聞佐證：\n- 美國GDP數據下修，引發市場對經濟動能放緩的擔憂。\n- PCE數據升溫雖帶來通膨壓力，但被成長風險抵銷。\n- 美伊停火談判緩解能源供應風險，壓低油價。\n- 美元指數隨美債殖利率回落，利差優勢邊際減弱。\n\n待觀察問題：\n- 非農就業數據若顯著惡化，將確認衰退交易主線。\n- 美伊停火談判進展，若反覆將推升油價與通膨預期。\n- Fed官員對停滯性通膨的政策立場表態。",
-      "generated_at": "2026-05-29T21:14:10+08:00",
-      "source": "Google Sheets Today Daily Source",
-      "mode": "today_daily_source",
-      "data_status": "complete"
     }
-  ],
-  "days": 6,
-  "end_date": "2026-05-28",
-  "today_daily_source_merged": {
-    "date": "2026-05-28",
-    "included": true,
-    "source_mode": "today_daily_source",
-    "source_generated_at": "2026-05-29T21:14:10+08:00"
-  }
+  ]
 }
