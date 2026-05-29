@@ -13,10 +13,17 @@ Input:
 Optional env:
 - WEEKLY_SOURCE_START = YYYY-MM-DD
 - WEEKLY_SOURCE_END   = YYYY-MM-DD
+- WEEKLY_INCLUDE_TODAY_SOURCE = true / false, default true
 
 Output:
 - data/weekly_video_source.json
 - output/weekly/YYYY-MM-DD/weekly_source_text.md
+
+Update:
+- Fetch mode=weekly_video_source first.
+- Then fetch mode=today_daily_source from the same Apps Script endpoint.
+- If today's daily_summary.date is missing from daily_summaries, append it.
+- De-duplicate by date and sort by date, so weekly history no longer misses the newest day.
 """
 
 import argparse
@@ -26,7 +33,7 @@ import urllib.parse
 import urllib.request
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -106,6 +113,141 @@ def bullet_list(items: Any) -> str:
         return "\n".join(lines) if lines else "- 資料不足"
 
     return f"- {safe_text(items)}"
+
+
+def parse_bool(value: Any, default: bool = True) -> bool:
+    if value is None:
+        return default
+
+    text = str(value).strip().lower()
+    if not text:
+        return default
+
+    return text in {"1", "true", "yes", "y", "on"}
+
+
+def date_in_requested_range(date_text: str, start: str = "", end: str = "") -> bool:
+    if not date_text:
+        return False
+    if start and date_text < start:
+        return False
+    if end and date_text > end:
+        return False
+    return True
+
+
+def normalize_today_daily_source(today_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """
+    Convert mode=today_daily_source response into one daily_summaries item.
+
+    Expected shape:
+    {
+      "mode": "today_daily_source",
+      "daily_summary": {...},
+      "visual_note": {...},
+      "news_narrative": {...}
+    }
+    """
+    if not isinstance(today_data, dict):
+        return None
+
+    day = today_data.get("daily_summary")
+    if not isinstance(day, dict):
+        return None
+
+    normalized = dict(day)
+
+    # Preserve root-level data for downstream use / traceability.
+    for key in [
+        "visual_note",
+        "news_narrative",
+        "generated_at",
+        "source",
+        "mode",
+        "data_status",
+    ]:
+        value = today_data.get(key)
+        if value is not None and key not in normalized:
+            normalized[key] = value
+
+    return normalized if normalized.get("date") else None
+
+
+def merge_today_daily_source(
+    weekly_data: Dict[str, Any],
+    today_data: Dict[str, Any],
+    start: str = "",
+    end: str = "",
+) -> Dict[str, Any]:
+    """
+    Merge today_daily_source into weekly_video_source without duplicating dates.
+
+    Rules:
+    - If today_daily_source.daily_summary.date is inside the requested date range
+      and missing from weekly_data.daily_summaries, append it.
+    - If the same date already exists, keep the existing historical item.
+    - Sort by date after merge.
+    """
+    today_summary = normalize_today_daily_source(today_data)
+    if not today_summary:
+        print("[INFO] today_daily_source has no usable daily_summary; skip merge.")
+        return weekly_data
+
+    today_date = str(today_summary.get("date", "")).strip()
+    if not date_in_requested_range(today_date, start, end):
+        print(f"[INFO] today_daily_source date {today_date} outside requested range; skip merge.")
+        return weekly_data
+
+    summaries = weekly_data.get("daily_summaries")
+    if not isinstance(summaries, list):
+        summaries = []
+
+    by_date: Dict[str, Dict[str, Any]] = {}
+    undated_items = []
+
+    for item in summaries:
+        if not isinstance(item, dict):
+            continue
+
+        item_date = str(item.get("date", "")).strip()
+        if item_date:
+            by_date[item_date] = item
+        else:
+            undated_items.append(item)
+
+    if today_date in by_date:
+        print(f"[INFO] today_daily_source date {today_date} already exists in weekly history; no append.")
+    else:
+        print(f"[INFO] Appending today_daily_source date {today_date} into weekly daily_summaries.")
+        by_date[today_date] = today_summary
+
+    merged = [by_date[d] for d in sorted(by_date.keys())]
+    if undated_items:
+        merged = undated_items + merged
+
+    weekly_data["daily_summaries"] = merged
+
+    range_data = weekly_data.get("range")
+    if not isinstance(range_data, dict):
+        range_data = {}
+        weekly_data["range"] = range_data
+
+    dated = [str(x.get("date")) for x in merged if isinstance(x, dict) and x.get("date")]
+    if dated:
+        range_data["start_date"] = min(dated)
+        range_data["end_date"] = max(dated)
+        range_data["days"] = len(dated)
+        weekly_data["days"] = len(dated)
+        weekly_data["end_date"] = max(dated)
+
+    weekly_data["today_daily_source_merged"] = {
+        "date": today_date,
+        "included": today_date in {str(x.get("date")) for x in merged if isinstance(x, dict)},
+        "source_mode": today_data.get("mode"),
+        "source_generated_at": today_data.get("generated_at"),
+    }
+
+    return weekly_data
 
 
 def infer_week_label(data: Dict[str, Any]) -> str:
@@ -221,19 +363,37 @@ def main() -> None:
     parser.add_argument("--url", type=str, default=os.getenv("WEEKLY_SOURCE_URL", "").strip())
     parser.add_argument("--start", type=str, default=os.getenv("WEEKLY_SOURCE_START", "").strip())
     parser.add_argument("--end", type=str, default=os.getenv("WEEKLY_SOURCE_END", "").strip())
+    parser.add_argument(
+        "--include-today-source",
+        action=argparse.BooleanOptionalAction,
+        default=parse_bool(os.getenv("WEEKLY_INCLUDE_TODAY_SOURCE"), True),
+        help="Fetch mode=today_daily_source and append it if weekly history does not contain today's date.",
+    )
     args = parser.parse_args()
 
     if not args.url:
         raise EnvironmentError("Missing WEEKLY_SOURCE_URL. Add your Apps Script deployment URL as a GitHub Actions secret.")
 
-    final_url = add_query_params(args.url, {
+    weekly_url = add_query_params(args.url, {
         "mode": "weekly_video_source",
         "start": args.start,
         "end": args.end,
     })
 
     print("[INFO] Fetching weekly source JSON from Apps Script endpoint...")
-    data = fetch_json(final_url)
+    data = fetch_json(weekly_url)
+
+    if args.include_today_source:
+        today_url = add_query_params(args.url, {
+            "mode": "today_daily_source",
+        })
+        print("[INFO] Fetching today_daily_source JSON from Apps Script endpoint...")
+        try:
+            today_data = fetch_json(today_url)
+            data = merge_today_daily_source(data, today_data, start=args.start, end=args.end)
+        except Exception as exc:
+            # Do not fail the weekly workflow if today's endpoint is temporarily unavailable.
+            print(f"[WARN] Failed to merge today_daily_source: {exc}")
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     save_json(DATA_DIR / "weekly_video_source.json", data)
