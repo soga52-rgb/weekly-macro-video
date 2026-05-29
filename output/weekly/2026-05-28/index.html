@@ -129,10 +129,11 @@ body {
   background:var(--accent);
   display:inline-block;
 }
-.chart-latest { color:var(--navy); margin-top:8px; line-height:1.15; letter-spacing:.01em; display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; }
+.chart-value-row { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-top:8px; }
+.chart-latest { color:var(--navy); line-height:1.15; letter-spacing:.01em; display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; }
 .chart-latest-value { font-size:34px; font-weight:850; }
 .chart-latest-unit { font-size:17px; font-weight:800; color:#52637a; letter-spacing:0; }
-.chart-change { color:var(--muted); font-size:15px; margin-top:4px; }
+.chart-change { color:var(--muted); font-size:15px; white-space:nowrap; }
 .chart-direction { font-size:14px; font-weight:900; border-radius:999px; padding:4px 12px; background:#f3f4f6; white-space:nowrap; border:1px solid transparent; }
 .chart-direction.up { color:#7c2d12; background:#fff3d1; border-color:#f3d28b; }
 .chart-direction.down { color:#374151; background:#f3f4f6; border-color:#e5e7eb; }
@@ -361,11 +362,13 @@ ul { margin:0; padding-left:22px; }
             <div class="asset-pill">美國10年期公債殖利率</div>
             <div class="chart-direction down">下行</div>
           </div>
-          <div class="chart-latest">
-            <span class="chart-latest-value">4.455</span>
-            <span class="chart-latest-unit">%</span>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">4.455</span>
+              <span class="chart-latest-unit">%</span>
+            </div>
+            <div class="chart-change">-0.103｜-2.26%</div>
           </div>
-          <div class="chart-change">-0.103｜-2.26%</div>
           
     <div class="gf-chart-wrap">
       <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
@@ -383,11 +386,13 @@ ul { margin:0; padding-left:22px; }
             <div class="asset-pill">美元指數</div>
             <div class="chart-direction down">下行</div>
           </div>
-          <div class="chart-latest">
-            <span class="chart-latest-value">98.993</span>
-            <span class="chart-latest-unit"></span>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">98.993</span>
+              <span class="chart-latest-unit"></span>
+            </div>
+            <div class="chart-change">-0.327｜-0.33%</div>
           </div>
-          <div class="chart-change">-0.327｜-0.33%</div>
           
     <div class="gf-chart-wrap">
       <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
@@ -405,11 +410,13 @@ ul { margin:0; padding-left:22px; }
             <div class="asset-pill">黃金</div>
             <div class="chart-direction up">上行</div>
           </div>
-          <div class="chart-latest">
-            <span class="chart-latest-value">4,524.3</span>
-            <span class="chart-latest-unit">USD/oz</span>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">4,524.3</span>
+              <span class="chart-latest-unit">USD/oz</span>
+            </div>
+            <div class="chart-change">+3.300｜+0.07%</div>
           </div>
-          <div class="chart-change">+3.300｜+0.07%</div>
           
     <div class="gf-chart-wrap">
       <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
@@ -427,11 +434,13 @@ ul { margin:0; padding-left:22px; }
             <div class="asset-pill">西德州原油</div>
             <div class="chart-direction down">下行</div>
           </div>
-          <div class="chart-latest">
-            <span class="chart-latest-value">88.550</span>
-            <span class="chart-latest-unit">USD/bbl</span>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">88.550</span>
+              <span class="chart-latest-unit">USD/bbl</span>
+            </div>
+            <div class="chart-change">-8.050｜-8.33%</div>
           </div>
-          <div class="chart-change">-8.050｜-8.33%</div>
           
     <div class="gf-chart-wrap">
       <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
@@ -449,11 +458,13 @@ ul { margin:0; padding-left:22px; }
             <div class="asset-pill">布蘭特原油</div>
             <div class="chart-direction down">下行</div>
           </div>
-          <div class="chart-latest">
-            <span class="chart-latest-value">92.350</span>
-            <span class="chart-latest-unit">USD/bbl</span>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">92.350</span>
+              <span class="chart-latest-unit">USD/bbl</span>
+            </div>
+            <div class="chart-change">-11.190｜-10.81%</div>
           </div>
-          <div class="chart-change">-11.190｜-10.81%</div>
           
     <div class="gf-chart-wrap">
       <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
@@ -471,11 +482,13 @@ ul { margin:0; padding-left:22px; }
             <div class="asset-pill">美元／日圓</div>
             <div class="chart-direction up">上行</div>
           </div>
-          <div class="chart-latest">
-            <span class="chart-latest-value">159.24</span>
-            <span class="chart-latest-unit">JPY</span>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">159.24</span>
+              <span class="chart-latest-unit">JPY</span>
+            </div>
+            <div class="chart-change">+0.080｜+0.05%</div>
           </div>
-          <div class="chart-change">+0.080｜+0.05%</div>
           
     <div class="gf-chart-wrap">
       <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
@@ -493,11 +506,13 @@ ul { margin:0; padding-left:22px; }
             <div class="asset-pill">美元／台幣</div>
             <div class="chart-direction down">下行</div>
           </div>
-          <div class="chart-latest">
-            <span class="chart-latest-value">31.411</span>
-            <span class="chart-latest-unit">TWD</span>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">31.411</span>
+              <span class="chart-latest-unit">TWD</span>
+            </div>
+            <div class="chart-change">-0.038｜-0.12%</div>
           </div>
-          <div class="chart-change">-0.038｜-0.12%</div>
           
     <div class="gf-chart-wrap">
       <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
@@ -515,11 +530,13 @@ ul { margin:0; padding-left:22px; }
             <div class="asset-pill">美元／韓元</div>
             <div class="chart-direction down">下行</div>
           </div>
-          <div class="chart-latest">
-            <span class="chart-latest-value">1,493.6</span>
-            <span class="chart-latest-unit">KRW</span>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">1,493.6</span>
+              <span class="chart-latest-unit">KRW</span>
+            </div>
+            <div class="chart-change">-26.900｜-1.77%</div>
           </div>
-          <div class="chart-change">-26.900｜-1.77%</div>
           
     <div class="gf-chart-wrap">
       <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
@@ -554,7 +571,7 @@ ul { margin:0; padding-left:22px; }
           </div>
           <div class="news-category-cards">
             
-    <a class="news-mini-card" href="#" target="_blank" rel="noopener noreferrer">
+    <a class="news-mini-card" href="#">
       <div class="news-mini-top">
         <span class="news-source">news.cnyes.com</span>
         <span class="open-mark">↗</span>
@@ -564,7 +581,7 @@ ul { margin:0; padding-left:22px; }
     </a>
     
 
-    <a class="news-mini-card" href="#" target="_blank" rel="noopener noreferrer">
+    <a class="news-mini-card" href="#">
       <div class="news-mini-top">
         <span class="news-source">經濟日報</span>
         <span class="open-mark">↗</span>
@@ -587,7 +604,7 @@ ul { margin:0; padding-left:22px; }
           </div>
           <div class="news-category-cards">
             
-    <a class="news-mini-card" href="#" target="_blank" rel="noopener noreferrer">
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMisgJBVV95cUxNV28zNk14cU9CSm13UnE3RXJQaFR5cnlTVEMwbXlzWjh6UmRFX1I0eVlnZXVvVlN3TmdRTGkyelF0Y2huNkdtWExJYlVCSEVzcklQZ2R4RlI0RjVrS1Q1LTFxek5OUUFKSGoyTjdqbEc5U2pnTWp1TUxJQmd5YjhiSkRTRndhMG9BWUk3Y1QzTk5aX3otYjBOWk9xMk93VnNqcHJTNWNxRnF0S1pRUGx2VW5NWVNOMEc1LXhMendTUHRHRFphV3lubUFicHFMNlMxaXlPS1lUOTFDQmpHdmV4VE9oRDRIejNGMnFCMTJmVENRSTRZXzdPYnpNSUI3SEVMVnNYMkpTVnlURVhvcVRDUHZWV2s3X2tMU3NER1cyQldnaHBfTmk2Ml9pTThIX3lQR1E?oc=5" target="_blank" rel="noopener noreferrer">
       <div class="news-mini-top">
         <span class="news-source">鉅亨號</span>
         <span class="open-mark">↗</span>
@@ -597,7 +614,7 @@ ul { margin:0; padding-left:22px; }
     </a>
     
 
-    <a class="news-mini-card" href="#" target="_blank" rel="noopener noreferrer">
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiWkFVX3lxTE5EbXhfeV8zUjVaSTJ0TnF6LXdtaVJKVFJqNmVjVHkzTXM4Q1AwcGxNNFhjTmtLSFAybE1TOFlaVC1TQzhFeFRkOXlKaWdlTTR1TmJRdnBJX00wQQ?oc=5" target="_blank" rel="noopener noreferrer">
       <div class="news-mini-top">
         <span class="news-source">經濟日報</span>
         <span class="open-mark">↗</span>
@@ -607,7 +624,7 @@ ul { margin:0; padding-left:22px; }
     </a>
     
 
-    <a class="news-mini-card" href="#" target="_blank" rel="noopener noreferrer">
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE9IU3FlR3V1VHBUdnVvb1doaVJ6NE81WGk1cE05T2VTTFpnaU5rQnplWFZSUWw5SXUtTHVpQ0FXb0EwR0dxU2NmWXFxMkMwWjg?oc=5" target="_blank" rel="noopener noreferrer">
       <div class="news-mini-top">
         <span class="news-source">news.cnyes.com</span>
         <span class="open-mark">↗</span>
@@ -617,7 +634,7 @@ ul { margin:0; padding-left:22px; }
     </a>
     
 
-    <a class="news-mini-card" href="#" target="_blank" rel="noopener noreferrer">
+    <a class="news-mini-card" href="#">
       <div class="news-mini-top">
         <span class="news-source">經濟日報</span>
         <span class="open-mark">↗</span>
@@ -640,7 +657,7 @@ ul { margin:0; padding-left:22px; }
           </div>
           <div class="news-category-cards">
             
-    <a class="news-mini-card" href="#" target="_blank" rel="noopener noreferrer">
+    <a class="news-mini-card" href="#">
       <div class="news-mini-top">
         <span class="news-source">news.cnyes.com</span>
         <span class="open-mark">↗</span>
@@ -650,7 +667,7 @@ ul { margin:0; padding-left:22px; }
     </a>
     
 
-    <a class="news-mini-card" href="#" target="_blank" rel="noopener noreferrer">
+    <a class="news-mini-card" href="#">
       <div class="news-mini-top">
         <span class="news-source">經濟日報</span>
         <span class="open-mark">↗</span>
@@ -660,7 +677,7 @@ ul { margin:0; padding-left:22px; }
     </a>
     
 
-    <a class="news-mini-card" href="#" target="_blank" rel="noopener noreferrer">
+    <a class="news-mini-card" href="#">
       <div class="news-mini-top">
         <span class="news-source">經濟日報</span>
         <span class="open-mark">↗</span>
@@ -683,7 +700,7 @@ ul { margin:0; padding-left:22px; }
           </div>
           <div class="news-category-cards">
             
-    <a class="news-mini-card" href="#" target="_blank" rel="noopener noreferrer">
+    <a class="news-mini-card" href="#">
       <div class="news-mini-top">
         <span class="news-source">news.cnyes.com</span>
         <span class="open-mark">↗</span>
@@ -693,7 +710,7 @@ ul { margin:0; padding-left:22px; }
     </a>
     
 
-    <a class="news-mini-card" href="#" target="_blank" rel="noopener noreferrer">
+    <a class="news-mini-card" href="#">
       <div class="news-mini-top">
         <span class="news-source">經濟日報</span>
         <span class="open-mark">↗</span>
