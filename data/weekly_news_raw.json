@@ -239,15 +239,6 @@
       "score": 15
     },
     {
-      "theme": "long_bond_yields",
-      "query": "美債 長天期 殖利率 期限溢價 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "港媒：美中壓力下 柬埔寨鏟除電信詐騙犯罪 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1jeHBKRWxuMURfMS0tTnVYaE5NcHJkdXJ3aWhRVGdfcjdkd21oaEVsTl85UDlEVXhOWXJRam9BanVyazJ0U3FZU2VLdXFpaFJtQzc1ZXFDVlluQdIBX0FVX3lxTE5DNENOMjhNZG4wTWJOY2ExczVEY2FYdHRFUDI4RDBTTVd3dmpSNzhUcDNSYlVfUDZkcW5WZFFfaEIwbnlwNHRGelZhRS1iSGlhelI0TUxyLVZ5cDNCREtz?oc=5",
-      "published_at": "2026-05-26 01:45:46 UTC",
-      "score": 15
-    },
-    {
       "theme": "dollar_asia_fx",
       "query": "dollar index Asia currencies yen Taiwan dollar (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
       "title": "台韓晶片業受惠AI熱潮大發利市...錢卻轉進美國 - 經濟日報",
@@ -281,6 +272,15 @@
       "source": "UDN",
       "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9qbkJheFNCQTMtaGJpb0pCWXotalZVQXJtLU5rMjI5aGt0U05jMmZyZGU0UTNMWndEZThpNUhqTWRfdXR1d0ZtLWFKUzl1MzNtV21FS2ZR0gFWQVVfeXFMT2puQmF4U0JBMy1oYmlvSkJZei1qVlVBcm0tTmsyMjloa3RTTmMyZnJkZTRRM0xad0RlOGk1SGpNZF91dHV3Rm0tYUpTOXUzM21XbUVLZlE?oc=5",
       "published_at": "2026-05-27 05:52:48 UTC",
+      "score": 14
+    },
+    {
+      "theme": "fed_policy",
+      "query": "Fed 降息 縮表 美債 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "川普「輔佐」沃什正式上任：AI賭局之外 聯準會獨立性成更緊要的戰爭 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1XdlE5THZkWVE0ZzdmdUlqSXdfREo2VkhjeDZPYlEzNW10bkZlbWZoTUJWdDdyOVlBcy1SX0pXcGhWWFNmNkJOMHZzUmNsMTQ?oc=5",
+      "published_at": "2026-05-23 03:30:08 UTC",
       "score": 14
     }
   ]
