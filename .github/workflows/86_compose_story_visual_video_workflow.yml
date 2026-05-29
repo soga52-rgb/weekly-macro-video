@@ -8,7 +8,7 @@ on:
         required: false
         default: ""
       dialogue_json:
-        description: "Optional explicit dialogue json path under repo or relative to week dir. Leave blank to auto-detect latest story dialogue."
+        description: "Optional explicit dialogue json path under repo or relative to week dir. Leave blank to auto-detect story-only dialogue."
         required: false
         default: ""
       force_rebuild:
@@ -37,10 +37,11 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg fonts-noto-cjk
           python -m pip install --upgrade pip
           pip install pillow
+
+      - name: Ensure ffmpeg exists
+        run: ffmpeg -version
 
       - name: Compose story visual video
         run: |
@@ -65,7 +66,9 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git add output/weekly || true
+          git add output/weekly/**/story_video/story_visual_video_test.mp4 || true
+          git add output/weekly/**/story_video/story_turn_timeline.json || true
+          git add -u output/weekly/**/story_video || true
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
@@ -78,6 +81,5 @@ jobs:
         with:
           name: step86-story-visual-video
           path: |
-            output/weekly/**/story_video/*.mp4
-            output/weekly/**/story_video/*.json
-            output/weekly/**/story_video/avatars/*
+            output/weekly/**/story_video/story_visual_video_test.mp4
+            output/weekly/**/story_video/story_turn_timeline.json
