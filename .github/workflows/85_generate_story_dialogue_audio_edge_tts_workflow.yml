@@ -1,0 +1,86 @@
+name: 85 Generate Story Dialogue Audio edge-tts
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_dir:
+        description: "Optional week directory, e.g. 2026-05-21 or output/weekly/2026-05-21. Leave blank to use latest."
+        required: false
+        default: ""
+      force_rebuild:
+        description: "Force rebuild audio even if segment files already exist"
+        required: false
+        default: "false"
+      tom_voice:
+        description: "Tom voice"
+        required: false
+        default: "zh-CN-YunxiNeural"
+      miranda_voice:
+        description: "Miranda voice"
+        required: false
+        default: "zh-TW-HsiaoChenNeural"
+      tts_rate:
+        description: "edge-tts rate, e.g. +0%, +10%, -10%"
+        required: false
+        default: "+0%"
+      tts_volume:
+        description: "edge-tts volume, e.g. +0%, +10%, -10%"
+        required: false
+        default: "+0%"
+
+permissions:
+  contents: write
+
+jobs:
+  generate-story-dialogue-audio:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install ffmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install edge-tts
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install edge-tts
+
+      - name: Generate story dialogue audio
+        env:
+          WEEK_DIR: ${{ github.event.inputs.week_dir }}
+          FORCE_REBUILD_AUDIO: ${{ github.event.inputs.force_rebuild }}
+          TOM_VOICE: ${{ github.event.inputs.tom_voice }}
+          MIRANDA_VOICE: ${{ github.event.inputs.miranda_voice }}
+          TTS_RATE: ${{ github.event.inputs.tts_rate }}
+          TTS_VOLUME: ${{ github.event.inputs.tts_volume }}
+        run: |
+          python scripts/85_generate_story_dialogue_audio_edge_tts.py
+
+      - name: Commit outputs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add output/weekly/**/story_audio/** || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Generate Step 85 story dialogue audio"
+            git push
+          fi
+
+      - name: Upload outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: step85-story-dialogue-audio
+          path: |
+            output/weekly/**/story_audio/**
+          if-no-files-found: warn
