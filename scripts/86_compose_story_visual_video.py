@@ -8,7 +8,7 @@ This version:
 - Uses Step 83 scene images.
 - Uses Step 85 edge-tts segment mp3 files.
 - Uses assets/tom.png and assets/miranda.png as speaker avatars.
-- Shows a compact news-style active speaker avatar inside the bottom subtitle lane, with a subtle glowing ring.
+- Shows a compact news-style active speaker avatar inside the bottom subtitle lane, with a constant subtle glowing halo.
 - Removes waveform.
 - Removes the speaker-name gray label.
 - Shows bottom, single-line, transparent transcript subtitles from spoken_text.
@@ -42,14 +42,12 @@ AVATAR_Y = VIDEO_H - AVATAR_SIZE - 14
 RING_X = AVATAR_X - (RING_SIZE - AVATAR_SIZE) // 2
 RING_Y = AVATAR_Y - (RING_SIZE - AVATAR_SIZE) // 2
 
-SUBTITLE_FONT_SIZE = 25
-SUBTITLE_CHARS = 34
-SUBTITLE_X = AVATAR_X + AVATAR_SIZE + 22
+SUBTITLE_FONT_SIZE = 24
+SUBTITLE_CHARS = 54
+SUBTITLE_X = AVATAR_X + AVATAR_SIZE + 16
 SUBTITLE_MARGIN_BOTTOM = 18
 
 FADE_SEC = 0.24
-RING_PERIOD = 1.05
-RING_ON = 0.55
 
 
 def run(cmd: list[str]) -> None:
@@ -252,11 +250,13 @@ def make_ring(out: Path, speaker: str) -> None:
     c = speaker_rgba(speaker)
     img = Image.new("RGBA", (RING_SIZE, RING_SIZE), (255,255,255,0))
     d = ImageDraw.Draw(img)
-    for width, alpha, inset in [(14, 48, 10), (10, 82, 14), (6, 148, 18)]:
-        d.ellipse((inset, inset, RING_SIZE-inset, RING_SIZE-inset), outline=(c[0],c[1],c[2],alpha), width=width)
-    d.ellipse((20, 20, RING_SIZE-21, RING_SIZE-21), outline=(255,255,255,210), width=4)
-    d.ellipse((24, 24, RING_SIZE-25, RING_SIZE-25), outline=c, width=4)
-    img.filter(ImageFilter.GaussianBlur(radius=0.25)).save(out)
+    # Constant subtle halo, not flashing.
+    for width, alpha, inset in [(12, 18, 11), (8, 34, 15), (4, 64, 19)]:
+        d.ellipse((inset, inset, RING_SIZE-inset, RING_SIZE-inset), outline=(c[0], c[1], c[2], alpha), width=width)
+    d.ellipse((23, 23, RING_SIZE-24, RING_SIZE-24), outline=(255, 255, 255, 140), width=3)
+    d.ellipse((26, 26, RING_SIZE-27, RING_SIZE-27), outline=(c[0], c[1], c[2], 96), width=3)
+    img = img.filter(ImageFilter.GaussianBlur(radius=0.9))
+    img.save(out)
 
 
 def prepare_avatars(tmp_dir: Path, fp: str | None) -> dict[str, dict[str, Path]]:
@@ -370,7 +370,7 @@ def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in
         f"[2:v]scale={AVATAR_SIZE}:{AVATAR_SIZE}[av]",
         f"[3:v]scale={RING_SIZE}:{RING_SIZE}[ring]",
         f"[bg][av]overlay={AVATAR_X}:{AVATAR_Y}[v1]",
-        f"[v1][ring]overlay={RING_X}:{RING_Y}:enable='lt(mod(t,{RING_PERIOD}),{RING_ON})'[vring]",
+        f"[v1][ring]overlay={RING_X}:{RING_Y}[vring]",
     ]
     current = "vring"
 
