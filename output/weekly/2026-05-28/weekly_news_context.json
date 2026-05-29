@@ -5,43 +5,177 @@
     "sources_used": [
       "經濟日報",
       "鉅亨網",
-      "鉅亨號"
+      "聯合新聞網"
     ],
-    "candidate_count": 32,
-    "data_quality_note": "新聞來源集中於財經媒體，對於Fed政策轉向與債市定價的報導具高度一致性，能有效佐證週報主線。"
+    "candidate_count": 30,
+    "data_quality_note": "候選新聞來源與本週每日摘要高度契合，特別是圍繞聯準會新任主席華許的政策預期、美伊和談對油價與美債殖利率的影響，提供了充足的實證支持。"
   },
-  "weekly_news_theme": "市場定價體制由「通膨黏性」轉向「成長放緩與避險防禦」，導致美債殖利率與美元出現非典型脫鉤。",
+  "weekly_news_theme": "高利率預期與經濟成長放緩的拉鋸，地緣政治和談進展引導通膨與債市定價重估",
   "news_fit_to_daily_summaries": "支持",
   "macro_drivers": [
-    "聯準會新任主席華許（Warsh）政策不確定性",
-    "美國就業市場邊際降溫預期",
-    "地緣政治風險溢價（美伊談判）",
-    "能源價格波動與通膨預期"
+    "聯準會新任主席就任引發的長期高利率（Higher for Longer）政策預期",
+    "美伊和談進展對能源價格與通膨預期的邊際修正",
+    "美國經濟數據（GDP下修、就業降溫）引發的成長放緩擔憂"
   ],
   "confirming_signals": [
-    "美債殖利率下行與通膨數據背離，顯示市場優先定價成長風險",
-    "美元指數在避險需求支撐下，與殖利率走勢出現脫鉤",
-    "黃金價格在避險情緒下與美元同步走強"
+    "美債30年期殖利率一度衝破5%，反映市場對長期高利率與通膨黏性的定價。",
+    "華許接掌聯準會引發政策不確定性，市場預期利率將在更高水平維持更久，壓抑降息預期。"
   ],
   "contradicting_signals": [
-    "部分Fed官員（如庫克）仍釋出鷹派升息訊號，與債市的降息/衰退定價形成拉鋸",
-    "能源價格波動導致通膨預期反覆，干擾衰退交易的穩定性"
+    "美伊和談進展壓低油價，導致美債殖利率與美元指數同步回落，修正了週初的通膨與高利率定價。",
+    "新台幣受AI熱潮與台股創高推升，一度登最強亞幣，與美元強勢壓制非美資產的傳導出現局部背離。"
   ],
   "news_based_corrections": [
-    "美伊停火談判進展成為壓低油價與通膨預期的關鍵修正因子",
-    "美國GDP數據下修確認了市場對成長放緩的擔憂，修正了先前對高利率維持更久的單一預期"
+    "週初市場定價偏向極端鷹派（升息機率逼近70%），但隨後美伊和談曙光與經濟數據下修，促使市場重新校準利率路徑，殖利率與美元自高點回落，顯示市場並非結構性失衡，而是處於再校準階段。"
   ],
   "watch_points": [
-    "非農就業數據是否進一步惡化以確認衰退交易",
-    "美伊談判進展對避險溢價的影響",
-    "Fed官員對停滯性通膨的政策立場表態"
+    "美伊停火談判的後續實質進展及其對原油價格的直接影響。",
+    "美國即將公布的就業與通膨數據，是否進一步確認經濟成長放緩的敘事。",
+    "聯準會官員對於新主席政策方向的表態與政策路徑的再校準。"
   ],
   "news_categories": {
-    "通膨預期": [],
-    "利率": [],
-    "貨幣": [],
-    "其他": []
+    "通膨預期": [
+      {
+        "title": "芝加哥Fed古爾斯比：能源價格比預期更頑強 亞洲恐陷停滯性通膨",
+        "published_at": "2026-05-28 04:30:05 UTC",
+        "source": "news.cnyes.com",
+        "why_it_matters": "顯示聯聯會官員對能源通膨黏性的擔憂，並提及亞洲面臨的停滯性通膨風險。"
+      },
+      {
+        "title": "原油期 謹慎操作",
+        "published_at": "2026-05-26 00:00:00 UTC",
+        "source": "經濟日報",
+        "why_it_matters": "反映地緣政治不確定性下，原油市場波動加劇，影響通膨預期。"
+      }
+    ],
+    "利率": [
+      {
+        "title": "美債30年殖利率衝破5% 全球高利率時代恐來臨",
+        "published_at": "2026-05-23 07:00:00 UTC",
+        "source": "鉅亨號",
+        "why_it_matters": "長債殖利率突破關鍵心理關卡，顯示市場對長期高利率環境的定價。"
+      },
+      {
+        "title": "美債關鍵殖利率曲線釋放警示信號 華許時代利率或在更高水平維持更久",
+        "published_at": "2026-05-26 01:12:32 UTC",
+        "source": "經濟日報",
+        "why_it_matters": "新任聯準會主席就任，引發市場對貨幣政策長期偏鷹的預期。"
+      },
+      {
+        "title": "美伊和談希望壓低油價 美債殖利率同步回落",
+        "published_at": "2026-05-27 14:30:11 UTC",
+        "source": "news.cnyes.com",
+        "why_it_matters": "證實地緣政治局勢緩和能有效邊際修正通膨預期，進而引導殖利率回落。"
+      },
+      {
+        "title": "美債殖利率走升 景順：市場更像再校準而非結構性失衡",
+        "published_at": "2026-05-28 23:37:47 UTC",
+        "source": "經濟日報",
+        "why_it_matters": "機構觀點指出債市波動屬於政策路徑的重新評估，而非基本面徹底惡化。"
+      }
+    ],
+    "貨幣": [
+      {
+        "title": "〈紐約匯市〉美元走弱 殖利率下滑、升息押注降溫",
+        "published_at": "2026-05-26 21:43:29 UTC",
+        "source": "news.cnyes.com",
+        "why_it_matters": "反映市場對高利率政策路徑的重新定價，導致美元利差優勢邊際減弱。"
+      },
+      {
+        "title": "AI 熱潮助攻股匯 台股創高、新台幣登最強亞幣",
+        "published_at": "2026-05-25 10:21:58 UTC",
+        "source": "經濟日報",
+        "why_it_matters": "顯示在強勢美元背景下，特定產業題材（AI）能為亞洲貨幣提供局部支撐。"
+      },
+      {
+        "title": "股匯不同調 新台幣貶5.1分終止連2升",
+        "published_at": "2026-05-27 14:05:54 UTC",
+        "source": "經濟日報",
+        "why_it_matters": "反映隨著避險情緒升溫，資金再度流向美元，非美貨幣承壓。"
+      }
+    ],
+    "其他": [
+      {
+        "title": "〈貴金屬盤後〉美伊停火露曙光 美元、油價回落 黃金自兩個月低點強彈",
+        "published_at": "2026-05-28 22:20:32 UTC",
+        "source": "news.cnyes.com",
+        "why_it_matters": "黃金在美元與油價回落時反彈，顯示其避險屬性與利率下行雙重支撐的複雜定價。"
+      },
+      {
+        "title": "通膨與地緣政治雙夾擊 債券波動、跨資產配置成震盪期解方",
+        "published_at": "2026-05-27 03:11:40 UTC",
+        "source": "經濟日報",
+        "why_it_matters": "指出當前市場面臨多重不確定性，跨資產配置重要性提升。"
+      }
+    ]
   },
-  "top_news": [],
-  "editor_note_for_forest_summary": "本週市場核心在於「成長放緩」敘事正式超越「通膨黏性」，導致美債殖利率出現結構性下行壓力。儘管Fed官員維持鷹派言論，但市場已將焦點轉向就業降溫與地緣政治避險。需留意下週非農數據是否會將市場從「衰退交易」推向「停滯性通膨」的更複雜定價。"
+  "top_news": [
+    {
+      "title": "美債30年殖利率衝破5% 全球高利率時代恐來臨",
+      "url": "https://news.google.com/rss/articles/CBMisgJBVV95cUxNV28zNk14cU9CSm13UnE3RXJQaFR5cnlTVEMwbXlzWjh6UmRFX1I0eVlnZXVvVlN3TmdRTGkyelF0Y2huNkdtWExJYlVCSEVzcklQZ2R4RlI0RjVrS1Q1LTFxek5OUUFKSGoyTjdqbEc5U2pnTWp1TUxJQmd5YjhiSkRTRndhMG9BWUk3Y1QzTk5aX3otYjBOWk9xMk93VnNqcHJTNWNxRnF0S1pRUGx2VW5NWVNOMEc1LXhMendTUHRHRFphV3lubUFicHFMNlMxaXlPS1lUOTFDQmpHdmV4VE9oRDRIejNGMnFCMTJmVENRSTRZXzdPYnpNSUI3SEVMVnNYMkpTVnlURVhvcVRDUHZWV2s3X2tMU3NER1cyQldnaHBfTmk2Ml9pTThIX3lQR1E?oc=5"
+    },
+    {
+      "title": "美伊和談希望壓低油價 美債殖利率同步回落",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9IU3FlR3V1VHBUdnVvb1doaVJ6NE81WGk1cE05T2VTTFpnaU5rQnplWFZSUWw5SXUtTHVpQ0FXb0EwR0dxU2NmWXFxMkMwWjg?oc=5"
+    },
+    {
+      "title": "美債關鍵殖利率曲線釋放警示信號 華許時代利率或在更高水平維持更久",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5EbXhfeV8zUjVaSTJ0TnF6LXdtaVJKVFJqNmVjVHkzTXM4Q1AwcGxNNFhjTmtLSFAybE1TOFlaVC1TQzhFeFRkOXlKaWdlTTR1TmJRdnBJX00wQQ?oc=5"
+    },
+    {
+      "title": "芝加哥Fed古爾斯比：能源價格比預期更頑強 亞洲恐陷停滯性通膨",
+      "published_at": "2026-05-28 04:30:05 UTC",
+      "source": "news.cnyes.com",
+      "why_it_matters": "顯示聯聯會官員對能源通膨黏性的擔憂，並提及亞洲面臨的停滯性通膨風險。"
+    },
+    {
+      "title": "原油期 謹慎操作",
+      "published_at": "2026-05-26 00:00:00 UTC",
+      "source": "經濟日報",
+      "why_it_matters": "反映地緣政治不確定性下，原油市場波動加劇，影響通膨預期。"
+    },
+    {
+      "title": "美債30年殖利率衝破5% 全球高利率時代恐來臨",
+      "published_at": "2026-05-23 07:00:00 UTC",
+      "source": "鉅亨號",
+      "why_it_matters": "長債殖利率突破關鍵心理關卡，顯示市場對長期高利率環境的定價。"
+    },
+    {
+      "title": "美債關鍵殖利率曲線釋放警示信號 華許時代利率或在更高水平維持更久",
+      "published_at": "2026-05-26 01:12:32 UTC",
+      "source": "經濟日報",
+      "why_it_matters": "新任聯準會主席就任，引發市場對貨幣政策長期偏鷹的預期。"
+    },
+    {
+      "title": "美伊和談希望壓低油價 美債殖利率同步回落",
+      "published_at": "2026-05-27 14:30:11 UTC",
+      "source": "news.cnyes.com",
+      "why_it_matters": "證實地緣政治局勢緩和能有效邊際修正通膨預期，進而引導殖利率回落。"
+    },
+    {
+      "title": "美債殖利率走升 景順：市場更像再校準而非結構性失衡",
+      "published_at": "2026-05-28 23:37:47 UTC",
+      "source": "經濟日報",
+      "why_it_matters": "機構觀點指出債市波動屬於政策路徑的重新評估，而非基本面徹底惡化。"
+    },
+    {
+      "title": "〈紐約匯市〉美元走弱 殖利率下滑、升息押注降溫",
+      "published_at": "2026-05-26 21:43:29 UTC",
+      "source": "news.cnyes.com",
+      "why_it_matters": "反映市場對高利率政策路徑的重新定價，導致美元利差優勢邊際減弱。"
+    },
+    {
+      "title": "AI 熱潮助攻股匯 台股創高、新台幣登最強亞幣",
+      "published_at": "2026-05-25 10:21:58 UTC",
+      "source": "經濟日報",
+      "why_it_matters": "顯示在強勢美元背景下，特定產業題材（AI）能為亞洲貨幣提供局部支撐。"
+    },
+    {
+      "title": "股匯不同調 新台幣貶5.1分終止連2升",
+      "published_at": "2026-05-27 14:05:54 UTC",
+      "source": "經濟日報",
+      "why_it_matters": "反映隨著避險情緒升溫，資金再度流向美元，非美貨幣承壓。"
+    }
+  ],
+  "editor_note_for_forest_summary": "本週總體經濟呈現「政策緊縮預期」與「經濟成長放緩」的拉鋸。週初因新任聯準會主席就任及通膨隱憂，長債殖利率與美元強勢上行，30年期美債殖利率更一度突破5%關卡。然而，隨著美伊和談釋出積極訊號，原油價格回落，加上美國GDP下修等經濟數據顯露疲態，市場定價邏輯在週後期發生轉變，殖利率與美元同步回調，黃金則展現避險韌性。整體而言，傳統的『通膨預期 → 利率 → 美元』傳導鏈在週後期受到成長放緩擔憂的修正，市場正處於政策路徑的再校準階段。"
 }

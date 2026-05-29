@@ -250,9 +250,18 @@
     {
       "theme": "geopolitics",
       "query": "美伊 伊朗 地緣政治 油價 通膨 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "通膨與地緣政治雙夾擊 債券波動、跨資產配置成震盪期解方 | 產業熱點 | 產業 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBub3U0dDgwSXNVZkdLLW1IYmZodlR2cEdZdGw1TVhhMUR5TUtZZXRCWHJGb3NSSEFSZDNTbFJ6dU1jSjlpakppd1RJVld1TGdENkZuV19GZnV1Rmk3dG1HUjZtM1h1NHZJcnVuUUNvNVFNNGEwWEdN?oc=5",
+      "published_at": "2026-05-27 03:11:40 UTC",
+      "score": 15
+    },
+    {
+      "theme": "geopolitics",
+      "query": "中東 地緣政治 原油 通膨 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
       "title": "通膨與地緣政治雙夾擊 債券波動、跨資產配置成震盪期解方 - 經濟日報",
       "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE1PckowLUp1N3dtLW1lUHJsRkRfSHNuVldCYmU2QjJ0WmI2RHJwSmFlS0RWQkVLUnRtTi03Qk4wU2NoVGVaSVZUbWNFUEEydDlQQy1uX19fMFRSTkJvVERv0gFfQVVfeXFMTU9ySjAtSnU3d20tbWVQcmxGRF9Ic25WV0JiZTZCMnRaYjZEcnBKYWVLRFZCRUtSdG1OLTdCTjBTY2hUZVpJVlRtY0VQQTJ0OVBDLW5fX18wVFJOQm9URG8?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5RcFdGc1BMaG1YNWstTDU3bUdFcmFubnFkSmtPYmhDRUEwaWVtX2lvVzk2aXRDNmFvOHF4ZDliVnlBR2RWTlY2a1RPZkhkRlVsN2xVTTR6amNkZ9IBX0FVX3lxTE1PckowLUp1N3dtLW1lUHJsRkRfSHNuVldCYmU2QjJ0WmI2RHJwSmFlS0RWQkVLUnRtTi03Qk4wU2NoVGVaSVZUbWNFUEEydDlQQy1uX19fMFRSTkJvVERv?oc=5",
       "published_at": "2026-05-27 03:11:40 UTC",
       "score": 15
     },
@@ -272,15 +281,6 @@
       "source": "UDN",
       "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9qbkJheFNCQTMtaGJpb0pCWXotalZVQXJtLU5rMjI5aGt0U05jMmZyZGU0UTNMWndEZThpNUhqTWRfdXR1d0ZtLWFKUzl1MzNtV21FS2ZR0gFWQVVfeXFMT2puQmF4U0JBMy1oYmlvSkJZei1qVlVBcm0tTmsyMjloa3RTTmMyZnJkZTRRM0xad0RlOGk1SGpNZF91dHV3Rm0tYUpTOXUzM21XbUVLZlE?oc=5",
       "published_at": "2026-05-27 05:52:48 UTC",
-      "score": 14
-    },
-    {
-      "theme": "fed_policy",
-      "query": "Fed 降息 縮表 美債 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "川普「輔佐」沃什正式上任：AI賭局之外 聯準會獨立性成更緊要的戰爭 - news.cnyes.com",
-      "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1XdlE5THZkWVE0ZzdmdUlqSXdfREo2VkhjeDZPYlEzNW10bkZlbWZoTUJWdDdyOVlBcy1SX0pXcGhWWFNmNkJOMHZzUmNsMTQ?oc=5",
-      "published_at": "2026-05-23 03:30:08 UTC",
       "score": 14
     }
   ]
