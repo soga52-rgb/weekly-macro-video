@@ -37,10 +37,12 @@ jobs:
 
       - name: Install dependencies
         run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
           python -m pip install --upgrade pip
           pip install pillow
 
-      - name: Ensure ffmpeg exists
+      - name: Verify ffmpeg
         run: ffmpeg -version
 
       - name: Compose story visual video
