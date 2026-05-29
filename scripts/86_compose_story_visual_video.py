@@ -8,9 +8,11 @@ This version:
 - Uses Step 83 scene images.
 - Uses Step 85 edge-tts segment mp3 files.
 - Uses assets/tom.png and assets/miranda.png as speaker avatars.
-- Shows an active-speaker glowing ring around the avatar.
+- Shows a larger, sharper active speaker avatar at lower-left with a glowing ring.
 - Removes waveform.
+- Removes the speaker-name gray label.
 - Shows bottom, single-line, transparent transcript subtitles from spoken_text.
+- Uses drawtext expansion=none to avoid '%' subtitle errors.
 - Keeps intermediate clips in a temporary directory; repo keeps only final mp4 + timeline json.
 """
 
@@ -33,18 +35,17 @@ VIDEO_W = 1280
 VIDEO_H = 720
 FPS = 30
 
-AVATAR_SIZE = 112
-RING_SIZE = 142
+AVATAR_SIZE = 140
+RING_SIZE = 176
 AVATAR_X = 38
-AVATAR_Y = 36
+AVATAR_Y = 500
 RING_X = AVATAR_X - (RING_SIZE - AVATAR_SIZE) // 2
 RING_Y = AVATAR_Y - (RING_SIZE - AVATAR_SIZE) // 2
 
-SUBTITLE_FONT_SIZE = 26
-SUBTITLE_CHARS = 36
-SUBTITLE_MARGIN_BOTTOM = 18
-
-SPEAKER_FONT_SIZE = 26
+SUBTITLE_FONT_SIZE = 25
+SUBTITLE_CHARS = 34
+SUBTITLE_X = 220
+SUBTITLE_MARGIN_BOTTOM = 20
 
 FADE_SEC = 0.24
 RING_PERIOD = 1.05
@@ -192,8 +193,9 @@ def font_path() -> str | None:
         "assets/fonts/NotoSansTC-Regular.otf",
         "assets/fonts/NotoSansCJK-Regular.ttc",
         "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
-        "/usr/share/fonts/opentype/noto/NotoSerifCJK-Regular.ttc",
+        "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.otf",
         "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
+        "/usr/share/fonts/truetype/noto/NotoSansTC-Regular.otf",
         "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
     ]
     for p in candidates:
@@ -225,7 +227,7 @@ def make_initial_avatar(out: Path, speaker: str, fp: str | None) -> None:
     d = ImageDraw.Draw(img)
     d.ellipse((4, 4, AVATAR_SIZE-4, AVATAR_SIZE-4), fill=bg)
     try:
-        font = ImageFont.truetype(fp, 56) if fp else ImageFont.load_default()
+        font = ImageFont.truetype(fp, 52) if fp else ImageFont.load_default()
     except Exception:
         font = ImageFont.load_default()
     initial = "T" if speaker == "Tom" else "M"
@@ -237,7 +239,8 @@ def make_initial_avatar(out: Path, speaker: str, fp: str | None) -> None:
 
 def make_avatar_from_asset(src: Path, out: Path) -> None:
     img = Image.open(src).convert("RGBA")
-    img = crop_square(img).resize((AVATAR_SIZE, AVATAR_SIZE), Image.LANCZOS)
+    img = crop_square(img).resize((AVATAR_SIZE, AVATAR_SIZE), Image.Resampling.LANCZOS)
+    img = img.filter(ImageFilter.UnsharpMask(radius=1.2, percent=135, threshold=3))
     avatar = Image.new("RGBA", (AVATAR_SIZE, AVATAR_SIZE), (255,255,255,0))
     avatar.paste(img, (0, 0), circle_mask(AVATAR_SIZE))
     d = ImageDraw.Draw(avatar)
@@ -249,10 +252,10 @@ def make_ring(out: Path, speaker: str) -> None:
     c = speaker_rgba(speaker)
     img = Image.new("RGBA", (RING_SIZE, RING_SIZE), (255,255,255,0))
     d = ImageDraw.Draw(img)
-    for width, alpha, inset in [(14, 48, 10), (10, 80, 14), (6, 140, 18)]:
+    for width, alpha, inset in [(14, 48, 10), (10, 82, 14), (6, 148, 18)]:
         d.ellipse((inset, inset, RING_SIZE-inset, RING_SIZE-inset), outline=(c[0],c[1],c[2],alpha), width=width)
-    d.ellipse((22, 22, RING_SIZE-23, RING_SIZE-23), outline=(255,255,255,210), width=4)
-    d.ellipse((26, 26, RING_SIZE-27, RING_SIZE-27), outline=c, width=4)
+    d.ellipse((20, 20, RING_SIZE-21, RING_SIZE-21), outline=(255,255,255,210), width=4)
+    d.ellipse((24, 24, RING_SIZE-25, RING_SIZE-25), outline=c, width=4)
     img.filter(ImageFilter.GaussianBlur(radius=0.25)).save(out)
 
 
@@ -334,18 +337,16 @@ def build_timeline(dialogue_json: Path, images: list[Path], seg_dir: Path) -> di
 
 
 def drawtext_filter(input_label: str, output_label: str, textfile: Path, fp: str | None, fontsize: int,
-                    x: str, y: str, enable: str | None = None, box: bool = False,
-                    boxcolor: str = "black@0.0", boxborderw: int = 0,
-                    borderw: int = 3, bordercolor: str = "black@0.46",
-                    shadowx: int = 2, shadowy: int = 2) -> str:
+                    x: str, y: str, enable: str | None = None) -> str:
     parts = [f"[{input_label}]drawtext="]
     if fp:
         parts.append(f"fontfile='{fp}':")
     parts += [
+        "expansion=none:",
         f"textfile='{textfile.as_posix()}':fontsize={fontsize}:fontcolor=white:",
         f"x={x}:y={y}:line_spacing=4:",
-        f"box={'1' if box else '0'}:boxborderw={boxborderw}:boxcolor={boxcolor}:",
-        f"borderw={borderw}:bordercolor={bordercolor}:shadowx={shadowx}:shadowy={shadowy}",
+        "box=0:boxborderw=0:boxcolor=black@0.0:",
+        "borderw=3:bordercolor=black@0.48:shadowx=2:shadowy=2",
     ]
     if enable:
         parts.append(f":enable='{enable}'")
@@ -358,8 +359,6 @@ def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in
     speaker = normalize_speaker(turn["speaker"])
     chunks = split_subtitles(turn["spoken_text"])
 
-    speaker_file = text_dir / f"speaker_{turn['segment_index']:03d}.txt"
-    write_text(speaker_file, speaker)
     chunk_files = []
     for i, chunk in enumerate(chunks):
         p = text_dir / f"subtitle_{turn['segment_index']:03d}_{i:02d}.txt"
@@ -374,10 +373,6 @@ def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in
         f"[v1][ring]overlay={RING_X}:{RING_Y}:enable='lt(mod(t,{RING_PERIOD}),{RING_ON})'[vring]",
     ]
     current = "vring"
-    filters.append(drawtext_filter(current, "v2", speaker_file, fp, SPEAKER_FONT_SIZE,
-                                   x="164", y="70", box=True, boxcolor="black@0.34",
-                                   boxborderw=12, borderw=0, shadowx=0, shadowy=0))
-    current = "v2"
 
     each = duration / max(len(chunk_files), 1)
     for i, cf in enumerate(chunk_files):
@@ -385,19 +380,17 @@ def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in
         end = duration if i == len(chunk_files) - 1 else (i + 1) * each
         out_label = f"vsub{i:02d}"
         filters.append(drawtext_filter(current, out_label, cf, fp, SUBTITLE_FONT_SIZE,
-                                       x="(w-text_w)/2", y=f"h-text_h-{SUBTITLE_MARGIN_BOTTOM}",
-                                       enable=f"between(t,{start:.3f},{end:.3f})",
-                                       box=False, borderw=3, bordercolor="black@0.46",
-                                       shadowx=2, shadowy=2))
+                                       x=str(SUBTITLE_X), y=f"h-text_h-{SUBTITLE_MARGIN_BOTTOM}",
+                                       enable=f"between(t,{start:.3f},{end:.3f})"))
         current = out_label
 
-    fade = []
+    fades = []
     if fade_in:
-        fade.append(f"fade=t=in:st=0:d={FADE_SEC}")
+        fades.append(f"fade=t=in:st=0:d={FADE_SEC}")
     if fade_out and duration > FADE_SEC:
-        fade.append(f"fade=t=out:st={max(0, duration-FADE_SEC):.3f}:d={FADE_SEC}")
-    if fade:
-        filters.append(f"[{current}]{','.join(fade)}[vout]")
+        fades.append(f"fade=t=out:st={max(0, duration-FADE_SEC):.3f}:d={FADE_SEC}")
+    if fades:
+        filters.append(f"[{current}]{','.join(fades)}[vout]")
         vout = "vout"
     else:
         vout = current
