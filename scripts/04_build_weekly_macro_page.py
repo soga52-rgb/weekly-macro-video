@@ -24,6 +24,7 @@ Design:
 import json
 import html
 import math
+import re
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List
@@ -73,6 +74,55 @@ def first_non_empty(*values: Any) -> str:
         if text:
             return text
     return ""
+
+def infer_week_label_from_source_text(week_dir: Path) -> str:
+    """
+    Prefer the source-text weekly range for the page header.
+
+    weekly_market_series may intentionally include a longer lookback window for charts.
+    The page headline period should follow weekly_source_text.md / weekly_video_source,
+    e.g. 2026-05-22 ～ 2026-05-28.
+    """
+    source_text_path = week_dir / "weekly_source_text.md"
+    if not source_text_path.exists():
+        return ""
+
+    try:
+        text = source_text_path.read_text(encoding="utf-8", errors="replace")
+    except Exception:
+        return ""
+
+    match = re.search(r"週期：\s*(\d{4}-\d{2}-\d{2})\s*[～~\-to]+\s*(\d{4}-\d{2}-\d{2})", text)
+    if not match:
+        return ""
+
+    return f"{match.group(1)} ～ {match.group(2)}"
+
+def parse_week_range_label(week_label: str) -> tuple[str, str]:
+    """Return YYYY-MM-DD start/end from a label like 2026-05-22 ～ 2026-05-28."""
+    match = re.search(r"(\d{4}-\d{2}-\d{2})\s*(?:～|~|to|-)\s*(\d{4}-\d{2}-\d{2})", week_label or "")
+    if not match:
+        return "", ""
+    return match.group(1), match.group(2)
+
+
+def filter_points_by_week(points: Any, week_start: str, week_end: str) -> List[Dict[str, Any]]:
+    """Filter market series points to the weekly source range used by the page."""
+    if not isinstance(points, list):
+        return []
+
+    filtered = []
+    for point in points:
+        if not isinstance(point, dict):
+            continue
+        date_text = str(point.get("date") or "")
+        if week_start and date_text < week_start:
+            continue
+        if week_end and date_text > week_end:
+            continue
+        filtered.append(point)
+
+    return filtered
 
 
 def get_nested(data: Dict[str, Any], *keys: str) -> Any:
@@ -337,6 +387,13 @@ def fmt_number(value: float, unit: str = "") -> str:
         text = f"{value:.3f}"
     return f"{text} {unit}".strip()
 
+def fmt_number_only(value: float) -> str:
+    if abs(value) >= 1000:
+        return f"{value:,.1f}"
+    if abs(value) >= 100:
+        return f"{value:.2f}"
+    return f"{value:.3f}"
+
 
 def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
     if len(points_data) < 2:
@@ -382,9 +439,10 @@ def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
     """
 
 
-def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any]) -> str:
+def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_label: str = "") -> str:
     series = market.get("series") or []
     signal_map = build_asset_signal_map(forest)
+    week_start, week_end = parse_week_range_label(week_label)
     if not isinstance(series, list) or not series:
         return '<div class="muted-box">目前尚未匯入本週市場走勢資料。</div>'
 
@@ -398,7 +456,9 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any]) -> str:
     for item in series_sorted[:8]:
         asset = first_non_empty(item.get("asset"), item.get("asset_key"), "未命名資產")
         unit = first_non_empty(item.get("unit"), "")
-        points = item.get("points") or []
+        points = filter_points_by_week(item.get("points") or [], week_start, week_end)
+        if len(points) < 2:
+            points = item.get("points") or []
 
         clean_points = []
         for point in points:
@@ -443,7 +503,10 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any]) -> str:
             <div class="asset-pill">{esc(asset)}</div>
             <div class="chart-direction {direction}">{esc(direction_text)}</div>
           </div>
-          <div class="chart-latest">{esc(fmt_number(latest_value, unit))}</div>
+          <div class="chart-latest">
+            <span class="chart-latest-value">{esc(fmt_number_only(latest_value))}</span>
+            <span class="chart-latest-unit">{esc(unit)}</span>
+          </div>
           <div class="chart-change">{esc(change_sign)}{change:.3f}｜{change_sign}{pct:.2f}%</div>
           {sparkline_svg(clean_points, unit)}
           <div class="chart-signal">{esc(signal_text or "本週方向待觀察。")}</div>
@@ -480,6 +543,7 @@ def build_html(week_dir: Path, forest: Dict[str, Any], news_context: Dict[str, A
     video = forest.get("video_planning") or {}
 
     week_label = first_non_empty(
+        infer_week_label_from_source_text(week_dir),
         get_nested(forest, "meta", "week_range"),
         f"{get_nested(market, 'meta', 'range', 'start') or ''} ～ {get_nested(market, 'meta', 'range', 'end') or ''}".strip(" ～"),
         "資料週期待確認",
@@ -500,7 +564,7 @@ def build_html(week_dir: Path, forest: Dict[str, Any], news_context: Dict[str, A
     )
 
     news_html = render_news(news_context)
-    charts_html = render_market_charts(market, forest)
+    charts_html = render_market_charts(market, forest, week_label)
     video_html = render_video_section(week_dir)
 
     revision_items = render_list([
@@ -641,7 +705,9 @@ body {{
   background:var(--accent);
   display:inline-block;
 }}
-.chart-latest {{ color:var(--navy); font-size:34px; font-weight:850; margin-top:8px; line-height:1.15; letter-spacing:.01em; }}
+.chart-latest {{ color:var(--navy); margin-top:8px; line-height:1.15; letter-spacing:.01em; display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; }}
+.chart-latest-value {{ font-size:34px; font-weight:850; }}
+.chart-latest-unit {{ font-size:17px; font-weight:800; color:#52637a; letter-spacing:0; }}
 .chart-change {{ color:var(--muted); font-size:15px; margin-top:4px; }}
 .chart-direction {{ font-size:14px; font-weight:900; border-radius:999px; padding:4px 12px; background:#f3f4f6; white-space:nowrap; border:1px solid transparent; }}
 .chart-direction.up {{ color:#7c2d12; background:#fff3d1; border-color:#f3d28b; }}
