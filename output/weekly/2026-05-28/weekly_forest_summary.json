@@ -1,0 +1,265 @@
+{
+  "meta": {
+    "source": "weekly_market_series.json + weekly_news_context.json",
+    "data_status_note": "complete",
+    "week_range": "2026-05-15 to 2026-05-28",
+    "days_observed": "14"
+  },
+  "forest_summary": {
+    "weekly_main_theme": "市場定價體制轉向：成長放緩擔憂取代通膨黏性",
+    "main_question": "美債殖利率顯著下行，為何美元指數卻未隨之大幅走弱？",
+    "one_sentence_verdict": "市場主軸由通膨轉向衰退交易，避險需求促成了殖利率與美元的非典型脫鉤。",
+    "overall_verdict": "成立",
+    "narrative_arc": "從油價崩跌與GDP下修確認成長放緩，到債市殖利率快速下行，再到避險情緒支撐美元與黃金，最終在亞洲貨幣上觀察到因基本面差異所導致的顯著分化。",
+    "why_it_matters": "這代表市場的風險偏好正在發生質變。如果衰退交易確立，資產配置必須從防禦通膨轉為防禦經濟下行，而美元的避險屬性將凌駕於利差邏輯之上。"
+  },
+  "macro_storyline": {
+    "story_start": "本週美國GDP數據下修與美伊停火談判進展，成為打破市場僵局的雙刃劍，直接削弱了先前的「通膨黏性」與「高利率維持更久」的定價。",
+    "main_drivers": [
+      "美國GDP數據下修與就業邊際降溫預期",
+      "美伊停火談判導致地緣風險溢價重估與油價大跌",
+      "市場避險情緒升溫",
+      "聯準會新任主席政策不確定性"
+    ],
+    "market_transmission": "油價大跌（WTI跌破90美元）-> 通膨預期降溫 -> 美債殖利率顯著下行（10年期自4.66%跌至4.45%）-> 利差縮小理應壓抑美元，但避險需求反而支撐美元維持在99附近 -> 黃金同樣受避險支撐維持高檔 -> 亞洲貨幣因缺乏統一的美元單邊壓力，依各自基本面走向分化。",
+    "revision_or_noise": "儘管部分Fed官員（如庫克）仍釋出鷹派訊號，但債市毫不猶豫地定價了降息或衰退風險，顯示市場已將官員發言視為落後指標（Noise），轉而相信實體經濟數據的降溫跡象。",
+    "story_end": "在非典型脫鉤的環境下，下週的非農就業數據將成為市場判定這僅是一次「成長放緩」，還是真正進入「衰退交易」的終極裁判。"
+  },
+  "macro_variables": {
+    "inflation_view": "原油價格（WTI與Brent）雙雙大幅下挫逾15%，加上實體經濟數據放緩，極大程度舒緩了市場對通膨黏性的擔憂。",
+    "rate_view": "美國10年期公債殖利率從4.66%高點快速滑落至4.45%，反映債市正積極定價經濟成長放緩與潛在的政策轉向。",
+    "dollar_fx_view": "美元指數並未跟隨殖利率大幅下挫，而是維持在98.9至99.3的區間震盪，顯示避險溢價抵銷了利差劣勢。",
+    "asia_fx_view": "亞幣呈現顯著內部分化：台幣在科技股資金面與出口動能支撐下逆勢升值；日圓受制於內外利差預期持續走貶；韓元則跟隨全球風險情緒先劇烈貶值後反彈。",
+    "gold_view": "黃金價格在4480至4570美元間高檔震盪，實質利率下行與地緣/經濟避險需求為其提供了強大支撐。",
+    "energy_view": "美伊停火談判的進展大幅抽離了原先蘊含在油價中的地緣政治風險溢價，導致油價結構性回落。"
+  },
+  "evidence": {
+    "most_important_evidence": [
+      "WTI原油自105美元重挫至88美元",
+      "美國10年期公債殖利率自4.66%下行至4.45%",
+      "美元指數與美債殖利率走勢脫鉤，守穩99關卡",
+      "台幣升值（31.64至31.41）與日圓貶值（158.7至159.4）的強烈對比"
+    ],
+    "insufficient_evidence": [
+      "Fed官員鷹派言論能否實質扭轉市場的降息預期",
+      "聯準會新任主席華許的具體政策路徑"
+    ],
+    "watch_items_from_daily_summaries": [
+      "美債殖利率下行趨勢是否延續",
+      "亞洲貨幣分化趨勢是否擴大"
+    ],
+    "watch_items_from_news_context": [
+      "下週美國非農就業數據表現",
+      "美伊談判後續進展與油價反彈風險",
+      "Fed對停滯性通膨的官方表態"
+    ]
+  },
+  "video_planning": {
+    "suggested_video_title": "衰退交易啟動？美債殖利率大跌，美元為何拒絕貶值？",
+    "target_duration": "6-8 minutes",
+    "video_thesis": "市場焦點已從通膨轉向成長放緩，避險情緒引發了資產定價的非典型脫鉤，並導致亞洲貨幣出現結構性分歧。",
+    "opening_hook": "當美國十年期公債殖利率一週內大跌超過20個基點，按照教科書邏輯，美元應該隨之重挫。但在本週，美元不僅沒有大跌，反而穩如泰山。市場究竟看到了什麼我們沒看到的風險？",
+    "video_segments": [
+      {
+        "segment_id": "seg_01",
+        "segment_title": "定價體制的轉變：再見，通膨黏性",
+        "segment_question": "市場為何突然放棄了『高利率維持更久』的預期？",
+        "narration_focus": "結合美國GDP數據下修與美伊談判帶動的油價大跌，說明市場如何將焦點從通膨轉向經濟成長放緩。",
+        "main_point": "原油重挫15%移除了通膨隱憂，債市隨即啟動成長放緩的定價。",
+        "estimated_duration": "1.5 mins",
+        "visual_needed": true,
+        "visual_role": "呈現油價與美債殖利率的同步急跌",
+        "visual_concept": "雙線圖：WTI原油價格與US10Y殖利率的疊加走勢，標註GDP下修與美伊談判的新聞事件點。"
+      },
+      {
+        "segment_id": "seg_02",
+        "segment_title": "非典型脫鉤：避險情緒接管市場",
+        "segment_question": "既然殖利率大跌，美元為什麼沒有崩盤？",
+        "narration_focus": "解釋利差邏輯與避險邏輯的拉鋸。雖然利差縮小對美元不利，但對衰退與地緣政治的不確定性促使資金湧入美元與黃金避險。",
+        "main_point": "美元的支撐力道已從『利差優勢』轉換為『避險溢價』。",
+        "estimated_duration": "1.5 mins",
+        "visual_needed": true,
+        "visual_role": "凸顯殖利率與美元走勢的背離",
+        "visual_concept": "分歧圖表：US10Y向下走勢與DXY美元指數橫向高檔震盪的對比，加上黃金維持高檔的走勢輔助說明。"
+      },
+      {
+        "segment_id": "seg_03",
+        "segment_title": "亞洲貨幣的內部裂解",
+        "segment_question": "面對強勢美元，為何亞洲貨幣出現截然不同的命運？",
+        "narration_focus": "逐一拆解台幣、日圓、韓元的不同反應。台幣受惠於AI資金與出口基本面逆勢升值；日圓受制於日銀政策預期持續走貶；韓元則完美反映了市場風險偏好的劇烈震盪。",
+        "main_point": "缺乏單邊美元壓力的環境下，亞幣走勢回歸各自的局部基本面與資金流向。",
+        "estimated_duration": "2.0 mins",
+        "visual_needed": true,
+        "visual_role": "展示亞幣三者的走勢分化",
+        "visual_concept": "基準化折線圖（以5/15為基期100）：將USDTWD、USDJPY、USDKRW走勢並列，明顯看出台幣向下（升值）、日圓向上（貶值）、韓圜大幅震盪的V型軌跡。"
+      },
+      {
+        "segment_id": "seg_04",
+        "segment_title": "噪音與信號：聯準會的尷尬處境",
+        "segment_question": "Fed官員還在喊鷹，市場為何不買單？",
+        "narration_focus": "對比部分Fed官員的鷹派言論與市場的降息定價，指出市場已將實體數據的權重置於官員前瞻指引之上。",
+        "main_point": "在成長放緩的明確證據前，鷹派言論被市場視為噪音。",
+        "estimated_duration": "1.0 mins",
+        "visual_needed": false,
+        "visual_role": "",
+        "visual_concept": ""
+      },
+      {
+        "segment_id": "seg_05",
+        "segment_title": "總結與下週展望",
+        "segment_question": "這是短暫的修正，還是衰退交易的開端？",
+        "narration_focus": "總結本週傳遞鏈的變化，並將目光轉向下週的非農就業數據，強調就業市場將是確認衰退真偽的最後拼圖。",
+        "main_point": "緊盯非農數據，防範市場從『衰退交易』演變為更複雜的『停滯性通膨』定價。",
+        "estimated_duration": "1.0 mins",
+        "visual_needed": true,
+        "visual_role": "整理關鍵觀察指標",
+        "visual_concept": "重點條列圖卡：列出『非農就業』、『美伊談判』、『亞幣分化』三個下週核心觀察點。"
+      }
+    ],
+    "visual_sequence": [
+      {
+        "visual_id": "vis_01",
+        "source_segment_id": "seg_01",
+        "visual_title": "通膨降溫：油價與殖利率的同步跳水",
+        "visual_purpose": "證明市場對通膨與成長放緩的定價已然啟動。",
+        "visual_concept": "左軸為WTI原油價格（自105跌至88），右軸為US10Y（自4.66%跌至4.45%），兩條線呈現明顯的同步向下趨勢。",
+        "key_labels": [
+          "WTI跌破90大關",
+          "10年期殖利率下行",
+          "GDP下修",
+          "美伊談判"
+        ],
+        "is_web_hero_candidate": false
+      },
+      {
+        "visual_id": "vis_02",
+        "source_segment_id": "seg_02",
+        "visual_title": "非典型脫鉤：殖利率跌，美元不跌",
+        "visual_purpose": "視覺化呈現利差邏輯失效與避險情緒接管的市場現象。",
+        "visual_concept": "將US10Y（向下箭頭）與DXY（橫向波浪線）並置，中間加上一個『避險盾牌』的圖示，解釋美元為何撐在99附近。",
+        "key_labels": [
+          "殖利率失去支撐",
+          "美元避險溢價",
+          "利差邏輯失效"
+        ],
+        "is_web_hero_candidate": true
+      },
+      {
+        "visual_id": "vis_03",
+        "source_segment_id": "seg_03",
+        "visual_title": "亞洲貨幣大分歧",
+        "visual_purpose": "展現亞幣在缺乏強勢美元壓制下的各自表述。",
+        "visual_concept": "以5月15日為起點（指數100），展示台幣升值（線條向下）、日圓貶值（線條向上）、韓元劇烈震盪的扇形分化圖。",
+        "key_labels": [
+          "台幣：資金匯入逆勢升",
+          "日圓：利差劣勢續弱",
+          "韓元：跟隨避險情緒震盪"
+        ],
+        "is_web_hero_candidate": false
+      },
+      {
+        "visual_id": "vis_04",
+        "source_segment_id": "seg_05",
+        "visual_title": "下週市場雷達",
+        "visual_purpose": "總結影片並提示觀眾後續觀察重點。",
+        "visual_concept": "簡潔的雷達圖或三柱列表，標示即將發布的數據與事件風險。",
+        "key_labels": [
+          "非農就業報告",
+          "中東地緣政治",
+          "Fed官員態度"
+        ],
+        "is_web_hero_candidate": false
+      }
+    ],
+    "web_hero_visual": {
+      "source_visual_id": "vis_02",
+      "purpose": "作為影片縮圖與網頁主視覺，吸引觀眾探究市場異象。",
+      "reason": "『美債殖利率與美元的脫鉤』是本週最具反差感與解釋價值的市場現象，能立刻勾起投資人對『避險情緒』與『衰退交易』的好奇心。"
+    },
+    "six_scene_outline": [
+      {
+        "scene_id": "scene_01",
+        "scene_title": "定價體制的轉變：再見，通膨黏性",
+        "scene_question": "市場為何突然放棄了『高利率維持更久』的預期？",
+        "main_point": "原油重挫15%移除了通膨隱憂，債市隨即啟動成長放緩的定價。",
+        "visual_hint": "雙線圖：WTI原油價格與US10Y殖利率的疊加走勢，標註GDP下修與美伊談判的新聞事件點。"
+      },
+      {
+        "scene_id": "scene_02",
+        "scene_title": "非典型脫鉤：避險情緒接管市場",
+        "scene_question": "既然殖利率大跌，美元為什麼沒有崩盤？",
+        "main_point": "美元的支撐力道已從『利差優勢』轉換為『避險溢價』。",
+        "visual_hint": "分歧圖表：US10Y向下走勢與DXY美元指數橫向高檔震盪的對比，加上黃金維持高檔的走勢輔助說明。"
+      },
+      {
+        "scene_id": "scene_03",
+        "scene_title": "亞洲貨幣的內部裂解",
+        "scene_question": "面對強勢美元，為何亞洲貨幣出現截然不同的命運？",
+        "main_point": "缺乏單邊美元壓力的環境下，亞幣走勢回歸各自的局部基本面與資金流向。",
+        "visual_hint": "基準化折線圖（以5/15為基期100）：將USDTWD、USDJPY、USDKRW走勢並列，明顯看出台幣向下（升值）、日圓向上（貶值）、韓圜大幅震盪的V型軌跡。"
+      },
+      {
+        "scene_id": "scene_04",
+        "scene_title": "噪音與信號：聯準會的尷尬處境",
+        "scene_question": "Fed官員還在喊鷹，市場為何不買單？",
+        "main_point": "在成長放緩的明確證據前，鷹派言論被市場視為噪音。",
+        "visual_hint": ""
+      },
+      {
+        "scene_id": "scene_05",
+        "scene_title": "總結與下週展望",
+        "scene_question": "這是短暫的修正，還是衰退交易的開端？",
+        "main_point": "緊盯非農數據，防範市場從『衰退交易』演變為更複雜的『停滯性通膨』定價。",
+        "visual_hint": "重點條列圖卡：列出『非農就業』、『美伊談判』、『亞幣分化』三個下週核心觀察點。"
+      }
+    ],
+    "image_card_brief": [
+      {
+        "card_id": "card_01",
+        "headline": "通膨降溫：油價與殖利率的同步跳水",
+        "short_labels": [
+          "WTI跌破90大關",
+          "10年期殖利率下行",
+          "GDP下修",
+          "美伊談判"
+        ],
+        "visual_concept": "左軸為WTI原油價格（自105跌至88），右軸為US10Y（自4.66%跌至4.45%），兩條線呈現明顯的同步向下趨勢。"
+      },
+      {
+        "card_id": "card_02",
+        "headline": "非典型脫鉤：殖利率跌，美元不跌",
+        "short_labels": [
+          "殖利率失去支撐",
+          "美元避險溢價",
+          "利差邏輯失效"
+        ],
+        "visual_concept": "將US10Y（向下箭頭）與DXY（橫向波浪線）並置，中間加上一個『避險盾牌』的圖示，解釋美元為何撐在99附近。"
+      },
+      {
+        "card_id": "card_03",
+        "headline": "亞洲貨幣大分歧",
+        "short_labels": [
+          "台幣：資金匯入逆勢升",
+          "日圓：利差劣勢續弱",
+          "韓元：跟隨避險情緒震盪"
+        ],
+        "visual_concept": "以5月15日為起點（指數100），展示台幣升值（線條向下）、日圓貶值（線條向上）、韓元劇烈震盪的扇形分化圖。"
+      },
+      {
+        "card_id": "card_04",
+        "headline": "下週市場雷達",
+        "short_labels": [
+          "非農就業報告",
+          "中東地緣政治",
+          "Fed官員態度"
+        ],
+        "visual_concept": "簡潔的雷達圖或三柱列表，標示即將發布的數據與事件風險。"
+      }
+    ],
+    "next_week_questions": [
+      "美國非農就業數據是否會進一步跌破預期，確認衰退交易？",
+      "美元的避險溢價能維持多久？如果股市反彈，美元是否會補跌？",
+      "台幣的強勢升值能否帶動其他亞幣，還是日圓會繼續拖累亞洲匯率板塊？"
+    ]
+  }
+}

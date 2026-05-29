@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本週總經摘要</title>
+<style>
+:root {
+  --bg:#f7f7f4;
+  --paper:#fffdf7;
+  --glass:rgba(255,255,255,.62);
+  --glass-strong:rgba(255,255,255,.78);
+  --ink:#111827;
+  --navy:#0f2a44;
+  --navy-soft:#eaf0f7;
+  --muted:#64748b;
+  --line:rgba(209,213,219,.72);
+  --accent:#f59e0b;
+  --accent-dark:#8a4b08;
+  --accent-soft:#fff3d1;
+  --shadow:0 18px 45px rgba(31,41,55,.075);
+  --soft-shadow:0 10px 26px rgba(31,41,55,.055);
+  --radius:24px;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,216,130,.22) 0, rgba(255,216,130,0) 26%),
+    radial-gradient(circle at 90% 12%, rgba(234,240,247,.72) 0, rgba(234,240,247,0) 34%),
+    linear-gradient(180deg,#fbfaf7 0%,#eef1f5 100%);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  line-height:1.65;
+}
+.wrap { max-width:1180px; margin:0 auto; padding:38px 18px 72px; }
+.header { display:flex; justify-content:space-between; gap:18px; align-items:flex-end; margin-bottom:24px; }
+.kicker { color:#9a6200; font-weight:850; letter-spacing:.08em; font-size:13px; text-transform:uppercase; }
+.title { color:var(--navy); font-size:42px; line-height:1.2; font-weight:900; margin:6px 0 10px; }
+.subtitle { color:#4b5563; font-size:20px; max-width:840px; }
+.meta { text-align:right; color:var(--muted); font-size:14px; white-space:nowrap; }
+.section {
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,.68);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:26px;
+  margin:20px 0;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+.section h2 {
+  color:var(--navy);
+  margin:0 0 18px;
+  font-size:28px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.section h2::before {
+  content:"";
+  width:10px;
+  height:28px;
+  border-radius:999px;
+  background:var(--accent);
+  display:inline-block;
+}
+.hero {
+  background:linear-gradient(135deg,rgba(255,247,220,.82) 0%,rgba(255,255,255,.72) 58%,rgba(248,250,252,.72) 100%);
+  border:1px solid rgba(234,214,162,.72);
+}
+.diagram-img {
+  width:100%;
+  display:block;
+  border-radius:22px;
+  border:1px solid rgba(234,223,191,.8);
+  background:#fffdf7;
+  box-shadow:var(--soft-shadow);
+}
+.summary-grid { display:grid; grid-template-columns:1.1fr .9fr; gap:16px; }
+.big-text { font-size:24px; font-weight:800; }
+.question {
+  font-size:18px;
+  background:linear-gradient(135deg,rgba(255,243,209,.88) 0%,rgba(255,250,240,.86) 100%);
+  border:1px solid rgba(243,210,139,.72);
+  border-radius:20px;
+  padding:18px;
+  color:#7c2d12;
+  font-weight:900;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.5);
+}
+.charts { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
+.chart-card,.slide-card,.news-category,.news-mini-card {
+  background:var(--glass-strong);
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:24px;
+  box-shadow:var(--soft-shadow);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.chart-card {
+  position:relative;
+  padding:18px;
+  overflow:hidden;
+  min-width:0;
+  border-top:4px solid rgba(245,158,11,.78);
+  background:linear-gradient(180deg,rgba(250,252,255,.90) 0%,rgba(255,255,255,.78) 38%);
+}
+.chart-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:8px; }
+.asset-pill {
+  color:var(--navy);
+  display:inline-flex;
+  align-items:center;
+  min-height:34px;
+  padding:5px 12px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:17px;
+  border:1px solid rgba(234,223,191,.9);
+  background:rgba(255,247,237,.86);
+  color:var(--accent-dark);
+  gap:8px;
+}
+.asset-pill::before {
+  content:"";
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:var(--accent);
+  display:inline-block;
+}
+.chart-latest { color:var(--navy); font-size:34px; font-weight:850; margin-top:8px; line-height:1.15; letter-spacing:.01em; }
+.chart-change { color:var(--muted); font-size:15px; margin-top:4px; }
+.chart-direction { font-size:14px; font-weight:900; border-radius:999px; padding:4px 12px; background:#f3f4f6; white-space:nowrap; border:1px solid transparent; }
+.chart-direction.up { color:#7c2d12; background:#fff3d1; border-color:#f3d28b; }
+.chart-direction.down { color:#374151; background:#f3f4f6; border-color:#e5e7eb; }
+.chart-direction.flat { color:#4b5563; background:#f3f4f6; border-color:#e5e7eb; }
+.gf-chart-wrap { width:100%; margin:16px 0 10px; overflow:hidden; border-radius:16px; }
+.sparkline { width:100%; height:96px; display:block; color:#334155; }
+.spark-node { pointer-events:auto; }
+.spark-dot { fill:#fff; stroke:currentColor; stroke-width:2.6; cursor:pointer; opacity:.95; }
+.spark-dot:hover { fill:var(--accent); stroke:var(--accent); }
+.chart-signal { color:#374151; font-size:16px; margin-top:10px; min-height:48px; }
+.market-section {
+  position:relative;
+  padding-bottom:54px;
+}
+.section-source {
+  position:absolute;
+  right:26px;
+  bottom:18px;
+  color:var(--muted);
+  font-size:14px;
+  white-space:nowrap;
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(209,213,219,.55);
+  border-radius:999px;
+  padding:5px 11px;
+}
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+ul { margin:0; padding-left:22px; }
+.section li {
+  margin:8px 0;
+  padding:9px 11px;
+  background:rgba(255,250,240,.62);
+  border:1px solid rgba(231,196,106,.35);
+  border-radius:13px;
+}
+.video-shell {
+  width:100%;
+  border-radius:24px;
+  overflow:hidden;
+  background:#0f172a;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.72);
+}
+.weekly-video {
+  width:100%;
+  display:block;
+  aspect-ratio:16/9;
+  background:#0f172a;
+}
+.video-note {
+  color:var(--muted);
+  font-size:14px;
+  margin-top:12px;
+}
+.news-masonry {
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:16px;
+  align-items:stretch;
+}
+.news-category { padding:16px; background:rgba(255,255,255,.56); min-width:0; }
+.news-category-head {
+  margin-bottom:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}
+.news-count {
+  flex:0 0 auto;
+  color:var(--accent-dark);
+  background:rgba(255,243,209,.88);
+  border:1px solid rgba(243,210,139,.72);
+  border-radius:999px;
+  padding:5px 10px;
+  font-size:13px;
+  font-weight:900;
+}
+.category-pill {
+  color:var(--navy);
+  display:inline-flex;
+  align-items:center;
+  padding:6px 13px;
+  border-radius:999px;
+  background:rgba(255,243,209,.9);
+  border:1px solid rgba(243,210,139,.75);
+  color:var(--accent-dark);
+  font-size:18px;
+  font-weight:900;
+}
+.news-category-desc { color:var(--muted); font-size:14px; margin-top:8px; }
+.news-category-cards {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:12px;
+}
+.news-mini-card {
+  display:block;
+  position:relative;
+  min-height:148px;
+  padding:14px;
+  text-decoration:none;
+  color:inherit;
+  transition:.16s ease;
+}
+.news-mini-card:hover {
+  transform:translateY(-2px);
+  box-shadow:0 14px 30px rgba(31,41,55,.10);
+}
+.news-mini-top { display:flex; justify-content:space-between; gap:8px; align-items:center; margin-bottom:8px; }
+.news-source { color:#9a6200; font-size:13px; font-weight:850; }
+.open-mark { color:#9a6200; font-size:15px; font-weight:900; opacity:.75; }
+.news-title {
+  color:var(--navy);
+  font-size:16px;
+  font-weight:900;
+  line-height:1.38;
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.news-why {
+  color:#4b5563;
+  font-size:13.5px;
+  line-height:1.45;
+  margin-top:8px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.muted-box { background:rgba(249,250,251,.72); border:1px dashed #d1d5db; color:#6b7280; border-radius:16px; padding:16px; }
+.muted-box.compact { padding:12px; font-size:14px; }
+.slides { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.slide-card { padding:16px; text-decoration:none; color:inherit; }
+.slide-id { color:#9a6200; font-size:12px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+.slide-title { font-size:18px; font-weight:900; margin:4px 0; }
+.slide-question { color:#7c2d12; font-weight:800; font-size:14px; margin-bottom:8px; }
+.slide-point { color:#4b5563; font-size:14px; }
+.footer { color:var(--muted); font-size:13px; padding:20px 2px; }
+@media(max-width:1000px) {
+  .charts,.slides { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .news-category { grid-column:span 6 !important; }
+  .news-category-cards { grid-template-columns:1fr; }
+}
+@media(max-width:760px) {
+  .header,.summary-grid,.two-col { display:block; }
+  .meta {
+    position:static !important;
+    text-align:center !important;
+    white-space:normal;
+    margin-top:10px;
+  }
+  .charts,.slides { grid-template-columns:1fr; }
+  .news-masonry { grid-template-columns:1fr; }
+  .news-category { grid-column:span 1 !important; }
+  .title { font-size:34px; }
+  .subtitle { font-size:18px; }
+}
+
+/* V12 header/source placement overrides */
+.header {
+  display:block !important;
+  position:relative !important;
+  width:100% !important;
+  text-align:center !important;
+  margin-left:auto !important;
+  margin-right:auto !important;
+}
+.header-main {
+  margin-left:auto !important;
+  margin-right:auto !important;
+  text-align:center !important;
+}
+.header .meta {
+  position:absolute !important;
+  right:0 !important;
+  bottom:10px !important;
+  text-align:right !important;
+}
+.section-source {
+  text-align:right;
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="header">
+    <div class="header-main">
+      <div class="kicker">Weekly Macro Summary</div>
+      <div class="title">本週總經摘要</div>
+    </div>
+    <div class="meta">
+      週期：2026-05-15 to 2026-05-28　｜　產生日期：2026-05-29
+    </div>
+  </header>
+
+  
+  <section class="section section-video">
+    <h2>本週總經影片</h2>
+    <div class="muted-box">本週影片尚未產生，完成 07 合成後會自動顯示於此。</div>
+  </section>
+
+
+  <section class="section hero">
+    <h2>總經傳導圖解</h2>
+    <img class="diagram-img" src="weekly_macro_diagram.png" alt="總經傳導圖解">
+  </section>
+
+  <section class="section section-highlight">
+    <h2>重點摘要</h2>
+    <div class="summary-grid">
+      <div class="big-text">市場定價體制轉向：成長放緩擔憂取代通膨黏性</div>
+      <div class="question">美債殖利率顯著下行，為何美元指數卻未隨之大幅走弱？</div>
+    </div>
+    <p>從油價崩跌與GDP下修確認成長放緩，到債市殖利率快速下行，再到避險情緒支撐美元與黃金，最終在亞洲貨幣上觀察到因基本面差異所導致的顯著分化。</p>
+  </section>
+
+  <section class="section section-market market-section">
+    <h2>本週市場訊號與走勢</h2>
+    <div class="charts">
+        <div class="chart-card chart-theme-rate">
+          <div class="chart-head">
+            <div class="asset-pill">美國10年期公債殖利率</div>
+            <div class="chart-direction down">下行</div>
+          </div>
+          <div class="chart-latest">4.455 %</div>
+          <div class="chart-change">-0.140｜-3.05%</div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
+        <polyline points="14.0,35.7 45.5,27.3 77.0,14.0 108.5,42.7 140.0,38.5 171.5,46.9 203.0,66.5 234.5,70.2 266.0,78.0" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="14.0" cy="35.7" r="4.2"></circle><title>2026-05-15｜4.595 %</title></g><g class="spark-node"><circle class="spark-dot" cx="45.5" cy="27.3" r="4.2"></circle><title>2026-05-18｜4.623 %</title></g><g class="spark-node"><circle class="spark-dot" cx="77.0" cy="14.0" r="4.2"></circle><title>2026-05-19｜4.667 %</title></g><g class="spark-node"><circle class="spark-dot" cx="108.5" cy="42.7" r="4.2"></circle><title>2026-05-20｜4.572 %</title></g><g class="spark-node"><circle class="spark-dot" cx="140.0" cy="38.5" r="4.2"></circle><title>2026-05-21｜4.586 %</title></g><g class="spark-node"><circle class="spark-dot" cx="171.5" cy="46.9" r="4.2"></circle><title>2026-05-22｜4.558 %</title></g><g class="spark-node"><circle class="spark-dot" cx="203.0" cy="66.5" r="4.2"></circle><title>2026-05-26｜4.493 %</title></g><g class="spark-node"><circle class="spark-dot" cx="234.5" cy="70.2" r="4.2"></circle><title>2026-05-27｜4.481 %</title></g><g class="spark-node"><circle class="spark-dot" cx="266.0" cy="78.0" r="4.2"></circle><title>2026-05-28｜4.455 %</title></g>
+      </svg>
+    </div>
+    
+          <div class="chart-signal">美國10年期公債殖利率從4.66%高點快速滑落至4.45%，反映債市正積極定價經濟成長放緩與潛在的政策轉向。</div>
+        </div>
+        
+
+        <div class="chart-card chart-theme-dollar">
+          <div class="chart-head">
+            <div class="asset-pill">美元指數</div>
+            <div class="chart-direction down">下行</div>
+          </div>
+          <div class="chart-latest">98.993</div>
+          <div class="chart-change">-0.277｜-0.28%</div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
+        <polyline points="14.0,22.7 36.9,21.3 59.8,78.0 82.7,16.1 105.6,47.9 128.5,36.6 151.5,14.0 174.4,58.9 197.3,28.2 220.2,45.3 243.1,31.7 266.0,71.2" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="14.0" cy="22.7" r="4.2"></circle><title>2026-05-15｜99.270</title></g><g class="spark-node"><circle class="spark-dot" cx="36.9" cy="21.3" r="4.2"></circle><title>2026-05-17｜99.278</title></g><g class="spark-node"><circle class="spark-dot" cx="59.8" cy="78.0" r="4.2"></circle><title>2026-05-18｜98.954</title></g><g class="spark-node"><circle class="spark-dot" cx="82.7" cy="16.1" r="4.2"></circle><title>2026-05-19｜99.308</title></g><g class="spark-node"><circle class="spark-dot" cx="105.6" cy="47.9" r="4.2"></circle><title>2026-05-20｜99.126</title></g><g class="spark-node"><circle class="spark-dot" cx="128.5" cy="36.6" r="4.2"></circle><title>2026-05-21｜99.191</title></g><g class="spark-node"><circle class="spark-dot" cx="151.5" cy="14.0" r="4.2"></circle><title>2026-05-22｜99.320</title></g><g class="spark-node"><circle class="spark-dot" cx="174.4" cy="58.9" r="4.2"></circle><title>2026-05-24｜99.063</title></g><g class="spark-node"><circle class="spark-dot" cx="197.3" cy="28.2" r="4.2"></circle><title>2026-05-25｜99.239</title></g><g class="spark-node"><circle class="spark-dot" cx="220.2" cy="45.3" r="4.2"></circle><title>2026-05-26｜99.141</title></g><g class="spark-node"><circle class="spark-dot" cx="243.1" cy="31.7" r="4.2"></circle><title>2026-05-27｜99.219</title></g><g class="spark-node"><circle class="spark-dot" cx="266.0" cy="71.2" r="4.2"></circle><title>2026-05-28｜98.993</title></g>
+      </svg>
+    </div>
+    
+          <div class="chart-signal">美元指數並未跟隨殖利率大幅下挫，而是維持在98.9至99.3的區間震盪，顯示避險溢價抵銷了利差劣勢。</div>
+        </div>
+        
+
+        <div class="chart-card chart-theme-gold">
+          <div class="chart-head">
+            <div class="asset-pill">黃金</div>
+            <div class="chart-direction down">下行</div>
+          </div>
+          <div class="chart-latest">4,524.3 USD/oz</div>
+          <div class="chart-change">-31.500｜-0.69%</div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
+        <polyline points="14.0,28.2 36.9,30.2 59.8,14.0 82.7,78.0 105.6,39.9 128.5,37.1 151.5,51.3 174.4,49.9 197.3,14.5 220.2,61.0 243.1,72.6 266.0,49.2" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="14.0" cy="28.2" r="4.2"></circle><title>2026-05-15｜4,555.8 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="36.9" cy="30.2" r="4.2"></circle><title>2026-05-17｜4,552.8 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="59.8" cy="14.0" r="4.2"></circle><title>2026-05-18｜4,577.2 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="82.7" cy="78.0" r="4.2"></circle><title>2026-05-19｜4,480.9 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="105.6" cy="39.9" r="4.2"></circle><title>2026-05-20｜4,538.2 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="128.5" cy="37.1" r="4.2"></circle><title>2026-05-21｜4,542.5 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="151.5" cy="51.3" r="4.2"></circle><title>2026-05-22｜4,521.0 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="174.4" cy="49.9" r="4.2"></circle><title>2026-05-24｜4,523.2 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="197.3" cy="14.5" r="4.2"></circle><title>2026-05-25｜4,576.4 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="220.2" cy="61.0" r="4.2"></circle><title>2026-05-26｜4,506.5 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="243.1" cy="72.6" r="4.2"></circle><title>2026-05-27｜4,489.0 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="266.0" cy="49.2" r="4.2"></circle><title>2026-05-28｜4,524.3 USD/oz</title></g>
+      </svg>
+    </div>
+    
+          <div class="chart-signal">黃金價格在4480至4570美元間高檔震盪，實質利率下行與地緣/經濟避險需求為其提供了強大支撐。</div>
+        </div>
+        
+
+        <div class="chart-card chart-theme-energy">
+          <div class="chart-head">
+            <div class="asset-pill">西德州原油</div>
+            <div class="chart-direction down">下行</div>
+          </div>
+          <div class="chart-latest">88.550 USD/bbl</div>
+          <div class="chart-change">-16.870｜-16.00%</div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
+        <polyline points="14.0,14.0 36.9,26.0 59.8,25.7 82.7,18.1 105.6,38.8 128.5,43.3 151.5,47.5 174.4,47.5 197.3,70.1 220.2,59.6 243.1,74.4 266.0,78.0" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="14.0" cy="14.0" r="4.2"></circle><title>2026-05-15｜105.42 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="36.9" cy="26.0" r="4.2"></circle><title>2026-05-17｜102.27 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="59.8" cy="25.7" r="4.2"></circle><title>2026-05-18｜102.34 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="82.7" cy="18.1" r="4.2"></circle><title>2026-05-19｜104.34 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="105.6" cy="38.8" r="4.2"></circle><title>2026-05-20｜98.870 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="128.5" cy="43.3" r="4.2"></circle><title>2026-05-21｜97.700 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="151.5" cy="47.5" r="4.2"></circle><title>2026-05-22｜96.600 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="174.4" cy="47.5" r="4.2"></circle><title>2026-05-24｜96.600 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="197.3" cy="70.1" r="4.2"></circle><title>2026-05-25｜90.630 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="220.2" cy="59.6" r="4.2"></circle><title>2026-05-26｜93.400 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="243.1" cy="74.4" r="4.2"></circle><title>2026-05-27｜89.490 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="266.0" cy="78.0" r="4.2"></circle><title>2026-05-28｜88.550 USD/bbl</title></g>
+      </svg>
+    </div>
+    
+          <div class="chart-signal">美伊停火談判的進展大幅抽離了原先蘊含在油價中的地緣政治風險溢價，導致油價結構性回落。</div>
+        </div>
+        
+
+        <div class="chart-card chart-theme-energy">
+          <div class="chart-head">
+            <div class="asset-pill">布蘭特原油</div>
+            <div class="chart-direction down">下行</div>
+          </div>
+          <div class="chart-latest">92.350 USD/bbl</div>
+          <div class="chart-change">-16.910｜-15.48%</div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
+        <polyline points="14.0,20.7 36.9,16.6 59.8,21.5 82.7,14.0 105.6,34.3 128.5,36.7 151.5,40.1 174.4,51.4 197.3,72.2 220.2,64.3 243.1,76.0 266.0,78.0" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="14.0" cy="20.7" r="4.2"></circle><title>2026-05-15｜109.26 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="36.9" cy="16.6" r="4.2"></circle><title>2026-05-17｜110.47 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="59.8" cy="21.5" r="4.2"></circle><title>2026-05-18｜109.01 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="82.7" cy="14.0" r="4.2"></circle><title>2026-05-19｜111.23 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="105.6" cy="34.3" r="4.2"></circle><title>2026-05-20｜105.23 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="128.5" cy="36.7" r="4.2"></circle><title>2026-05-21｜104.52 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="151.5" cy="40.1" r="4.2"></circle><title>2026-05-22｜103.54 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="174.4" cy="51.4" r="4.2"></circle><title>2026-05-24｜100.21 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="197.3" cy="72.2" r="4.2"></circle><title>2026-05-25｜94.060 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="220.2" cy="64.3" r="4.2"></circle><title>2026-05-26｜96.390 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="243.1" cy="76.0" r="4.2"></circle><title>2026-05-27｜92.940 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="266.0" cy="78.0" r="4.2"></circle><title>2026-05-28｜92.350 USD/bbl</title></g>
+      </svg>
+    </div>
+    
+          <div class="chart-signal">美伊停火談判的進展大幅抽離了原先蘊含在油價中的地緣政治風險溢價，導致油價結構性回落。</div>
+        </div>
+        
+
+        <div class="chart-card chart-theme-fx">
+          <div class="chart-head">
+            <div class="asset-pill">美元／日圓</div>
+            <div class="chart-direction up">上行</div>
+          </div>
+          <div class="chart-latest">159.24 JPY</div>
+          <div class="chart-change">+0.504｜+0.32%</div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
+        <polyline points="14.0,78.0 36.9,72.7 59.8,73.3 82.7,48.4 105.6,68.1 128.5,53.7 151.5,42.0 174.4,69.1 197.3,63.8 220.2,30.2 243.1,14.0 266.0,35.2" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="14.0" cy="78.0" r="4.2"></circle><title>2026-05-15｜158.73 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="36.9" cy="72.7" r="4.2"></circle><title>2026-05-17｜158.79 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="59.8" cy="73.3" r="4.2"></circle><title>2026-05-18｜158.79 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="82.7" cy="48.4" r="4.2"></circle><title>2026-05-19｜159.08 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="105.6" cy="68.1" r="4.2"></circle><title>2026-05-20｜158.85 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="128.5" cy="53.7" r="4.2"></circle><title>2026-05-21｜159.02 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="151.5" cy="42.0" r="4.2"></circle><title>2026-05-22｜159.15 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="174.4" cy="69.1" r="4.2"></circle><title>2026-05-24｜158.84 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="197.3" cy="63.8" r="4.2"></circle><title>2026-05-25｜158.90 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="220.2" cy="30.2" r="4.2"></circle><title>2026-05-26｜159.29 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="243.1" cy="14.0" r="4.2"></circle><title>2026-05-27｜159.49 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="266.0" cy="35.2" r="4.2"></circle><title>2026-05-28｜159.24 JPY</title></g>
+      </svg>
+    </div>
+    
+          <div class="chart-signal">亞幣呈現顯著內部分化：台幣在科技股資金面與出口動能支撐下逆勢升值；日圓受制於內外利差預期持續走貶；韓元則跟隨全球風險情緒先劇烈貶值後反彈。</div>
+        </div>
+        
+
+        <div class="chart-card chart-theme-fx">
+          <div class="chart-head">
+            <div class="asset-pill">美元／台幣</div>
+            <div class="chart-direction down">下行</div>
+          </div>
+          <div class="chart-latest">31.411 TWD</div>
+          <div class="chart-change">-0.149｜-0.47%</div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
+        <polyline points="14.0,37.9 36.9,35.2 59.8,36.1 82.7,14.0 105.6,25.0 128.5,39.3 151.5,67.8 174.4,70.7 197.3,72.4 220.2,70.7 243.1,70.5 266.0,78.0" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="14.0" cy="37.9" r="4.2"></circle><title>2026-05-15｜31.560 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="36.9" cy="35.2" r="4.2"></circle><title>2026-05-17｜31.570 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="59.8" cy="36.1" r="4.2"></circle><title>2026-05-18｜31.567 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="82.7" cy="14.0" r="4.2"></circle><title>2026-05-19｜31.649 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="105.6" cy="25.0" r="4.2"></circle><title>2026-05-20｜31.608 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="128.5" cy="39.3" r="4.2"></circle><title>2026-05-21｜31.555 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="151.5" cy="67.8" r="4.2"></circle><title>2026-05-22｜31.449 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="174.4" cy="70.7" r="4.2"></circle><title>2026-05-24｜31.438 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="197.3" cy="72.4" r="4.2"></circle><title>2026-05-25｜31.432 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="220.2" cy="70.7" r="4.2"></circle><title>2026-05-26｜31.438 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="243.1" cy="70.5" r="4.2"></circle><title>2026-05-27｜31.439 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="266.0" cy="78.0" r="4.2"></circle><title>2026-05-28｜31.411 TWD</title></g>
+      </svg>
+    </div>
+    
+          <div class="chart-signal">亞幣呈現顯著內部分化：台幣在科技股資金面與出口動能支撐下逆勢升值；日圓受制於內外利差預期持續走貶；韓元則跟隨全球風險情緒先劇烈貶值後反彈。</div>
+        </div>
+        
+
+        <div class="chart-card chart-theme-fx">
+          <div class="chart-head">
+            <div class="asset-pill">美元／韓元</div>
+            <div class="chart-direction down">下行</div>
+          </div>
+          <div class="chart-latest">1,493.6 KRW</div>
+          <div class="chart-change">-4.130｜-0.28%</div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 280 92" preserveAspectRatio="none">
+        <polyline points="14.0,59.4 36.9,59.1 59.8,78.0 82.7,41.6 105.6,61.9 128.5,41.6 151.5,14.7 174.4,14.0 197.3,21.2 220.2,39.6 243.1,53.3 266.0,67.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="14.0" cy="59.4" r="4.2"></circle><title>2026-05-15｜1,497.8 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="36.9" cy="59.1" r="4.2"></circle><title>2026-05-17｜1,497.9 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="59.8" cy="78.0" r="4.2"></circle><title>2026-05-18｜1,488.3 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="82.7" cy="41.6" r="4.2"></circle><title>2026-05-19｜1,506.8 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="105.6" cy="61.9" r="4.2"></circle><title>2026-05-20｜1,496.5 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="128.5" cy="41.6" r="4.2"></circle><title>2026-05-21｜1,506.8 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="151.5" cy="14.7" r="4.2"></circle><title>2026-05-22｜1,520.5 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="174.4" cy="14.0" r="4.2"></circle><title>2026-05-24｜1,520.9 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="197.3" cy="21.2" r="4.2"></circle><title>2026-05-25｜1,517.2 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="220.2" cy="39.6" r="4.2"></circle><title>2026-05-26｜1,507.8 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="243.1" cy="53.3" r="4.2"></circle><title>2026-05-27｜1,500.9 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="266.0" cy="67.5" r="4.2"></circle><title>2026-05-28｜1,493.6 KRW</title></g>
+      </svg>
+    </div>
+    
+          <div class="chart-signal">亞幣呈現顯著內部分化：台幣在科技股資金面與出口動能支撐下逆勢升值；日圓受制於內外利差預期持續走貶；韓元則跟隨全球風險情緒先劇烈貶值後反彈。</div>
+        </div>
+        </div>
+    <div class="section-source">來源：YAHOO財經</div>
+  </section>
+
+  <section class="section section-watch">
+    <h2>修正因子 / 待觀察</h2>
+    <ul><li>儘管部分Fed官員（如庫克）仍釋出鷹派訊號，但債市毫不猶豫地定價了降息或衰退風險，顯示市場已將官員發言視為落後指標（Noise），轉而相信實體經濟數據的降溫跡象。</li>
+<li>Fed官員鷹派言論能否實質扭轉市場的降息預期</li>
+<li>聯準會新任主席華許的具體政策路徑</li></ul>
+  </section>
+
+  <section class="section section-news">
+    <h2>本週新聞佐證</h2>
+    <div class="news-masonry"><div class="muted-box">本週新聞補充資料不足，待觀察。</div></div>
+  </section>
+
+  <section class="section section-next">
+    <h2>下週觀察</h2>
+    <div class="two-col">
+      <div>
+        <h3>關鍵問題</h3>
+        <ul><li>美國非農就業數據是否會進一步跌破預期，確認衰退交易？</li>
+<li>美元的避險溢價能維持多久？如果股市反彈，美元是否會補跌？</li>
+<li>台幣的強勢升值能否帶動其他亞幣，還是日圓會繼續拖累亞洲匯率板塊？</li></ul>
+      </div>
+      <div>
+        <h3>主要佐證</h3>
+        <ul><li>WTI原油自105美元重挫至88美元</li>
+<li>美國10年期公債殖利率自4.66%下行至4.45%</li>
+<li>美元指數與美債殖利率走勢脫鉤，守穩99關卡</li>
+<li>台幣升值（31.64至31.41）與日圓貶值（158.7至159.4）的強烈對比</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    本頁由 weekly_forest_summary.json、weekly_news_context.json、weekly_market_series.json 與 weekly_macro_diagram.png 自動產生。內容為總經資訊整理，不構成投資建議。
+  </div>
+</div>
+</body>
+</html>
