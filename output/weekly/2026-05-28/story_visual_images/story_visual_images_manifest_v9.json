@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "type": "story_visual_images_v9",
+    "source": "weekly_dialogue_story_only_v8.json",
+    "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-28",
+    "image_model": "gemini-3.1-flash-image-preview",
+    "generated_at": "2026-05-30T11:51:16",
+    "target_scene": "",
+    "preview_only_first": false,
+    "style": "whiteboard sketch explainer / minimalist marker doodle / consistent video series"
+  },
+  "images": [
+    {
+      "section_id": "s1",
+      "visual_id": "scene_01",
+      "section_title": "當極端鷹派遇上地緣冷卻：本週市場的再校準開場",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-28/story_visual_images/scene_01.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s2",
+      "visual_id": "scene_02",
+      "section_title": "美伊和談的油價蝴蝶效應：通膨預期的防禦性降溫",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-28/story_visual_images/scene_02.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s3",
+      "visual_id": "scene_03",
+      "section_title": "當成長放緩撞上鷹派修辭：美債期限溢價的重估",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-28/story_visual_images/scene_03.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s4",
+      "visual_id": "scene_04",
+      "section_title": "強美元微調與黃金的防禦韌性：非典型負相關的背後",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-28/story_visual_images/scene_04.jpg",
+      "status": "created_or_existing"
+    }
+  ],
+  "failed_images": [
+    {
+      "section_id": "s5",
+      "visual_id": "scene_05",
+      "section_title": "亞幣防禦的溫度差：科技紅利與利差鴻溝的博弈",
+      "error": "Remote end closed connection without response"
+    }
+  ]
+}
