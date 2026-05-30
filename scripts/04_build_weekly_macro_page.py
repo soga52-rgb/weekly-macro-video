@@ -254,72 +254,14 @@ def classify_news_item(item: Dict[str, Any]) -> str:
     return best_category if scores[best_category] > 0 else "其他"
 
 
-
-def normalize_news_title(title: Any) -> str:
-    text = str(title or "").strip().lower()
-    return re.sub(r"\W+", "", text)[:90]
-
-
-def build_news_url_lookup(news_context: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
-    """
-    Build URL lookup from top_news and data/weekly_news_raw.json.
-
-    Gemini may put good categorized cards into news_categories but omit URL.
-    The original RSS package usually still has URLs, so the web layer can restore
-    clickable links without re-running AI.
-    """
-    lookup: Dict[str, Dict[str, Any]] = {}
-
-    def add_item(item: Any) -> None:
-        if not isinstance(item, dict):
-            return
-        key = normalize_news_title(item.get("title"))
-        url = first_non_empty(item.get("url"), "")
-        if not key or not url:
-            return
-        current = lookup.get(key, {})
-        merged = dict(current)
-        for field in ["title", "url", "source", "published_at", "why_it_matters", "theme", "score"]:
-            if item.get(field) and not merged.get(field):
-                merged[field] = item.get(field)
-        lookup[key] = merged
-
-    for item in as_list(news_context.get("top_news")):
-        add_item(item)
-
-    raw_package = load_json(ROOT_DIR / "data" / "weekly_news_raw.json", {})
-    for item in as_list(raw_package.get("items") if isinstance(raw_package, dict) else []):
-        add_item(item)
-
-    return lookup
-
-
-def enrich_news_items_with_urls(items: List[Dict[str, Any]], lookup: Dict[str, Dict[str, Any]]) -> List[Dict[str, Any]]:
-    enriched = []
-    for item in items:
-        if not isinstance(item, dict):
-            continue
-
-        merged = dict(item)
-        if not first_non_empty(merged.get("url"), ""):
-            matched = lookup.get(normalize_news_title(merged.get("title")), {})
-            for field in ["url", "source", "published_at", "theme"]:
-                if matched.get(field) and not merged.get(field):
-                    merged[field] = matched.get(field)
-
-        enriched.append(merged)
-    return enriched
-
-
 def render_news_card(item: Dict[str, Any]) -> str:
     title = first_non_empty(item.get("title"), "未命名新聞")
     source = first_non_empty(item.get("source"), "News")
     why = first_non_empty(item.get("why_it_matters"), item.get("theme"), "")
     url = first_non_empty(item.get("url"), "#")
-    target_attr = ' target="_blank" rel="noopener noreferrer"' if url != "#" else ""
 
     return f"""
-    <a class="news-mini-card" href="{esc(url)}"{target_attr}>
+    <a class="news-mini-card" href="{esc(url)}" target="_blank" rel="noopener noreferrer">
       <div class="news-mini-top">
         <span class="news-source">{esc(source)}</span>
         <span class="open-mark">↗</span>
@@ -371,10 +313,6 @@ def get_categorized_news(news_context: Dict[str, Any]) -> Dict[str, List[Dict[st
 
         for key in categories.keys():
             categories[key] = dedupe_news_items(categories[key], 8)
-
-    url_lookup = build_news_url_lookup(news_context)
-    for key in categories.keys():
-        categories[key] = enrich_news_items_with_urls(categories[key], url_lookup)
 
     return categories
 
@@ -455,6 +393,46 @@ def fmt_number_only(value: float) -> str:
     if abs(value) >= 100:
         return f"{value:.2f}"
     return f"{value:.3f}"
+
+def build_market_signal_text(asset_key: str, asset: str, clean_points: List[Dict[str, Any]], unit: str) -> str:
+    """
+    Build chart explanation from the same filtered points used in the sparkline.
+
+    This prevents the card text from referencing a longer market_series window
+    after the page has been narrowed to the weekly source range.
+    """
+    if len(clean_points) < 2:
+        return "本週方向待觀察。"
+
+    first = float(clean_points[0]["value"])
+    latest = float(clean_points[-1]["value"])
+    high = max(float(p["value"]) for p in clean_points)
+    low = min(float(p["value"]) for p in clean_points)
+    change = latest - first
+    pct = (change / first * 100) if first else 0.0
+
+    direction = "上行" if change > 0 else "下行" if change < 0 else "持平"
+    start_text = fmt_number(first, unit)
+    latest_text = fmt_number(latest, unit)
+    high_text = fmt_number(high, unit)
+    low_text = fmt_number(low, unit)
+    pct_text = f"{pct:+.2f}%"
+
+    templates = {
+        "US10Y": f"本週美國10年期公債殖利率由 {start_text} {direction}至 {latest_text}，週內區間約 {low_text} ～ {high_text}，反映利率定價在週內重新調整。",
+        "DXY": f"本週美元指數由 {start_text} {direction}至 {latest_text}，週內區間約 {low_text} ～ {high_text}，顯示美元仍在區間內震盪。",
+        "Gold": f"本週黃金由 {start_text} {direction}至 {latest_text}，週內區間約 {low_text} ～ {high_text}，反映避險需求與利率變化共同影響金價。",
+        "WTI": f"本週西德州原油由 {start_text} {direction}至 {latest_text}，週內區間約 {low_text} ～ {high_text}，油價變化影響通膨預期判斷。",
+        "Brent": f"本週布蘭特原油由 {start_text} {direction}至 {latest_text}，週內區間約 {low_text} ～ {high_text}，油價變化影響通膨預期判斷。",
+        "USDJPY": f"本週美元／日圓由 {start_text} {direction}至 {latest_text}，週內區間約 {low_text} ～ {high_text}，反映日圓對美元與利差訊號的反應。",
+        "USDTWD": f"本週美元／台幣由 {start_text} {direction}至 {latest_text}，週內區間約 {low_text} ～ {high_text}，反映台幣在美元與資金流向下的變化。",
+        "USDKRW": f"本週美元／韓元由 {start_text} {direction}至 {latest_text}，週內區間約 {low_text} ～ {high_text}，反映韓元對全球風險情緒與美元變化的反應。",
+    }
+
+    return templates.get(
+        asset_key,
+        f"本週{asset}由 {start_text} {direction}至 {latest_text}，變動幅度 {pct_text}，週內區間約 {low_text} ～ {high_text}。"
+    )
 
 
 def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
@@ -547,7 +525,7 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_la
         change_sign = "+" if change > 0 else ""
 
         asset_key = str(item.get("asset_key") or "")
-        signal_text = signal_map.get(asset_key, "")
+        signal_text = build_market_signal_text(asset_key, asset, clean_points, unit)
         asset_theme = {
             "US10Y": "rate",
             "DXY": "dollar",
@@ -559,21 +537,23 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_la
             "USDKRW": "fx",
         }.get(asset_key, "neutral")
 
+        unit_html = ""
+        if unit:
+            unit_html = f'<span class="asset-pill-unit">{esc(unit)}</span>'
+
         cards.append(f"""
         <div class="chart-card chart-theme-{asset_theme}">
           <div class="chart-head">
-            <div class="asset-pill">{esc(asset)}</div>
+            <div class="asset-pill">{esc(asset)}{unit_html}</div>
             <div class="chart-direction {direction}">{esc(direction_text)}</div>
           </div>
           <div class="chart-value-row">
             <div class="chart-latest">
               <span class="chart-latest-value">{esc(fmt_number_only(latest_value))}</span>
-              <span class="chart-latest-unit">{esc(unit)}</span>
             </div>
             <div class="chart-change">{esc(change_sign)}{change:.3f}｜{change_sign}{pct:.2f}%</div>
           </div>
           {sparkline_svg(clean_points, unit)}
-          <div class="chart-signal">{esc(signal_text or "本週方向待觀察。")}</div>
         </div>
         """)
 
@@ -750,7 +730,7 @@ body {{
 .asset-pill {{
   color:var(--navy);
   display:inline-flex;
-  align-items:center;
+  align-items:baseline;
   min-height:34px;
   padding:5px 12px;
   border-radius:999px;
@@ -760,6 +740,14 @@ body {{
   background:rgba(255,247,237,.86);
   color:var(--accent-dark);
   gap:8px;
+  flex-wrap:wrap;
+}}
+.asset-pill-unit {{
+  font-size:11px;
+  font-weight:800;
+  color:#6b7280;
+  letter-spacing:0;
+  line-height:1;
 }}
 .asset-pill::before {{
   content:"";
@@ -772,7 +760,6 @@ body {{
 .chart-value-row {{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-top:8px; }}
 .chart-latest {{ color:var(--navy); line-height:1.15; letter-spacing:.01em; display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; }}
 .chart-latest-value {{ font-size:34px; font-weight:850; }}
-.chart-latest-unit {{ font-size:17px; font-weight:800; color:#52637a; letter-spacing:0; }}
 .chart-change {{ color:var(--muted); font-size:15px; white-space:nowrap; }}
 .chart-direction {{ font-size:14px; font-weight:900; border-radius:999px; padding:4px 12px; background:#f3f4f6; white-space:nowrap; border:1px solid transparent; }}
 .chart-direction.up {{ color:#7c2d12; background:#fff3d1; border-color:#f3d28b; }}
@@ -783,7 +770,6 @@ body {{
 .spark-node {{ pointer-events:auto; }}
 .spark-dot {{ fill:#fff; stroke:currentColor; stroke-width:2.6; cursor:pointer; opacity:.95; }}
 .spark-dot:hover {{ fill:var(--accent); stroke:var(--accent); }}
-.chart-signal {{ color:#374151; font-size:16px; margin-top:10px; min-height:48px; }}
 .market-section {{
   position:relative;
   padding-bottom:54px;
