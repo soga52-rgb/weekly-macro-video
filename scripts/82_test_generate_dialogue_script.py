@@ -65,6 +65,11 @@ Miranda 是機構級總經策略師。她不是念資料的人。
 Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重要、價格怎麼反應、這個反應驗證或抵銷了什麼判斷、下一步會傳導到哪個變數。她非常擅長把冷冰冰的宏觀數字落地，在解釋高利率、強美元、流動性壓力或避險需求時，會自然帶出實體經濟的微觀痛點，例如房貸凍結、企業融資成本上升、原物料進口壓力、外資撤離或央行外匯存底消耗。她也擅長指出央行、投資人或市場當下面臨的兩難困境，例如保匯率 vs 保外匯存底、打通膨 vs 救經濟、維持高利率 vs 實體經濟受傷。
 
 核心寫作原則：
+0. 【分析區間硬規則】input_bundle.meta.analysis_window 是本集唯一正式分析區間。storyline、main_event_threads、sections、price_reaction、spoken_text、subtitle_text、full_script_plain_text 的「本週」價格變化，只能使用 analysis window 內的數字與事件。
+0-1. lookback、macro_background、endpoint_context、weekly_source_text 中屬於 analysis window 以前的內容，只能作為「前期背景」或「延續性脈絡」用一兩句交代，不得成為第一段主軸，不得列為 main_event_threads 的主要價格反應。
+0-2. 嚴禁把 lookback window 的起點價格寫成本週起點。例如若 analysis window 內 WTI 是 96.6 → 88.5，就不可寫成 105 → 88.5；若 analysis window 內 US10Y 是 4.558 → 4.455，就不可寫成 4.66 → 4.45。
+0-3. 若需提到 30Y 破 5%、新任主席、前期長債恐慌等背景，必須明確稱為「前期背景」或「週初壓力」，並在同一段內快速轉回 analysis window 的本週主線，不可讓它成為整支影片的開場主軸。
+0-4. 本集主線應優先依 analysis_layer.main_theme_analysis_process.weekly_main_theme_conclusion 與 analysis_layer.main_theme_analysis_process.market_validation 展開。
 1. 這是一個故事，不是資料摘要。
 2. 前後邏輯必須接得上：上一段留下的問題，下一段要接著回答。
 3. 頭尾要呼應：開頭鋪陳過、尚未結束的事件線，必須自然變成下週觀察。
@@ -133,6 +138,15 @@ USER_PROMPT_TEMPLATE = """
 
 資料：
 {input_bundle_json}
+
+硬性生成規則：
+- 你必須先讀取 input_bundle.meta.analysis_window，並將其作為本集唯一正式週期。
+- meta.week_range 必須等於 input_bundle.meta.analysis_window.label。
+- 所有「本週」價格反應必須優先使用 input_bundle.market_series_analysis_window 與 analysis_layer 中已按 analysis window 產生的 market_validation。
+- input_bundle.market_series_lookback_note、weekly_source_text、endpoint_context_excerpt 若包含更早日期，只能用於前期背景，不可作為本週起點。
+- storyline.main_event_threads 不得把 lookback 起點價格當成本週主要事件線。
+- 第一段可簡短交代前期高利率背景，但必須快速轉入 analysis window 內的本週變化，不可整段都圍繞前期長債恐慌。
+- 嚴禁使用 analysis window 外的價格區間描述本週變化。例如不可把 105 → 88.5 或 4.66 → 4.45 寫成本週走勢，除非 input_bundle.meta.analysis_window 明確包含那些日期。
 
 請輸出 JSON，結構如下：
 
@@ -289,16 +303,148 @@ def build_market_series_summary(raw: Any) -> Dict[str, Any]:
     return summary
 
 
+def infer_analysis_window(analysis: Any, week_dir: Path) -> Dict[str, str]:
+    env_start = os.environ.get("ANALYSIS_START_DATE", "").strip()
+    env_end = os.environ.get("ANALYSIS_END_DATE", "").strip()
+    if env_start and env_end:
+        return {
+            "start_date": env_start,
+            "end_date": env_end,
+            "label": f"{env_start} ～ {env_end}",
+            "source": "workflow_env",
+        }
+
+    if isinstance(analysis, dict):
+        meta = analysis.get("meta") if isinstance(analysis.get("meta"), dict) else {}
+        window = meta.get("analysis_window") if isinstance(meta.get("analysis_window"), dict) else {}
+        start = str(window.get("start_date") or "").strip()
+        end = str(window.get("end_date") or "").strip()
+        if start and end:
+            return {
+                "start_date": start,
+                "end_date": end,
+                "label": f"{start} ～ {end}",
+                "source": "analysis_layer.meta.analysis_window",
+            }
+
+        week_range = str(meta.get("week_range") or "").strip()
+        match = re.search(r"(\d{4}-\d{2}-\d{2})\s*(?:～|~|to|-)\s*(\d{4}-\d{2}-\d{2})", week_range)
+        if match:
+            start, end = match.group(1), match.group(2)
+            return {
+                "start_date": start,
+                "end_date": end,
+                "label": f"{start} ～ {end}",
+                "source": "analysis_layer.meta.week_range",
+            }
+
+    source_text = read_text(week_dir / SOURCE_TEXT_FILENAME, 20000)
+    match = re.search(r"週期：\s*(\d{4}-\d{2}-\d{2})\s*[～~\-to]+\s*(\d{4}-\d{2}-\d{2})", source_text)
+    if match:
+        start, end = match.group(1), match.group(2)
+        return {
+            "start_date": start,
+            "end_date": end,
+            "label": f"{start} ～ {end}",
+            "source": "weekly_source_text.md",
+        }
+
+    return {
+        "start_date": "",
+        "end_date": week_dir.name,
+        "label": week_dir.name,
+        "source": "week_dir",
+    }
+
+
+def filter_points_by_window(points: Any, start_date: str, end_date: str) -> List[Dict[str, Any]]:
+    if not isinstance(points, list):
+        return []
+
+    filtered: List[Dict[str, Any]] = []
+    for point in points:
+        if not isinstance(point, dict):
+            continue
+        date_text = str(point.get("date") or "")
+        if start_date and date_text < start_date:
+            continue
+        if end_date and date_text > end_date:
+            continue
+        filtered.append(point)
+
+    return filtered
+
+
+def build_market_series_analysis_window(raw: Any, analysis_window: Dict[str, str]) -> Dict[str, Any]:
+    if not isinstance(raw, dict):
+        return {"available": False}
+
+    start = analysis_window.get("start_date", "")
+    end = analysis_window.get("end_date", "")
+    result: Dict[str, Any] = {
+        "available": True,
+        "analysis_window": analysis_window,
+        "assets": {},
+        "instruction": (
+            "Use these filtered points for all this-week price reactions in the dialogue. "
+            "Do not use lookback-window start prices as this-week starting points."
+        ),
+    }
+
+    series = raw.get("series", raw)
+
+    if isinstance(series, dict):
+        for name, values in series.items():
+            if not isinstance(values, list):
+                continue
+            points = filter_points_by_window(values, start, end)
+            result["assets"][str(name)] = {
+                "points_count": len(points),
+                "points": points,
+            }
+    elif isinstance(series, list):
+        for item in series:
+            if not isinstance(item, dict):
+                continue
+            name = item.get("asset") or item.get("symbol") or item.get("name") or item.get("ticker")
+            values = item.get("data") or item.get("points") or item.get("values")
+            if name and isinstance(values, list):
+                points = filter_points_by_window(values, start, end)
+                result["assets"][str(name)] = {
+                    "points_count": len(points),
+                    "points": points,
+                }
+
+    return result
+
+
+def build_market_series_lookback_note(raw: Any) -> Dict[str, Any]:
+    if not isinstance(raw, dict):
+        return {"available": False}
+
+    meta = raw.get("meta") if isinstance(raw.get("meta"), dict) else {}
+    return {
+        "available": True,
+        "meta": meta,
+        "note": (
+            "Lookback data is intentionally not provided as raw dialogue material. "
+            "It may be used only as prior context already distilled in the analysis_layer."
+        ),
+    }
+
+
 def build_input_bundle(week_dir: Path) -> Dict[str, Any]:
     analysis = load_json(week_dir / ANALYSIS_FILENAME, {})
     market_series_raw = load_json(week_dir / MARKET_SERIES_FILENAME, {})
     news_context_json = load_json(week_dir / NEWS_CONTEXT_JSON_FILENAME, {})
     endpoint_json = load_json(ENDPOINT_JSON_PATH, {})
+    analysis_window = infer_analysis_window(analysis, week_dir)
 
     return {
         "meta": {
             "week_dir": str(week_dir),
             "generated_at": datetime.now().isoformat(timespec="seconds"),
+            "analysis_window": analysis_window,
             "input_files": {
                 "analysis": str(week_dir / ANALYSIS_FILENAME),
                 "weekly_market_series": str(week_dir / MARKET_SERIES_FILENAME),
@@ -307,15 +453,27 @@ def build_input_bundle(week_dir: Path) -> Dict[str, Any]:
                 "weekly_source_text": str(week_dir / SOURCE_TEXT_FILENAME),
                 "endpoint_json": str(ENDPOINT_JSON_PATH),
             },
+            "hard_rule": (
+                "The dialogue must use analysis_window as the only formal week range. "
+                "Pre-analysis-window information is background only, never this-week price reaction."
+            ),
         },
         "analysis_layer": analysis,
-        "market_series_summary": build_market_series_summary(market_series_raw),
-        "market_series_raw_excerpt": compact_json(market_series_raw, 60000),
+        "market_series_analysis_window": build_market_series_analysis_window(market_series_raw, analysis_window),
+        "market_series_lookback_note": build_market_series_lookback_note(market_series_raw),
         "weekly_news_context_json": news_context_json,
-        "weekly_news_context_md": read_text(week_dir / NEWS_CONTEXT_MD_FILENAME, 60000),
-        "weekly_source_text": read_text(week_dir / SOURCE_TEXT_FILENAME, 90000),
-        "endpoint_context_excerpt": compact_json(endpoint_json, 60000),
-        "instruction_hint": "Select the strongest event threads and write a coherent macro story. Do not force all data into the script.",
+        "weekly_news_context_md": read_text(week_dir / NEWS_CONTEXT_MD_FILENAME, 40000),
+        "weekly_source_text": read_text(week_dir / SOURCE_TEXT_FILENAME, 30000),
+        "endpoint_context_note": (
+            "Endpoint context may include lookback or daily source material. "
+            "Use it only if it supports the analysis-layer conclusion, and never use its older prices as this-week start."
+        ),
+        "endpoint_context_excerpt": compact_json(endpoint_json, 12000),
+        "instruction_hint": (
+            "Select the strongest event threads from analysis_layer. "
+            "Use market_series_analysis_window for numbers. "
+            "Do not force all background data into the script."
+        ),
     }
 
 
@@ -546,11 +704,20 @@ def main() -> None:
     print(f"[INFO] Gemini model: {model}")
 
     bundle = build_input_bundle(week_dir)
+    analysis_window = bundle.get("meta", {}).get("analysis_window", {})
+    print(f"[INFO] Analysis window: {analysis_window.get('label')} ({analysis_window.get('source')})")
+
     user_prompt = USER_PROMPT_TEMPLATE.replace("{input_bundle_json}", compact_json(bundle, 170000))
     (week_dir / OUT_PROMPT_DEBUG_FILENAME).write_text(SYSTEM_PROMPT.strip() + "\n\n" + user_prompt.strip(), encoding="utf-8")
 
     print("[INFO] Generating story-only dialogue...")
     result = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
+
+    result.setdefault("meta", {})
+    if isinstance(analysis_window, dict):
+        result["meta"]["week_range"] = analysis_window.get("label", result["meta"].get("week_range", ""))
+        result["meta"]["analysis_window"] = analysis_window
+
     ensure_closing_turn(result)
     rebuild_full_script(result)
 
