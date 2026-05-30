@@ -1,13 +1,12 @@
-# Save as: .github/workflows/run_04_page_only.yml
 name: Run 04 Macro Page Only
 
 on:
   workflow_dispatch:
     inputs:
       week_end_date:
-        description: 'Target weekly folder end date, e.g. 2026-05-21'
+        description: 'Target weekly folder end date, e.g. 2026-05-28'
         required: true
-        default: '2026-05-21'
+        default: '2026-05-28'
 
 permissions:
   contents: write
@@ -31,11 +30,39 @@ jobs:
         run: |
           python scripts/04_build_weekly_macro_page.py --week-dir "output/weekly/${{ github.event.inputs.week_end_date }}"
 
+      - name: Update latest page redirect
+        run: |
+          WEEK_END_DATE="${{ github.event.inputs.week_end_date }}"
+          TARGET_PATH="output/weekly/${WEEK_END_DATE}/index.html"
+          TARGET_URL="./${TARGET_PATH}"
+
+          cat > index.html <<EOF
+          <!DOCTYPE html>
+          <html lang="zh-Hant">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta http-equiv="refresh" content="0; url=${TARGET_URL}">
+            <title>本週總經摘要</title>
+            <script>window.location.replace("${TARGET_URL}");</script>
+          </head>
+          <body>
+            <p>正在前往最新版本週總經摘要：<a href="${TARGET_URL}">${TARGET_PATH}</a></p>
+          </body>
+          </html>
+          EOF
+
+          cp index.html latest.html
+          echo "[OK] Latest page redirects to ${TARGET_PATH}"
+
       - name: Commit weekly macro page
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add index.html latest.html
           git add output/weekly/${{ github.event.inputs.week_end_date }}/index.html || true
+
           git diff --cached --quiet && echo "No page changes to commit." && exit 0
           git commit -m "build: update weekly macro page only"
           git push
