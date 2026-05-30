@@ -4,7 +4,15 @@ on:
   workflow_dispatch:
     inputs:
       week_dir:
-        description: "Optional week folder under output/weekly, e.g. 2026-05-21. Leave blank to use latest."
+        description: "Optional week folder under output/weekly, e.g. 2026-05-28. Leave blank to use latest."
+        required: false
+        default: ""
+      analysis_start_date:
+        description: "Formal analysis window start date, e.g. 2026-05-22"
+        required: false
+        default: ""
+      analysis_end_date:
+        description: "Formal analysis window end date, e.g. 2026-05-28"
         required: false
         default: ""
       analysis_model:
@@ -22,6 +30,8 @@ jobs:
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_ANALYSIS_MODEL: ${{ inputs.analysis_model }}
+      ANALYSIS_START_DATE: ${{ inputs.analysis_start_date }}
+      ANALYSIS_END_DATE: ${{ inputs.analysis_end_date }}
 
     steps:
       - name: Checkout repository
