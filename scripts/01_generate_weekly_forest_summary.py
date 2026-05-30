@@ -59,9 +59,16 @@ SYSTEM_PROMPT = """
 
 
 USER_PROMPT_TEMPLATE = """
-以下是最近 7 天市場數據與新聞事件。
+以下資料包含本週正式分析區間（analysis window）與較長的背景參考區間（lookback/context window）。
 
 請根據來源資料產生 weekly_forest_summary.json。
+
+重要區間原則：
+- 本次正式分析區間是：{analysis_window_label}
+- market series 可能包含較長 lookback/context window，這是為了提供前期位置與延續性背景。
+- 本週主線、本週漲跌、本週傳導檢查、影片段落與視覺描述，必須以 analysis window 為準。
+- analysis window 之前的資料只能作背景，不可當成本週變動起點。
+- 如果需要提到前期背景，請明確寫成「前期背景」或「延續性脈絡」，不要把它寫成本週走勢。
 
 這支影片的格式是：說明影片。
 目標是條理分明地呈現來源之間的關聯性，讓觀眾理解市場數據、新聞事件與資產價格變化如何互相印證、互相修正，或形成值得解釋的分歧。
@@ -175,6 +182,126 @@ def find_latest_week_dir() -> Path:
         raise FileNotFoundError("No weekly output folder found under output/weekly/")
     week_dirs.sort(key=lambda p: p.name, reverse=True)
     return week_dirs[0]
+
+
+def infer_analysis_window_from_source(week_dir: Path) -> Dict[str, str]:
+    """
+    Determine the formal weekly analysis window.
+
+    Priority:
+    1) ANALYSIS_START_DATE / ANALYSIS_END_DATE env override from workflow.
+    2) weekly_source_text.md, because it is the formal source for this weekly issue.
+    3) data/weekly_video_source.json range.
+    4) week_dir name as end date only.
+    """
+    env_start = os.getenv("ANALYSIS_START_DATE", "").strip()
+    env_end = os.getenv("ANALYSIS_END_DATE", "").strip()
+    if env_start and env_end:
+        return {
+            "start_date": env_start,
+            "end_date": env_end,
+            "label": f"{env_start} ～ {env_end}",
+            "source": "workflow_env",
+        }
+
+    source_text = load_text(week_dir / "weekly_source_text.md")
+    match = re.search(r"週期：\s*(\d{4}-\d{2}-\d{2})\s*[～~\-to]+\s*(\d{4}-\d{2}-\d{2})", source_text)
+    if match:
+        start, end = match.group(1), match.group(2)
+        return {
+            "start_date": start,
+            "end_date": end,
+            "label": f"{start} ～ {end}",
+            "source": "weekly_source_text.md",
+        }
+
+    source_json = load_json(ROOT_DIR / "data" / "weekly_video_source.json", {}) or {}
+    range_data = source_json.get("range", {}) if isinstance(source_json, dict) else {}
+    start = str(range_data.get("start_date") or "")
+    end = str(range_data.get("end_date") or week_dir.name)
+    if start and end:
+        return {
+            "start_date": start,
+            "end_date": end,
+            "label": f"{start} ～ {end}",
+            "source": "data/weekly_video_source.json",
+        }
+
+    return {
+        "start_date": "",
+        "end_date": week_dir.name,
+        "label": week_dir.name,
+        "source": "week_dir",
+    }
+
+
+def filter_points_by_window(points: Any, start_date: str, end_date: str) -> List[Dict[str, Any]]:
+    if not isinstance(points, list):
+        return []
+
+    filtered: List[Dict[str, Any]] = []
+    for point in points:
+        if not isinstance(point, dict):
+            continue
+        date_text = str(point.get("date") or "")
+        if start_date and date_text < start_date:
+            continue
+        if end_date and date_text > end_date:
+            continue
+        filtered.append(point)
+
+    return filtered
+
+
+def build_market_payload_for_analysis(
+    weekly_market_series: Dict[str, Any],
+    analysis_window: Dict[str, str],
+) -> Dict[str, Any]:
+    """
+    Give Gemini both the formal analysis window and the longer lookback context.
+
+    The original market series is preserved as lookback_series for background.
+    analysis_series contains the same assets filtered to the formal weekly window.
+    """
+    series = weekly_market_series.get("series", [])
+    start = analysis_window.get("start_date", "")
+    end = analysis_window.get("end_date", "")
+
+    analysis_series: List[Dict[str, Any]] = []
+    lookback_series: List[Dict[str, Any]] = []
+
+    if isinstance(series, list):
+        for item in series:
+            if not isinstance(item, dict):
+                continue
+
+            original_item = dict(item)
+            original_points = item.get("points") or []
+            filtered_points = filter_points_by_window(original_points, start, end)
+
+            filtered_item = dict(item)
+            filtered_item["points"] = filtered_points
+            filtered_item["analysis_points_count"] = len(filtered_points)
+            filtered_item["lookback_points_count"] = len(original_points) if isinstance(original_points, list) else 0
+
+            analysis_series.append(filtered_item)
+            lookback_series.append(original_item)
+
+    original_meta = weekly_market_series.get("meta", {}) if isinstance(weekly_market_series.get("meta"), dict) else {}
+
+    return {
+        "meta": {
+            "source": "weekly_market_series.json",
+            "analysis_window": analysis_window,
+            "lookback_window": original_meta.get("range", {}),
+            "instruction": (
+                "Use analysis_series for this week's main move and transmission checks. "
+                "Use lookback_series only as background/context."
+            ),
+        },
+        "analysis_series": analysis_series,
+        "lookback_series": lookback_series,
+    }
 
 
 def as_list(value: Any) -> List[Any]:
@@ -298,8 +425,12 @@ def build_user_prompt(
     weekly_market_series: Dict[str, Any],
     weekly_news_context_md: str,
     weekly_news_context_json: Dict[str, Any],
+    analysis_window: Dict[str, str],
 ) -> str:
     return USER_PROMPT_TEMPLATE.replace(
+        "{analysis_window_label}",
+        analysis_window.get("label", "資料週期待確認"),
+    ).replace(
         "{weekly_market_series_json}",
         json.dumps(weekly_market_series, ensure_ascii=False, indent=2),
     ).replace(
@@ -331,9 +462,15 @@ def main() -> None:
     weekly_market_series = load_json(week_dir / "weekly_market_series.json", {})
     weekly_news_context_md = load_text(week_dir / "weekly_news_context.md")
     weekly_news_context_json = load_json(week_dir / "weekly_news_context.json", {})
+    analysis_window = infer_analysis_window_from_source(week_dir)
 
     if not weekly_market_series:
         raise FileNotFoundError(f"Missing or empty weekly_market_series.json in {week_dir}")
+
+    market_payload = build_market_payload_for_analysis(
+        weekly_market_series=weekly_market_series,
+        analysis_window=analysis_window,
+    )
 
     if not weekly_news_context_md and not weekly_news_context_json:
         weekly_news_context_md = (
@@ -342,19 +479,31 @@ def main() -> None:
         )
 
     user_prompt = build_user_prompt(
-        weekly_market_series=weekly_market_series,
+        weekly_market_series=market_payload,
         weekly_news_context_md=weekly_news_context_md,
         weekly_news_context_json=weekly_news_context_json,
+        analysis_window=analysis_window,
     )
 
     print(f"[INFO] Generating weekly forest summary with analysis model: {model}")
     print(f"[INFO] Week dir: {week_dir}")
+    print(f"[INFO] Analysis window: {analysis_window.get('label')} ({analysis_window.get('source')})")
     print(f"[INFO] Market series included: {bool(weekly_market_series)}")
     print(f"[INFO] News context md included: {bool((week_dir / 'weekly_news_context.md').exists())}")
     print(f"[INFO] News context json included: {bool((week_dir / 'weekly_news_context.json').exists())}")
 
     forest_summary = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
     forest_summary = normalize_video_planning(forest_summary)
+
+    forest_summary.setdefault("meta", {})
+    forest_summary["meta"]["source"] = "weekly_market_series.json + weekly_news_context.json"
+    forest_summary["meta"]["week_range"] = analysis_window.get("label", "")
+    forest_summary["meta"]["analysis_window"] = {
+        "start_date": analysis_window.get("start_date", ""),
+        "end_date": analysis_window.get("end_date", ""),
+        "source": analysis_window.get("source", ""),
+    }
+    forest_summary["meta"]["lookback_window"] = market_payload.get("meta", {}).get("lookback_window", {})
 
     out_path = week_dir / "weekly_forest_summary.json"
     save_json(out_path, forest_summary)
