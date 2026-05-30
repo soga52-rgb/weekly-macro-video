@@ -85,7 +85,7 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
 {
   "meta": {
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-28",
-    "generated_at": "2026-05-30T10:15:56",
+    "generated_at": "2026-05-30T11:20:46",
     "input_files": {
       "analysis": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-28/weekly_forest_summary_analysis_layer_test.json",
       "weekly_market_series": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-05-28/weekly_market_series.json",
@@ -95,7 +95,194 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
       "endpoint_json": "/home/runner/work/weekly-macro-video/weekly-macro-video/data/weekly_video_source.json"
     }
   },
-  "analysis_layer": {},
+  "analysis_layer": {
+    "meta": {
+      "source": "weekly_news_context + macro_background_context + weekly_market_series",
+      "data_status_note": "分析層使用 analysis window 作為本週正式判斷區間；lookback / background 資料僅作前期脈絡，不作為本週變動起點。",
+      "week_range": "2026-05-22 ～ 2026-05-28",
+      "analysis_window": {
+        "start_date": "2026-05-22",
+        "end_date": "2026-05-28",
+        "source": "workflow_env"
+      }
+    },
+    "main_theme_analysis_process": {
+      "news_context": {
+        "current_week_news": {
+          "inflation": [
+            {
+              "title": "芝加哥Fed古爾斯比：能源價格比預期更頑強 亞洲恐陷停滯性通膨",
+              "effect": "分歧",
+              "target_section": "通膨預期綜合研判"
+            },
+            {
+              "title": "原油期 謹慎操作",
+              "effect": "待觀察",
+              "target_section": "通膨預期綜合研判"
+            }
+          ],
+          "rates": [
+            {
+              "title": "美債30年殖利率衝破5% 全球高利率時代恐來臨",
+              "effect": "強化",
+              "target_section": "利率驅動來源"
+            },
+            {
+              "title": "美債關鍵殖利率曲線釋放警示信號 華許時代利率或在更高水平維持更久",
+              "effect": "強化",
+              "target_section": "利率驅動來源"
+            },
+            {
+              "title": "美伊和談希望壓低油價 美債殖利率同步回落",
+              "effect": "抵銷",
+              "target_section": "利率驅動來源"
+            },
+            {
+              "title": "美債殖利率走升 景順：市場更像再校準而非結構性失衡",
+              "effect": "待觀察",
+              "target_section": "利率驅動來源"
+            }
+          ],
+          "dollar_fx_gold": [
+            {
+              "title": "〈紐約匯市〉美元走弱 殖利率下滑、升息押注降溫",
+              "effect": "抵銷",
+              "target_section": "美元與黃金"
+            },
+            {
+              "title": "AI 熱潮助攻股匯 台股創高、新台幣登最強亞幣",
+              "effect": "分歧",
+              "target_section": "亞洲貨幣：台、日、韓"
+            },
+            {
+              "title": "股匯不同調 新台幣貶5.1分終止連2升",
+              "effect": "分歧",
+              "target_section": "亞洲貨幣：台、日、韓"
+            },
+            {
+              "title": "〈貴金屬盤後〉美伊停火露曙光 美元、油價回落 黃金自兩個月低點強彈",
+              "effect": "強化",
+              "target_section": "美元與黃金"
+            }
+          ]
+        },
+        "background_news": {
+          "inflation": [],
+          "rates": [],
+          "dollar_fx_gold": []
+        },
+        "context_summary": "本週新聞脈絡呈現「政策緊縮預期」與「經濟成長放緩及地緣風險降溫」的交錯。週初受新任聯準會主席華許上任影響，市場擔憂長期高利率，帶動長債殖利率與美元走升；但隨後美伊和談曙光出現，油價顯著回落，加上經濟數據顯露疲態，促使市場重新校準利率路徑，殖利率與美元同步回調。"
+      },
+      "market_validation": {
+        "inflation_energy": "WTI原油自96.60跌至88.55，Brent自103.54跌至92.35，顯著反映美伊和談帶來的能源通膨壓力降溫。",
+        "rates": "US10Y自4.558%回落至4.455%，反映油價下跌與經濟數據下修帶動的利率預期放鬆，修正了週初的高利率定價。",
+        "dollar": "DXY自99.32回落至98.99，受利率回落與升息押注降溫影響，失去部分利差支撐。",
+        "gold": "黃金價格在4489至4576之間震盪，最終收於4524，顯示在美元與油價回落時，避險需求與利率下行提供了雙重支撐。",
+        "asia_fx": {
+          "twd": "USDTWD自31.449微降至31.411（台幣微升），反映AI熱潮與台股創高提供的局部支撐，抵抗了強勢美元的壓抑。",
+          "jpy": "USDJPY自159.15微升至159.23（日圓微貶），顯示日圓仍受美日利差與避險情緒交錯影響，缺乏明確升值動能。",
+          "krw": "USDKRW自1520.53顯著降至1493.63（韓元升值），反映美元回落及亞洲市場情緒回溫。"
+        },
+        "validation_summary": "市場數據驗證了新聞脈絡中的「再校準」敘事。油價大幅下跌帶動美債殖利率與美元指數同步回落，修正了週初極端的鷹派定價；同時，亞洲貨幣（台幣、韓元）在美元回落與特定產業題材支撐下呈現升值，黃金則展現韌性。"
+      },
+      "inflation_expectation_judgment": {
+        "signal_strength": "mixed",
+        "supporting_signals": [
+          "芝加哥Fed古爾斯比擔憂能源價格比預期更頑強，亞洲恐陷停滯性通膨"
+        ],
+        "offsetting_signals": [
+          "美伊和談希望壓低油價",
+          "WTI與Brent原油價格本週顯著下跌"
+        ],
+        "judgment": "本週通膨預期呈現分歧。雖然聯準會官員仍擔憂能源通膨黏性，但美伊和談曙光促使原油價格大幅回落，形成強烈的抵銷力量，整體通膨預期尚未形成單一方向，短期內能源端壓力有所緩解。"
+      },
+      "rate_driver_diagnosis": {
+        "main_driver": "mixed",
+        "fed_policy_signal": "新任主席華許就任引發「利率在更高水平維持更久」的預期，週初推升長債殖利率。",
+        "cpi_ppi_background": "資料不足 / 待確認",
+        "long_end_yield_term_premium": "30年期美債殖利率一度衝破5%，反映市場對長期高利率與通膨黏性的定價，但隨後因油價下跌與經濟數據下修而回落。",
+        "market_validation": "US10Y自4.558%降至4.455%，顯示週初的鷹派定價在週後期被修正。",
+        "judgment": "本週利率驅動來源呈現交錯。週初主要由 Fed 新任主席的鷹派政策指引與長天期期限溢價推升；但週後期，隨著地緣政治緩和帶動油價下跌，以及經濟成長放緩擔憂，市場對政策路徑進行再校準，導致利率最終偏弱回落。"
+      },
+      "dollar_gold_reaction": {
+        "dollar": {
+          "news_signal": "美元走弱，殖利率下滑、升息押注降溫。",
+          "background_context": "資料不足 / 待確認",
+          "market_validation": "DXY自99.32回落至98.99。",
+          "driver_explanation": "美元走勢與美債殖利率高度連動，隨著市場對高利率政策路徑重新定價，利差優勢邊際減弱，導致美元承壓。",
+          "judgment": "美元本週受利率預期回落拖累而偏弱，失去前期強勢支撐。"
+        },
+        "gold": {
+          "news_signal": "美伊停火露曙光，美元、油價回落，黃金自兩個月低點強彈。",
+          "background_context": "資料不足 / 待確認",
+          "market_validation": "黃金價格在4489至4576區間震盪，收於4524。",
+          "driver_explanation": "黃金定價面臨複雜交錯，一方面受惠於美元與利率回落降低持有成本，另一方面地緣政治風險降溫削弱了部分避險需求，但整體仍展現韌性。",
+          "judgment": "黃金受利率下行支撐與避險情緒降溫兩股不同方向力量影響，呈現震盪偏強的分歧狀態。"
+        }
+      },
+      "asia_fx_reaction": {
+        "twd": {
+          "news_signal": "AI熱潮助攻股匯，台股創高、新台幣登最強亞幣；隨後股匯不同調，新台幣貶值終止連升。",
+          "background_context": "資料不足 / 待確認",
+          "market_validation": "USDTWD自31.449微降至31.411，台幣整體微幅升值。",
+          "driver_explanation": "台幣受惠於AI產業題材與台股資金流入，在美元回落的背景下獲得局部支撐，表現相對強勢。",
+          "judgment": "台幣受特定產業資金動能支撐，與美元走弱形成共振，呈現偏強走勢。"
+        },
+        "jpy": {
+          "news_signal": "資料不足 / 待確認",
+          "background_context": "資料不足 / 待確認",
+          "market_validation": "USDJPY自159.15微升至159.23，日圓微幅貶值。",
+          "driver_explanation": "儘管美元回落，日圓仍未見顯著升值，顯示美日絕對利差仍大，且缺乏內部利多驅動。",
+          "judgment": "日圓受制於結構性利差，在亞幣中表現相對疲軟。"
+        },
+        "krw": {
+          "news_signal": "資料不足 / 待確認",
+          "background_context": "資料不足 / 待確認",
+          "market_validation": "USDKRW自1520.53降至1493.63，韓元顯著升值。",
+          "driver_explanation": "韓元受惠於美元指數回落及整體亞洲風險情緒改善，出現較大幅度的反彈。",
+          "judgment": "韓元跟隨美元走弱與外部環境改善而顯著升值。"
+        }
+      },
+      "weekly_main_theme_conclusion": {
+        "weekly_main_theme": "政策預期再校準與地緣風險降溫引導市場重估",
+        "main_question": "在新任Fed主席引發的高利率預期與美伊和談帶來的通膨降溫訊號交錯下，市場定價是否發生結構性轉向？",
+        "one_sentence_verdict": "市場並非結構性失衡，而是處於政策路徑與通膨預期的再校準階段，帶動利率與美元自高點回落。",
+        "overall_verdict": "成立",
+        "narrative_arc": "本週市場經歷了從「擔憂長期高利率」到「反映通膨與成長降溫」的轉折。週初受Fed新主席效應影響，長債殖利率與美元衝高；但隨後美伊和談壓低油價，加上經濟數據疲軟，促使市場重新定價，殖利率與美元同步回落，亞幣與黃金獲得喘息空間。",
+        "why_it_matters": "這一轉折顯示市場對通膨黏性與高利率的容忍度已達階段性高點，未來資產價格的走向將高度依賴實體經濟數據與地緣政治的實質進展，跨資產配置的靈活性變得尤為重要。"
+      },
+      "next_week_watch": [
+        "美伊停火談判的後續實質進展及其對原油價格的直接影響。",
+        "美國即將公布的就業與通膨數據，是否進一步確認經濟成長放緩的敘事。",
+        "聯準會官員對於新主席政策方向的表態與政策路徑的再校準。"
+      ]
+    },
+    "forest_summary": {
+      "weekly_main_theme": "政策預期再校準與地緣風險降溫引導市場重估",
+      "main_question": "在新任Fed主席引發的高利率預期與美伊和談帶來的通膨降溫訊號交錯下，市場定價是否發生結構性轉向？",
+      "one_sentence_verdict": "市場並非結構性失衡，而是處於政策路徑與通膨預期的再校準階段，帶動利率與美元自高點回落。",
+      "overall_verdict": "成立",
+      "narrative_arc": "本週市場經歷了從「擔憂長期高利率」到「反映通膨與成長降溫」的轉折。週初受Fed新主席效應影響，長債殖利率與美元衝高；但隨後美伊和談壓低油價，加上經濟數據疲軟，促使市場重新定價，殖利率與美元同步回落，亞幣與黃金獲得喘息空間。",
+      "why_it_matters": "這一轉折顯示市場對通膨黏性與高利率的容忍度已達階段性高點，未來資產價格的走向將高度依賴實體經濟數據與地緣政治的實質進展，跨資產配置的靈活性變得尤為重要。"
+    },
+    "evidence": {
+      "most_important_evidence": [
+        "美伊和談希望壓低油價 美債殖利率同步回落",
+        "美債30年殖利率衝破5% 全球高利率時代恐來臨",
+        "WTI與Brent原油價格本週顯著下跌",
+        "US10Y與DXY本週同步回落"
+      ],
+      "insufficient_evidence": [
+        "前期CPI/PPI具體數據背景",
+        "日圓與韓元當週具體新聞驅動"
+      ],
+      "watch_items_from_news_context": [
+        "美伊停火談判進展",
+        "美國就業與通膨數據",
+        "聯準會官員表態"
+      ]
+    }
+  },
   "market_series_summary": {
     "available": true,
     "assets": {
