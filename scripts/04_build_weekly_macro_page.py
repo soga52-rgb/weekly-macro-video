@@ -77,12 +77,16 @@ def first_non_empty(*values: Any) -> str:
 
 def infer_week_label_from_source_text(week_dir: Path) -> str:
     """
-    Prefer the source-text weekly range for the page header.
+    Prefer workflow env override, then source-text weekly range for the page header.
 
     weekly_market_series may intentionally include a longer lookback window for charts.
-    The page headline period should follow weekly_source_text.md / weekly_video_source,
-    e.g. 2026-05-22 ～ 2026-05-28.
+    The page headline period should follow the formal analysis window.
     """
+    env_start = os.getenv("ANALYSIS_START_DATE", "").strip()
+    env_end = os.getenv("ANALYSIS_END_DATE", "").strip()
+    if env_start and env_end:
+        return f"{env_start} ～ {env_end}"
+
     source_text_path = week_dir / "weekly_source_text.md"
     if not source_text_path.exists():
         return ""
