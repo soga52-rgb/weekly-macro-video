@@ -26,6 +26,7 @@ import html
 import math
 import os
 import re
+import urllib.parse
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List
@@ -162,6 +163,8 @@ def render_list(items: Any, empty: str = "資料不足，待觀察") -> str:
 def render_video_section(week_dir: Path) -> str:
     """Render the weekly macro video player near the top of the page."""
     candidates = [
+        week_dir / "story_video" / "story_visual_video_test.mp4",
+        week_dir / "story_video" / "story_visual_video.mp4",
         week_dir / "final" / "weekly_macro_video.mp4",
         week_dir / "video" / "weekly_macro_video.mp4",
         week_dir / "weekly_macro_video.mp4",
@@ -172,13 +175,19 @@ def render_video_section(week_dir: Path) -> str:
         return """
   <section class="section section-video">
     <h2>本週總經影片</h2>
-    <div class="muted-box">本週影片尚未產生，完成 07 合成後會自動顯示於此。</div>
+    <div class="muted-box">本週影片尚未產生，完成 86 合成後會自動顯示於此。</div>
   </section>
 """
 
     src = video_path.relative_to(week_dir).as_posix()
-    poster_path = week_dir / "slides" / "scene_01.png"
-    poster_attr = f' poster="{esc(poster_path.relative_to(week_dir).as_posix())}"' if poster_path.exists() else ""
+
+    poster_candidates = [
+        week_dir / "story_visual_images" / "scene_01.jpg",
+        week_dir / "story_visual_images" / "scene_01.png",
+        week_dir / "slides" / "scene_01.png",
+    ]
+    poster_path = next((p for p in poster_candidates if p.exists()), None)
+    poster_attr = f' poster="{esc(poster_path.relative_to(week_dir).as_posix())}"' if poster_path else ""
 
     return f"""
   <section class="section section-video">
@@ -189,10 +198,9 @@ def render_video_section(week_dir: Path) -> str:
         您的瀏覽器不支援影片播放。
       </video>
     </div>
-    <div class="video-note">影片依本週總經傳導圖、旁白與圖卡自動合成。</div>
+    <div class="video-note">影片依本週語音稿、旁白音檔與圖卡自動合成。</div>
   </section>
 """
-
 
 def build_asset_signal_map(forest: Dict[str, Any]) -> Dict[str, str]:
     variables = forest.get("macro_variables") or {}
@@ -259,11 +267,68 @@ def classify_news_item(item: Dict[str, Any]) -> str:
     return best_category if scores[best_category] > 0 else "其他"
 
 
+
+def resolve_news_url(item: Dict[str, Any]) -> str:
+    """
+    Return a usable news link.
+
+    Priority:
+    1) Direct URL-like fields from weekly_news_context.json.
+    2) Nested URL fields if the source is an object.
+    3) Google search fallback using title/source, so the card remains clickable
+       even when the upstream news context does not preserve the original URL.
+    """
+    url_fields = [
+        "url",
+        "link",
+        "href",
+        "article_url",
+        "source_url",
+        "original_url",
+        "resolved_url",
+        "canonical_url",
+        "news_url",
+    ]
+
+    for field in url_fields:
+        value = item.get(field)
+        if isinstance(value, str):
+            text = value.strip()
+            if text.startswith(("http://", "https://")):
+                return text
+
+    source_obj = item.get("source")
+    if isinstance(source_obj, dict):
+        for field in url_fields:
+            value = source_obj.get(field)
+            if isinstance(value, str):
+                text = value.strip()
+                if text.startswith(("http://", "https://")):
+                    return text
+
+    title = first_non_empty(item.get("title"), item.get("headline"), item.get("theme"))
+    source = item.get("source")
+    source_text = ""
+    if isinstance(source, str):
+        source_text = source
+    elif isinstance(source, dict):
+        source_text = first_non_empty(source.get("name"), source.get("domain"))
+
+    query = " ".join(x for x in [title, source_text] if x).strip()
+    if query:
+        return "https://www.google.com/search?q=" + urllib.parse.quote_plus(query)
+
+    return "#"
+
 def render_news_card(item: Dict[str, Any]) -> str:
     title = first_non_empty(item.get("title"), "未命名新聞")
-    source = first_non_empty(item.get("source"), "News")
+    source_raw = item.get("source")
+    if isinstance(source_raw, dict):
+        source = first_non_empty(source_raw.get("name"), source_raw.get("domain"), "News")
+    else:
+        source = first_non_empty(source_raw, "News")
     why = first_non_empty(item.get("why_it_matters"), item.get("theme"), "")
-    url = first_non_empty(item.get("url"), "#")
+    url = resolve_news_url(item)
 
     return f"""
     <a class="news-mini-card" href="{esc(url)}" target="_blank" rel="noopener noreferrer">
