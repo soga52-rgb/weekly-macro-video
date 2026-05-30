@@ -4,7 +4,15 @@ on:
   workflow_dispatch:
     inputs:
       week_dir:
-        description: "Optional week directory, e.g. output/weekly/2026-05-21. Leave blank to use latest."
+        description: "Optional week directory, e.g. 2026-05-28 or output/weekly/2026-05-28. Leave blank to use latest."
+        required: false
+        default: ""
+      analysis_start_date:
+        description: "Formal analysis window start date, e.g. 2026-05-22"
+        required: false
+        default: ""
+      analysis_end_date:
+        description: "Formal analysis window end date, e.g. 2026-05-28"
         required: false
         default: ""
 
@@ -29,6 +37,8 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-3.5-flash' }}
           WEEK_DIR: ${{ github.event.inputs.week_dir }}
+          ANALYSIS_START_DATE: ${{ github.event.inputs.analysis_start_date }}
+          ANALYSIS_END_DATE: ${{ github.event.inputs.analysis_end_date }}
         run: |
           python scripts/82_test_generate_dialogue_script.py
 
