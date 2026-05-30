@@ -8,6 +8,16 @@ on:
         required: false
         default: false
         type: boolean
+      analysis_start_date:
+        description: "Formal analysis window start date, e.g. 2026-05-22"
+        required: false
+        default: ""
+        type: string
+      analysis_end_date:
+        description: "Formal analysis window end date, e.g. 2026-05-28"
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: write
@@ -27,6 +37,8 @@ jobs:
       GEMINI_IMAGE_MODEL: gemini-3.1-flash-image-preview
       WEEKLY_NEWS_MAX_ITEMS: "30"
       FORCE_REBUILD_DIAGRAM: ${{ inputs.force_rebuild_diagram }}
+      ANALYSIS_START_DATE: ${{ inputs.analysis_start_date }}
+      ANALYSIS_END_DATE: ${{ inputs.analysis_end_date }}
 
     steps:
       - name: Checkout repository
@@ -65,11 +77,37 @@ jobs:
         run: |
           python scripts/04_build_weekly_macro_page.py
 
+      - name: Update latest page redirect
+        run: |
+          LATEST_WEEK_DIR="$(ls -1 output/weekly | sort | tail -n 1)"
+          TARGET_PATH="output/weekly/${LATEST_WEEK_DIR}/index.html"
+          TARGET_URL="./${TARGET_PATH}"
+
+          cat > index.html <<EOF
+          <!DOCTYPE html>
+          <html lang="zh-Hant">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta http-equiv="refresh" content="0; url=${TARGET_URL}">
+            <title>本週總經摘要</title>
+            <script>window.location.replace("${TARGET_URL}");</script>
+          </head>
+          <body>
+            <p>正在前往最新版本週總經摘要：<a href="${TARGET_URL}">${TARGET_PATH}</a></p>
+          </body>
+          </html>
+          EOF
+
+          cp index.html latest.html
+          echo "[OK] Latest page redirects to ${TARGET_PATH}"
+
       - name: Commit weekly macro page
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
+          git add index.html latest.html
           git add data/weekly_video_source.json data/weekly_news_raw.json data/weekly_market_series.json output/weekly/
 
           if git diff --cached --quiet; then
