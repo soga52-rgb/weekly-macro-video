@@ -167,6 +167,9 @@ B. weekly_news_candidates：
 - 每類最多 8 則，優先挑對本週主線最有佐證價值者。
 - 請優先保留靠近週末或最新交易日的新聞；若 5/20～5/21 有同類新聞，除非舊新聞更具代表性，否則不要大量使用 5/15～5/18 的新聞。
 - 一則新聞只能放在一類，不要重複。
+- news_categories 每則新聞都必須保留原始候選新聞的 title、source、url、published_at，並新增 why_it_matters。
+- top_news 每則新聞也必須保留 title、source、url、published_at，並新增 why_it_matters。
+- 不要改寫新聞標題；title 必須盡量沿用 weekly_news_candidates 的原始 title，以便後續網頁連結。
 - 分類以標題與新聞主題優先，why_it_matters 只作輔助。
 - 「油價、能源、CPI、PPI、物價、再通膨、通膨黏性」優先放「通膨預期」。
 - 「美債殖利率、長債、Fed、聯準會、升息、降息、利率路徑」優先放「利率」。
@@ -493,8 +496,160 @@ def build_news_context_markdown(context: Dict[str, Any]) -> str:
     return "\n".join(lines).strip() + "\n"
 
 
-def normalize_news_categories(context: Dict[str, Any]) -> Dict[str, Any]:
-    """Ensure categorized news fields exist and top_news has enough items."""
+def safe_news_text(value: Any) -> str:
+    if value is None:
+        return ""
+    return str(value).strip()
+
+
+def normalize_news_title(title: Any) -> str:
+    text = safe_news_text(title).lower()
+    text = re.sub(r"\s*[-｜|]\s*(news\.cnyes\.com|經濟日報|聯合新聞網|udn|marketwatch|investing\.com)\s*$", "", text)
+    text = re.sub(r"〈[^〉]{1,20}〉", "", text)
+    return re.sub(r"\W+", "", text)[:90]
+
+
+def news_title_similarity(a: Any, b: Any) -> float:
+    aa = normalize_news_title(a)
+    bb = normalize_news_title(b)
+    if not aa or not bb:
+        return 0.0
+    if aa == bb:
+        return 1.0
+    if aa in bb or bb in aa:
+        return min(len(aa), len(bb)) / max(len(aa), len(bb))
+
+    grams_a = {aa[i:i + 2] for i in range(max(len(aa) - 1, 0))}
+    grams_b = {bb[i:i + 2] for i in range(max(len(bb) - 1, 0))}
+    if not grams_a or not grams_b:
+        return 0.0
+    return len(grams_a & grams_b) / len(grams_a | grams_b)
+
+
+def classify_news_bucket(item: Dict[str, Any]) -> str:
+    """Rule-based fallback category for natural-weighted news display."""
+    text = f"{item.get('title','')} {item.get('theme','')} {item.get('query','')}".lower()
+
+    inflation_keywords = [
+        "油價", "原油", "能源", "通膨", "物價", "pce", "cpi", "ppi",
+        "inflation", "oil", "wti", "brent", "energy", "停滯性通膨",
+        "美伊", "伊朗", "中東", "geopolitical",
+    ]
+    rate_keywords = [
+        "美債", "殖利率", "長債", "fed", "聯準會", "利率", "降息", "升息",
+        "treasury", "yield", "rate", "federal reserve", "期限溢價",
+    ]
+    currency_keywords = [
+        "美元", "dxy", "台幣", "新台幣", "日圓", "日元", "韓元", "人民幣",
+        "亞幣", "匯率", "dollar", "yen", "taiwan dollar", "asia currencies",
+        "fx",
+    ]
+
+    if any(k.lower() in text for k in inflation_keywords):
+        return "通膨預期"
+    if any(k.lower() in text for k in rate_keywords):
+        return "利率"
+    if any(k.lower() in text for k in currency_keywords):
+        return "貨幣"
+    return "其他"
+
+
+def build_url_candidates(ranked_items: List[Dict[str, Any]], top_news: List[Any]) -> List[Dict[str, Any]]:
+    candidates: List[Dict[str, Any]] = []
+    seen = set()
+
+    def add_item(item: Any) -> None:
+        if not isinstance(item, dict):
+            return
+        title = safe_news_text(item.get("title"))
+        url = safe_news_text(item.get("url"))
+        key = (normalize_news_title(title), url)
+        if not key[0] or not url or key in seen:
+            return
+        seen.add(key)
+        candidates.append(item)
+
+    for item in ranked_items or []:
+        add_item(item)
+    for item in top_news or []:
+        add_item(item)
+
+    return candidates
+
+
+def enrich_news_item(item: Dict[str, Any], url_candidates: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Restore URL/source/published_at from original RSS candidates when Gemini omitted them."""
+    merged = dict(item)
+
+    if safe_news_text(merged.get("url")):
+        return merged
+
+    best_match: Dict[str, Any] = {}
+    best_score = 0.0
+    for candidate in url_candidates:
+        score = news_title_similarity(merged.get("title"), candidate.get("title"))
+        if score > best_score:
+            best_score = score
+            best_match = candidate
+
+    if best_score >= 0.38:
+        for field in ["url", "source", "published_at", "theme"]:
+            if best_match.get(field) and not merged.get(field):
+                merged[field] = best_match.get(field)
+
+    return merged
+
+
+def news_card_from_item(item: Dict[str, Any]) -> Dict[str, Any]:
+    title = safe_news_text(item.get("title"))
+    source = safe_news_text(item.get("source"))
+    theme = safe_news_text(item.get("theme"))
+    published_at = safe_news_text(item.get("published_at"))
+
+    why_parts = []
+    if theme:
+        why_parts.append(f"主題：{theme}")
+    if published_at:
+        why_parts.append(f"時間：{published_at[:10]}")
+
+    return {
+        "title": title,
+        "source": source,
+        "url": safe_news_text(item.get("url")),
+        "published_at": published_at,
+        "theme": theme,
+        "why_it_matters": safe_news_text(item.get("why_it_matters")) or "本週總經新聞候選。",
+        "score": item.get("score", 0),
+    }
+
+
+def build_fallback_news_categories(ranked_items: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
+    categories: Dict[str, List[Dict[str, Any]]] = {
+        "通膨預期": [],
+        "利率": [],
+        "貨幣": [],
+        "其他": [],
+    }
+
+    seen = set()
+    for item in ranked_items or []:
+        if not isinstance(item, dict):
+            continue
+        card = news_card_from_item(item)
+        key = (card.get("title") or "", card.get("url") or "")
+        if not key[0] or key in seen:
+            continue
+        seen.add(key)
+
+        bucket = classify_news_bucket(item)
+        if len(categories[bucket]) < 8:
+            categories[bucket].append(card)
+
+    return categories
+
+
+def normalize_news_categories(context: Dict[str, Any], ranked_items: List[Dict[str, Any]] | None = None) -> Dict[str, Any]:
+    """Ensure categorized news fields exist, keep URLs, and provide fallback cards when Gemini returns empty buckets."""
     categories = context.get("news_categories")
     if not isinstance(categories, dict):
         context["news_categories"] = {
@@ -505,25 +660,40 @@ def normalize_news_categories(context: Dict[str, Any]) -> Dict[str, Any]:
         }
         categories = context["news_categories"]
 
-    for key in ["通膨預期", "利率", "貨幣", "其他"]:
-        if not isinstance(categories.get(key), list):
-            categories[key] = []
-        categories[key] = [item for item in categories[key] if isinstance(item, dict)][:8]
-
     top_news = context.get("top_news")
     if not isinstance(top_news, list):
         top_news = []
 
-    seen = set()
+    url_candidates = build_url_candidates(ranked_items or [], top_news)
+
+    for key in ["通膨預期", "利率", "貨幣", "其他"]:
+        if not isinstance(categories.get(key), list):
+            categories[key] = []
+        cleaned_items = []
+        for item in categories[key]:
+            if isinstance(item, dict):
+                cleaned_items.append(enrich_news_item(item, url_candidates))
+        categories[key] = cleaned_items[:8]
+
+    has_category_cards = any(categories.get(key) for key in ["通膨預期", "利率", "貨幣", "其他"])
+
     normalized_top = []
+    seen = set()
     for item in top_news:
         if not isinstance(item, dict):
             continue
-        key = (item.get("title") or "", item.get("url") or "")
+        enriched = enrich_news_item(item, url_candidates)
+        key = (enriched.get("title") or "", enriched.get("url") or "")
         if key in seen:
             continue
         seen.add(key)
-        normalized_top.append(item)
+        normalized_top.append(enriched)
+
+    # Fallback: Gemini may summarize well but return empty news_categories/top_news.
+    if not has_category_cards and not normalized_top and ranked_items:
+        fallback_categories = build_fallback_news_categories(ranked_items)
+        for key in ["通膨預期", "利率", "貨幣", "其他"]:
+            categories[key] = fallback_categories.get(key, [])[:8]
 
     for bucket in ["通膨預期", "利率", "貨幣", "其他"]:
         for item in categories.get(bucket, []):
@@ -533,6 +703,7 @@ def normalize_news_categories(context: Dict[str, Any]) -> Dict[str, Any]:
             seen.add(key)
             normalized_top.append(item)
 
+    context["news_categories"] = categories
     context["top_news"] = normalized_top[:12]
     return context
 
@@ -587,7 +758,14 @@ def main() -> None:
 
     print(f"[INFO] Generating weekly news context with model: {model}")
     context = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
-    context = normalize_news_categories(context)
+    context = normalize_news_categories(context, ranked_items=ranked)
+
+    category_counts = {
+        key: len(context.get("news_categories", {}).get(key, []) or [])
+        for key in ["通膨預期", "利率", "貨幣", "其他"]
+    }
+    print(f"[INFO] News category counts: {category_counts}")
+    print(f"[INFO] Top news count: {len(context.get('top_news', []) or [])}")
 
     context.setdefault("meta", {})
     context["meta"]["source"] = "Google News RSS"
