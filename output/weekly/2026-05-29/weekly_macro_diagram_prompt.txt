@@ -1,0 +1,89 @@
+Create a 16:9 NotebookLM-style whiteboard explainer image for a weekly macro summary webpage.
+
+Purpose:
+This image is the FIRST block of a weekly macro summary webpage.
+It visually summarizes the conclusions from later sections:
+Executive Summary, market signals, revision factors, news evidence, and next-week watch.
+It is a visual macro transmission diagram, not a dense report.
+
+Important title rule:
+- Do NOT render a large headline inside the image.
+- The webpage already has the page title「本週總經摘要」and section title「總經傳導圖解」.
+- The image should start directly with diagram nodes, icons, arrows, and short labels.
+
+Style:
+- off-white / white background
+- subtle light gray grid-paper texture
+- bold black hand-drawn line art
+- orange / warm amber accent arrows, circles, tags, pins, labels
+- clean macro-finance explainer diagram
+- airy, readable composition
+- looks like a knowledge video card, not a corporate slide
+- use icons, causal arrows, simple doodles, flow paths, question marks, magnifying glass, warning tags
+
+Visual structure rules:
+- Upper main chain: 驅動因子 → 通膨 / 利率 → 美元 → 亞洲匯率 / 黃金
+- Lower secondary branch: 修正因子 → 房市疲軟 / 成長擔憂 / 美元短暫走弱
+- Right-side watch area: 下週驗證
+- Bottom evidence strip if space allows: 本週證據
+- Main chain must be visually dominant.
+- Revision factor is secondary and must not visually compete with the main chain.
+- Right-side watch area should contain only 2–3 short questions.
+
+Visible text rules:
+- Use Traditional Chinese only.
+- Do NOT include a large main headline inside the image.
+- Use only short labels, nodes, tags, and very short questions.
+- Keep visible text minimal, large, and readable.
+- No long paragraphs.
+- No dense report layout.
+- No tables.
+- Do not invent numbers or directions.
+- Use the source content only as background understanding.
+- Do not render long explanations as visible paragraph text.
+
+Source content:
+- Week range: 2026-05-22 ～ 2026-05-28
+- Weekly main theme: 市場定價軸心由「通膨黏性」轉向「成長放緩風險」
+- One-sentence verdict: 地緣政治降溫大幅削弱能源通膨溢價，促使債市率先反映經濟成長隱憂，進而帶動美元回落與資金在亞洲貨幣間的重新配置。
+- Main question: 在部分聯準會官員維持鷹派警告的背景下，為何美債殖利率與美元卻呈現同步走弱的非典型脫鉤？
+- Narrative arc: 本週市場邏輯從油價重挫引發的通膨預期降溫開始，傳導至長天期美債殖利率下行，進而削弱美元的利差支撐，最終引發非美貨幣分化與黃金避險買盤的重新定價。
+- Story start: 本週初，市場仍在消化聯準會關於通膨黏性與高利率環境維持更久的警告，但原油市場的地緣政治突發進展打破了僵局。
+- Main drivers: ["美伊和談曙光大幅壓低國際油價，消弭能源通膨溢價。", "長天期美債殖利率對經濟成長放緩風險的敏感度顯著提升。", "熱錢在美元走弱背景下尋求非美資產的重新定價機會。"]
+- Market transmission: WTI與布蘭特原油價格雙雙重挫，直接壓抑了通膨預期。債市隨即將焦點轉向成長風險，推動10年期美債殖利率從 4.55% 降至 4.45%。殖利率的下行直接削弱了美元的利差優勢，導致美元指數跌破 99 關卡。
+- Revision factor: 儘管芝加哥聯準銀行總裁古爾斯比警告能源價格頑強，部分官員亦釋出鷹派信號，但債券市場選擇忽視這些雜音，堅定反映「再校準」的成長放緩交易。
+- Story end: 在美元走弱的環境下，資金尋找新平衡：黃金受惠於實質利率下行與避險需求維持強勢；而亞洲貨幣則因內部基本面與資金流向差異，出現韓元大升、台幣微升，但日圓持續承壓的顯著分化。
+- Macro variables: {"inflation": "受美伊和談進展影響，油價顯著下跌，大幅緩解了市場對短期能源通膨的擔憂，通膨預期隨之降溫。", "rate": "10年期美債殖利率由 4.55% 回落至 4.45%，顯示債市正將定價重心由「防禦通膨」轉向「對沖經濟衰退風險」。", "dollar_fx": "美元指數跟隨美債殖利率同步走弱，自 99.32 滑落至 98.99，顯示高息貨幣的利差支撐正在流失。", "asia_fx": "亞幣內部呈現強烈分化：韓元受資金青睞大幅升值，台幣在熱錢流入下微升；但日圓未能受惠於美元走弱，仍徘徊於 159 上方的弱勢區間，顯示缺乏本地貨幣政策轉向支撐。", "gold": "在美元貶值與殖利率下行的雙重紅利下，黃金展現強大韌性，穩站 4500 美元上方，反映避險邏輯的重組。", "energy": "WTI 與布蘭特原油雙雙重挫逾 8%，地緣政治風險溢價的消退成為本週市場傳導鏈的最核心起點。"}
+- Evidence: ["WTI 原油自 96.60 美元大幅下跌至 88.55 美元。", "美國10年期公債殖利率自 4.558% 下行至 4.455%。", "美元指數跌破 99，自 99.32 降至 98.99。", "美元/韓元匯率自 1520.53 顯著回落至 1493.63。"]
+- News theme: 市場定價體制從「通膨黏性」轉向「成長放緩風險」，導致美債殖利率與美元出現非典型脫鉤。
+- News confirming signals: ["美債殖利率在通膨數據偏強背景下仍下行，確認市場優先定價成長放緩。", "美元指數與殖利率同步回落，顯示利差優勢減弱與避險需求重組。", "黃金價格在避險情緒下與美元出現同步走強的非典型現象。"]
+- News corrections: ["美伊和談進展導致油價回落，修正了原先市場對能源通膨的過度擔憂。"]
+- Next week questions: ["非農就業數據是否會進一步印證經濟成長放緩的市場預期？", "日本央行面對日圓在美元弱勢下依然疲軟的窘境，是否會釋出干預或政策轉向訊號？", "原油市場的供給端利空是否會隨地緣政治談判反覆而出現報復性反彈？"]
+
+Suggested visible labels:
+- 再通膨
+- 油價高檔
+- 通膨黏性
+- 長債利率
+- 高利率更久
+- 美元偏強
+- 亞幣承壓
+- 黃金壓力
+- 修正因子
+- 房市疲軟
+- 成長擔憂
+- 美元短弱
+- 下週驗證
+
+Avoid:
+- large title text inside the image
+- dense slide layout
+- table
+- long paragraphs
+- small unreadable text
+- cluttered UI
+- stock dashboard style
+- Bloomberg terminal style
+- exact NotebookLM logo
+- Google branding
+- fake extra data

@@ -1,9 +1,9 @@
 {
   "meta": {
     "source": "Google News RSS",
-    "week_range": "2026-05-22 ～ 2026-05-28",
+    "week_range": "2026-05-22 ～ 2026-05-29",
     "query_count": 21,
-    "raw_count": 85,
+    "raw_count": 86,
     "ranked_count": 30,
     "sources_preferred": [
       "site:udn.com",
@@ -13,15 +13,6 @@
     ]
   },
   "items": [
-    {
-      "theme": "long_bond_yields",
-      "query": "美債 殖利率 20年期 30年期 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "美債30年殖利率衝破5% 全球高利率時代恐來臨 - 鉅亨號",
-      "source": "鉅亨號",
-      "url": "https://news.google.com/rss/articles/CBMisgJBVV95cUxNV28zNk14cU9CSm13UnE3RXJQaFR5cnlTVEMwbXlzWjh6UmRFX1I0eVlnZXVvVlN3TmdRTGkyelF0Y2huNkdtWExJYlVCSEVzcklQZ2R4RlI0RjVrS1Q1LTFxek5OUUFKSGoyTjdqbEc5U2pnTWp1TUxJQmd5YjhiSkRTRndhMG9BWUk3Y1QzTk5aX3otYjBOWk9xMk93VnNqcHJTNWNxRnF0S1pRUGx2VW5NWVNOMEc1LXhMendTUHRHRFphV3lubUFicHFMNlMxaXlPS1lUOTFDQmpHdmV4VE9oRDRIejNGMnFCMTJmVENRSTRZXzdPYnpNSUI3SEVMVnNYMkpTVnlURVhvcVRDUHZWV2s3X2tMU3NER1cyQldnaHBfTmk2Ml9pTThIX3lQR1E?oc=5",
-      "published_at": "2026-05-23 07:00:00 UTC",
-      "score": 21
-    },
     {
       "theme": "long_bond_yields",
       "query": "美債 長天期 殖利率 期限溢價 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
@@ -50,8 +41,8 @@
       "score": 20
     },
     {
-      "theme": "long_bond_yields",
-      "query": "美債 殖利率 20年期 30年期 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "theme": "energy_inflation",
+      "query": "WTI Brent 原油 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
       "title": "美伊和談希望壓低油價 美債殖利率同步回落 - news.cnyes.com",
       "source": "news.cnyes.com",
       "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9IU3FlR3V1VHBUdnVvb1doaVJ6NE81WGk1cE05T2VTTFpnaU5rQnplWFZSUWw5SXUtTHVpQ0FXb0EwR0dxU2NmWXFxMkMwWjg?oc=5",
@@ -93,6 +84,15 @@
       "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBSdloxZWxkSm5Qc1NPQkU1bk5xNzluR2g5Y2ZiS2gyXzhyVjRaSE9CUU5HWjdueFdOWFBwekZqRjhZU0thM01mYl9jQmJmQ2s?oc=5",
       "published_at": "2026-05-28 22:20:32 UTC",
       "score": 18
+    },
+    {
+      "theme": "long_bond_yields",
+      "query": "美債 殖利率 20年期 30年期 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "美債破5%：一場二十年金融休戰的終結 - 鉅亨號",
+      "source": "鉅亨號",
+      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTFB0VGcwYm9HMGdpQ2QweGpuVFNNMjJVVTlRUXhYdlUyVVM0ZTFnRUtNcGl5d2dGNlRPTGdGaWNEN1J5MkFZcTlCSA?oc=5",
+      "published_at": "2026-05-24 07:44:19 UTC",
+      "score": 17
     },
     {
       "theme": "long_bond_yields",
@@ -141,20 +141,29 @@
     },
     {
       "theme": "dollar_asia_fx",
-      "query": "美元 亞幣 承壓 台幣 日圓 韓元 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "台幣連四升 挑戰31.3 - 經濟日報",
+      "query": "美元指數 亞洲貨幣 台幣 日圓 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "熱錢追捧股匯齊揚 新台幣成交量爆出史上第5大 - 經濟日報",
       "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5aV3BPMzM1c3pITzdpT01FTkU1aGtRY3o5ODRGLXlFOExseWpJWFJ1Y1BYb0FScm5nZldmNk1IZWtaSXJiNUpPRURtLTQtR0VLOVgzWGVnLVFpd9IBX0FVX3lxTE01ckU5R0p2amZGLXNHNmVhanJoU2lFZXJHVkR5UUpmTVVFeTc0WGpLVzZLWVowUDNDWmFWVEE4LWNEYTBVQWx1Si1kNnpkY1VLT1VodzFHbFZLTW1jSlU4?oc=5",
-      "published_at": "2026-05-25 17:24:56 UTC",
+      "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxNa3hna2dlS1gzSzhXdmdhTlRra2ZOcXJkZTUtaVFUcXh2Tk55MUhILUlyTndfZHNZYUg0bXUtSklSUkp1YnBEZXprX1BsNmQxdTYya1ZYVHQ5Rm5WMFlnaWs3TnNFZzZ6SGsxbFNudEJ5YnFKNkRtSWdYcWFpS1E2Q3Rn0gFfQVVfeXFMUF9uYXlqaUgyUjVJMTlieWdCdjNuYTM5ZmVqQWlma3VZNy1OaDBrdGw3VldTRTVUMXk4ck45MTJRamNpR3dfN3pRZlJHVGlpQTlVVHR2dkExeExGbjF1YTA?oc=5",
+      "published_at": "2026-05-29 10:54:29 UTC",
+      "score": 17
+    },
+    {
+      "theme": "dollar_asia_fx",
+      "query": "美元指數 亞洲貨幣 台幣 日圓 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "美元5月反彈只是曇花一現？華爾街看衰：Q3和Q4連兩季走貶 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5RVURiWGhub0s2MTJxRlBtYTFycFdEb2d1VE1YQTB6YUxnYUItSXlSWFA1a2U5OHNSQzRXX3ZKMl9wUXlvM0R4bThjT0lxTXZXRWw5SVVhQ01WZ9IBX0FVX3lxTE5fOEk1ejFpMG5Edm95aVZTUmF5Tkw5VFgtNlE3TDRQUDdER0NnUU9pemVwOVpfR0NIYmtLc1gyREpvQzFSdHhubEloclFDb2hQaFpQbTF3NkZIZV9pT2cw?oc=5",
+      "published_at": "2026-05-29 03:08:32 UTC",
       "score": 17
     },
     {
       "theme": "dollar_asia_fx",
       "query": "美元 亞幣 承壓 台幣 日圓 韓元 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "股匯不同調 新台幣貶5.1分終止連2升 - 經濟日報",
+      "title": "台幣連四升 挑戰31.3 - 經濟日報",
       "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTFBNYXo0VDJoWnptTDRFUzBCcTBVWHRkWVpzeUtCeGswM3ExRGZBbFVsNG9oNWJWWk9QMkY0eVN5d0s5aUFLZE5IYWRaeGpyTUl2QVJ6YW5tRzZkSjBJTDdzN1hWdk56a2RKSlJOM3RBVlpYMWdP0gFfQVVfeXFMTThSSHFES0NjcTliV3VCbGVGVWtUX0Rpbjh5SVlGb0tzZkJvdnRaQk43c1hGX0E5Z0U1ZFJ1U3gyc05XRlBOdDJUREE5MnJxM2RReGVkRlhVRlRGN2NRVlU?oc=5",
-      "published_at": "2026-05-27 14:05:54 UTC",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5aV3BPMzM1c3pITzdpT01FTkU1aGtRY3o5ODRGLXlFOExseWpJWFJ1Y1BYb0FScm5nZldmNk1IZWtaSXJiNUpPRURtLTQtR0VLOVgzWGVnLVFpd9IBX0FVX3lxTE01ckU5R0p2amZGLXNHNmVhanJoU2lFZXJHVkR5UUpmTVVFeTc0WGpLVzZLWVowUDNDWmFWVEE4LWNEYTBVQWx1Si1kNnpkY1VLT1VodzFHbFZLTW1jSlU4?oc=5",
+      "published_at": "2026-05-25 17:24:56 UTC",
       "score": 17
     },
     {
@@ -194,8 +203,26 @@
       "score": 17
     },
     {
+      "theme": "long_bond_yields",
+      "query": "美債 殖利率 20年期 30年期 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "元大期狠賺8.45元豪配5.5元！連24年配發股利 殖利率衝5.62% - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9waVdvTUtxODY4T1kzR2RJUzItQlZVV2RtZlVkY25JSFh0VVllWnRoOEZJeEpUVEtRendzcHBHcWpEbjdGLUVtamJmSG0xQ0k?oc=5",
+      "published_at": "2026-05-29 03:46:28 UTC",
+      "score": 16
+    },
+    {
+      "theme": "dollar_asia_fx",
+      "query": "美元指數 亞洲貨幣 台幣 日圓 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "〈紐約匯市〉風險偏好升溫美元走弱 高利率支撐下5月仍漲近1% - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9VclR1dEVFOUJWMHY3bDlaSklxVDFrSUtMczlqdjk2cGU3elhkVHZ2Tjh5QXBzSHZ2VENCU09RdXJTb0o3VXUzUWJLbjB6emM?oc=5",
+      "published_at": "2026-05-29 21:57:57 UTC",
+      "score": 16
+    },
+    {
       "theme": "energy_inflation",
-      "query": "油價 原油 通膨 預期 地緣政治 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "query": "WTI Brent 原油 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
       "title": "芝加哥Fed古爾斯比：能源價格比預期更頑強 亞洲恐陷停滯性通膨 - news.cnyes.com",
       "source": "news.cnyes.com",
       "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFB3Nm4tZWtqQmFkNWw4RV9jS01NX0hONHU4OUZGcWpRNzdwX2V0TFlQdU5PRWlFWTNMUWQxd0J4WFh4M3MwUmpSamd6YXpQbVE?oc=5",
@@ -214,28 +241,19 @@
     {
       "theme": "long_bond_yields",
       "query": "美債 長天期 殖利率 期限溢價 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "歐盟擬升高對中貿易防線！祭關稅與配額 防廉價產品摧毀產業 - 經濟日報",
+      "title": "SCFI 運價指數大漲15% 遠東到美西飆漲3成 - 經濟日報",
       "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBMMVZBY25OR0pETFJUcFNKTXVJbWczMGZFZWxQOXdiZGVPSGRfdHZmQmR2LUd0Zms1c1NNbzFYOUs2aElHNlpHN2xkWWpydWV1enNfWUdUdVpwUdIBX0FVX3lxTFBnVGJEY0l5S3F6RVlFVE1xWVA3UXVUeDEwVlVIWk4zZTlleUs1ZkZLNVNaNjBHWlZyODhtR2VvcnBtUGtoWHI5elBPYUdIa29SbDJSQkM4eW9FUkpEQkNv?oc=5",
-      "published_at": "2026-05-28 06:11:24 UTC",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE8wQldMMVhVaC1QdTdaZTRJazNJOGxVWWp2TVhUb05aVmtGMTEyRHRnNWM0YlRvZnh0dFZpMzc3aU9SckZMQ3Q3OG9CZ245aXhfSmR6TWRNOWFRUdIBX0FVX3lxTE5RWmV2RWw4bFdJY1YyaU01cExKQlRRVUctSkVXYy1jR0lacmJ6MlptYmRVaFhTZFhHNm5rc1lWMTN5WGJYd204T0dWWlZyUDRYSmhmSFFtMEFDWHBGeUtR?oc=5",
+      "published_at": "2026-05-29 07:59:34 UTC",
       "score": 15
     },
     {
-      "theme": "long_bond_yields",
-      "query": "美債 長天期 殖利率 期限溢價 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "歐盟擬升高對中貿易防線！祭關稅與配額 防廉價產品摧毀產業 | 國際焦點 | 國際 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMikAFBVV95cUxOcHdjVm9kVFozc0lOcS1lZzctRXYxem83bzA5MnIwZllfNGZfSTk3eXA3WkFIQmZ3N0VNSlppNENOZmN6aWtnUkRJT0h6Unc4VHJTZUpOa3I3U1NlRjljNXR1dzJLZ0hhanZEb3FFSF95dWdaQ3pKbXZXSWVvYzNSS01KeWxIVk9EUkc4c1otdlY?oc=5",
-      "published_at": "2026-05-28 06:11:24 UTC",
-      "score": 15
-    },
-    {
-      "theme": "long_bond_yields",
-      "query": "美債 長天期 殖利率 期限溢價 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "其實不必發錢！多放假能搶救低生育率 英數據揭意外關聯 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5qVnNaQXBJMnBuRk9rMHFpQnhKOC1odnZTcHZGS0hzSzc1bEJYRGx6WjFrRU9QTk1Ibms3bDhSY2NwdmNMTHdWQXpvUDM4VnN0bkpIa2NneTVFQdIBX0FVX3lxTE5ucjVaTHY2dXRkRUZadGRWVU5YTkhGd2Z2eDVnTUZ1RklJU3F5bVpkelZCNXZfVDZ1bDhLOHppbWxJQXVjaTFnZDRqbENpLW9pb1M2a0daMV8xTkZ3aG1R?oc=5",
-      "published_at": "2026-05-25 09:58:47 UTC",
+      "theme": "fed_policy",
+      "query": "Fed 降息 縮表 美債 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
+      "title": "華許來了，川普親自站台主持 - 鉅亨號",
+      "source": "鉅亨號",
+      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE1wc0ZWUkxKN09SUkh4TXJ2OXVVZXRmTU9zZGlqY2tWNEVkd18zSHVOdUhXVUwxOUhzVzg5U1BEV09OWm5SdlZlTg?oc=5",
+      "published_at": "2026-05-23 07:54:37 UTC",
       "score": 15
     },
     {
@@ -245,15 +263,6 @@
       "source": "經濟日報",
       "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1Odmxfdkd1Z3dIOGs4M0EybnRjSE9fU3RzZnVtUV9wTGVja0sxd1ltclB3dkVhR1g4bWZIRTNpbnduVGg4TkVOdVV3Mzd1eGdPYnhCQUludWc0UdIBX0FVX3lxTFBUN0Y5TFlJMnByVGktODJ3ZGEtekJVQjlxQ2N4aG9BTk5YNFo5Qm1JOWFCc1NfbC1pa3Z4RGhadXdNNkZEUnVkRWJlVHlXSVN5cmFoYUEwTmk3NE5HQVI0?oc=5",
       "published_at": "2026-05-23 10:05:51 UTC",
-      "score": 15
-    },
-    {
-      "theme": "geopolitics",
-      "query": "美伊 伊朗 地緣政治 油價 通膨 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "通膨與地緣政治雙夾擊 債券波動、跨資產配置成震盪期解方 | 產業熱點 | 產業 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBub3U0dDgwSXNVZkdLLW1IYmZodlR2cEdZdGw1TVhhMUR5TUtZZXRCWHJGb3NSSEFSZDNTbFJ6dU1jSjlpakppd1RJVld1TGdENkZuV19GZnV1Rmk3dG1HUjZtM1h1NHZJcnVuUUNvNVFNNGEwWEdN?oc=5",
-      "published_at": "2026-05-27 03:11:40 UTC",
       "score": 15
     },
     {
@@ -270,18 +279,9 @@
       "query": "美中 會談 關稅 貿易 市場 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
       "title": "美國擬徵詢公眾意見 調降300億美元中國商品關稅 - 經濟日報",
       "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1raWJsSEJBcDUtY3F3eE00YS01RmdrbTlnUER4ckJhMDR0T2xSMTFoTDBsVmxnTWdMZE1sU2VOYjJfRnQyS2w5SGhXNEZSSnFEenVtUEhwdmF3RVo5QXBWZG1EaDBNRHhSWlZFVkQyOENRRG9pNzNDd0ttb9IBX0FVX3lxTE9QSXpmMFhyR1YyekR2SmhBSjQ0MldiWjVGaEpUdUdsaVFNVVp3S3lla001VFN6WEg4NC1BZVV5aTFuMmo2TkhCTVVQSm5tTlp2R2ROWnVLaFVKN0NTNThn?oc=5",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9fb1hUQjlLVnRqTjM5UVRvQXVIMEF1Zzc4TVVNOEFBbVVwSUc0QUt3WVVIclVwZk5HaTB4TC1QNGlqSFF4Yjc1RlZsZndHc2lBa3BTV0ItNm5VQdIBX0FVX3lxTE9QSXpmMFhyR1YyekR2SmhBSjQ0MldiWjVGaEpUdUdsaVFNVVp3S3lla001VFN6WEg4NC1BZVV5aTFuMmo2TkhCTVVQSm5tTlp2R2ROWnVLaFVKN0NTNThn?oc=5",
       "published_at": "2026-05-27 01:00:19 UTC",
       "score": 15
-    },
-    {
-      "theme": "fed_policy",
-      "query": "Fed 降息 縮表 美債 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:7d",
-      "title": "學者：美國5月通膨若破4% 恐進一步衝擊台灣出口 - UDN",
-      "source": "UDN",
-      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE9qbkJheFNCQTMtaGJpb0pCWXotalZVQXJtLU5rMjI5aGt0U05jMmZyZGU0UTNMWndEZThpNUhqTWRfdXR1d0ZtLWFKUzl1MzNtV21FS2ZR0gFWQVVfeXFMT2puQmF4U0JBMy1oYmlvSkJZei1qVlVBcm0tTmsyMjloa3RTTmMyZnJkZTRRM0xad0RlOGk1SGpNZF91dHV3Rm0tYUpTOXUzM21XbUVLZlE?oc=5",
-      "published_at": "2026-05-27 05:52:48 UTC",
-      "score": 14
     }
   ]
 }
