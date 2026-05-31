@@ -8,10 +8,10 @@ This version:
 - Uses Step 83 scene images.
 - Uses Step 85 edge-tts segment mp3 files.
 - Uses assets/tom.png and assets/miranda.png as speaker avatars.
-- Shows a compact news-style active speaker avatar inside the bottom subtitle lane, with a constant subtle glowing halo.
+- Shows the active speaker avatar in the center-lower area, with a constant subtle glowing halo.
+- Shows transcript subtitles in a compact lower-right panel.
 - Removes waveform.
 - Removes the speaker-name gray label.
-- Shows bottom, single-line, transparent transcript subtitles from spoken_text.
 - Uses drawtext expansion=none to avoid '%' subtitle errors.
 - Keeps intermediate clips in a temporary directory; repo keeps only final mp4 + timeline json.
 """
@@ -35,17 +35,22 @@ VIDEO_W = 1280
 VIDEO_H = 720
 FPS = 30
 
-AVATAR_SIZE = 72
-RING_SIZE = 94
-AVATAR_X = 26
-AVATAR_Y = VIDEO_H - AVATAR_SIZE - 14
+AVATAR_SIZE = 96
+RING_SIZE = 124
+AVATAR_X = (VIDEO_W - AVATAR_SIZE) // 2
+AVATAR_Y = VIDEO_H - AVATAR_SIZE - 48
 RING_X = AVATAR_X - (RING_SIZE - AVATAR_SIZE) // 2
 RING_Y = AVATAR_Y - (RING_SIZE - AVATAR_SIZE) // 2
 
-SUBTITLE_FONT_SIZE = 24
-SUBTITLE_CHARS = 54
-SUBTITLE_X = AVATAR_X + AVATAR_SIZE + 16
-SUBTITLE_MARGIN_BOTTOM = 18
+SUBTITLE_FONT_SIZE = 26
+SUBTITLE_CHARS_PER_LINE = 19
+SUBTITLE_LINES_PER_PAGE = 2
+SUBTITLE_BOX_W = 430
+SUBTITLE_BOX_H = 132
+SUBTITLE_BOX_X = VIDEO_W - SUBTITLE_BOX_W - 42
+SUBTITLE_BOX_Y = VIDEO_H - SUBTITLE_BOX_H - 42
+SUBTITLE_TEXT_X = SUBTITLE_BOX_X + 24
+SUBTITLE_TEXT_Y = SUBTITLE_BOX_Y + 26
 
 FADE_SEC = 0.24
 
@@ -183,7 +188,15 @@ def split_subtitles(text: str) -> list[str]:
     text = (text or "").strip()
     if not text:
         return [""]
-    return [text[i:i + SUBTITLE_CHARS] for i in range(0, len(text), SUBTITLE_CHARS)]
+
+    line_len = SUBTITLE_CHARS_PER_LINE
+    page_len = SUBTITLE_CHARS_PER_LINE * SUBTITLE_LINES_PER_PAGE
+    pages = []
+    for start in range(0, len(text), page_len):
+        page = text[start:start + page_len]
+        lines = [page[i:i + line_len] for i in range(0, len(page), line_len)]
+        pages.append("\n".join(lines[:SUBTITLE_LINES_PER_PAGE]))
+    return pages or [""]
 
 
 def font_path() -> str | None:
@@ -256,6 +269,15 @@ def make_ring(out: Path, speaker: str) -> None:
     d.ellipse((23, 23, RING_SIZE-24, RING_SIZE-24), outline=(255, 255, 255, 140), width=3)
     d.ellipse((26, 26, RING_SIZE-27, RING_SIZE-27), outline=(c[0], c[1], c[2], 96), width=3)
     img = img.filter(ImageFilter.GaussianBlur(radius=0.9))
+    img.save(out)
+
+
+def make_subtitle_panel(out: Path) -> None:
+    img = Image.new("RGBA", (SUBTITLE_BOX_W, SUBTITLE_BOX_H), (255, 255, 255, 0))
+    d = ImageDraw.Draw(img)
+    rect = (0, 0, SUBTITLE_BOX_W - 1, SUBTITLE_BOX_H - 1)
+    d.rounded_rectangle(rect, radius=28, fill=(18, 24, 34, 150), outline=(255, 255, 255, 88), width=2)
+    img = img.filter(ImageFilter.GaussianBlur(radius=0.15))
     img.save(out)
 
 
@@ -354,7 +376,7 @@ def drawtext_filter(input_label: str, output_label: str, textfile: Path, fp: str
     return "".join(parts)
 
 
-def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in: bool, fade_out: bool, text_dir: Path) -> None:
+def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in: bool, fade_out: bool, text_dir: Path, subtitle_panel: Path) -> None:
     duration = max(0.35, float(turn["duration_sec"]))
     speaker = normalize_speaker(turn["speaker"])
     chunks = split_subtitles(turn["spoken_text"])
@@ -369,10 +391,12 @@ def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in
         f"[0:v]scale={VIDEO_W}:{VIDEO_H}:force_original_aspect_ratio=decrease,pad={VIDEO_W}:{VIDEO_H}:(ow-iw)/2:(oh-ih)/2:white,format=rgba[bg]",
         f"[2:v]scale={AVATAR_SIZE}:{AVATAR_SIZE}[av]",
         f"[3:v]scale={RING_SIZE}:{RING_SIZE}[ring]",
-        f"[bg][av]overlay={AVATAR_X}:{AVATAR_Y}[v1]",
-        f"[v1][ring]overlay={RING_X}:{RING_Y}[vring]",
+        f"[4:v]scale={SUBTITLE_BOX_W}:{SUBTITLE_BOX_H}[panel]",
+        f"[bg][panel]overlay={SUBTITLE_BOX_X}:{SUBTITLE_BOX_Y}[vpanel]",
+        f"[vpanel][ring]overlay={RING_X}:{RING_Y}[vring]",
+        f"[vring][av]overlay={AVATAR_X}:{AVATAR_Y}[vavatar]",
     ]
-    current = "vring"
+    current = "vavatar"
 
     each = duration / max(len(chunk_files), 1)
     for i, cf in enumerate(chunk_files):
@@ -380,7 +404,7 @@ def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in
         end = duration if i == len(chunk_files) - 1 else (i + 1) * each
         out_label = f"vsub{i:02d}"
         filters.append(drawtext_filter(current, out_label, cf, fp, SUBTITLE_FONT_SIZE,
-                                       x=str(SUBTITLE_X), y=f"h-text_h-{SUBTITLE_MARGIN_BOTTOM}",
+                                       x=str(SUBTITLE_TEXT_X), y=str(SUBTITLE_TEXT_Y),
                                        enable=f"between(t,{start:.3f},{end:.3f})"))
         current = out_label
 
@@ -401,6 +425,7 @@ def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in
         "-i", turn["segment_audio"],
         "-i", str(avatar_map[speaker]["base"]),
         "-i", str(avatar_map[speaker]["ring"]),
+        "-i", str(subtitle_panel),
         "-filter_complex", ";".join(filters),
         "-map", f"[{vout}]",
         "-map", "1:a:0",
@@ -468,6 +493,8 @@ def main() -> None:
         text_dir.mkdir()
 
         avatar_map = prepare_avatars(avatar_dir, fp)
+        subtitle_panel = tmp_dir / "subtitle_panel.png"
+        make_subtitle_panel(subtitle_panel)
         timeline = build_timeline(dialogue_json, images, seg_dir)
         timeline_json.write_text(json.dumps(timeline, ensure_ascii=False, indent=2), encoding="utf-8")
         print(f"[OK] Wrote {timeline_json}")
@@ -484,6 +511,7 @@ def main() -> None:
                 fade_in=(idx == 0 or scene != prev_scene),
                 fade_out=(idx == len(turns) - 1 or scene != next_scene),
                 text_dir=text_dir,
+                subtitle_panel=subtitle_panel,
             )
             clips.append(clip)
 
