@@ -532,10 +532,12 @@ def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
         y = pad_y + (1 - ((value - min_v) / span)) * chart_h
 
         coords.append(f"{x:.1f},{y:.1f}")
+        tooltip_text = f"{date}｜{fmt_number(value, unit)}"
         dots.append(
-            f'<g class="spark-node">'
+            f'<g class="spark-node" tabindex="0" role="button" '
+            f'data-tooltip="{esc(tooltip_text)}" aria-label="{esc(tooltip_text)}">'
             f'<circle class="spark-dot" cx="{x:.1f}" cy="{y:.1f}" r="4.2"></circle>'
-            f'<title>{esc(date)}｜{esc(fmt_number(value, unit))}</title>'
+            f'<title>{esc(tooltip_text)}</title>'
             f'</g>'
         )
 
@@ -980,9 +982,9 @@ ul {{ margin:0; padding-left:22px; }}
   .header,.summary-grid,.two-col {{ display:block; }}
   .meta {{
     position:static !important;
-    text-align:center !important;
+    text-align:initial !important;
     white-space:normal;
-    margin-top:10px;
+    margin-top:12px;
   }}
   .charts,.slides {{ grid-template-columns:1fr; }}
   .news-masonry {{ grid-template-columns:1fr; }}
@@ -991,7 +993,7 @@ ul {{ margin:0; padding-left:22px; }}
   .subtitle {{ font-size:18px; }}
 }}
 
-/* V12 header/source placement overrides */
+/* V13 header/source placement overrides */
 .header {{
   display:block !important;
   position:relative !important;
@@ -1005,14 +1007,60 @@ ul {{ margin:0; padding-left:22px; }}
   margin-right:auto !important;
   text-align:center !important;
 }}
+.header .title {{
+  text-align:center !important;
+  margin-top:0 !important;
+  margin-bottom:12px !important;
+}}
 .header .meta {{
-  position:absolute !important;
-  right:0 !important;
-  bottom:10px !important;
-  text-align:right !important;
+  position:static !important;
+  width:100% !important;
+  max-width:100% !important;
+  margin-top:8px !important;
+  color:var(--muted);
+  font-size:14px;
+  white-space:normal !important;
+}}
+.meta-line {{
+  display:flex;
+  width:100%;
+  align-items:center;
+}}
+.meta-week {{
+  justify-content:flex-start;
+  text-align:left;
+}}
+.meta-generated {{
+  justify-content:flex-end;
+  text-align:right;
+  margin-top:2px;
 }}
 .section-source {{
   text-align:right;
+}}
+.asset-point-tooltip {{
+  position:fixed;
+  z-index:9999;
+  display:none;
+  pointer-events:none;
+  max-width:240px;
+  padding:7px 10px;
+  border-radius:999px;
+  background:rgba(17,24,39,.92);
+  color:#fff;
+  font-size:13px;
+  font-weight:800;
+  line-height:1.35;
+  box-shadow:0 10px 26px rgba(31,41,55,.18);
+  transform:translate(-50%,-120%);
+}}
+.spark-node {{
+  cursor:pointer;
+  outline:none;
+}}
+.spark-node:focus .spark-dot {{
+  fill:var(--accent);
+  stroke:var(--accent);
 }}
 
 </style>
@@ -1021,11 +1069,11 @@ ul {{ margin:0; padding-left:22px; }}
 <div class="wrap">
   <header class="header">
     <div class="header-main">
-      <div class="kicker">Weekly Macro Summary</div>
       <div class="title">{esc(title)}</div>
     </div>
     <div class="meta">
-      週期：{esc(week_label)}　｜　產生日期：{esc(generated_at)}
+      <div class="meta-line meta-week">週期：{esc(week_label)}</div>
+      <div class="meta-line meta-generated">產生日期：{esc(generated_at)}</div>
     </div>
   </header>
 
@@ -1079,6 +1127,50 @@ ul {{ margin:0; padding-left:22px; }}
     本頁由 weekly_forest_summary.json、weekly_news_context.json、weekly_market_series.json 與 weekly_macro_diagram.png 自動產生。內容為總經資訊整理，不構成投資建議。
   </div>
 </div>
+<div id="assetPointTooltip" class="asset-point-tooltip" aria-hidden="true"></div>
+<script>
+(function() {{
+  const tooltip = document.getElementById("assetPointTooltip");
+  if (!tooltip) return;
+
+  function showTooltip(target) {{
+    const text = target.getAttribute("data-tooltip");
+    if (!text) return;
+    const rect = target.getBoundingClientRect();
+    tooltip.textContent = text;
+    tooltip.style.left = (rect.left + rect.width / 2) + "px";
+    tooltip.style.top = rect.top + "px";
+    tooltip.style.display = "block";
+    tooltip.setAttribute("aria-hidden", "false");
+  }}
+
+  function hideTooltip() {{
+    tooltip.style.display = "none";
+    tooltip.setAttribute("aria-hidden", "true");
+  }}
+
+  document.querySelectorAll(".spark-node[data-tooltip]").forEach(function(node) {{
+    node.addEventListener("mouseenter", function() {{ showTooltip(node); }});
+    node.addEventListener("mouseleave", hideTooltip);
+    node.addEventListener("focus", function() {{ showTooltip(node); }});
+    node.addEventListener("blur", hideTooltip);
+    node.addEventListener("click", function(event) {{
+      event.stopPropagation();
+      showTooltip(node);
+    }});
+    node.addEventListener("touchstart", function(event) {{
+      event.stopPropagation();
+      showTooltip(node);
+    }}, {{ passive: true }});
+  }});
+
+  document.addEventListener("click", hideTooltip);
+  document.addEventListener("touchstart", function(event) {{
+    if (!event.target.closest(".spark-node")) hideTooltip();
+  }}, {{ passive: true }});
+  window.addEventListener("scroll", hideTooltip, {{ passive: true }});
+}})();
+</script>
 </body>
 </html>"""
 
