@@ -532,12 +532,12 @@ def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
         y = pad_y + (1 - ((value - min_v) / span)) * chart_h
 
         coords.append(f"{x:.1f},{y:.1f}")
-        tooltip_text = f"{date}｜{fmt_number(value, unit)}"
+        tip = f"{date}｜{fmt_number(value, unit)}"
         dots.append(
-            f'<g class="spark-node" tabindex="0" role="button" '
-            f'data-tooltip="{esc(tooltip_text)}" aria-label="{esc(tooltip_text)}">'
-            f'<circle class="spark-dot" cx="{x:.1f}" cy="{y:.1f}" r="4.2"></circle>'
-            f'<title>{esc(tooltip_text)}</title>'
+            f'<g class="spark-node">'
+            f'<circle class="spark-dot" cx="{x:.1f}" cy="{y:.1f}" r="4.2" '
+            f'data-tooltip="{esc(tip)}" tabindex="0"></circle>'
+            f'<title>{esc(tip)}</title>'
             f'</g>'
         )
 
@@ -726,11 +726,11 @@ body {{
   line-height:1.65;
 }}
 .wrap {{ max-width:1180px; margin:0 auto; padding:38px 18px 72px; }}
-.header {{ display:flex; justify-content:space-between; gap:18px; align-items:flex-end; margin-bottom:24px; }}
-.kicker {{ color:#9a6200; font-weight:850; letter-spacing:.08em; font-size:13px; text-transform:uppercase; }}
-.title {{ color:var(--navy); font-size:42px; line-height:1.2; font-weight:900; margin:6px 0 10px; }}
-.subtitle {{ color:#4b5563; font-size:20px; max-width:840px; }}
-.meta {{ text-align:right; color:var(--muted); font-size:14px; white-space:nowrap; }}
+.header {{ display:block; width:100%; text-align:center; margin-bottom:24px; }}
+.header-main {{ text-align:center; }}
+.title {{ color:var(--navy); font-size:42px; line-height:1.2; font-weight:900; margin:0 0 8px; }}
+.week-range {{ color:#64748b; font-size:16px; font-weight:700; text-align:center; margin-top:2px; }}
+.meta {{ text-align:right; color:var(--muted); font-size:14px; white-space:nowrap; margin-top:8px; }}
 .section {{
   background:var(--glass);
   border:1px solid rgba(255,255,255,.68);
@@ -841,7 +841,23 @@ body {{
 .sparkline {{ width:100%; height:96px; display:block; color:#334155; }}
 .spark-node {{ pointer-events:auto; }}
 .spark-dot {{ fill:#fff; stroke:currentColor; stroke-width:2.6; cursor:pointer; opacity:.95; }}
-.spark-dot:hover {{ fill:var(--accent); stroke:var(--accent); }}
+.spark-dot:hover,.spark-dot:focus {{ fill:var(--accent); stroke:var(--accent); outline:none; }}
+.chart-tooltip {{
+  position:fixed;
+  z-index:9999;
+  display:none;
+  max-width:min(260px, calc(100vw - 28px));
+  padding:8px 11px;
+  border-radius:999px;
+  color:#fff;
+  background:rgba(15,42,68,.92);
+  box-shadow:0 12px 28px rgba(15,23,42,.18);
+  font-size:13px;
+  font-weight:800;
+  pointer-events:none;
+  transform:translate(-50%,-120%);
+}}
+.chart-tooltip.show {{ display:block; }}
 .market-section {{
   position:relative;
   padding-bottom:54px;
@@ -981,86 +997,20 @@ ul {{ margin:0; padding-left:22px; }}
 @media(max-width:760px) {{
   .header,.summary-grid,.two-col {{ display:block; }}
   .meta {{
-    position:static !important;
-    text-align:initial !important;
+    text-align:right !important;
     white-space:normal;
-    margin-top:12px;
+    margin-top:8px;
   }}
+  .week-range {{ font-size:15px; }}
   .charts,.slides {{ grid-template-columns:1fr; }}
   .news-masonry {{ grid-template-columns:1fr; }}
   .news-category {{ grid-column:span 1 !important; }}
   .title {{ font-size:34px; }}
-  .subtitle {{ font-size:18px; }}
 }}
 
 /* V13 header/source placement overrides */
-.header {{
-  display:block !important;
-  position:relative !important;
-  width:100% !important;
-  text-align:center !important;
-  margin-left:auto !important;
-  margin-right:auto !important;
-}}
-.header-main {{
-  margin-left:auto !important;
-  margin-right:auto !important;
-  text-align:center !important;
-}}
-.header .title {{
-  text-align:center !important;
-  margin-top:0 !important;
-  margin-bottom:12px !important;
-}}
-.header .meta {{
-  position:static !important;
-  width:100% !important;
-  max-width:100% !important;
-  margin-top:8px !important;
-  color:var(--muted);
-  font-size:14px;
-  white-space:normal !important;
-}}
-.meta-line {{
-  display:flex;
-  width:100%;
-  align-items:center;
-}}
-.meta-week {{
-  justify-content:flex-start;
-  text-align:left;
-}}
-.meta-generated {{
-  justify-content:flex-end;
-  text-align:right;
-  margin-top:2px;
-}}
 .section-source {{
   text-align:right;
-}}
-.asset-point-tooltip {{
-  position:fixed;
-  z-index:9999;
-  display:none;
-  pointer-events:none;
-  max-width:240px;
-  padding:7px 10px;
-  border-radius:999px;
-  background:rgba(17,24,39,.92);
-  color:#fff;
-  font-size:13px;
-  font-weight:800;
-  line-height:1.35;
-  box-shadow:0 10px 26px rgba(31,41,55,.18);
-  transform:translate(-50%,-120%);
-}}
-.spark-node {{
-  cursor:pointer;
-  outline:none;
-}}
-.spark-node:focus .spark-dot {{
-  fill:var(--accent);
-  stroke:var(--accent);
 }}
 
 </style>
@@ -1070,11 +1020,9 @@ ul {{ margin:0; padding-left:22px; }}
   <header class="header">
     <div class="header-main">
       <div class="title">{esc(title)}</div>
+      <div class="week-range">{esc(week_label)}</div>
     </div>
-    <div class="meta">
-      <div class="meta-line meta-week">週期：{esc(week_label)}</div>
-      <div class="meta-line meta-generated">產生日期：{esc(generated_at)}</div>
-    </div>
+    <div class="meta">產生日期：{esc(generated_at)}</div>
   </header>
 
   {video_html}
@@ -1127,48 +1075,56 @@ ul {{ margin:0; padding-left:22px; }}
     本頁由 weekly_forest_summary.json、weekly_news_context.json、weekly_market_series.json 與 weekly_macro_diagram.png 自動產生。內容為總經資訊整理，不構成投資建議。
   </div>
 </div>
-<div id="assetPointTooltip" class="asset-point-tooltip" aria-hidden="true"></div>
+
+<div id="chartTooltip" class="chart-tooltip" aria-hidden="true"></div>
 <script>
 (function() {{
-  const tooltip = document.getElementById("assetPointTooltip");
+  const tooltip = document.getElementById('chartTooltip');
   if (!tooltip) return;
 
-  function showTooltip(target) {{
-    const text = target.getAttribute("data-tooltip");
+  function showTooltip(target, event) {{
+    const text = target.getAttribute('data-tooltip');
     if (!text) return;
-    const rect = target.getBoundingClientRect();
     tooltip.textContent = text;
-    tooltip.style.left = (rect.left + rect.width / 2) + "px";
-    tooltip.style.top = rect.top + "px";
-    tooltip.style.display = "block";
-    tooltip.setAttribute("aria-hidden", "false");
+    tooltip.classList.add('show');
+    tooltip.setAttribute('aria-hidden', 'false');
+
+    const rect = target.getBoundingClientRect();
+    const x = event && event.clientX ? event.clientX : rect.left + rect.width / 2;
+    const y = event && event.clientY ? event.clientY : rect.top;
+    const safeX = Math.min(Math.max(x, 70), window.innerWidth - 70);
+    const safeY = Math.max(y - 10, 34);
+    tooltip.style.left = safeX + 'px';
+    tooltip.style.top = safeY + 'px';
   }}
 
   function hideTooltip() {{
-    tooltip.style.display = "none";
-    tooltip.setAttribute("aria-hidden", "true");
+    tooltip.classList.remove('show');
+    tooltip.setAttribute('aria-hidden', 'true');
   }}
 
-  document.querySelectorAll(".spark-node[data-tooltip]").forEach(function(node) {{
-    node.addEventListener("mouseenter", function() {{ showTooltip(node); }});
-    node.addEventListener("mouseleave", hideTooltip);
-    node.addEventListener("focus", function() {{ showTooltip(node); }});
-    node.addEventListener("blur", hideTooltip);
-    node.addEventListener("click", function(event) {{
+  document.querySelectorAll('.spark-dot[data-tooltip]').forEach((dot) => {{
+    dot.addEventListener('pointerenter', (event) => showTooltip(dot, event));
+    dot.addEventListener('pointermove', (event) => showTooltip(dot, event));
+    dot.addEventListener('pointerleave', hideTooltip);
+    dot.addEventListener('focus', (event) => showTooltip(dot, event));
+    dot.addEventListener('blur', hideTooltip);
+    dot.addEventListener('click', (event) => {{
       event.stopPropagation();
-      showTooltip(node);
+      showTooltip(dot, event);
     }});
-    node.addEventListener("touchstart", function(event) {{
+    dot.addEventListener('touchstart', (event) => {{
       event.stopPropagation();
-      showTooltip(node);
+      const touch = event.touches && event.touches[0];
+      showTooltip(dot, touch || event);
     }}, {{ passive: true }});
   }});
 
-  document.addEventListener("click", hideTooltip);
-  document.addEventListener("touchstart", function(event) {{
-    if (!event.target.closest(".spark-node")) hideTooltip();
+  document.addEventListener('click', hideTooltip);
+  document.addEventListener('touchstart', (event) => {{
+    if (!event.target.closest || !event.target.closest('.spark-dot')) hideTooltip();
   }}, {{ passive: true }});
-  window.addEventListener("scroll", hideTooltip, {{ passive: true }});
+  window.addEventListener('scroll', hideTooltip, {{ passive: true }});
 }})();
 </script>
 </body>
