@@ -69,14 +69,18 @@ SYSTEM_PROMPT = """
 核心風格要求：
 1. 白板手繪風格（whiteboard animation style）/ 手繪圖解（sketch explainer）/ 極簡線條插畫。
 2. 背景乾淨，以白底或極淺底為主。
-3. 以黑色線條為主，只搭配少量點綴色，整組圖保持統一風格。
-4. 使用簡單符號、icon、箭頭、線條、簡單圖表、抽象比喻，不要複雜寫實人物，不要 3D 科技感，不要廉價圖庫感。
-5. 畫面是為了支撐語音敘事，所以要有故事感、延續感與轉場感。
-6. 每張圖只抓一個主概念，避免塞滿資訊。
-7. 文字必須非常少，只保留必要的繁體中文短標籤與少量關鍵數字。
-8. 可以使用白板式的物理隱喻：磁鐵、天平、彈簧、裂開房子、雨傘、油桶、橋、箭頭、簡單線圖等。
-9. 不要把畫面做成傳統 PPT、密集表格或複雜簡報頁。
-10. 全部圖片要像同一個系列，風格、筆觸、構圖語言要一致。
+3. 以黑色線條為主，搭配少量高對比點綴色，整組圖保持統一風格。
+4. 點綴色必須清楚、醒目、合成後仍容易辨識；避免粉淡色、灰淡色、低飽和色、接近背景色的顏色。
+5. 使用簡單符號、icon、箭頭、線條、簡單圖表、抽象比喻，不要複雜寫實人物，不要 3D 科技感，不要廉價圖庫感。
+6. 畫面是為了支撐語音敘事，所以要有故事感、延續感與轉場感。
+7. 每張圖只抓一個主概念，避免塞滿資訊。
+8. 文字必須非常少，只保留必要的繁體中文短標籤與少量關鍵數字。
+9. 可以使用白板式的物理隱喻：磁鐵、天平、彈簧、裂開房子、雨傘、油桶、橋、箭頭、簡單線圖等。
+10. 不要把畫面做成傳統 PPT、密集表格或複雜簡報頁。
+11. 全部圖片要像同一個系列，風格、筆觸、構圖語言要一致。
+12. 畫面中央偏下必須預留人物頭像區，右下角必須預留台詞字幕區；這兩區不要放關鍵資訊、重要箭頭、主要 icon 或關鍵數字。
+13. 主要圖解內容請集中在左側、上方、中央偏上，讓後續影片合成時不會被頭像與字幕遮住。
+14. 不要直接把人物頭像、字幕框或完整台詞畫進圖片；Step 83 只負責畫底圖與預留安全區。
 """.strip()
 
 
@@ -86,9 +90,14 @@ Series visual language:
 - whiteboard animation / marker sketch / minimalist doodle.
 - clean white or very light background.
 - black marker lines as main drawing language.
-- use only 1-2 accent colors when needed.
+- use only 1-3 high-contrast accent colors when needed.
+- prefer high-contrast accent colors such as orange, deep blue, gold, deep green, brick red.
+- avoid pale pinks, washed-out grays, low-saturation pastels, and colors too close to the background.
 - lots of whitespace, clean composition, modern and memorable.
 - simple icons, arrows, light charts, symbolic objects.
+- keep the center-lower area clean for the speaker avatar overlay.
+- keep the lower-right area clean for the subtitle box overlay.
+- place the most important content mostly on the left side, upper half, and center-upper area.
 - Traditional Chinese only for very short labels if text is needed.
 - maintain continuity across all scenes so the full video feels like one story.
 - avoid PPT look, avoid stock-photo look, avoid photorealistic faces, avoid clutter.
@@ -279,6 +288,13 @@ Design instructions:
 - If useful, use symbolic objects such as an oil barrel, bond yield line, magnet, house, umbrella, gold bar, scale, spring, bridge, shield, arrows, or currency icons.
 - Keep on-screen text minimal: at most one short Traditional Chinese title and up to 2-4 tiny labels or numbers.
 - Do not render paragraphs, tables, or long subtitles.
+- Keep the center-lower area visually clean for a future speaker avatar overlay.
+- Keep the lower-right area visually clean for a future subtitle box overlay.
+- Do not place the main causal arrow, key chart turning point, important icon cluster, or critical numbers inside those reserved areas.
+- Concentrate the key story elements in the left area, upper area, and center-upper area.
+- Use only a few high-contrast accent colors so the image remains clear after video compositing.
+- Prefer accent colors such as orange, deep blue, gold, deep green, or brick red.
+- Avoid pale, washed-out, low-contrast colors that may become hard to see after compositing.
 - Make the visual modern, clean, whiteboard-like, and strong in storytelling.
 - Maintain continuity so the next image can transition naturally from this one.
 
