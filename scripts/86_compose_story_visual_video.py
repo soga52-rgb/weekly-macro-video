@@ -8,8 +8,9 @@ This version:
 - Uses Step 83 scene images.
 - Uses Step 85 edge-tts segment mp3 files.
 - Uses assets/tom.png and assets/miranda.png as speaker avatars.
-- Shows the active speaker avatar in the center-lower area, with a constant subtle glowing halo.
-- Shows transcript subtitles in a compact lower-right panel.
+- Scales and pads Step 83 scene images upward on a white 16:9 canvas for a clean lower caption area.
+- Shows the active speaker avatar in the lower-left area, with a constant subtle glowing halo.
+- Shows transcript subtitles beside the avatar in a wider lower panel.
 - Removes waveform.
 - Removes the speaker-name gray label.
 - Uses drawtext expansion=none to avoid '%' subtitle errors.
@@ -35,22 +36,31 @@ VIDEO_W = 1280
 VIDEO_H = 720
 FPS = 30
 
-AVATAR_SIZE = 96
-RING_SIZE = 124
-AVATAR_X = (VIDEO_W - AVATAR_SIZE) // 2
-AVATAR_Y = VIDEO_H - AVATAR_SIZE - 48
+# Scene image is first scaled down and placed near the top on a white canvas.
+# This keeps all Step 83 content intact while creating clean space for avatar/subtitles.
+SCENE_SCALE_FACTOR = 0.80
+SCENE_PAD_TOP = 12
+SCENE_TARGET_W = int(VIDEO_W * SCENE_SCALE_FACTOR)
+SCENE_TARGET_H = int(VIDEO_H * SCENE_SCALE_FACTOR)
+
+# Lower-left speaker avatar.
+AVATAR_SIZE = 76
+RING_SIZE = 98
+AVATAR_X = 54
+AVATAR_Y = VIDEO_H - AVATAR_SIZE - 34
 RING_X = AVATAR_X - (RING_SIZE - AVATAR_SIZE) // 2
 RING_Y = AVATAR_Y - (RING_SIZE - AVATAR_SIZE) // 2
 
-SUBTITLE_FONT_SIZE = 26
-SUBTITLE_CHARS_PER_LINE = 19
+# Subtitle panel sits beside the avatar, with right-side safety margin.
+SUBTITLE_FONT_SIZE = 24
+SUBTITLE_CHARS_PER_LINE = 28
 SUBTITLE_LINES_PER_PAGE = 2
-SUBTITLE_BOX_W = 430
-SUBTITLE_BOX_H = 132
-SUBTITLE_BOX_X = VIDEO_W - SUBTITLE_BOX_W - 42
-SUBTITLE_BOX_Y = VIDEO_H - SUBTITLE_BOX_H - 42
+SUBTITLE_BOX_X = 166
+SUBTITLE_BOX_W = VIDEO_W - SUBTITLE_BOX_X - 86
+SUBTITLE_BOX_H = 112
+SUBTITLE_BOX_Y = VIDEO_H - SUBTITLE_BOX_H - 34
 SUBTITLE_TEXT_X = SUBTITLE_BOX_X + 24
-SUBTITLE_TEXT_Y = SUBTITLE_BOX_Y + 26
+SUBTITLE_TEXT_Y = SUBTITLE_BOX_Y + 22
 
 FADE_SEC = 0.24
 
@@ -276,7 +286,7 @@ def make_subtitle_panel(out: Path) -> None:
     img = Image.new("RGBA", (SUBTITLE_BOX_W, SUBTITLE_BOX_H), (255, 255, 255, 0))
     d = ImageDraw.Draw(img)
     rect = (0, 0, SUBTITLE_BOX_W - 1, SUBTITLE_BOX_H - 1)
-    d.rounded_rectangle(rect, radius=28, fill=(18, 24, 34, 150), outline=(255, 255, 255, 88), width=2)
+    d.rounded_rectangle(rect, radius=26, fill=(18, 24, 34, 168), outline=(255, 255, 255, 92), width=2)
     img = img.filter(ImageFilter.GaussianBlur(radius=0.15))
     img.save(out)
 
@@ -388,7 +398,7 @@ def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in
         chunk_files.append(p)
 
     filters = [
-        f"[0:v]scale={VIDEO_W}:{VIDEO_H}:force_original_aspect_ratio=decrease,pad={VIDEO_W}:{VIDEO_H}:(ow-iw)/2:(oh-ih)/2:white,format=rgba[bg]",
+        f"[0:v]scale={SCENE_TARGET_W}:{SCENE_TARGET_H}:force_original_aspect_ratio=decrease,pad={VIDEO_W}:{VIDEO_H}:(ow-iw)/2:{SCENE_PAD_TOP}:white,format=rgba[bg]",
         f"[2:v]scale={AVATAR_SIZE}:{AVATAR_SIZE}[av]",
         f"[3:v]scale={RING_SIZE}:{RING_SIZE}[ring]",
         f"[4:v]scale={SUBTITLE_BOX_W}:{SUBTITLE_BOX_H}[panel]",
