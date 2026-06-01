@@ -44,18 +44,18 @@ SCENE_TARGET_W = int(VIDEO_W * SCENE_SCALE_FACTOR)
 SCENE_TARGET_H = int(VIDEO_H * SCENE_SCALE_FACTOR)
 
 # Lower-left speaker avatar.
-AVATAR_SIZE = 76
-RING_SIZE = 98
-AVATAR_X = 54
-AVATAR_Y = VIDEO_H - AVATAR_SIZE - 34
+AVATAR_SIZE = 92
+RING_SIZE = 116
+AVATAR_X = 52
+AVATAR_Y = VIDEO_H - AVATAR_SIZE - 28
 RING_X = AVATAR_X - (RING_SIZE - AVATAR_SIZE) // 2
 RING_Y = AVATAR_Y - (RING_SIZE - AVATAR_SIZE) // 2
 
 # Subtitle panel sits beside the avatar, with right-side safety margin.
-SUBTITLE_FONT_SIZE = 24
-SUBTITLE_CHARS_PER_LINE = 28
+SUBTITLE_FONT_SIZE = 27
+SUBTITLE_CHARS_PER_LINE = 34
 SUBTITLE_LINES_PER_PAGE = 2
-SUBTITLE_BOX_X = 166
+SUBTITLE_BOX_X = 178
 SUBTITLE_BOX_W = VIDEO_W - SUBTITLE_BOX_X - 86
 SUBTITLE_BOX_H = 112
 SUBTITLE_BOX_Y = VIDEO_H - SUBTITLE_BOX_H - 34
@@ -286,7 +286,7 @@ def make_subtitle_panel(out: Path) -> None:
     img = Image.new("RGBA", (SUBTITLE_BOX_W, SUBTITLE_BOX_H), (255, 255, 255, 0))
     d = ImageDraw.Draw(img)
     rect = (0, 0, SUBTITLE_BOX_W - 1, SUBTITLE_BOX_H - 1)
-    d.rounded_rectangle(rect, radius=26, fill=(18, 24, 34, 168), outline=(255, 255, 255, 92), width=2)
+    d.rounded_rectangle(rect, radius=26, fill=(18, 24, 34, 0), outline=(255, 255, 255, 56), width=2)
     img = img.filter(ImageFilter.GaussianBlur(radius=0.15))
     img.save(out)
 
@@ -378,7 +378,7 @@ def drawtext_filter(input_label: str, output_label: str, textfile: Path, fp: str
         f"textfile='{textfile.as_posix()}':fontsize={fontsize}:fontcolor=white:",
         f"x={x}:y={y}:line_spacing=4:",
         "box=0:boxborderw=0:boxcolor=black@0.0:",
-        "borderw=3:bordercolor=black@0.48:shadowx=2:shadowy=2",
+        "borderw=3:bordercolor=black@0.58:shadowx=2:shadowy=2",
     ]
     if enable:
         parts.append(f":enable='{enable}'")
@@ -440,7 +440,7 @@ def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in
         "-map", f"[{vout}]",
         "-map", "1:a:0",
         "-r", str(FPS),
-        "-c:v", "libx264", "-preset", "veryfast", "-crf", "30",
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", "27",
         "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "128k",
         "-shortest",
@@ -453,7 +453,7 @@ def concat_and_optimize(clips: list[Path], concat_file: Path, tmp_video: Path, f
     run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_file), "-c", "copy", str(tmp_video)])
     run([
         "ffmpeg", "-y", "-i", str(tmp_video),
-        "-c:v", "libx264", "-preset", "veryfast", "-crf", "31",
+        "-c:v", "libx264", "-preset", "veryfast", "-crf", "28",
         "-c:a", "aac", "-b:a", "128k",
         "-pix_fmt", "yuv420p", "-movflags", "+faststart",
         str(final),
