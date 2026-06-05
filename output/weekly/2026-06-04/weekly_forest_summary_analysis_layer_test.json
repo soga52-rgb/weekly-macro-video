@@ -1,0 +1,167 @@
+{
+  "meta": {
+    "source": "analysis_input_bundle",
+    "data_status_note": "分析層使用 analysis window 作為正式判斷區間；lookback / background 資料僅作前期脈絡，不作為正式區間變動起點。",
+    "week_range": "2026-05-29 ～ 2026-06-04",
+    "analysis_window": {
+      "start_date": "2026-05-29",
+      "end_date": "2026-06-04",
+      "source": "workflow_env"
+    }
+  },
+  "main_theme_analysis_process": {
+    "material_inventory": {
+      "inflation_materials": [
+        "油價波動與通膨預期的關聯性（油價衝擊通膨疑慮再起）",
+        "能源市場對地緣政治消息過度反應（停火消息反覆）",
+        "AI投資帶來的結構性通膨黏性",
+        "WTI原油自87.36上漲至92.69，Brent自92.05上漲至95.01"
+      ],
+      "rate_materials": [
+        "美債交易員押注聯準會升息，非農就業數據將成為關鍵考驗",
+        "PIMCO表示美債殖利率主要反映聯準會利率政策，而非AI驅動",
+        "德銀上調美債殖利率預測，認定Fed已停止寬鬆",
+        "美國10年期公債殖利率在4.45%至4.49%區間震盪偏上"
+      ],
+      "dollar_materials": [
+        "美元指數自98.91顯著上升至99.43",
+        "市場對Fed政策路徑的鷹派預期調整",
+        "外資流動對亞幣的直接衝擊"
+      ],
+      "gold_materials": [
+        "黃金已超越美債，成全球央行最重要準備資產",
+        "美元美債殖利率走軟預期對金價的潛在支撐",
+        "黃金價格自4560.5回落至4456.1後反彈至4504.5"
+      ],
+      "asia_fx_materials": [
+        "熱錢湧進台灣，外資一天匯入15億美元（隨後爆量匯出）",
+        "美元/台幣自31.41貶值至31.48",
+        "美元/日圓逼近160關卡，收159.97",
+        "美元/韓元自1507.13顯著貶值至1532.57"
+      ],
+      "inventory_summary": "本週市場素材集中於地緣政治引發的油價反彈、Fed貨幣政策預期的重塑（鷹派定價），以及強勢美元對非美貨幣的全面壓抑。黃金則展現出受央行買盤支撐的獨立邏輯。"
+    },
+    "inflation_expectation_formation": {
+      "energy": "地緣政治停火消息反覆，帶動WTI與Brent原油價格顯著反彈，增加通膨不確定性。",
+      "supply_chain": "待確認",
+      "price_data": "待確認",
+      "demand": "待確認",
+      "labor_market": "市場高度關注即將公布的非農就業數據，預期勞動力市場邊際降溫可能成為通膨降溫的關鍵。",
+      "policy_expectation": "AI投資帶來的結構性通膨黏性與政策監管不確定性，使市場對通膨回落的信心動搖。",
+      "upward_channels": [
+        "能源價格反彈",
+        "地緣政治風險溢價",
+        "AI結構性通膨預期"
+      ],
+      "offsetting_channels": [
+        "勞動力市場邊際降溫預期"
+      ],
+      "direction": "up",
+      "strength": "medium",
+      "judgment": "油價反彈與地緣政治不確定性推升了短線再通膨預期，儘管勞動力市場降溫的預期形成了一定抵銷力量，但整體通膨預期仍偏向上行。"
+    },
+    "rate_pricing": {
+      "direction": "up",
+      "same_direction_as_inflation": "yes",
+      "inflation_to_rate_transmission": "再通膨預期（油價上漲）與地緣政治風險推升了市場對Fed可能維持高利率甚至重啟升息的擔憂，帶動長債殖利率震盪走高。",
+      "fed_policy_signal": "市場押注Fed停止寬鬆甚至升息，機構（如PIMCO、德銀）強調貨幣政策預期仍是主導殖利率的核心因子。",
+      "bond_supply_demand": "待確認",
+      "term_premium": "待確認",
+      "safe_haven_bond_demand": "待確認",
+      "growth_or_rate_cut_expectation": "成長降溫預期與再通膨預期形成拉鋸，壓抑了降息預期。",
+      "dominant_driver": "policy_guidance",
+      "judgment": "利率走勢與通膨預期同向，主要受Fed貨幣政策預期（鷹派定價）驅動，市場在等待非農就業數據以進一步確認利率路徑。"
+    },
+    "dollar_pricing": {
+      "direction": "up",
+      "same_direction_as_rates": "yes",
+      "rate_differential_effect": "高利率預期與Fed緊縮政策的延續，擴大了美國與其他經濟體的利差優勢，支撐美元走強。",
+      "safe_haven_dollar": "地緣政治風險可能帶來部分避險買盤。",
+      "dollar_liquidity_demand": "待確認",
+      "other_currency_weakness": "亞幣普遍走弱（日圓逼近160，韓元大幅貶值），被動推升美元指數。",
+      "us_relative_resilience": "待確認",
+      "dominant_driver": "rate_differential",
+      "judgment": "美元與利率同向走強，主要反映市場對Fed維持緊縮政策的預期，利差優勢與非美貨幣的弱勢共同推升美元指數。"
+    },
+    "gold_pricing": {
+      "direction": "mixed",
+      "rate_real_yield_pressure": "前半週殖利率上升與強勢美元對金價形成明顯壓抑。",
+      "dollar_effect": "強美元環境增加了持有黃金的機會成本。",
+      "safe_haven_demand": "地緣政治風險（中東局勢）提供下檔支撐。",
+      "central_bank_buying": "全球央行將黃金視為超越美債的最重要準備資產，提供強大的結構性買盤。",
+      "geopolitics": "停火消息反覆，支撐避險需求。",
+      "dominant_driver": "mixed",
+      "judgment": "黃金前半週受高利率與強美元壓抑走跌，但受惠於全球央行結構性買盤與地緣政治避險需求，尾盤展現出對抗強美元的韌性並出現反彈。"
+    },
+    "asia_fx_pricing": {
+      "twd": {
+        "direction": "down",
+        "same_direction_as_dollar_pressure": "yes",
+        "local_flow": "週初外資短暫大舉匯入帶來升值，隨後爆量匯出導致匯率快速走貶。",
+        "central_bank_policy": "待確認",
+        "export_or_tech_sector": "待確認",
+        "regional_risk": "待確認",
+        "judgment": "台幣整體隨強美元承壓，期間受外資資金進出（股匯脫鉤）影響呈現波動，最終仍反映利差劣勢與資金匯出的貶值壓力。"
+      },
+      "jpy": {
+        "direction": "down",
+        "same_direction_as_dollar_pressure": "yes",
+        "japan_policy": "待確認",
+        "rate_differential": "美日利差持續施壓，導致匯率逼近160關卡。",
+        "safe_haven_demand": "待確認",
+        "other_factor": "待確認",
+        "judgment": "日圓完全受制於強勢美元與美日利差劣勢，貶值趨勢明確，市場關注潛在的央行干預訊號。"
+      },
+      "krw": {
+        "direction": "down",
+        "same_direction_as_dollar_pressure": "yes",
+        "korea_export": "待確認",
+        "equity_flow": "待確認",
+        "regional_risk": "待確認",
+        "other_factor": "待確認",
+        "judgment": "韓圜與美元壓力同向，呈現顯著貶值，反映亞洲貨幣在強美元環境下的普遍弱勢。"
+      }
+    },
+    "market_contradictions_and_modifiers": {
+      "baseline_path": "通膨預期 → 利率預期 → 美元指數 → 亞洲貨幣 / 黃金",
+      "expected_baseline_script": "油價上漲推升通膨預期，帶動美債殖利率與美元上漲，進而壓抑黃金與非美貨幣。",
+      "most_unintuitive_market_reaction": "在強美元與高利率預期的雙重夾擊下，黃金雖有回落但隨後展現強大韌性反彈；台幣在強美元背景下，週初竟出現外資大舉匯入的逆勢升值。",
+      "contradiction_type": "modifier",
+      "how_it_fits_main_theme": "黃金的韌性來自於央行去美元化的結構性買盤，這修正了單純由利率平價決定的定價模型。台幣的波動則反映了AI熱潮下的區域資金流動與宏觀利差的短期拉鋸，最終仍回歸強美元主線。",
+      "presenter_opening_question": "在強勢美元與高利率預期的雙重夾擊下，為何黃金仍能展現韌性，甚至成為央行超越美債的準備資產？這是否暗示著市場定價邏輯正在發生結構性轉變？"
+    },
+    "main_theme_next_validation": {
+      "dominant_pricing_force": "Fed貨幣政策預期（再通膨擔憂引發的鷹派定價）。",
+      "offsetting_or_modifying_force": "勞動力市場邊際降溫的預期，以及央行買盤對黃金的結構性支撐。",
+      "one_sentence_to_remember": "市場在「再通膨擔憂」與「成長降溫」間拉鋸，Fed政策預期主導了強美元與高利率，但結構性買盤讓黃金展現抗跌韌性。",
+      "next_validation_point": "非農就業數據是否能確認勞動力市場趨勢性轉弱，進而修正Fed利率路徑預期。",
+      "overall_verdict": "成立",
+      "uncertainty_level": "medium"
+    }
+  },
+  "forest_summary": {
+    "weekly_main_theme": "再通膨預期與成長降溫的拉鋸戰",
+    "main_question": "在油價反彈與地緣政治風險下，Fed是否會被迫維持緊縮？非農數據將如何打破目前的市場僵局？",
+    "one_sentence_verdict": "貨幣政策預期仍是主導美債與美元的核心，市場正屏息等待就業數據以確認下一步方向。",
+    "overall_verdict": "成立",
+    "narrative_arc": "本週市場受油價反彈與地緣政治影響，再通膨擔憂推升了對Fed維持緊縮的預期，帶動美債殖利率與美元走強，亞幣普遍承壓；然而，黃金受惠於央行買盤展現韌性。市場焦點轉向即將公布的非農就業數據，以尋求打破「通膨黏性」與「成長降溫」拉鋸的關鍵訊號。",
+    "why_it_matters": "若就業數據意外強勁，可能進一步推升升息預期，加劇亞幣貶值壓力；若數據顯著降溫，則有望緩解目前的強美元格局，為風險資產與非美貨幣提供喘息空間。"
+  },
+  "evidence": {
+    "most_important_evidence": [
+      "US10Y 殖利率震盪偏上 (4.45% -> 4.47%)",
+      "DXY 美元指數顯著上漲 (98.91 -> 99.43)",
+      "WTI 原油價格上漲 (87.36 -> 92.69)",
+      "USDJPY 逼近 160 關卡 (159.25 -> 159.97)"
+    ],
+    "insufficient_evidence": [
+      "供應鏈瓶頸具體數據",
+      "本週內最新的 CPI/PCE 官方數據"
+    ],
+    "watch_items_from_news_context": [
+      "非農就業數據對Fed降息預期的修正幅度",
+      "地緣政治風險是否持續推升能源價格並轉化為通膨黏性",
+      "亞洲貨幣在美元強勢下的央行干預訊號"
+    ]
+  }
+}
