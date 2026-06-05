@@ -1,0 +1,200 @@
+{
+  "meta": {
+    "source": "Google News RSS",
+    "week_range": "2026-05-29 至 2026-06-04",
+    "sources_used": [
+      "經濟日報",
+      "news.cnyes.com",
+      "gfemobile.cnyes.com",
+      "鉅亨號"
+    ],
+    "candidate_count": 33,
+    "data_quality_note": "本週新聞集中於美債殖利率與Fed政策預期的互動，地緣政治對油價的影響呈現反覆性，與總經摘要中的成長擔憂與再通膨拉鋸高度吻合。"
+  },
+  "weekly_news_theme": "市場在「再通膨預期」與「成長降溫」之間反覆擺盪，導致美債殖利率與美元走勢呈現高波動與脫鉤現象，避險資產（黃金）受利率與地緣政治雙重驅動。",
+  "news_fit_to_daily_summaries": "支持",
+  "macro_drivers": [
+    "美國勞動力市場邊際降溫預期",
+    "AI投資帶來的結構性通膨黏性",
+    "地緣政治風險溢價與避險需求",
+    "Fed利率路徑的重新定價"
+  ],
+  "confirming_signals": [
+    {
+      "title": "美債交易員押注聯準會升息 非農就業數據將成為關鍵考驗",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9NSms4ZlBVellwd2VlaWc5SXFlZElBeUxXWDU0aVVkN3FxTGNfT3pXVXd5Z3l4Qk5yMlc1Sm9tdEFHaTdKMDZLWFpHN05DaEJLak5md1YtVTloQQ?oc=5",
+      "published_at": "2026-06-01 14:50:53 UTC",
+      "why_it_matters": "確認市場對Fed利率路徑的敏感度，與週報中關於就業數據影響利率的觀察一致。"
+    },
+    {
+      "title": "〈貴金屬盤後〉美元美債殖利率走軟 金價順勢反彈",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBER2tkRFM1bjdTV0U5Q3RURVltSms1M04xNm1rb2NYb3EtV3FvQW9YNGdmcFJNUGgzUzlIUjctWDRWWlg0YktER0c1NVNZZ1k?oc=5",
+      "published_at": "2026-06-04 22:55:19 UTC",
+      "why_it_matters": "證實了利率下行與美元走弱對金價的支撐傳導鏈。"
+    }
+  ],
+  "contradicting_signals": [
+    {
+      "title": "PIMCO：目前美債殖利率主要反映聯準會利率政策 而非AI驅動",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9TRVQ4U0JqMkFXbEpfYXBVd1R3U1pmRWh2UmJIbWRyRDlJaDJxNXptSUFvUXMydHZVSVpITXhsdlZ2Zl9pNnJ1TFVRRzFvXzA?oc=5",
+      "published_at": "2026-06-02 07:50:03 UTC",
+      "why_it_matters": "修正了市場對AI直接推升長債殖利率的過度解讀，強調貨幣政策預期仍是主導因子。"
+    }
+  ],
+  "news_based_corrections": [
+    {
+      "title": "黃金已超越美債 成全球央行最重要準備資產",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1oLXQzcHZTTHFwMWdEUGFmSnVxTEhPSm40MUpVM0tCWHR1N29sV1hZNmV5SG84MnlCY2ZqNjdhSnNMMmRJbEhmSjNyRHBjTTQ?oc=5",
+      "published_at": "2026-06-02 22:41:21 UTC",
+      "why_it_matters": "解釋了為何在強勢美元環境下，黃金仍能維持韌性，修正了單純以利率平價理論解釋金價的不足。"
+    }
+  ],
+  "watch_points": [
+    "非農就業數據對Fed降息預期的修正幅度",
+    "地緣政治風險是否持續推升能源價格並轉化為通膨黏性",
+    "亞洲貨幣在美元強勢下的央行干預訊號"
+  ],
+  "news_categories": {
+    "通膨預期": [
+      {
+        "title": "美股九連漲止步油價衝擊通膨疑慮再起比特幣腰斬成AI熱潮棄兒",
+        "source": "UDN",
+        "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9IY1YzclFGSWhpdm4ydDVEZVk4ekhNOUxES2JXOEdHS3NvWU1kVV9faWJIVnc5N0ZqVzdtTXNfcGFkSDBBck1ON29JQjB5SXkw?oc=5",
+        "published_at": "2026-06-03 22:47:28 UTC",
+        "why_it_matters": "油價波動與通膨預期的關聯性是本週市場情緒的關鍵修正因子。"
+      },
+      {
+        "title": "單月暴跌20%疫情來最慘！油價陷「記憶碎片化」模式 停火消息反覆但200美元夢魘未除",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5uY05xbXlsd1NTdVVRLVNCS0lPamdHOXZoa3Bxdm52VTRwcFVHeHo2bmZ4aENJODRIR2oxVlhfby1UbFRtNF9CMDJHdjJYeWs?oc=5",
+        "published_at": "2026-05-30 04:30:18 UTC",
+        "why_it_matters": "反映能源市場對地緣政治消息的過度反應，增加通膨預期的不確定性。"
+      }
+    ],
+    "利率": [
+      {
+        "title": "Pimco 表示 AI 尚未構成長期供給衝擊 當前美債殖利率受貨幣政策預期驅動",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE53SUU0STFGMVlFT2pESWNLSERQdjQtalE3ajR3UXBkTHZwWWcxZV9XZUJMQ19oRDA3TE5lVFRGMzJ5WFFWeHByWDl4WjZZcGp4YnpxUXFfTm15dw?oc=5",
+        "published_at": "2026-06-02 11:45:35 UTC",
+        "why_it_matters": "釐清了長債殖利率的驅動因子，對市場定價邏輯有重要修正作用。"
+      },
+      {
+        "title": "降息夢碎？德銀上調美債殖利率預測 認定Fed已停止寬鬆",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE83VldaR0l1MEN0bF93T1BtenBxVHdfc0JGTDIxbnVKd0dXZXZtdHltYkRVZExyTzhzQU9CZGw1R0dMczByaDg4MEQ0SEM4R0E?oc=5",
+        "published_at": "2026-05-29 18:00:14 UTC",
+        "why_it_matters": "反映市場對Fed政策路徑的鷹派預期調整。"
+      },
+      {
+        "title": "美利率將180度大轉彎？專家：美伊戰爭「維持現狀」 將逼 Fed 今年升息",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFB5R2g5R3VpaXdnbFJQc29YNGd6MDA0Zm1aWk0xbTlKVE55TE40WVRhUWFDWjI5VmNVVENzVEhqZldyaGFPdklGdUY1QkktNWY3aGw2Z1ZzRldndw?oc=5",
+        "published_at": "2026-05-30 14:02:27 UTC",
+        "why_it_matters": "極端情境分析，顯示地緣政治對利率政策的潛在影響。"
+      }
+    ],
+    "貨幣": [
+      {
+        "title": "熱錢湧進台灣！外資一天匯入15億美元",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1XbWlVcXFsSXRlV1EwTS1rTlpRVkFhOEVncWhkSkxsRWR4Tm5Jc2tKT2pRaWhReXRQN0ttVk01QmJzZjNFcG1yRng4aXAtY1gtNzlVWkV0ci1Nd9IBX0FVX3lxTE9iY0ZVaU1HRFBkMHhXTEhGRUxESFV0dkpWZ3FPVU1GRENzZUNvdmRVNjFLSktheDZxd0RFTjFZQ2NFVk9vYWdac0lyOFZSNzVmdTY2Mi0xemZ4RDFUMlBN?oc=5",
+        "published_at": "2026-06-01 17:52:22 UTC",
+        "why_it_matters": "解釋了台幣在強勢美元環境下的逆勢表現，屬於區域資金流動的修正因子。"
+      },
+      {
+        "title": "股匯脫鉤 外資轉匯出新台幣爆量貶值收31.445元",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTFB4Y3E5am90U2dIckVuSW1HRHowY09sMWt4Qnc3Rl81UWRhWVhCTVJuRkd4T1RuWk9MZ1o2REE4N3NtZWs4c0hwNEhvcTEzVTZ1eTBNa0NkbmlnYkZDcHZPdm94c2hheUdaX2xaX3dMTUh3dXpw0gFfQVVfeXFMTWxwWkwyU2NsOGk2V01TaEcwY0RDZWtWRzI5SmlXcWg0UGVuaDZfUGpFY2xRa3RwZUllM1dTUHo4RklCY2pLajFDQUtBUS1jM2FxRm1DTjJZVThFN1NLck0?oc=5",
+        "published_at": "2026-06-02 10:21:34 UTC",
+        "why_it_matters": "反映外資流動對亞幣的直接衝擊，與強美元傳導鏈一致。"
+      }
+    ],
+    "其他": [
+      {
+        "title": "川普簽署行政命令 AI 新模型 政府要先審查",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE1yMGY4eGJUaUE5eVUtakowN3V5emZoSEJHR1NaYXlUYndabW1MVWNSREg5aXRqaXBWWlpzOTF1LU9GcWRZTjI4aEp3SHVuTWFaTDBqWXBWUFh0WnVqQXN5NjJTOWstclFmNi1sdEtyTXAzZmVj0gFfQVVfeXFMT1lJdmpNVjg1VkhLVmRrZFdQMi1GRE82UDk1THFvTmpmRU5lMjJPbjZwejQtQXNKVHlNZWVlY1NSR0dyZzBvd0pIckJGUXJfQ1o3c29rdGUyT09ycEp2S0U?oc=5",
+        "published_at": "2026-06-03 17:49:04 UTC",
+        "why_it_matters": "政策監管不確定性可能影響AI相關投資情緒，進而間接影響通膨預期。"
+      }
+    ]
+  },
+  "top_news": [
+    {
+      "title": "美債交易員押注聯準會升息 非農就業數據將成為關鍵考驗",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9NSms4ZlBVellwd2VlaWc5SXFlZElBeUxXWDU0aVVkN3FxTGNfT3pXVXd5Z3l4Qk5yMlc1Sm9tdEFHaTdKMDZLWFpHN05DaEJLak5md1YtVTloQQ?oc=5",
+      "published_at": "2026-06-01 14:50:53 UTC",
+      "why_it_matters": "本週市場定價的核心，連結了就業數據、Fed政策與債市反應。"
+    },
+    {
+      "title": "黃金已超越美債 成全球央行最重要準備資產",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1oLXQzcHZTTHFwMWdEUGFmSnVxTEhPSm40MUpVM0tCWHR1N29sV1hZNmV5SG84MnlCY2ZqNjdhSnNMMmRJbEhmSjNyRHBjTTQ?oc=5",
+      "published_at": "2026-06-02 22:41:21 UTC",
+      "why_it_matters": "提供了宏觀資產配置轉變的結構性視角，解釋了金價的獨立走勢。"
+    },
+    {
+      "title": "美股九連漲止步油價衝擊通膨疑慮再起比特幣腰斬成AI熱潮棄兒",
+      "source": "UDN",
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9IY1YzclFGSWhpdm4ydDVEZVk4ekhNOUxES2JXOEdHS3NvWU1kVV9faWJIVnc5N0ZqVzdtTXNfcGFkSDBBck1ON29JQjB5SXkw?oc=5",
+      "published_at": "2026-06-03 22:47:28 UTC",
+      "why_it_matters": "油價波動與通膨預期的關聯性是本週市場情緒的關鍵修正因子。"
+    },
+    {
+      "title": "單月暴跌20%疫情來最慘！油價陷「記憶碎片化」模式 停火消息反覆但200美元夢魘未除",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5uY05xbXlsd1NTdVVRLVNCS0lPamdHOXZoa3Bxdm52VTRwcFVHeHo2bmZ4aENJODRIR2oxVlhfby1UbFRtNF9CMDJHdjJYeWs?oc=5",
+      "published_at": "2026-05-30 04:30:18 UTC",
+      "why_it_matters": "反映能源市場對地緣政治消息的過度反應，增加通膨預期的不確定性。"
+    },
+    {
+      "title": "Pimco 表示 AI 尚未構成長期供給衝擊 當前美債殖利率受貨幣政策預期驅動",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE53SUU0STFGMVlFT2pESWNLSERQdjQtalE3ajR3UXBkTHZwWWcxZV9XZUJMQ19oRDA3TE5lVFRGMzJ5WFFWeHByWDl4WjZZcGp4YnpxUXFfTm15dw?oc=5",
+      "published_at": "2026-06-02 11:45:35 UTC",
+      "why_it_matters": "釐清了長債殖利率的驅動因子，對市場定價邏輯有重要修正作用。"
+    },
+    {
+      "title": "降息夢碎？德銀上調美債殖利率預測 認定Fed已停止寬鬆",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE83VldaR0l1MEN0bF93T1BtenBxVHdfc0JGTDIxbnVKd0dXZXZtdHltYkRVZExyTzhzQU9CZGw1R0dMczByaDg4MEQ0SEM4R0E?oc=5",
+      "published_at": "2026-05-29 18:00:14 UTC",
+      "why_it_matters": "反映市場對Fed政策路徑的鷹派預期調整。"
+    },
+    {
+      "title": "美利率將180度大轉彎？專家：美伊戰爭「維持現狀」 將逼 Fed 今年升息",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFB5R2g5R3VpaXdnbFJQc29YNGd6MDA0Zm1aWk0xbTlKVE55TE40WVRhUWFDWjI5VmNVVENzVEhqZldyaGFPdklGdUY1QkktNWY3aGw2Z1ZzRldndw?oc=5",
+      "published_at": "2026-05-30 14:02:27 UTC",
+      "why_it_matters": "極端情境分析，顯示地緣政治對利率政策的潛在影響。"
+    },
+    {
+      "title": "熱錢湧進台灣！外資一天匯入15億美元",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1XbWlVcXFsSXRlV1EwTS1rTlpRVkFhOEVncWhkSkxsRWR4Tm5Jc2tKT2pRaWhReXRQN0ttVk01QmJzZjNFcG1yRng4aXAtY1gtNzlVWkV0ci1Nd9IBX0FVX3lxTE9iY0ZVaU1HRFBkMHhXTEhGRUxESFV0dkpWZ3FPVU1GRENzZUNvdmRVNjFLSktheDZxd0RFTjFZQ2NFVk9vYWdac0lyOFZSNzVmdTY2Mi0xemZ4RDFUMlBN?oc=5",
+      "published_at": "2026-06-01 17:52:22 UTC",
+      "why_it_matters": "解釋了台幣在強勢美元環境下的逆勢表現，屬於區域資金流動的修正因子。"
+    },
+    {
+      "title": "股匯脫鉤 外資轉匯出新台幣爆量貶值收31.445元",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTFB4Y3E5am90U2dIckVuSW1HRHowY09sMWt4Qnc3Rl81UWRhWVhCTVJuRkd4T1RuWk9MZ1o2REE4N3NtZWs4c0hwNEhvcTEzVTZ1eTBNa0NkbmlnYkZDcHZPdm94c2hheUdaX2xaX3dMTUh3dXpw0gFfQVVfeXFMTWxwWkwyU2NsOGk2V01TaEcwY0RDZWtWRzI5SmlXcWg0UGVuaDZfUGpFY2xRa3RwZUllM1dTUHo4RklCY2pLajFDQUtBUS1jM2FxRm1DTjJZVThFN1NLck0?oc=5",
+      "published_at": "2026-06-02 10:21:34 UTC",
+      "why_it_matters": "反映外資流動對亞幣的直接衝擊，與強美元傳導鏈一致。"
+    },
+    {
+      "title": "川普簽署行政命令 AI 新模型 政府要先審查",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE1yMGY4eGJUaUE5eVUtakowN3V5emZoSEJHR1NaYXlUYndabW1MVWNSREg5aXRqaXBWWlpzOTF1LU9GcWRZTjI4aEp3SHVuTWFaTDBqWXBWUFh0WnVqQXN5NjJTOWstclFmNi1sdEtyTXAzZmVj0gFfQVVfeXFMT1lJdmpNVjg1VkhLVmRrZFdQMi1GRE82UDk1THFvTmpmRU5lMjJPbjZwejQtQXNKVHlNZWVlY1NSR0dyZzBvd0pIckJGUXJfQ1o3c29rdGUyT09ycEp2S0U?oc=5",
+      "published_at": "2026-06-03 17:49:04 UTC",
+      "why_it_matters": "政策監管不確定性可能影響AI相關投資情緒，進而間接影響通膨預期。"
+    }
+  ],
+  "editor_note_for_forest_summary": "本週市場主線由「再通膨定價」與「成長降溫」交替主導。週初市場受就業降溫預期壓抑殖利率，但隨後ISM數據強勁引發再通膨擔憂。值得注意的是，市場對AI通膨敘事的反應已轉趨理性，不再單純視為殖利率上行的唯一驅動力。建議下週重點觀察非農數據是否能確認勞動力市場的趨勢性轉弱，這將是決定Fed利率路徑與美元強弱的關鍵轉折點。"
+}
