@@ -336,7 +336,13 @@ ul { margin:0; padding-left:22px; }
   
   <section class="section section-video">
     <h2>本週總經影片</h2>
-    <div class="muted-box">本週影片尚未產生，完成 86 合成後會自動顯示於此。</div>
+    <div class="video-shell">
+      <video class="weekly-video" controls playsinline preload="metadata" poster="story_visual_images/scene_01.jpg">
+        <source src="story_video/story_visual_video_test.mp4" type="video/mp4">
+        您的瀏覽器不支援影片播放。
+      </video>
+    </div>
+    <div class="video-note">影片依本週語音稿、旁白音檔與圖卡自動合成。</div>
   </section>
 
 
