@@ -1,0 +1,50 @@
+{
+  "meta": {
+    "type": "story_visual_images_v9",
+    "source": "weekly_dialogue_story_only_v8.json",
+    "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04",
+    "image_model": "gemini-3.1-flash-image-preview",
+    "generated_at": "2026-06-05T02:23:11",
+    "target_scene": "",
+    "preview_only_first": false,
+    "style": "whiteboard sketch explainer / minimalist marker doodle / consistent video series"
+  },
+  "images": [
+    {
+      "section_id": "s1",
+      "visual_id": "scene_01",
+      "section_title": "油價在漲，為什麼利率卻不跟著狂飆？",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_01.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s2",
+      "visual_id": "scene_02",
+      "section_title": "AI 熱潮與四年新高的製造業警訊",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_02.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s3",
+      "visual_id": "scene_03",
+      "section_title": "避險共振：當美元與黃金站在同一陣線",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_03.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s4",
+      "visual_id": "scene_04",
+      "section_title": "15億美元的暴進暴出：亞幣的防禦極限",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_04.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s5",
+      "visual_id": "scene_05",
+      "section_title": "超越美債的終極資產：黃金的去美元化韌性",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_05.jpg",
+      "status": "created_or_existing"
+    }
+  ],
+  "failed_images": []
+}
