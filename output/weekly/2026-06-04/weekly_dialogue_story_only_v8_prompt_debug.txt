@@ -72,15 +72,19 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
 應該寫成：「黃金前段受高利率壓抑回落，但後段又因房市疲軟與避險需求升溫重新回升。這代表市場沒有單純交易利率，也在為成長放緩與地緣政治不確定性買保護。」
 
 建議故事推進方式：
-- 先從本週最能形成故事的事件線切入，例如地緣政治、央行政策、長債壓力、房市疲軟、強美元或亞幣壓力。
-- 用事件帶出價格反應，不要先報數字。
-- 用價格反應解釋市場真正交易的是什麼。
+- 先從本週最重要的定價矛盾或淨方向切入，例如「油價上升但利率只小幅走高」、「美元整週走強但黃金週中反彈」、「亞幣整週承壓但台幣週內有資金流波動」。
+- 用整週淨方向建立主線，再用週內事件解釋中間的反覆。
+- 用價格反應解釋市場真正交易的是什麼，不要把單日波動寫成整週結論。
 - 如果價格走勢和直覺不同，要把它當作故事問題。
 - 讓 Tom 問出這個問題，讓 Miranda 解釋。
 - 每段結尾自然帶出下一個變數。
 
 請產生 10 到 12 分鐘左右的中文雙人對談稿。
 語氣：台灣專業財經節目口語，清楚、有節奏、有洞察，但不要浮誇。
+語言邊界：
+- 避免戲劇化或絕對化詞彙，例如：拉鋸、雙重夾擊、海嘯、毀滅性打擊、兩杯毒藥、終極考驗、狂飆、完全正確、屏息等待。請改用：訊號分歧、抵銷力量、修正因子、壓力升高、仍需驗證、局部反彈、區間震盪。
+- 匯率表述必須清楚：USD/TWD 上升代表台幣貶值，USD/KRW 上升代表韓元貶值，USD/JPY 上升代表日圓貶值。不要寫成「美元/台幣貶值」。
+- 請用「本週 / 本期 / 正式分析區間」描述週報，不要用「今天」代表整週。
 不要投資建議，不要買賣指令。
 請輸出合法 JSON，不要 Markdown，不要多餘文字。
 
@@ -90,7 +94,7 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
 {
   "meta": {
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04",
-    "generated_at": "2026-06-05T02:03:27",
+    "generated_at": "2026-06-06T07:15:53",
     "analysis_window": {
       "start_date": "2026-05-29",
       "end_date": "2026-06-04",
@@ -283,7 +287,10 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
       "source": "workflow_env"
     },
     "assets": {
-      "美國10年期公債殖利率": {
+      "US10Y": {
+        "asset_key": "US10Y",
+        "asset_name": "美國10年期公債殖利率",
+        "unit": "%",
         "points_count": 5,
         "points": [
           {
@@ -306,9 +313,27 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
             "date": "2026-06-04",
             "value": 4.4770002365112305
           }
-        ]
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-05-29",
+          "start_value": 4.453000068664551,
+          "end_date": "2026-06-04",
+          "end_value": 4.4770002365112305,
+          "net_change": 0.024000167846679688,
+          "net_change_pct": 0.538966258176531,
+          "net_direction": "up",
+          "high_date": "2026-06-03",
+          "high_value": 4.491000175476074,
+          "low_date": "2026-05-29",
+          "low_value": 4.453000068664551,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
       },
-      "美元指數": {
+      "DXY": {
+        "asset_key": "DXY",
+        "asset_name": "美元指數",
+        "unit": "",
         "points_count": 6,
         "points": [
           {
@@ -335,9 +360,27 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
             "date": "2026-06-04",
             "value": 99.43199920654297
           }
-        ]
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-05-29",
+          "start_value": 98.91000366210938,
+          "end_date": "2026-06-04",
+          "end_value": 99.43199920654297,
+          "net_change": 0.5219955444335938,
+          "net_change_pct": 0.5277479780678248,
+          "net_direction": "up",
+          "high_date": "2026-06-03",
+          "high_value": 99.55000305175781,
+          "low_date": "2026-05-29",
+          "low_value": 98.91000366210938,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
       },
-      "黃金": {
+      "Gold": {
+        "asset_key": "Gold",
+        "asset_name": "黃金",
+        "unit": "USD/oz",
         "points_count": 6,
         "points": [
           {
@@ -364,9 +407,27 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
             "date": "2026-06-04",
             "value": 4504.5
           }
-        ]
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-05-29",
+          "start_value": 4560.5,
+          "end_date": "2026-06-04",
+          "end_value": 4504.5,
+          "net_change": -56.0,
+          "net_change_pct": -1.2279355333844972,
+          "net_direction": "down",
+          "high_date": "2026-05-31",
+          "high_value": 4565.5,
+          "low_date": "2026-06-03",
+          "low_value": 4456.10009765625,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
       },
-      "西德州原油": {
+      "WTI": {
+        "asset_key": "WTI",
+        "asset_name": "西德州原油",
+        "unit": "USD/bbl",
         "points_count": 6,
         "points": [
           {
@@ -393,9 +454,27 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
             "date": "2026-06-04",
             "value": 92.69000244140625
           }
-        ]
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-05-29",
+          "start_value": 87.36000061035156,
+          "end_date": "2026-06-04",
+          "end_value": 92.69000244140625,
+          "net_change": 5.3300018310546875,
+          "net_change_pct": 6.10119252955124,
+          "net_direction": "up",
+          "high_date": "2026-06-03",
+          "high_value": 95.66000366210938,
+          "low_date": "2026-05-29",
+          "low_value": 87.36000061035156,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
       },
-      "布蘭特原油": {
+      "Brent": {
+        "asset_key": "Brent",
+        "asset_name": "布蘭特原油",
+        "unit": "USD/bbl",
         "points_count": 6,
         "points": [
           {
@@ -422,9 +501,27 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
             "date": "2026-06-04",
             "value": 95.01000213623047
           }
-        ]
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-05-29",
+          "start_value": 92.05000305175781,
+          "end_date": "2026-06-04",
+          "end_value": 95.01000213623047,
+          "net_change": 2.9599990844726562,
+          "net_change_pct": 3.2156425707105187,
+          "net_direction": "up",
+          "high_date": "2026-06-03",
+          "high_value": 97.2699966430664,
+          "low_date": "2026-05-29",
+          "low_value": 92.05000305175781,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
       },
-      "美元／日圓": {
+      "USDJPY": {
+        "asset_key": "USDJPY",
+        "asset_name": "美元／日圓",
+        "unit": "JPY",
         "points_count": 7,
         "points": [
           {
@@ -455,9 +552,27 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
             "date": "2026-06-04",
             "value": 159.9770050048828
           }
-        ]
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-05-29",
+          "start_value": 159.2550048828125,
+          "end_date": "2026-06-04",
+          "end_value": 159.9770050048828,
+          "net_change": 0.7220001220703125,
+          "net_change_pct": 0.4533610247298632,
+          "net_direction": "up",
+          "high_date": "2026-06-03",
+          "high_value": 160.0189971923828,
+          "low_date": "2026-05-29",
+          "low_value": 159.2550048828125,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
       },
-      "美元／台幣": {
+      "USDTWD": {
+        "asset_key": "USDTWD",
+        "asset_name": "美元／台幣",
+        "unit": "TWD",
         "points_count": 6,
         "points": [
           {
@@ -484,9 +599,27 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
             "date": "2026-06-04",
             "value": 31.486000061035156
           }
-        ]
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-05-29",
+          "start_value": 31.410999298095703,
+          "end_date": "2026-06-04",
+          "end_value": 31.486000061035156,
+          "net_change": 0.07500076293945312,
+          "net_change_pct": 0.23877229192132088,
+          "net_direction": "up",
+          "high_date": "2026-06-03",
+          "high_value": 31.506999969482422,
+          "low_date": "2026-06-01",
+          "low_value": 31.323999404907227,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
       },
-      "美元／韓元": {
+      "USDKRW": {
+        "asset_key": "USDKRW",
+        "asset_name": "美元／韓元",
+        "unit": "KRW",
         "points_count": 6,
         "points": [
           {
@@ -513,10 +646,26 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
             "date": "2026-06-04",
             "value": 1532.5699462890625
           }
-        ]
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-05-29",
+          "start_value": 1507.1300048828125,
+          "end_date": "2026-06-04",
+          "end_value": 1532.5699462890625,
+          "net_change": 25.43994140625,
+          "net_change_pct": 1.6879725918686153,
+          "net_direction": "up",
+          "high_date": "2026-06-04",
+          "high_value": 1532.5699462890625,
+          "low_date": "2026-05-29",
+          "low_value": 1507.1300048828125,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
       }
     },
-    "instruction": "Use these filtered points for all this-week price reactions in the dialogue. Do not use lookback-window start prices as this-week starting points."
+    "direction_rule": "For every asset, the formal this-week direction is start_value -> end_value inside analysis_window. The model may discuss high/low or mid-week reversals, but must label them as intra-week episodes and must not describe them as the whole-week direction.",
+    "instruction": "Use these filtered points and the computed summary for all this-week price reactions in the dialogue. Do not use lookback-window start prices as this-week starting points."
   },
   "market_series_lookback_note": {
     "available": true,
@@ -754,7 +903,9 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
 硬性生成規則：
 - 你必須先讀取 input_bundle.meta.analysis_window，並將其作為本集唯一正式週期。
 - meta.week_range 必須等於 input_bundle.meta.analysis_window.label。
-- 所有「本週」價格反應必須優先使用 input_bundle.market_series_analysis_window 與 analysis_layer 中已按 analysis window 產生的 market_validation。
+- 所有「本週」價格反應必須優先使用 input_bundle.market_series_analysis_window.assets.*.summary。
+- 任何資產的整週方向必須以 summary.start_value → summary.end_value / summary.net_direction 為準。
+- 若要描述 summary.high_value / summary.low_value 或中間某一天走勢，必須明確寫成「週內一度」或「週中波動」，不得寫成本週主線方向。
 - input_bundle.market_series_lookback_note、weekly_source_text、endpoint_context_excerpt 若包含更早日期，只能用於前期背景，不可作為本週起點。
 - storyline.main_event_threads 不得把 lookback 起點價格當成本週主要事件線。
 - 第一段可簡短交代前期高利率背景，但必須快速轉入 analysis window 內的本週變化，不可整段都圍繞前期長債恐慌。
