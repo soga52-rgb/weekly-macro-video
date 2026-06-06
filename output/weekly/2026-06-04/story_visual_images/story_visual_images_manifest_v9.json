@@ -4,9 +4,9 @@
     "source": "weekly_dialogue_story_only_v8.json",
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04",
     "image_model": "gemini-3.1-flash-image-preview",
-    "generated_at": "2026-06-06T08:13:05",
-    "target_scene": "",
-    "preview_only_first": false,
+    "generated_at": "2026-06-06T16:33:05",
+    "target_scene": "s1",
+    "preview_only_first": true,
     "style": "whiteboard sketch explainer / minimalist marker doodle / consistent video series"
   },
   "images": [
@@ -15,34 +15,6 @@
       "visual_id": "scene_01",
       "section_title": "通膨黏性與成長擔憂的訊號分歧開場",
       "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_01.jpg",
-      "status": "created_or_existing"
-    },
-    {
-      "section_id": "s2",
-      "visual_id": "scene_02",
-      "section_title": "能源衝擊與AI通膨敘事的理性回歸",
-      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_02.jpg",
-      "status": "created_or_existing"
-    },
-    {
-      "section_id": "s3",
-      "visual_id": "scene_03",
-      "section_title": "避險共振與黃金的去美元化韌性",
-      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_03.jpg",
-      "status": "created_or_existing"
-    },
-    {
-      "section_id": "s4",
-      "visual_id": "scene_04",
-      "section_title": "亞洲貨幣的利差劣勢與熱錢的雙向洗劫",
-      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_04.jpg",
-      "status": "created_or_existing"
-    },
-    {
-      "section_id": "s5",
-      "visual_id": "scene_05",
-      "section_title": "就業市場邊際降溫與軟著陸的定價轉折",
-      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_05.jpg",
       "status": "created_or_existing"
     }
   ],
