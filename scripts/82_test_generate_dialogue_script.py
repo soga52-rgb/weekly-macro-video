@@ -119,15 +119,19 @@ Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重
 應該寫成：「黃金前段受高利率壓抑回落，但後段又因房市疲軟與避險需求升溫重新回升。這代表市場沒有單純交易利率，也在為成長放緩與地緣政治不確定性買保護。」
 
 建議故事推進方式：
-- 先從本週最能形成故事的事件線切入，例如地緣政治、央行政策、長債壓力、房市疲軟、強美元或亞幣壓力。
-- 用事件帶出價格反應，不要先報數字。
-- 用價格反應解釋市場真正交易的是什麼。
+- 先從本週最重要的定價矛盾或淨方向切入，例如「油價上升但利率只小幅走高」、「美元整週走強但黃金週中反彈」、「亞幣整週承壓但台幣週內有資金流波動」。
+- 用整週淨方向建立主線，再用週內事件解釋中間的反覆。
+- 用價格反應解釋市場真正交易的是什麼，不要把單日波動寫成整週結論。
 - 如果價格走勢和直覺不同，要把它當作故事問題。
 - 讓 Tom 問出這個問題，讓 Miranda 解釋。
 - 每段結尾自然帶出下一個變數。
 
 請產生 10 到 12 分鐘左右的中文雙人對談稿。
 語氣：台灣專業財經節目口語，清楚、有節奏、有洞察，但不要浮誇。
+語言邊界：
+- 避免戲劇化或絕對化詞彙，例如：拉鋸、雙重夾擊、海嘯、毀滅性打擊、兩杯毒藥、終極考驗、狂飆、完全正確、屏息等待。請改用：訊號分歧、抵銷力量、修正因子、壓力升高、仍需驗證、局部反彈、區間震盪。
+- 匯率表述必須清楚：USD/TWD 上升代表台幣貶值，USD/KRW 上升代表韓元貶值，USD/JPY 上升代表日圓貶值。不要寫成「美元/台幣貶值」。
+- 請用「本週 / 本期 / 正式分析區間」描述週報，不要用「今天」代表整週。
 不要投資建議，不要買賣指令。
 請輸出合法 JSON，不要 Markdown，不要多餘文字。
 """
@@ -142,7 +146,9 @@ USER_PROMPT_TEMPLATE = """
 硬性生成規則：
 - 你必須先讀取 input_bundle.meta.analysis_window，並將其作為本集唯一正式週期。
 - meta.week_range 必須等於 input_bundle.meta.analysis_window.label。
-- 所有「本週」價格反應必須優先使用 input_bundle.market_series_analysis_window 與 analysis_layer 中已按 analysis window 產生的 market_validation。
+- 所有「本週」價格反應必須優先使用 input_bundle.market_series_analysis_window.assets.*.summary。
+- 任何資產的整週方向必須以 summary.start_value → summary.end_value / summary.net_direction 為準。
+- 若要描述 summary.high_value / summary.low_value 或中間某一天走勢，必須明確寫成「週內一度」或「週中波動」，不得寫成本週主線方向。
 - input_bundle.market_series_lookback_note、weekly_source_text、endpoint_context_excerpt 若包含更早日期，只能用於前期背景，不可作為本週起點。
 - storyline.main_event_threads 不得把 lookback 起點價格當成本週主要事件線。
 - 第一段可簡短交代前期高利率背景，但必須快速轉入 analysis window 內的本週變化，不可整段都圍繞前期長債恐慌。
@@ -375,6 +381,62 @@ def filter_points_by_window(points: Any, start_date: str, end_date: str) -> List
     return filtered
 
 
+def infer_point_direction(start_value: float, end_value: float, tolerance: float = 1e-9) -> str:
+    if end_value > start_value + tolerance:
+        return "up"
+    if end_value < start_value - tolerance:
+        return "down"
+    return "flat"
+
+
+def summarize_analysis_points(points: List[Dict[str, Any]]) -> Dict[str, Any]:
+    clean_points: List[Dict[str, Any]] = []
+    for point in points:
+        if not isinstance(point, dict):
+            continue
+        try:
+            value = float(point.get("value"))
+        except (TypeError, ValueError):
+            continue
+        clean_points.append({"date": str(point.get("date") or ""), "value": value})
+
+    if not clean_points:
+        return {
+            "available": False,
+            "net_direction": "unclear",
+            "instruction": "No usable analysis-window points. Treat direction as unclear / 待確認.",
+        }
+
+    start_point = clean_points[0]
+    end_point = clean_points[-1]
+    start_value = float(start_point["value"])
+    end_value = float(end_point["value"])
+    net_change = end_value - start_value
+    net_change_pct = (net_change / start_value * 100) if start_value else None
+    high_point = max(clean_points, key=lambda x: x["value"])
+    low_point = min(clean_points, key=lambda x: x["value"])
+
+    return {
+        "available": True,
+        "start_date": start_point["date"],
+        "start_value": start_value,
+        "end_date": end_point["date"],
+        "end_value": end_value,
+        "net_change": net_change,
+        "net_change_pct": net_change_pct,
+        "net_direction": infer_point_direction(start_value, end_value),
+        "high_date": high_point["date"],
+        "high_value": high_point["value"],
+        "low_date": low_point["date"],
+        "low_value": low_point["value"],
+        "instruction": (
+            "Use net_direction as the formal this-week direction. "
+            "High/low and intermediate moves may be described only as intra-week episodes."
+        ),
+    }
+
+
+
 def build_market_series_analysis_window(raw: Any, analysis_window: Dict[str, str]) -> Dict[str, Any]:
     if not isinstance(raw, dict):
         return {"available": False}
@@ -385,8 +447,13 @@ def build_market_series_analysis_window(raw: Any, analysis_window: Dict[str, str
         "available": True,
         "analysis_window": analysis_window,
         "assets": {},
+        "direction_rule": (
+            "For every asset, the formal this-week direction is start_value -> end_value "
+            "inside analysis_window. The model may discuss high/low or mid-week reversals, "
+            "but must label them as intra-week episodes and must not describe them as the whole-week direction."
+        ),
         "instruction": (
-            "Use these filtered points for all this-week price reactions in the dialogue. "
+            "Use these filtered points and the computed summary for all this-week price reactions in the dialogue. "
             "Do not use lookback-window start prices as this-week starting points."
         ),
     }
@@ -399,20 +466,29 @@ def build_market_series_analysis_window(raw: Any, analysis_window: Dict[str, str
                 continue
             points = filter_points_by_window(values, start, end)
             result["assets"][str(name)] = {
+                "asset_key": str(name),
+                "asset_name": str(name),
                 "points_count": len(points),
                 "points": points,
+                "summary": summarize_analysis_points(points),
             }
     elif isinstance(series, list):
         for item in series:
             if not isinstance(item, dict):
                 continue
-            name = item.get("asset") or item.get("symbol") or item.get("name") or item.get("ticker")
+            asset_key = item.get("asset_key") or item.get("symbol") or item.get("ticker") or item.get("asset") or item.get("name")
+            asset_name = item.get("asset") or item.get("name") or asset_key
+            unit = item.get("unit", "")
             values = item.get("data") or item.get("points") or item.get("values")
-            if name and isinstance(values, list):
+            if asset_key and isinstance(values, list):
                 points = filter_points_by_window(values, start, end)
-                result["assets"][str(name)] = {
+                result["assets"][str(asset_key)] = {
+                    "asset_key": str(asset_key),
+                    "asset_name": str(asset_name),
+                    "unit": unit,
                     "points_count": len(points),
                     "points": points,
+                    "summary": summarize_analysis_points(points),
                 }
 
     return result
@@ -531,6 +607,37 @@ def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: 
                 continue
             raise
     raise RuntimeError(f"Gemini call failed after retries: {last_error}")
+
+
+
+def clean_text_value(text: str) -> str:
+    replacements = {
+        "聯聯準會": "聯準會",
+        "拉鋸戰": "訊號分歧",
+        "拉鋸": "訊號分歧",
+        "雙重夾擊": "多重壓力",
+        "海嘯": "壓力升高",
+        "毀滅性的打擊": "明顯壓力",
+        "毀滅性打擊": "明顯壓力",
+        "兩杯毒藥": "兩難選擇",
+        "終極考驗": "關鍵驗證",
+        "狂飆": "快速上行",
+        "完全正確": "可以這樣理解",
+        "屏息等待": "等待",
+    }
+    for old, new in replacements.items():
+        text = text.replace(old, new)
+    return text
+
+
+def clean_result_texts(obj: Any) -> Any:
+    if isinstance(obj, dict):
+        return {key: clean_result_texts(value) for key, value in obj.items()}
+    if isinstance(obj, list):
+        return [clean_result_texts(value) for value in obj]
+    if isinstance(obj, str):
+        return clean_text_value(obj)
+    return obj
 
 
 
@@ -712,6 +819,7 @@ def main() -> None:
 
     print("[INFO] Generating story-only dialogue...")
     result = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
+    result = clean_result_texts(result)
 
     result.setdefault("meta", {})
     if isinstance(analysis_window, dict):
