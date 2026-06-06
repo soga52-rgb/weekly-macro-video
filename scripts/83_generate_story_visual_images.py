@@ -91,10 +91,7 @@ Series visual language:
 - prefer high-contrast accent colors such as orange, deep blue, gold, deep green, brick red.
 - avoid pale pinks, washed-out grays, low-saturation pastels, and colors too close to the background.
 - lots of whitespace, clean composition, modern and memorable.
-- simple icons, arrows, light charts, symbolic objects.
-- keep the center-lower area clean for the speaker avatar overlay.
-- keep the lower-right area clean for the subtitle box overlay.
-- place the most important content mostly on the left side, upper half, and center-upper area.
+- simple icons, arrows, light charts, and clean symbolic objects only when they directly support the story.
 - Traditional Chinese only for very short labels if text is needed.
 - maintain continuity across all scenes so the full video feels like one story.
 - avoid PPT look, avoid stock-photo look, avoid photorealistic faces, avoid clutter.
@@ -282,13 +279,10 @@ Design instructions:
 - The image should help the audience immediately feel what this section is about.
 - Let the narration explain the full reasoning; the image should not become a dense infographic.
 - If useful, include a very light simple chart, a direction arrow, or a turning-point line to reflect price action.
-- If useful, use symbolic objects such as an oil barrel, bond yield line, magnet, house, umbrella, gold bar, scale, spring, bridge, shield, arrows, or currency icons.
+- Use simple macro-finance symbols only when they directly support the current section, such as oil, bond yields, gold, currency quotes, arrows, or a clean price line.
 - Keep on-screen text minimal: at most one short Traditional Chinese title and up to 2-4 tiny labels or numbers.
 - Do not render paragraphs, tables, or long subtitles.
-- Keep the center-lower area visually clean for a future speaker avatar overlay.
-- Keep the lower-right area visually clean for a future subtitle box overlay.
-- Do not place the main causal arrow, key chart turning point, important icon cluster, or critical numbers inside those reserved areas.
-- Concentrate the key story elements in the left area, upper area, and center-upper area.
+- Use the whole frame naturally as a clean whiteboard composition; do not create blank placeholder boxes or marked layout zones.
 - Use only a few high-contrast accent colors so the image remains clear after video compositing.
 - Prefer accent colors such as orange, deep blue, gold, deep green, or brick red.
 - Avoid pale, washed-out, low-contrast colors that may become hard to see after compositing.
