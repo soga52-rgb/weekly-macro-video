@@ -4,19 +4,11 @@
     "source": "weekly_dialogue_story_only_v8.json",
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04",
     "image_model": "gemini-3.1-flash-image-preview",
-    "generated_at": "2026-06-07T13:18:59",
-    "target_scene": "s1",
-    "preview_only_first": true,
+    "generated_at": "2026-06-07T13:24:04",
+    "target_scene": "2,3,4",
+    "preview_only_first": false,
     "style": "whiteboard sketch explainer / minimalist marker doodle / consistent video series"
   },
-  "images": [
-    {
-      "section_id": "s1",
-      "visual_id": "scene_01",
-      "section_title": "通膨黏性與成長擔憂的訊號分歧開場",
-      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_01.jpg",
-      "status": "created_or_existing"
-    }
-  ],
+  "images": [],
   "failed_images": []
 }
