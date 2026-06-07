@@ -4,11 +4,19 @@
     "source": "weekly_dialogue_story_only_v8.json",
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04",
     "image_model": "gemini-3.1-flash-image-preview",
-    "generated_at": "2026-06-07T13:24:04",
-    "target_scene": "2,3,4",
+    "generated_at": "2026-06-07T13:25:51",
+    "target_scene": "s2",
     "preview_only_first": false,
     "style": "whiteboard sketch explainer / minimalist marker doodle / consistent video series"
   },
-  "images": [],
+  "images": [
+    {
+      "section_id": "s2",
+      "visual_id": "scene_02",
+      "section_title": "能源衝擊與AI通膨敘事的理性回歸",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_02.jpg",
+      "status": "created_or_existing"
+    }
+  ],
   "failed_images": []
 }
