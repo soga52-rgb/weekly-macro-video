@@ -4,17 +4,17 @@
     "source": "weekly_dialogue_story_only_v8.json",
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04",
     "image_model": "gemini-3.1-flash-image-preview",
-    "generated_at": "2026-06-07T13:27:59",
-    "target_scene": "s3",
+    "generated_at": "2026-06-07T13:29:35",
+    "target_scene": "s4",
     "preview_only_first": false,
     "style": "whiteboard sketch explainer / minimalist marker doodle / consistent video series"
   },
   "images": [
     {
-      "section_id": "s3",
-      "visual_id": "scene_03",
-      "section_title": "避險共振與黃金的去美元化韌性",
-      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_03.jpg",
+      "section_id": "s4",
+      "visual_id": "scene_04",
+      "section_title": "亞洲貨幣的利差劣勢與熱錢的雙向洗劫",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_04.jpg",
       "status": "created_or_existing"
     }
   ],
