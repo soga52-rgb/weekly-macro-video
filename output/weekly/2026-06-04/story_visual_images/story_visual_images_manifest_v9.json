@@ -4,17 +4,17 @@
     "source": "weekly_dialogue_story_only_v8.json",
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04",
     "image_model": "gemini-3.1-flash-image-preview",
-    "generated_at": "2026-06-07T13:29:35",
-    "target_scene": "s4",
+    "generated_at": "2026-06-07T13:32:43",
+    "target_scene": "s5",
     "preview_only_first": false,
     "style": "whiteboard sketch explainer / minimalist marker doodle / consistent video series"
   },
   "images": [
     {
-      "section_id": "s4",
-      "visual_id": "scene_04",
-      "section_title": "亞洲貨幣的利差劣勢與熱錢的雙向洗劫",
-      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_04.jpg",
+      "section_id": "s5",
+      "visual_id": "scene_05",
+      "section_title": "就業市場邊際降溫與軟著陸的定價轉折",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_visual_images/scene_05.jpg",
       "status": "created_or_existing"
     }
   ],
