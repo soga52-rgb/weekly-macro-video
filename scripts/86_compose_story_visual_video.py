@@ -10,9 +10,9 @@ This version:
 - Uses assets/tom.png and assets/miranda.png as speaker avatars.
 - Scales and pads Step 83 scene images upward on a white 16:9 canvas for a clean lower caption area.
 - Shows the active speaker avatar in the lower-left area, with a constant subtle glowing halo.
-- Shows transcript subtitles in a translucent dark glass-style lower dialogue panel.
-- Centers subtitle text within the dialogue panel.
-- Uses a larger bold black-style CJK font when available.
+- Shows transcript subtitles in a lighter translucent dark glass-style lower dialogue panel.
+- Uses one-line centered subtitles with a softer regular CJK font.
+- Adds a subtle live audio waveform inside the subtitle panel.
 - Splits subtitles automatically from spoken_text by punctuation and length.
 - Times subtitle pages by text length against the actual mp3 segment duration.
 - Removes waveform.
@@ -49,31 +49,37 @@ SCENE_TARGET_W = int(VIDEO_W * SCENE_SCALE_FACTOR)
 SCENE_TARGET_H = int(VIDEO_H * SCENE_SCALE_FACTOR)
 
 # Lower-left speaker avatar.
-AVATAR_SIZE = 92
-RING_SIZE = 116
-AVATAR_X = 52
-AVATAR_Y = VIDEO_H - AVATAR_SIZE - 28
+AVATAR_SIZE = 108
+RING_SIZE = 136
+AVATAR_X = 50
+AVATAR_Y = VIDEO_H - AVATAR_SIZE - 26
 RING_X = AVATAR_X - (RING_SIZE - AVATAR_SIZE) // 2
 RING_Y = AVATAR_Y - (RING_SIZE - AVATAR_SIZE) // 2
 
 # Subtitle panel sits beside the avatar.
-# Keep it medium-width so it feels like a dialogue box, not a full-width banner.
-SUBTITLE_FONT_SIZE = 32
-SUBTITLE_CHARS_PER_LINE = 24
-SUBTITLE_LINES_PER_PAGE = 2
+# Keep it medium-width and one-line so it does not cover too much of the scene image.
+SUBTITLE_FONT_SIZE = 30
+SUBTITLE_CHARS_PER_LINE = 31
+SUBTITLE_LINES_PER_PAGE = 1
 SUBTITLE_MAX_CHARS_PER_PAGE = SUBTITLE_CHARS_PER_LINE * SUBTITLE_LINES_PER_PAGE
-SUBTITLE_BOX_X = 178
-SUBTITLE_BOX_W = 860
-SUBTITLE_BOX_H = 128
+SUBTITLE_BOX_X = 188
+SUBTITLE_BOX_W = 850
+SUBTITLE_BOX_H = 96
 SUBTITLE_BOX_Y = VIDEO_H - SUBTITLE_BOX_H - 26
 
-# Center subtitle text inside the dialogue box.
+# Center subtitle text inside the dialogue box, slightly above the waveform.
 SUBTITLE_TEXT_X_EXPR = f"{SUBTITLE_BOX_X}+({SUBTITLE_BOX_W}-text_w)/2"
-SUBTITLE_TEXT_Y_EXPR = f"{SUBTITLE_BOX_Y}+({SUBTITLE_BOX_H}-text_h)/2-2"
+SUBTITLE_TEXT_Y_EXPR = f"{SUBTITLE_BOX_Y}+({SUBTITLE_BOX_H}-text_h)/2-12"
+
+# Subtle waveform inside the lower part of the subtitle panel.
+WAVE_W = 620
+WAVE_H = 22
+WAVE_X = SUBTITLE_BOX_X + (SUBTITLE_BOX_W - WAVE_W) // 2
+WAVE_Y = SUBTITLE_BOX_Y + SUBTITLE_BOX_H - 30
 
 # Timing guardrails for automatically paged subtitles.
 # These are soft guardrails. If the audio is very short, the actual display time is still bounded by duration.
-SUBTITLE_MIN_PAGE_SEC = 1.15
+SUBTITLE_MIN_PAGE_SEC = 0.85
 
 FADE_SEC = 0.24
 
@@ -215,6 +221,10 @@ def speaker_rgba(speaker: str) -> tuple[int, int, int, int]:
     return (196, 120, 255, 255) if normalize_speaker(speaker) == "Miranda" else (255, 210, 64, 255)
 
 
+def speaker_wave_hex(speaker: str) -> str:
+    return "c478ff" if normalize_speaker(speaker) == "Miranda" else "ffd240"
+
+
 def visible_len(text: str) -> int:
     return len(re.sub(r"\s+", "", text or ""))
 
@@ -311,20 +321,16 @@ def subtitle_windows(chunks: list[str], duration: float) -> list[tuple[float, fl
 
 def font_path() -> str | None:
     candidates = [
-        "assets/fonts/NotoSansTC-Bold.otf",
-        "assets/fonts/NotoSansCJK-Bold.ttc",
-        "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
-        "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.otf",
-        "/usr/share/fonts/truetype/noto/NotoSansCJK-Bold.ttc",
-        "/usr/share/fonts/truetype/noto/NotoSansTC-Bold.otf",
-        # Fallbacks
         "assets/fonts/NotoSansTC-Regular.otf",
         "assets/fonts/NotoSansCJK-Regular.ttc",
+        "assets/fonts/NotoSansTC-Medium.otf",
+        "assets/fonts/NotoSansCJK-Medium.ttc",
         "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
         "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.otf",
         "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
         "/usr/share/fonts/truetype/noto/NotoSansTC-Regular.otf",
-        "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
+        "/usr/share/fonts/opentype/noto/NotoSansCJK-Medium.ttc",
+        "/usr/share/fonts/opentype/noto/NotoSansCJK-Medium.otf",
         "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
     ]
     for p in candidates:
@@ -394,58 +400,45 @@ def make_ring(out: Path, speaker: str) -> None:
 
 def make_subtitle_panel(out: Path) -> None:
     """
-    Create a translucent dark glass-style subtitle panel.
+    Create a lighter translucent dark glass-style subtitle panel.
 
-    It adds visual depth on whiteboard scenes without becoming a heavy black bar.
-    The slight blur, soft shadow, and faint highlight make the panel feel like
-    a dialogue card rather than a full-width news subtitle banner.
+    The panel separates subtitles from the whiteboard scene, but stays lower and
+    softer than a heavy black bar.
     """
-    shadow = Image.new("RGBA", (SUBTITLE_BOX_W + 22, SUBTITLE_BOX_H + 22), (255, 255, 255, 0))
+    shadow = Image.new("RGBA", (SUBTITLE_BOX_W + 18, SUBTITLE_BOX_H + 18), (255, 255, 255, 0))
     sd = ImageDraw.Draw(shadow)
     sd.rounded_rectangle(
-        (11, 11, SUBTITLE_BOX_W + 10, SUBTITLE_BOX_H + 10),
-        radius=28,
-        fill=(0, 0, 0, 92),
+        (9, 9, SUBTITLE_BOX_W + 8, SUBTITLE_BOX_H + 8),
+        radius=24,
+        fill=(0, 0, 0, 66),
     )
-    shadow = shadow.filter(ImageFilter.GaussianBlur(radius=8))
+    shadow = shadow.filter(ImageFilter.GaussianBlur(radius=6))
 
-    panel = Image.new("RGBA", (SUBTITLE_BOX_W + 22, SUBTITLE_BOX_H + 22), (255, 255, 255, 0))
+    panel = Image.new("RGBA", (SUBTITLE_BOX_W + 18, SUBTITLE_BOX_H + 18), (255, 255, 255, 0))
     panel.alpha_composite(shadow, (0, 0))
 
     d = ImageDraw.Draw(panel)
-    rect = (11, 11, SUBTITLE_BOX_W + 10, SUBTITLE_BOX_H + 10)
+    rect = (9, 9, SUBTITLE_BOX_W + 8, SUBTITLE_BOX_H + 8)
 
-    # Main glass body: dark, translucent, and slightly cool.
     d.rounded_rectangle(
         rect,
-        radius=28,
-        fill=(18, 22, 28, 172),
-        outline=(255, 255, 255, 132),
+        radius=24,
+        fill=(15, 23, 42, 138),
+        outline=(255, 255, 255, 96),
         width=2,
     )
 
-    # Soft top highlight for glass feeling.
     highlight = Image.new("RGBA", (SUBTITLE_BOX_W, SUBTITLE_BOX_H), (255, 255, 255, 0))
     hd = ImageDraw.Draw(highlight)
     hd.rounded_rectangle(
-        (0, 0, SUBTITLE_BOX_W - 1, int(SUBTITLE_BOX_H * 0.48)),
-        radius=26,
-        fill=(255, 255, 255, 28),
+        (0, 0, SUBTITLE_BOX_W - 1, int(SUBTITLE_BOX_H * 0.45)),
+        radius=22,
+        fill=(255, 255, 255, 18),
     )
-    panel.alpha_composite(highlight, (11, 11))
+    panel.alpha_composite(highlight, (9, 9))
 
-    # Very subtle inner darkening near the bottom to improve subtitle contrast.
-    shade = Image.new("RGBA", (SUBTITLE_BOX_W, SUBTITLE_BOX_H), (255, 255, 255, 0))
-    sd2 = ImageDraw.Draw(shade)
-    sd2.rounded_rectangle(
-        (0, int(SUBTITLE_BOX_H * 0.38), SUBTITLE_BOX_W - 1, SUBTITLE_BOX_H - 1),
-        radius=26,
-        fill=(0, 0, 0, 38),
-    )
-    panel.alpha_composite(shade, (11, 11))
-
-    panel = panel.filter(ImageFilter.GaussianBlur(radius=0.18))
-    panel.crop((11, 11, SUBTITLE_BOX_W + 11, SUBTITLE_BOX_H + 11)).save(out)
+    panel = panel.filter(ImageFilter.GaussianBlur(radius=0.12))
+    panel.crop((9, 9, SUBTITLE_BOX_W + 9, SUBTITLE_BOX_H + 9)).save(out)
 
 
 def prepare_avatars(tmp_dir: Path, fp: str | None) -> dict[str, dict[str, Path]]:
@@ -533,9 +526,9 @@ def drawtext_filter(input_label: str, output_label: str, textfile: Path, fp: str
     parts += [
         "expansion=none:",
         f"textfile='{textfile.as_posix()}':fontsize={fontsize}:fontcolor=white:",
-        f"x={x}:y={y}:line_spacing=6:",
+        f"x={x}:y={y}:line_spacing=4:",
         "box=0:boxborderw=0:boxcolor=black@0.0:",
-        "borderw=4:bordercolor=black@0.72:shadowx=2:shadowy=2",
+        "borderw=1:bordercolor=black@0.42:shadowx=1:shadowy=1",
     ]
     if enable:
         parts.append(f":enable='{enable}'")
@@ -555,7 +548,10 @@ def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in
         write_text(p, chunk)
         chunk_files.append(p)
 
+    wave_color = speaker_wave_hex(speaker)
     filters = [
+        "[1:a]asplit=2[aout][wavein]",
+        f"[wavein]showwaves=s={WAVE_W}x{WAVE_H}:mode=cline:colors=0x{wave_color}:rate={FPS},format=rgba,colorkey=0x000000:0.18:0.04[wave]",
         f"[0:v]scale={SCENE_TARGET_W}:{SCENE_TARGET_H}:force_original_aspect_ratio=decrease,pad={VIDEO_W}:{VIDEO_H}:(ow-iw)/2:{SCENE_PAD_TOP}:white,format=rgba[bg]",
         f"[2:v]scale={AVATAR_SIZE}:{AVATAR_SIZE}[av]",
         f"[3:v]scale={RING_SIZE}:{RING_SIZE}[ring]",
@@ -573,6 +569,9 @@ def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in
                                        x=SUBTITLE_TEXT_X_EXPR, y=SUBTITLE_TEXT_Y_EXPR,
                                        enable=f"between(t,{start:.3f},{end:.3f})"))
         current = out_label
+
+    filters.append(f"[{current}][wave]overlay={WAVE_X}:{WAVE_Y}[vwave]")
+    current = "vwave"
 
     fades = []
     if fade_in:
@@ -594,7 +593,7 @@ def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in
         "-i", str(subtitle_panel),
         "-filter_complex", ";".join(filters),
         "-map", f"[{vout}]",
-        "-map", "1:a:0",
+        "-map", "[aout]",
         "-r", str(FPS),
         "-c:v", "libx264", "-preset", "veryfast", "-crf", "27",
         "-pix_fmt", "yuv420p",
