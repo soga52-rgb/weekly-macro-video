@@ -10,7 +10,9 @@ This version:
 - Uses assets/tom.png and assets/miranda.png as speaker avatars.
 - Scales and pads Step 83 scene images upward on a white 16:9 canvas for a clean lower caption area.
 - Shows the active speaker avatar in the lower-left area, with a constant subtle glowing halo.
-- Shows transcript subtitles beside the avatar in a wider lower panel.
+- Shows transcript subtitles beside the avatar in a medium-width lower dialogue panel.
+- Splits subtitles automatically from spoken_text by punctuation and length.
+- Times subtitle pages by text length against the actual mp3 segment duration.
 - Removes waveform.
 - Removes the speaker-name gray label.
 - Uses drawtext expansion=none to avoid '%' subtitle errors.
@@ -21,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import shutil
 import subprocess
 import tempfile
@@ -51,18 +54,27 @@ AVATAR_Y = VIDEO_H - AVATAR_SIZE - 28
 RING_X = AVATAR_X - (RING_SIZE - AVATAR_SIZE) // 2
 RING_Y = AVATAR_Y - (RING_SIZE - AVATAR_SIZE) // 2
 
-# Subtitle panel sits beside the avatar, with right-side safety margin.
+# Subtitle panel sits beside the avatar.
+# Keep it medium-width so it feels like a dialogue box, not a full-width banner.
 SUBTITLE_FONT_SIZE = 27
-SUBTITLE_CHARS_PER_LINE = 34
+SUBTITLE_CHARS_PER_LINE = 26
 SUBTITLE_LINES_PER_PAGE = 2
+SUBTITLE_MAX_CHARS_PER_PAGE = SUBTITLE_CHARS_PER_LINE * SUBTITLE_LINES_PER_PAGE
 SUBTITLE_BOX_X = 178
-SUBTITLE_BOX_W = VIDEO_W - SUBTITLE_BOX_X - 86
+SUBTITLE_BOX_W = 860
 SUBTITLE_BOX_H = 112
 SUBTITLE_BOX_Y = VIDEO_H - SUBTITLE_BOX_H - 34
 SUBTITLE_TEXT_X = SUBTITLE_BOX_X + 24
 SUBTITLE_TEXT_Y = SUBTITLE_BOX_Y + 22
 
+# Timing guardrails for automatically paged subtitles.
+# These are soft guardrails. If the audio is very short, the actual display time is still bounded by duration.
+SUBTITLE_MIN_PAGE_SEC = 1.15
+
 FADE_SEC = 0.24
+
+
+PUNCTUATION_PATTERN = re.compile(r"([^，。；！？!?;：:、]+[，。；！？!?;：:、]?)")
 
 
 def run(cmd: list[str]) -> None:
@@ -194,19 +206,98 @@ def speaker_rgba(speaker: str) -> tuple[int, int, int, int]:
     return (196, 120, 255, 255) if normalize_speaker(speaker) == "Miranda" else (56, 189, 248, 255)
 
 
-def split_subtitles(text: str) -> list[str]:
+def visible_len(text: str) -> int:
+    return len(re.sub(r"\s+", "", text or ""))
+
+
+def break_long_piece(piece: str, max_chars: int) -> list[str]:
+    piece = piece.strip()
+    if not piece:
+        return []
+    return [piece[i:i + max_chars] for i in range(0, len(piece), max_chars)]
+
+
+def wrap_subtitle_page(text: str) -> str:
     text = (text or "").strip()
+    lines = []
+    for start in range(0, len(text), SUBTITLE_CHARS_PER_LINE):
+        lines.append(text[start:start + SUBTITLE_CHARS_PER_LINE])
+    return "\n".join(lines[:SUBTITLE_LINES_PER_PAGE])
+
+
+def split_subtitles(text: str) -> list[str]:
+    """
+    Split a spoken_text turn into readable subtitle pages.
+
+    Rules:
+    - Prefer punctuation boundaries, so subtitles change near natural pauses.
+    - Keep each page to a medium-width dialogue box: about 2 lines.
+    - Fall back to fixed-length chunks only when a sentence is too long.
+    """
+    text = re.sub(r"\s+", "", (text or "").strip())
     if not text:
         return [""]
 
-    line_len = SUBTITLE_CHARS_PER_LINE
-    page_len = SUBTITLE_CHARS_PER_LINE * SUBTITLE_LINES_PER_PAGE
-    pages = []
-    for start in range(0, len(text), page_len):
-        page = text[start:start + page_len]
-        lines = [page[i:i + line_len] for i in range(0, len(page), line_len)]
-        pages.append("\n".join(lines[:SUBTITLE_LINES_PER_PAGE]))
+    pieces = [m.group(0).strip() for m in PUNCTUATION_PATTERN.finditer(text) if m.group(0).strip()]
+    if not pieces:
+        pieces = break_long_piece(text, SUBTITLE_MAX_CHARS_PER_PAGE)
+
+    pages: list[str] = []
+    current = ""
+
+    for raw_piece in pieces:
+        sub_pieces = break_long_piece(raw_piece, SUBTITLE_MAX_CHARS_PER_PAGE)
+        for piece in sub_pieces:
+            if not current:
+                current = piece
+                continue
+
+            if visible_len(current + piece) <= SUBTITLE_MAX_CHARS_PER_PAGE:
+                current += piece
+            else:
+                pages.append(wrap_subtitle_page(current))
+                current = piece
+
+    if current:
+        pages.append(wrap_subtitle_page(current))
+
     return pages or [""]
+
+
+def subtitle_windows(chunks: list[str], duration: float) -> list[tuple[float, float]]:
+    """
+    Compute display windows for subtitle pages.
+
+    The previous implementation assigned equal time to each page. This version
+    assigns time by text length, which tracks TTS speed more naturally while still
+    using only the actual mp3 duration from Step 85.
+    """
+    n = max(len(chunks), 1)
+    if n == 1:
+        return [(0.0, duration)]
+
+    # If the segment is very short, equal timing is safer than overfitting.
+    if duration <= SUBTITLE_MIN_PAGE_SEC * n:
+        each = duration / n
+        return [
+            (i * each, duration if i == n - 1 else (i + 1) * each)
+            for i in range(n)
+        ]
+
+    weights = [max(visible_len(c), 6) for c in chunks]
+    base = SUBTITLE_MIN_PAGE_SEC
+    remaining = max(0.0, duration - base * n)
+    total_weight = float(sum(weights)) or 1.0
+    lengths = [base + remaining * (w / total_weight) for w in weights]
+
+    windows = []
+    t = 0.0
+    for i, length in enumerate(lengths):
+        start = t
+        end = duration if i == n - 1 else min(duration, t + length)
+        windows.append((start, end))
+        t = end
+    return windows
 
 
 def font_path() -> str | None:
@@ -390,6 +481,7 @@ def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in
     duration = max(0.35, float(turn["duration_sec"]))
     speaker = normalize_speaker(turn["speaker"])
     chunks = split_subtitles(turn["spoken_text"])
+    windows = subtitle_windows(chunks, duration)
 
     chunk_files = []
     for i, chunk in enumerate(chunks):
@@ -408,10 +500,8 @@ def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in
     ]
     current = "vavatar"
 
-    each = duration / max(len(chunk_files), 1)
     for i, cf in enumerate(chunk_files):
-        start = i * each
-        end = duration if i == len(chunk_files) - 1 else (i + 1) * each
+        start, end = windows[i]
         out_label = f"vsub{i:02d}"
         filters.append(drawtext_filter(current, out_label, cf, fp, SUBTITLE_FONT_SIZE,
                                        x=str(SUBTITLE_TEXT_X), y=str(SUBTITLE_TEXT_Y),
