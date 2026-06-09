@@ -21,37 +21,37 @@ VIDEO_H = 720
 FPS = 30
 
 SCENE_W = 1110
-SCENE_H = 610
+SCENE_H = 560
 SCENE_X = (VIDEO_W - SCENE_W) // 2
-SCENE_Y = 8
+SCENE_Y = 10
 
-BAND_Y = 612
+BAND_Y = 586
 BAND_H = VIDEO_H - BAND_Y
 
 AVATAR_SIZE = 104
 AVATAR_X = 56
-AVATAR_Y = 606
+AVATAR_Y = 586
 
 PANEL_X = 188
-PANEL_Y = 618
-PANEL_W = 720
-PANEL_H = 82
+PANEL_Y = 604
+PANEL_W = 690
+PANEL_H = 70
 PANEL_RADIUS = 22
 
 LABEL_W = 92
 LABEL_H = 30
 LABEL_X = AVATAR_X + (AVATAR_SIZE - LABEL_W) // 2
-LABEL_Y = AVATAR_Y + AVATAR_SIZE - 18
+LABEL_Y = AVATAR_Y + AVATAR_SIZE - 16
 
-SUBTITLE_FONT_SIZE = 30
-SUBTITLE_CHARS_PER_LINE = 26
-SUBTITLE_MAX_CHARS_PER_PAGE = 26
+SUBTITLE_FONT_SIZE = 28
+SUBTITLE_CHARS_PER_LINE = 20
+SUBTITLE_MAX_CHARS_PER_PAGE = 20
 SUBTITLE_MIN_PAGE_SEC = 0.75
 
-WAVE_W = 440
-WAVE_H = 14
+WAVE_W = 390
+WAVE_H = 10
 WAVE_X = PANEL_X + (PANEL_W - WAVE_W) // 2
-WAVE_Y = PANEL_Y + PANEL_H - 20
+WAVE_Y = PANEL_Y + PANEL_H - 15
 
 PUNCTUATION_PATTERN = re.compile(r"([^，。；！？!?;：:、]+[，。；！？!?;：:、]?)")
 
@@ -197,6 +197,35 @@ def visible_len(text: str) -> int:
     return len(re.sub(r"\s+", "", text or ""))
 
 
+def pixel_width(text: str, font: ImageFont.ImageFont) -> int:
+    if not text:
+        return 0
+    bbox = ImageDraw.Draw(Image.new("RGB", (1, 1))).textbbox((0, 0), text, font=font)
+    return bbox[2] - bbox[0]
+
+
+def subtitle_text_max_width() -> int:
+    return PANEL_W - 56
+
+
+def break_long_piece_by_width(piece: str, font: ImageFont.ImageFont, max_width: int) -> list[str]:
+    piece = piece.strip()
+    if not piece:
+        return []
+    chunks = []
+    current = ""
+    for ch in piece:
+        test = current + ch
+        if current and pixel_width(test, font) > max_width:
+            chunks.append(current)
+            current = ch
+        else:
+            current = test
+    if current:
+        chunks.append(current)
+    return chunks
+
+
 def break_long_piece(piece: str, max_chars: int) -> list[str]:
     piece = piece.strip()
     if not piece:
@@ -205,28 +234,37 @@ def break_long_piece(piece: str, max_chars: int) -> list[str]:
 
 
 def split_subtitles(text: str) -> list[str]:
+    """
+    Split subtitle pages by actual rendered pixel width, not just character count.
+    This prevents Chinese subtitles from spilling outside the dialogue panel.
+    """
     text = re.sub(r"\s+", "", (text or "").strip())
     if not text:
         return [""]
+
+    font = load_font(SUBTITLE_FONT_SIZE)
+    max_width = subtitle_text_max_width()
+
     pieces = [m.group(0).strip() for m in PUNCTUATION_PATTERN.finditer(text) if m.group(0).strip()]
     if not pieces:
-        pieces = break_long_piece(text, SUBTITLE_MAX_CHARS_PER_PAGE)
+        pieces = [text]
 
     pages = []
     current = ""
+
     for raw_piece in pieces:
-        for piece in break_long_piece(raw_piece, SUBTITLE_MAX_CHARS_PER_PAGE):
-            if not current:
-                current = piece
-            elif visible_len(current + piece) <= SUBTITLE_MAX_CHARS_PER_PAGE:
-                current += piece
-            else:
+        for piece in break_long_piece_by_width(raw_piece, font, max_width):
+            test = current + piece
+            if current and pixel_width(test, font) > max_width:
                 pages.append(current)
                 current = piece
+            else:
+                current = test
+
     if current:
         pages.append(current)
-    return pages or [""]
 
+    return pages or [""]
 
 def subtitle_windows(chunks: list[str], duration: float) -> list[tuple[float, float]]:
     n = max(len(chunks), 1)
@@ -340,16 +378,22 @@ def draw_centered_text(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int]
 
 
 def create_subtitle_panel(size: tuple[int, int]) -> Image.Image:
+    """
+    Create a minimal inner subtitle card. The main subtitle background is the
+    lower gradient band; this card only gives the text a soft anchor.
+    """
     w, h = size
     panel = Image.new("RGBA", (w, h), (255, 255, 255, 0))
     d = ImageDraw.Draw(panel)
-    d.rounded_rectangle((4, 5, w - 4, h - 2), radius=PANEL_RADIUS, fill=(0, 0, 0, 55))
-    d.rounded_rectangle((0, 0, w - 8, h - 8), radius=PANEL_RADIUS,
-                        fill=(12, 22, 38, 158), outline=(255, 255, 255, 72), width=1)
-    d.rounded_rectangle((1, 1, w - 9, int(h * 0.45)), radius=PANEL_RADIUS - 2,
-                        fill=(255, 255, 255, 14))
-    return panel
 
+    d.rounded_rectangle(
+        (0, 0, w - 1, h - 1),
+        radius=PANEL_RADIUS,
+        fill=(10, 18, 32, 110),
+        outline=(255, 255, 255, 45),
+        width=1,
+    )
+    return panel
 
 def build_buckets(sections: list[dict], images: list[Path]) -> list[list[dict]]:
     records = []
@@ -426,8 +470,9 @@ def compose_frame(turn: dict, subtitle_text: str, avatar_cache: dict[str, Image.
     band = Image.new("RGBA", (VIDEO_W, BAND_H), (255, 255, 255, 0))
     bd = ImageDraw.Draw(band)
     for s in range(BAND_H):
-        alpha = int(8 + 34 * (s / max(BAND_H - 1, 1)))
-        bd.line((0, s, VIDEO_W, s), fill=(10, 18, 34, alpha))
+        alpha = int(26 + 154 * (s / max(BAND_H - 1, 1)))
+        bd.line((0, s, VIDEO_W, s), fill=(8, 15, 28, alpha))
+    bd.rectangle((0, 0, VIDEO_W, 2), fill=(56, 189, 248, 150))
     frame.alpha_composite(band, (0, BAND_Y))
 
     speaker = normalize_speaker(turn["speaker"])
@@ -445,7 +490,7 @@ def compose_frame(turn: dict, subtitle_text: str, avatar_cache: dict[str, Image.
     frame.alpha_composite(panel, (PANEL_X, PANEL_Y))
 
     sub_font = load_font(SUBTITLE_FONT_SIZE)
-    text_box = (PANEL_X + 22, PANEL_Y + 5, PANEL_X + PANEL_W - 22, PANEL_Y + 50)
+    text_box = (PANEL_X + 28, PANEL_Y + 6, PANEL_X + PANEL_W - 28, PANEL_Y + 44)
     draw_centered_text(d, text_box, subtitle_text, sub_font, (244, 247, 251, 255), shadow=True)
 
     frame.convert("RGB").save(out_path, quality=95)
@@ -507,7 +552,7 @@ def concat_and_optimize(clips: list[Path], concat_file: Path, tmp_video: Path, f
     run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_file), "-c", "copy", str(tmp_video)])
     run([
         "ffmpeg", "-y", "-i", str(tmp_video),
-        "-c:v", "libx264", "-preset", "fast", "-crf", "22",
+        "-c:v", "libx264", "-preset", "fast", "-crf", "21",
         "-c:a", "aac", "-b:a", "128k",
         "-pix_fmt", "yuv420p", "-movflags", "+faststart",
         str(final),
