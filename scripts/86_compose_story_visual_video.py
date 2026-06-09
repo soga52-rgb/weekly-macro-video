@@ -49,9 +49,9 @@ SUBTITLE_MAX_CHARS_PER_PAGE = 24
 SUBTITLE_MIN_PAGE_SEC = 0.75
 
 WAVE_W = 420
-WAVE_H = 10
+WAVE_H = 18
 WAVE_X = PANEL_X + (PANEL_W - WAVE_W) // 2
-WAVE_Y = PANEL_Y + 26
+WAVE_Y = PANEL_Y + 18
 
 PUNCTUATION_PATTERN = re.compile(r"([^，。；！？!?;：:、]+[，。；！？!?;：:、]?)")
 
