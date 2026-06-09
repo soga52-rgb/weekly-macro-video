@@ -9,11 +9,12 @@
     "spoken_text": "歡迎來到本週總經報導。Miranda，在進入今天的主線分析之前，我想先從市場價格本身看起。這週有哪些重要財經數據的走勢，最值得我們注意？",
     "subtitle_text": "歡迎來到本週總經報導，本週有哪些關鍵價格值得注意？",
     "estimated_seconds": 15,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_000_Tom.mp3",
     "start_seconds": 0.0,
-    "end_seconds": 12.912,
-    "duration_seconds": 12.912
+    "end_seconds": 13.968,
+    "duration_seconds": 13.968
   },
   {
     "turn_id": "turn_001",
@@ -22,14 +23,15 @@
     "section_title": "通膨黏性與成長擔憂的訊號分歧開場",
     "turn_index_in_section": 2,
     "speaker": "Miranda",
-    "spoken_text": "Tom，本週的市場走勢非常耐人尋味，核心可以用『訊號分歧』來形容。如果我們看這週的起點，5月29日美國10年期公債殖利率是4.453%，西德州原油在87.36美元，美元指數則在98.91。但到了週中，我們看到油價一路往上衝，西德州原油甚至一度突破了95.66美元。這直接帶動了再通膨預期，把美債殖利率在6月3日推升到了4.49%的週內高點，美元指數也同步衝上99.55。這反映出市場在週中非常焦慮，擔心通膨黏性會讓高利率維持得更久。",
+    "spoken_text": "Tom，本週的市場走勢非常耐人尋味，核心可以用『訊號分歧』來形容。如果我們看這週的起點，5月29日美國10年期公債殖利率是，4.453%，西德州原油在，87.36，美元，美元指數則在，98.91。但到了週中，我們看到油價一路往上衝，西德州原油甚至一度突破了，95.66，美元。這直接帶動了再通膨預期，把美債殖利率在6月3日推升到了，4.49%，的週內高點，美元指數也同步衝上，99.55。這反映出市場在週中非常焦慮，擔心通膨黏性會讓高利率維持得更久。",
     "subtitle_text": "本週核心是訊號分歧，週中油價與美債殖利率同步衝高。",
     "estimated_seconds": 45,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_001_Miranda.mp3",
-    "start_seconds": 12.912,
-    "end_seconds": 60.12,
-    "duration_seconds": 47.208
+    "start_seconds": 13.968,
+    "end_seconds": 64.296,
+    "duration_seconds": 50.328
   },
   {
     "turn_id": "turn_002",
@@ -38,14 +40,15 @@
     "section_title": "通膨黏性與成長擔憂的訊號分歧開場",
     "turn_index_in_section": 3,
     "speaker": "Tom",
-    "spoken_text": "等一下，這聽起來有點反直覺。如果油價在週中衝得那麼高，通膨預期這麼強，為什麼我們沒有看到美債殖利率失控飆升，反而是在4.49%附近就止步了？",
+    "spoken_text": "等一下，這聽起來有點反直覺。如果油價在週中衝得那麼高，通膨預期這麼強，為什麼我們沒有看到美債殖利率失控飆升，反而是在，4.49%，附近就止步了？",
     "subtitle_text": "既然通膨預期強，為何美債殖利率沒有失控飆升？",
     "estimated_seconds": 18,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_002_Tom.mp3",
-    "start_seconds": 60.12,
-    "end_seconds": 74.472,
-    "duration_seconds": 14.352
+    "start_seconds": 64.296,
+    "end_seconds": 78.336,
+    "duration_seconds": 14.04
   },
   {
     "turn_id": "turn_003",
@@ -58,9 +61,10 @@
     "subtitle_text": "就業降溫的修正因子，抵銷了部分通膨推升利率的力道。",
     "estimated_seconds": 40,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_003_Miranda.mp3",
-    "start_seconds": 74.472,
-    "end_seconds": 112.32,
+    "start_seconds": 78.336,
+    "end_seconds": 116.184,
     "duration_seconds": 37.848
   },
   {
@@ -73,11 +77,12 @@
     "spoken_text": "所以這不只是數據的訊號分歧，而是市場在賭聯準會到底會先被通膨逼入絕境，還是先被經濟衰退絆倒？",
     "subtitle_text": "市場在賭聯準會先被通膨逼入絕境，還是先被衰退絆倒？",
     "estimated_seconds": 15,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_004_Tom.mp3",
-    "start_seconds": 112.32,
-    "end_seconds": 122.52,
-    "duration_seconds": 10.2
+    "start_seconds": 116.184,
+    "end_seconds": 124.608,
+    "duration_seconds": 8.424
   },
   {
     "turn_id": "turn_005",
@@ -90,9 +95,10 @@
     "subtitle_text": "聯準會如履薄冰，這也主導了本週能源與債市的定價。",
     "estimated_seconds": 20,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_005_Miranda.mp3",
-    "start_seconds": 122.52,
-    "end_seconds": 139.32,
+    "start_seconds": 124.608,
+    "end_seconds": 141.408,
     "duration_seconds": 16.8
   },
   {
@@ -102,14 +108,15 @@
     "section_title": "能源衝擊與AI通膨敘事的理性回歸",
     "turn_index_in_section": 1,
     "speaker": "Tom",
-    "spoken_text": "Miranda，我們看到這週西德州原油從87.36美元一路上漲到92.69美元，漲幅不小。地緣政治的風吹草動似乎一直在干擾能源市場。但更讓我好奇的是，市場上開始有人把AI投資跟結構性通膨黏性綁在一起，這真的在影響債市嗎？",
+    "spoken_text": "Miranda，我們看到這週西德州原油從，87.36，美元一路上漲到，92.69，美元，漲幅不小。地緣政治的風吹草動似乎一直在干擾能源市場。但更讓我好奇的是，市場上開始有人把，AI，投資跟結構性通膨黏性綁在一起，這真的在影響債市嗎？",
     "subtitle_text": "油價大漲，而AI投資跟結構性通膨的關聯真的在影響債市？",
     "estimated_seconds": 28,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_006_Tom.mp3",
-    "start_seconds": 139.32,
-    "end_seconds": 161.568,
-    "duration_seconds": 22.248
+    "start_seconds": 141.408,
+    "end_seconds": 163.944,
+    "duration_seconds": 22.536
   },
   {
     "turn_id": "turn_007",
@@ -118,14 +125,15 @@
     "section_title": "能源衝擊與AI通膨敘事的理性回歸",
     "turn_index_in_section": 2,
     "speaker": "Miranda",
-    "spoken_text": "這確實是本週熱議的焦點。德銀甚至上調了美債殖利率預測，認為聯準會已經停止寬鬆了。不過，太平洋投資管理公司，也就是PIMCO，給出了一個非常冷靜的定價邏輯。他們指出，美債殖利率目前的波動，主要還是反映聯準會的貨幣政策路徑，而不是AI驅動的長期供給衝擊。這就是我們常說的『政策預期定價』。白話說，就是投資人現在不看虛無縹緲的長期科技變革，他們只看聯準會下個月到底要不要降息。",
+    "spoken_text": "這確實是本週熱議的焦點。德銀甚至上調了美債殖利率預測，認為聯準會已經停止寬鬆了。不過，太平洋投資管理公司，也就是，PIMCO，給出了一個非常冷靜的定價邏輯。他們指出，美債殖利率目前的波動，主要還是反映聯準會的貨幣政策路徑，而不是，AI，驅動的長期供給衝擊。這就是我們常說的『政策預期定價』。白話說，就是投資人現在不看虛無縹緲的長期科技變革，他們只看聯準會下個月到底要不要降息。",
     "subtitle_text": "PIMCO認為美債殖利率主要反映政策預期，而非AI衝擊。",
     "estimated_seconds": 45,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_007_Miranda.mp3",
-    "start_seconds": 161.568,
-    "end_seconds": 200.808,
-    "duration_seconds": 39.24
+    "start_seconds": 163.944,
+    "end_seconds": 204.432,
+    "duration_seconds": 40.488
   },
   {
     "turn_id": "turn_008",
@@ -134,14 +142,15 @@
     "section_title": "能源衝擊與AI通膨敘事的理性回歸",
     "turn_index_in_section": 3,
     "speaker": "Tom",
-    "spoken_text": "這很有意思。所以AI雖然在股市炒得沸沸揚揚，但在債券市場這個『聰明錢』聚集的地方，大家還是回歸到最傳統的利差和政策博弈？",
+    "spoken_text": "這很有意思。所以，AI，雖然在股市炒得沸沸揚揚，但在債券市場這個『聰明錢』聚集的地方，大家還是回歸到最傳統的利差和政策博弈？",
     "subtitle_text": "所以債市更看重傳統的利差與政策博弈，而非AI概念？",
     "estimated_seconds": 18,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_008_Tom.mp3",
-    "start_seconds": 200.808,
-    "end_seconds": 212.904,
-    "duration_seconds": 12.096
+    "start_seconds": 204.432,
+    "end_seconds": 216.48,
+    "duration_seconds": 12.048
   },
   {
     "turn_id": "turn_009",
@@ -150,14 +159,15 @@
     "section_title": "能源衝擊與AI通膨敘事的理性回歸",
     "turn_index_in_section": 4,
     "speaker": "Miranda",
-    "spoken_text": "是的。因為AI帶來的電力需求或基礎建設投資，雖然可能在未來幾年推高通膨，但那屬於中長期的傳導。當下最直接的痛點，還是油價反彈對企業利潤的擠壓。布蘭特原油本週從92.05美元漲到95.01美元，這對於進口原物料的製造商來說是立刻要付的帳單。如果此時聯準會因為通膨黏性而維持高利率，企業就得同時承受高昂的材料成本與高額的貸款利息，這就是實體經濟的雙重打擊。",
+    "spoken_text": "是的。因為，AI，帶來的電力需求或基礎建設投資，雖然可能在未來幾年推高通膨，但那屬於中長期的傳導。當下最直接的痛點，還是油價反彈對企業利潤的擠壓。布蘭特原油本週從，92.05，美元漲到，95.01，美元，這對於進口原物料的製造商來說是立刻要付的帳單。如果此時聯準會因為通膨黏性而維持高利率，企業就得同時承受高昂的材料成本與高額的貸款利息，這就是實體經濟的雙重打擊。",
     "subtitle_text": "油價上漲是即時的微觀痛點，高利率則帶來雙重打擊。",
     "estimated_seconds": 42,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_009_Miranda.mp3",
-    "start_seconds": 212.904,
-    "end_seconds": 250.848,
-    "duration_seconds": 37.944
+    "start_seconds": 216.48,
+    "end_seconds": 256.536,
+    "duration_seconds": 40.056
   },
   {
     "turn_id": "turn_010",
@@ -166,14 +176,15 @@
     "section_title": "能源衝擊與AI通膨敘事的理性回歸",
     "turn_index_in_section": 5,
     "speaker": "Tom",
-    "spoken_text": "換句話說，AI雖然很熱，但債券交易員更在乎的，還是聯準會口袋裡到底什麼時候才會掏出降息的牌？",
+    "spoken_text": "換句話說，AI，雖然很熱，但債券交易員更在乎的，還是聯準會口袋裡到底什麼時候才會掏出降息的牌？",
     "subtitle_text": "AI雖熱，但債市更在乎聯準會何時降息。",
     "estimated_seconds": 15,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_010_Tom.mp3",
-    "start_seconds": 250.848,
-    "end_seconds": 260.328,
-    "duration_seconds": 9.48
+    "start_seconds": 256.536,
+    "end_seconds": 265.728,
+    "duration_seconds": 9.192
   },
   {
     "turn_id": "turn_011",
@@ -186,9 +197,10 @@
     "subtitle_text": "這也是為何降息預期受阻時，美元避險需求會被激發。",
     "estimated_seconds": 15,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_011_Miranda.mp3",
-    "start_seconds": 260.328,
-    "end_seconds": 270.912,
+    "start_seconds": 265.728,
+    "end_seconds": 276.312,
     "duration_seconds": 10.584
   },
   {
@@ -198,14 +210,15 @@
     "section_title": "避險共振與黃金的去美元化韌性",
     "turn_index_in_section": 1,
     "speaker": "Tom",
-    "spoken_text": "Miranda，這週二出現了一個很奇特的現象。那天美債殖利率其實是稍微下滑的，收在4.455%，照理說這應該會壓抑美元，但美元指數卻逆勢上漲到99.22，而且連黃金也一起漲到了4518美元。這種美元跟黃金同步走強的背離，背後到底在交易什麼？",
+    "spoken_text": "Miranda，這週二出現了一個很奇特的現象。那天美債殖利率其實是稍微下滑的，收在，4.455%，照理說這應該會壓抑美元，但美元指數卻逆勢上漲到，99.22，而且連黃金也一起漲到了4518美元。這種美元跟黃金同步走強的背離，背後到底在交易什麼？",
     "subtitle_text": "週二殖利率下滑，美元與黃金卻同步走強，背後交易什麼？",
     "estimated_seconds": 30,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_012_Tom.mp3",
-    "start_seconds": 270.912,
-    "end_seconds": 295.032,
-    "duration_seconds": 24.12
+    "start_seconds": 276.312,
+    "end_seconds": 299.712,
+    "duration_seconds": 23.4
   },
   {
     "turn_id": "turn_013",
@@ -218,9 +231,10 @@
     "subtitle_text": "這是地緣政治引發的避險溢價，且全球央行正大舉配置黃金。",
     "estimated_seconds": 50,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_013_Miranda.mp3",
-    "start_seconds": 295.032,
-    "end_seconds": 337.488,
+    "start_seconds": 299.712,
+    "end_seconds": 342.168,
     "duration_seconds": 42.456
   },
   {
@@ -233,11 +247,12 @@
     "spoken_text": "這聽起來非常震撼。以前大家都說美債是無風險資產之王，現在全球央行居然寧可抱黃金也不要美債？這是不是說明，大家對美國財政赤字和高利率的長期後果感到不安？",
     "subtitle_text": "全球央行寧抱黃金也不要美債，是對美元系統的不安嗎？",
     "estimated_seconds": 20,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_014_Tom.mp3",
-    "start_seconds": 337.488,
-    "end_seconds": 353.784,
-    "duration_seconds": 16.296
+    "start_seconds": 342.168,
+    "end_seconds": 357.456,
+    "duration_seconds": 15.288
   },
   {
     "turn_id": "turn_015",
@@ -246,14 +261,15 @@
     "section_title": "避險共振與黃金的去美元化韌性",
     "turn_index_in_section": 4,
     "speaker": "Miranda",
-    "spoken_text": "這確實點出了市場的兩難困境。一方面，美國的高利率讓美元很有吸引力，這叫『利差優勢』；但另一方面，長期維持高利率會讓美國政府的債務利息支出像滾雪球一樣變大，這讓大家擔心硬著陸風險。對跨國企業來說，這意味著他們在做資產配置時，不能再單純看哪邊利息高，還得防範系統性風險。這也是為什麼黃金雖然在週三因為利率衝高而被短暫壓抑到4456.1美元，但隔天一有風吹草動，立刻又被買盤拉回4504.5美元，展現出極強的韌性。",
+    "spoken_text": "這確實點出了市場的兩難困境。一方面，美國的高利率讓美元很有吸引力，這叫『利差優勢』；但另一方面，長期維持高利率會讓美國政府的債務利息支出像滾雪球一樣變大，這讓大家擔心硬著陸風險。對跨國企業來說，這意味著他們在做資產配置時，不能再單純看哪邊利息高，還得防範系統性風險。這也是為什麼黃金雖然在週三因為利率衝高而被短暫壓抑到，4456.1，美元，但隔天一有風吹草動，立刻又被買盤拉回，4504.5，美元，展現出極強的韌性。",
     "subtitle_text": "高利率擴大美債吸引力，但也增加長期財政與硬著陸擔憂。",
     "estimated_seconds": 45,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_015_Miranda.mp3",
-    "start_seconds": 353.784,
-    "end_seconds": 397.512,
-    "duration_seconds": 43.728
+    "start_seconds": 357.456,
+    "end_seconds": 402.552,
+    "duration_seconds": 45.096
   },
   {
     "turn_id": "turn_016",
@@ -265,11 +281,12 @@
     "spoken_text": "所以現在市場買黃金，不只是為了賺取利差的利潤，而是為了在美元系統出現裂縫時，買一份不被綁架的保險？",
     "subtitle_text": "買黃金不只為利潤，而是為美元系統買一份不被綁架的保險？",
     "estimated_seconds": 16,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_016_Tom.mp3",
-    "start_seconds": 397.512,
-    "end_seconds": 407.208,
-    "duration_seconds": 9.696
+    "start_seconds": 402.552,
+    "end_seconds": 411.36,
+    "duration_seconds": 8.808
   },
   {
     "turn_id": "turn_017",
@@ -282,9 +299,10 @@
     "subtitle_text": "沒錯，而這種防禦性配置，正加劇亞洲貨幣的失血壓力。",
     "estimated_seconds": 15,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_017_Miranda.mp3",
-    "start_seconds": 407.208,
-    "end_seconds": 417.888,
+    "start_seconds": 411.36,
+    "end_seconds": 422.04,
     "duration_seconds": 10.68
   },
   {
@@ -294,14 +312,15 @@
     "section_title": "亞洲貨幣的利差劣勢與熱錢的雙向洗劫",
     "turn_index_in_section": 1,
     "speaker": "Tom",
-    "spoken_text": "Miranda，這週亞洲匯市真的非常驚心動魄。日圓兌美元已經逼近160的關鍵大關，收在159.97；韓元更慘，貶值到了1532.57。但最奇怪的是台幣，這週一居然有新聞說『熱錢湧進，外資一天匯入15億美元』，台幣一度升到31.32，但隨後幾天又爆量貶回31.48。這到底是什麼神操作？",
+    "spoken_text": "Miranda，這週亞洲匯市真的非常驚心動魄。日圓兌美元已經逼近160的關鍵大關，收在，159.97，；韓元更慘，貶值到了，1532.57。但最奇怪的是台幣，這週一居然有新聞說『熱錢湧進，外資一天匯入15億美元』，台幣一度升到，31.32，但隨後幾天又爆量貶回，31.48。這到底是什麼神操作？",
     "subtitle_text": "日圓韓元大貶，台幣卻先升後跌，這種波動背後是什麼？",
     "estimated_seconds": 32,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_018_Tom.mp3",
-    "start_seconds": 417.888,
-    "end_seconds": 446.52,
-    "duration_seconds": 28.632
+    "start_seconds": 422.04,
+    "end_seconds": 451.536,
+    "duration_seconds": 29.496
   },
   {
     "turn_id": "turn_019",
@@ -310,14 +329,15 @@
     "section_title": "亞洲貨幣的利差劣勢與熱錢的雙向洗劫",
     "turn_index_in_section": 2,
     "speaker": "Miranda",
-    "spoken_text": "這就是我們常說的『熱錢雙向洗劫』。週初外資確實因為AI題材的短線熱度，大舉匯入15億美元想搶短，這屬於特定產業基本面帶來的『修正因子』，讓台幣短暫與日韓貨幣脫鉤。但這只是曇花一現。因為到了週二、週三，當美元指數因為再通膨預期強勢突破99.55時，巨大的利差劣勢立刻顯現。外資發現抱著台幣或日圓，利息遠遠輸給美元，於是立刻股匯脫鉤，爆量轉為匯出，把台幣重新打回貶值通道。這就是『利差優勢』的終極傳導。",
+    "spoken_text": "這就是我們常說的『熱錢雙向洗劫』。週初外資確實因為，AI，題材的短線熱度，大舉匯入15億美元想搶短，這屬於特定產業基本面帶來的『修正因子』，讓台幣短暫與日韓貨幣脫鉤。但這只是曇花一現。因為到了週二、週三，當美元指數因為再通膨預期強勢突破，99.55，時，巨大的利差劣勢立刻顯現。外資發現抱著台幣或日圓，利息遠遠輸給美元，於是立刻股匯脫鉤，爆量轉為匯出，把台幣重新打回貶值通道。這就是『利差優勢』的終極傳導。",
     "subtitle_text": "週初外資因AI搶短匯入，隨後因利差劣勢爆量撤出。",
     "estimated_seconds": 50,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_019_Miranda.mp3",
-    "start_seconds": 446.52,
-    "end_seconds": 489.504,
-    "duration_seconds": 42.984
+    "start_seconds": 451.536,
+    "end_seconds": 495.792,
+    "duration_seconds": 44.256
   },
   {
     "turn_id": "turn_020",
@@ -326,14 +346,15 @@
     "section_title": "亞洲貨幣的利差劣勢與熱錢的雙向洗劫",
     "turn_index_in_section": 3,
     "speaker": "Tom",
-    "spoken_text": "這聽起來，外資就像是把亞洲市場當成了提款機，AI熱潮來了就進來撈一把，風向不對立刻換回美元拍拍屁股走人？而留在當地的，只有被迫承受輸入型通膨的本土企業和老百姓？",
+    "spoken_text": "這聽起來，外資就像是把亞洲市場當成了提款機，AI，熱潮來了就進來撈一把，風向不對立刻換回美元拍拍屁股走人？而留在當地的，只有被迫承受輸入型通膨的本土企業和老百姓？",
     "subtitle_text": "外資把亞洲當提款機，留下輸入型通膨給本土企業承受？",
     "estimated_seconds": 22,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_020_Tom.mp3",
-    "start_seconds": 489.504,
-    "end_seconds": 506.736,
-    "duration_seconds": 17.232
+    "start_seconds": 495.792,
+    "end_seconds": 510.768,
+    "duration_seconds": 14.976
   },
   {
     "turn_id": "turn_021",
@@ -346,9 +367,10 @@
     "subtitle_text": "央行面臨升息保匯率傷經濟，或不升息看著資金外流的兩難。",
     "estimated_seconds": 45,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_021_Miranda.mp3",
-    "start_seconds": 506.736,
-    "end_seconds": 543.168,
+    "start_seconds": 510.768,
+    "end_seconds": 547.2,
     "duration_seconds": 36.432
   },
   {
@@ -361,11 +383,12 @@
     "spoken_text": "所以這不是單純比誰的經濟基本面強，而是比誰的央行比較有本錢、能熬得過這段強美元的痛苦期？",
     "subtitle_text": "這不是單純比經濟強，而是比誰的央行能熬過強美元痛苦期？",
     "estimated_seconds": 15,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_022_Tom.mp3",
-    "start_seconds": 543.168,
-    "end_seconds": 552.096,
-    "duration_seconds": 8.928
+    "start_seconds": 547.2,
+    "end_seconds": 555.216,
+    "duration_seconds": 8.016
   },
   {
     "turn_id": "turn_023",
@@ -378,9 +401,10 @@
     "subtitle_text": "是的，這是一場耐力賽。而週四我們終於迎來了轉折訊號。",
     "estimated_seconds": 15,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_023_Miranda.mp3",
-    "start_seconds": 552.096,
-    "end_seconds": 562.8,
+    "start_seconds": 555.216,
+    "end_seconds": 565.92,
     "duration_seconds": 10.704
   },
   {
@@ -390,14 +414,15 @@
     "section_title": "就業市場邊際降溫與軟著陸的定價轉折",
     "turn_index_in_section": 1,
     "speaker": "Tom",
-    "spoken_text": "Miranda，這週四公布的初領失業金人數升到了三個月高點，這似乎成了債市和黃金的救命稻草？我們看到美債殖利率從4.49%的高位縮了回來，美元也稍微轉弱，黃金則一口氣彈回4504.5美元。市場為什麼對壞消息感到這麼興奮？",
+    "spoken_text": "Miranda，這週四公布的初領失業金人數升到了三個月高點，這似乎成了債市和黃金的救命稻草？我們看到美債殖利率從，4.49%，的高位縮了回來，美元也稍微轉弱，黃金則一口氣彈回，4504.5，美元。市場為什麼對壞消息感到這麼興奮？",
     "subtitle_text": "初領失業金人數創三個月高點，為何反成債市與黃金的救星？",
     "estimated_seconds": 28,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_024_Tom.mp3",
-    "start_seconds": 562.8,
-    "end_seconds": 585.024,
-    "duration_seconds": 22.224
+    "start_seconds": 565.92,
+    "end_seconds": 588.096,
+    "duration_seconds": 22.176
   },
   {
     "turn_id": "turn_025",
@@ -410,9 +435,10 @@
     "subtitle_text": "就業降溫強化了降息預期，壓低利率與美元，並支撐黃金。",
     "estimated_seconds": 45,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_025_Miranda.mp3",
-    "start_seconds": 585.024,
-    "end_seconds": 618.24,
+    "start_seconds": 588.096,
+    "end_seconds": 621.312,
     "duration_seconds": 33.216
   },
   {
@@ -425,11 +451,12 @@
     "spoken_text": "這聽起來有點黑色幽默。勞工面臨裁員風險、日子變難過，在金融市場眼裡反而變成了利多？",
     "subtitle_text": "實體經濟的壞消息，在金融市場眼裡反而是降息的利多？",
     "estimated_seconds": 15,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_026_Tom.mp3",
-    "start_seconds": 618.24,
-    "end_seconds": 627.576,
-    "duration_seconds": 9.336
+    "start_seconds": 621.312,
+    "end_seconds": 630.24,
+    "duration_seconds": 8.928
   },
   {
     "turn_id": "turn_027",
@@ -442,9 +469,10 @@
     "subtitle_text": "聯準會需判斷就業是健康降溫還是衰退序曲，否則難防硬著陸。",
     "estimated_seconds": 42,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_027_Miranda.mp3",
-    "start_seconds": 627.576,
-    "end_seconds": 662.616,
+    "start_seconds": 630.24,
+    "end_seconds": 665.28,
     "duration_seconds": 35.04
   },
   {
@@ -457,11 +485,12 @@
     "spoken_text": "換句話說，這週的結尾，市場其實是用一份『變差的就業數據』，跟聯準會交換了一份『會降息的希望』？",
     "subtitle_text": "市場用變差的就業數據，跟聯準會交換降息的希望？",
     "estimated_seconds": 16,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_028_Tom.mp3",
-    "start_seconds": 662.616,
-    "end_seconds": 670.824,
-    "duration_seconds": 8.208
+    "start_seconds": 665.28,
+    "end_seconds": 674.04,
+    "duration_seconds": 8.76
   },
   {
     "turn_id": "turn_029",
@@ -474,9 +503,10 @@
     "subtitle_text": "確實如此。但這個希望是否踏實，還需要下週的關鍵數據驗證。",
     "estimated_seconds": 18,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_029_Miranda.mp3",
-    "start_seconds": 670.824,
-    "end_seconds": 683.088,
+    "start_seconds": 674.04,
+    "end_seconds": 686.304,
     "duration_seconds": 12.264
   },
   {
@@ -486,14 +516,15 @@
     "section_title": "就業市場邊際降溫與軟著陸的定價轉折",
     "turn_index_in_section": 7,
     "speaker": "Miranda",
-    "spoken_text": "下週我們最需要盯緊的第一個指標，就是即將公布的非農就業報告，這將決定本週四的就業降溫是不是一個真正的趨勢。第二是地緣政治談判對油價的影響，看油價是否會從本週的92.69美元高位回落。最後則是亞洲央行在日圓逼近160大關時，是否會出手干預。Tom，以上就是下週最需要追蹤的幾個關鍵訊號。",
+    "spoken_text": "下週我們最需要盯緊的第一個指標，就是即將公布的非農就業報告，這將決定本週四的就業降溫是不是一個真正的趨勢。第二是地緣政治談判對油價的影響，看油價是否會從本週的，92.69，美元高位回落。最後則是亞洲央行在日圓逼近160大關時，是否會出手干預。Tom，以上就是下週最需要追蹤的幾個關鍵訊號。",
     "subtitle_text": "下週重點觀察非農就業、油價地緣政治及亞洲央行干預訊號。",
     "estimated_seconds": 35,
     "voice": "zh-TW-HsiaoChenNeural",
+    "pitch": "+0Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_030_Miranda.mp3",
-    "start_seconds": 683.088,
-    "end_seconds": 713.496,
-    "duration_seconds": 30.408
+    "start_seconds": 686.304,
+    "end_seconds": 717.312,
+    "duration_seconds": 31.008
   },
   {
     "turn_id": "turn_031",
@@ -505,10 +536,11 @@
     "spoken_text": "謝謝 Miranda 的深度分析。本週市場在通膨與降息希望之間劇烈擺盪，而下週的就業與地緣政治數據，將會是戳破幻想或證實趨勢的關鍵。感謝大家的收看，請記得持續追蹤我們的最新分析，我們下週見。",
     "subtitle_text": "本週市場在通膨與降息希望間擺盪，我們下週見。",
     "estimated_seconds": 20,
-    "voice": "zh-CN-YunxiNeural",
+    "voice": "zh-TW-YunJheNeural",
+    "pitch": "-5Hz",
     "audio_path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-04/story_audio/segments/seg_031_Tom.mp3",
-    "start_seconds": 713.496,
-    "end_seconds": 731.904,
-    "duration_seconds": 18.408
+    "start_seconds": 717.312,
+    "end_seconds": 734.784,
+    "duration_seconds": 17.472
   }
 ]
