@@ -221,9 +221,9 @@ def generate_segment_audio(
         cmd = command + [
             "--file", str(tmp_path),
             "--voice", voice,
-            "--rate", rate,
-            "--volume", volume,
-            "--pitch", pitch,
+            f"--rate={rate}",
+            f"--volume={volume}",
+            f"--pitch={pitch}",
             "--write-media", str(out_path),
         ]
         subprocess.run(cmd, check=True, timeout=120)
