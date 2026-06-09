@@ -21,37 +21,37 @@ VIDEO_H = 720
 FPS = 30
 
 SCENE_W = 1110
-SCENE_H = 560
+SCENE_H = 600
 SCENE_X = (VIDEO_W - SCENE_W) // 2
 SCENE_Y = 10
 
-BAND_Y = 584
+BAND_Y = 624
 BAND_H = VIDEO_H - BAND_Y
 
-AVATAR_SIZE = 104
+AVATAR_SIZE = 82
 AVATAR_X = 56
-AVATAR_Y = 584
+AVATAR_Y = 624
 
 PANEL_X = 188
-PANEL_Y = 606
+PANEL_Y = 640
 PANEL_W = 760
-PANEL_H = 50
+PANEL_H = 36
 PANEL_RADIUS = 22  # retained for compatibility; inner panel is disabled in V10
 
-LABEL_W = 92
-LABEL_H = 30
+LABEL_W = 84
+LABEL_H = 24
 LABEL_X = AVATAR_X + (AVATAR_SIZE - LABEL_W) // 2
-LABEL_Y = AVATAR_Y + AVATAR_SIZE - 14
+LABEL_Y = AVATAR_Y + AVATAR_SIZE - 10
 
-SUBTITLE_FONT_SIZE = 29
+SUBTITLE_FONT_SIZE = 27
 SUBTITLE_CHARS_PER_LINE = 24
 SUBTITLE_MAX_CHARS_PER_PAGE = 24
 SUBTITLE_MIN_PAGE_SEC = 0.75
 
 WAVE_W = 420
-WAVE_H = 12
+WAVE_H = 10
 WAVE_X = PANEL_X + (PANEL_W - WAVE_W) // 2
-WAVE_Y = PANEL_Y + 34
+WAVE_Y = PANEL_Y + 26
 
 PUNCTUATION_PATTERN = re.compile(r"([^，。；！？!?;：:、]+[，。；！？!?;：:、]?)")
 
@@ -459,13 +459,12 @@ def compose_frame(turn: dict, subtitle_text: str, avatar_cache: dict[str, Image.
     sy = SCENE_Y + (SCENE_H - scene.height) // 2
     frame.alpha_composite(scene, (sx, sy))
 
-    band = Image.new("RGBA", (VIDEO_W, BAND_H), (255, 255, 255, 0))
+    # Solid deep navy subtitle band. No gradient.
+    # V12 (Approach A): lower band reduced to 96px to make the main scene larger.
+    band = Image.new("RGBA", (VIDEO_W, BAND_H), (6, 18, 36, 238))
     bd = ImageDraw.Draw(band)
-    for s in range(BAND_H):
-        alpha = int(78 + 168 * (s / max(BAND_H - 1, 1)))
-        bd.line((0, s, VIDEO_W, s), fill=(6, 12, 22, alpha))
-    # subtle top accent line like the old video style
-    bd.rectangle((0, 0, VIDEO_W, 3), fill=(56, 189, 248, 180))
+    # Thin cyan divider line.
+    bd.rectangle((0, 0, VIDEO_W, 3), fill=(56, 189, 248, 210))
     frame.alpha_composite(band, (0, BAND_Y))
 
     speaker = normalize_speaker(turn["speaker"])
@@ -475,7 +474,7 @@ def compose_frame(turn: dict, subtitle_text: str, avatar_cache: dict[str, Image.
     d = ImageDraw.Draw(frame)
     label_color = speaker_label_rgba(speaker)
     d.rounded_rectangle((LABEL_X, LABEL_Y, LABEL_X + LABEL_W, LABEL_Y + LABEL_H), radius=9, fill=label_color)
-    name_font = load_font(22)
+    name_font = load_font(19)
     draw_centered_text(d, (LABEL_X, LABEL_Y - 1, LABEL_X + LABEL_W, LABEL_Y + LABEL_H - 1),
                        speaker, name_font, (255, 255, 255, 245), shadow=False)
 
@@ -483,8 +482,8 @@ def compose_frame(turn: dict, subtitle_text: str, avatar_cache: dict[str, Image.
     frame.alpha_composite(panel, (PANEL_X, PANEL_Y))
 
     sub_font = load_font(SUBTITLE_FONT_SIZE)
-    text_box = (PANEL_X + 8, PANEL_Y + 1, PANEL_X + PANEL_W - 8, PANEL_Y + 38)
-    draw_centered_text(d, text_box, subtitle_text, sub_font, (244, 247, 251, 255), shadow=True)
+    text_box = (PANEL_X + 8, PANEL_Y - 2, PANEL_X + PANEL_W - 8, PANEL_Y + 28)
+    draw_centered_text(d, text_box, subtitle_text, sub_font, (248, 250, 252, 255), shadow=True)
 
     frame.convert("RGB").save(out_path, quality=95)
 
