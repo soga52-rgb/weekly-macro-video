@@ -1,38 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-"""
-Step 86 | Compose Story Visual Video
-
-This version:
-- Uses Step 83 scene images.
-- Uses Step 85 edge-tts segment mp3 files.
-- Uses assets/tom.png and assets/miranda.png as speaker avatars.
-- Scales and pads Step 83 scene images upward on a white 16:9 canvas for a clean lower caption area.
-- Shows the active speaker avatar in the lower-left area, with a constant subtle glowing halo.
-- Shows transcript subtitles in a lighter translucent dark glass-style lower dialogue panel.
-- Uses one-line centered subtitles with a softer regular CJK font.
-- Adds a subtle live audio waveform inside the subtitle panel.
-- Splits subtitles automatically from spoken_text by punctuation and length.
-- Times subtitle pages by text length against the actual mp3 segment duration.
-- Removes waveform.
-- Removes the speaker-name gray label.
-- Uses drawtext expansion=none to avoid '%' subtitle errors.
-- Keeps intermediate clips in a temporary directory; repo keeps only final mp4 + timeline json.
-"""
-
 from __future__ import annotations
 
 import argparse
 import json
 import re
-import shutil
 import subprocess
 import tempfile
 from pathlib import Path
 
 try:
-    from PIL import Image, ImageDraw, ImageFont, ImageFilter
+    from PIL import Image, ImageDraw, ImageFont, ImageFilter, ImageOps
 except Exception as exc:
     raise RuntimeError("Pillow is required. Please install pillow before running Step 86.") from exc
 
@@ -41,48 +20,38 @@ VIDEO_W = 1280
 VIDEO_H = 720
 FPS = 30
 
-# Scene image is first scaled down and placed near the top on a white canvas.
-# This keeps all Step 83 content intact while creating clean space for avatar/subtitles.
-SCENE_SCALE_FACTOR = 0.80
-SCENE_PAD_TOP = 12
-SCENE_TARGET_W = int(VIDEO_W * SCENE_SCALE_FACTOR)
-SCENE_TARGET_H = int(VIDEO_H * SCENE_SCALE_FACTOR)
+SCENE_W = 1110
+SCENE_H = 610
+SCENE_X = (VIDEO_W - SCENE_W) // 2
+SCENE_Y = 8
 
-# Lower-left speaker avatar.
-AVATAR_SIZE = 108
-RING_SIZE = 136
-AVATAR_X = 50
-AVATAR_Y = VIDEO_H - AVATAR_SIZE - 26
-RING_X = AVATAR_X - (RING_SIZE - AVATAR_SIZE) // 2
-RING_Y = AVATAR_Y - (RING_SIZE - AVATAR_SIZE) // 2
+BAND_Y = 612
+BAND_H = VIDEO_H - BAND_Y
 
-# Subtitle panel sits beside the avatar.
-# Keep it medium-width and one-line so it does not cover too much of the scene image.
+AVATAR_SIZE = 104
+AVATAR_X = 56
+AVATAR_Y = 606
+
+PANEL_X = 188
+PANEL_Y = 618
+PANEL_W = 720
+PANEL_H = 82
+PANEL_RADIUS = 22
+
+LABEL_W = 92
+LABEL_H = 30
+LABEL_X = AVATAR_X + (AVATAR_SIZE - LABEL_W) // 2
+LABEL_Y = AVATAR_Y + AVATAR_SIZE - 18
+
 SUBTITLE_FONT_SIZE = 30
-SUBTITLE_CHARS_PER_LINE = 31
-SUBTITLE_LINES_PER_PAGE = 1
-SUBTITLE_MAX_CHARS_PER_PAGE = SUBTITLE_CHARS_PER_LINE * SUBTITLE_LINES_PER_PAGE
-SUBTITLE_BOX_X = 188
-SUBTITLE_BOX_W = 850
-SUBTITLE_BOX_H = 96
-SUBTITLE_BOX_Y = VIDEO_H - SUBTITLE_BOX_H - 26
+SUBTITLE_CHARS_PER_LINE = 26
+SUBTITLE_MAX_CHARS_PER_PAGE = 26
+SUBTITLE_MIN_PAGE_SEC = 0.75
 
-# Center subtitle text inside the dialogue box, slightly above the waveform.
-SUBTITLE_TEXT_X_EXPR = f"{SUBTITLE_BOX_X}+({SUBTITLE_BOX_W}-text_w)/2"
-SUBTITLE_TEXT_Y_EXPR = f"{SUBTITLE_BOX_Y}+({SUBTITLE_BOX_H}-text_h)/2-12"
-
-# Subtle waveform inside the lower part of the subtitle panel.
-WAVE_W = 620
-WAVE_H = 22
-WAVE_X = SUBTITLE_BOX_X + (SUBTITLE_BOX_W - WAVE_W) // 2
-WAVE_Y = SUBTITLE_BOX_Y + SUBTITLE_BOX_H - 30
-
-# Timing guardrails for automatically paged subtitles.
-# These are soft guardrails. If the audio is very short, the actual display time is still bounded by duration.
-SUBTITLE_MIN_PAGE_SEC = 0.85
-
-FADE_SEC = 0.24
-
+WAVE_W = 440
+WAVE_H = 14
+WAVE_X = PANEL_X + (PANEL_W - WAVE_W) // 2
+WAVE_Y = PANEL_Y + PANEL_H - 20
 
 PUNCTUATION_PATTERN = re.compile(r"([^，。；！？!?;：:、]+[，。；！？!?;：:、]?)")
 
@@ -111,7 +80,6 @@ def latest_week_dir(explicit: str | None) -> Path:
         if p2.exists():
             return p2
         raise FileNotFoundError(f"Week directory not found: {explicit}")
-
     base = Path("output/weekly")
     if not base.exists():
         raise FileNotFoundError("output/weekly not found")
@@ -131,12 +99,11 @@ def resolve_dialogue_json(week_dir: Path, explicit: str | None) -> Path:
             return p2
         raise FileNotFoundError(f"Dialogue JSON not found: {explicit}")
 
-    preferred = [
+    for p in [
         week_dir / "weekly_dialogue_story_only_v8.json",
         week_dir / "weekly_dialogue_story_only_v8_11.json",
         week_dir / "weekly_dialogue_story_only.json",
-    ]
-    for p in preferred:
+    ]:
         if p.exists():
             return p
 
@@ -158,8 +125,10 @@ def resolve_scene_images(week_dir: Path) -> list[Path]:
     d = week_dir / "story_visual_images"
     if not d.exists():
         raise FileNotFoundError(f"story_visual_images not found: {d}")
-    images = [p for p in d.glob("scene_*.*") if p.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"}]
-    images = sorted(images, key=lambda p: p.stem)
+    images = sorted(
+        [p for p in d.glob("scene_*.*") if p.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp"}],
+        key=lambda p: p.stem,
+    )
     if not images:
         raise FileNotFoundError("No scene images found in story_visual_images")
     return images
@@ -213,12 +182,11 @@ def normalize_speaker(raw: str) -> str:
 
 
 def speaker_rgba(speaker: str) -> tuple[int, int, int, int]:
-    """
-    Speaker accent colors:
-    - Tom: warm yellow border/ring
-    - Miranda: purple border/ring
-    """
     return (196, 120, 255, 255) if normalize_speaker(speaker) == "Miranda" else (255, 210, 64, 255)
+
+
+def speaker_label_rgba(speaker: str) -> tuple[int, int, int, int]:
+    return (70, 64, 104, 230) if normalize_speaker(speaker) == "Miranda" else (112, 87, 28, 230)
 
 
 def speaker_wave_hex(speaker: str) -> str:
@@ -236,85 +204,48 @@ def break_long_piece(piece: str, max_chars: int) -> list[str]:
     return [piece[i:i + max_chars] for i in range(0, len(piece), max_chars)]
 
 
-def wrap_subtitle_page(text: str) -> str:
-    text = (text or "").strip()
-    lines = []
-    for start in range(0, len(text), SUBTITLE_CHARS_PER_LINE):
-        lines.append(text[start:start + SUBTITLE_CHARS_PER_LINE])
-    return "\n".join(lines[:SUBTITLE_LINES_PER_PAGE])
-
-
 def split_subtitles(text: str) -> list[str]:
-    """
-    Split a spoken_text turn into readable subtitle pages.
-
-    Rules:
-    - Prefer punctuation boundaries, so subtitles change near natural pauses.
-    - Keep each page to a medium-width dialogue box: about 2 lines.
-    - Fall back to fixed-length chunks only when a sentence is too long.
-    """
     text = re.sub(r"\s+", "", (text or "").strip())
     if not text:
         return [""]
-
     pieces = [m.group(0).strip() for m in PUNCTUATION_PATTERN.finditer(text) if m.group(0).strip()]
     if not pieces:
         pieces = break_long_piece(text, SUBTITLE_MAX_CHARS_PER_PAGE)
 
-    pages: list[str] = []
+    pages = []
     current = ""
-
     for raw_piece in pieces:
-        sub_pieces = break_long_piece(raw_piece, SUBTITLE_MAX_CHARS_PER_PAGE)
-        for piece in sub_pieces:
+        for piece in break_long_piece(raw_piece, SUBTITLE_MAX_CHARS_PER_PAGE):
             if not current:
                 current = piece
-                continue
-
-            if visible_len(current + piece) <= SUBTITLE_MAX_CHARS_PER_PAGE:
+            elif visible_len(current + piece) <= SUBTITLE_MAX_CHARS_PER_PAGE:
                 current += piece
             else:
-                pages.append(wrap_subtitle_page(current))
+                pages.append(current)
                 current = piece
-
     if current:
-        pages.append(wrap_subtitle_page(current))
-
+        pages.append(current)
     return pages or [""]
 
 
 def subtitle_windows(chunks: list[str], duration: float) -> list[tuple[float, float]]:
-    """
-    Compute display windows for subtitle pages.
-
-    The previous implementation assigned equal time to each page. This version
-    assigns time by text length, which tracks TTS speed more naturally while still
-    using only the actual mp3 duration from Step 85.
-    """
     n = max(len(chunks), 1)
     if n == 1:
         return [(0.0, duration)]
-
-    # If the segment is very short, equal timing is safer than overfitting.
     if duration <= SUBTITLE_MIN_PAGE_SEC * n:
         each = duration / n
-        return [
-            (i * each, duration if i == n - 1 else (i + 1) * each)
-            for i in range(n)
-        ]
+        return [(i * each, duration if i == n - 1 else (i + 1) * each) for i in range(n)]
 
     weights = [max(visible_len(c), 6) for c in chunks]
     base = SUBTITLE_MIN_PAGE_SEC
     remaining = max(0.0, duration - base * n)
-    total_weight = float(sum(weights)) or 1.0
-    lengths = [base + remaining * (w / total_weight) for w in weights]
-
+    total = float(sum(weights)) or 1.0
     windows = []
     t = 0.0
-    for i, length in enumerate(lengths):
-        start = t
+    for i, w in enumerate(weights):
+        length = base + remaining * (w / total)
         end = duration if i == n - 1 else min(duration, t + length)
-        windows.append((start, end))
+        windows.append((t, end))
         t = end
     return windows
 
@@ -339,8 +270,14 @@ def font_path() -> str | None:
     return None
 
 
-def write_text(path: Path, text: str) -> None:
-    path.write_text(text or "", encoding="utf-8")
+def load_font(size: int) -> ImageFont.ImageFont:
+    fp = font_path()
+    if fp:
+        try:
+            return ImageFont.truetype(fp, size)
+        except Exception:
+            pass
+    return ImageFont.load_default()
 
 
 def circle_mask(size: int) -> Image.Image:
@@ -350,112 +287,68 @@ def circle_mask(size: int) -> Image.Image:
     return m
 
 
-def crop_square(img: Image.Image) -> Image.Image:
-    w, h = img.size
-    s = min(w, h)
-    return img.crop(((w-s)//2, (h-s)//2, (w+s)//2, (h+s)//2))
+def center_crop(img: Image.Image, size: tuple[int, int]) -> Image.Image:
+    return ImageOps.fit(img, size, method=Image.Resampling.LANCZOS, centering=(0.5, 0.45))
 
 
-def make_initial_avatar(out: Path, speaker: str, fp: str | None) -> None:
-    bg = (220, 170, 28, 255) if speaker == "Tom" else (186, 85, 211, 255)
-    img = Image.new("RGBA", (AVATAR_SIZE, AVATAR_SIZE), (255, 255, 255, 0))
-    d = ImageDraw.Draw(img)
-    d.ellipse((4, 4, AVATAR_SIZE-4, AVATAR_SIZE-4), fill=bg)
-    try:
-        font = ImageFont.truetype(fp, 52) if fp else ImageFont.load_default()
-    except Exception:
-        font = ImageFont.load_default()
-    initial = "T" if speaker == "Tom" else "M"
-    box = d.textbbox((0, 0), initial, font=font)
-    tw, th = box[2]-box[0], box[3]-box[1]
-    d.text(((AVATAR_SIZE-tw)/2, (AVATAR_SIZE-th)/2-4), initial, fill=(255,255,255,255), font=font)
-    img.save(out)
+def make_circle_avatar(img_path: Path, speaker: str) -> Image.Image:
+    accent = speaker_rgba(speaker)
+    canvas_size = AVATAR_SIZE + 18
+    avatar_layer = Image.new("RGBA", (canvas_size, canvas_size), (255, 255, 255, 0))
+    draw = ImageDraw.Draw(avatar_layer)
+
+    draw.ellipse((0, 0, canvas_size - 1, canvas_size - 1), fill=(accent[0], accent[1], accent[2], 30))
+    draw.ellipse((4, 4, canvas_size - 5, canvas_size - 5), fill=(accent[0], accent[1], accent[2], 70))
+    draw.ellipse((8, 8, canvas_size - 9, canvas_size - 9), fill=(accent[0], accent[1], accent[2], 130))
+
+    inner = Image.new("RGBA", (AVATAR_SIZE, AVATAR_SIZE), (255, 255, 255, 0))
+    if img_path.exists():
+        src = Image.open(img_path).convert("RGBA")
+        src = center_crop(src, (AVATAR_SIZE, AVATAR_SIZE))
+        src = src.filter(ImageFilter.UnsharpMask(radius=0.6, percent=120, threshold=2))
+        inner.paste(src, (0, 0), circle_mask(AVATAR_SIZE))
+    else:
+        d = ImageDraw.Draw(inner)
+        bg = (220, 170, 28, 255) if normalize_speaker(speaker) == "Tom" else (128, 84, 196, 255)
+        d.ellipse((0, 0, AVATAR_SIZE - 1, AVATAR_SIZE - 1), fill=bg)
+        f = load_font(54)
+        initial = "T" if normalize_speaker(speaker) == "Tom" else "M"
+        bbox = d.textbbox((0, 0), initial, font=f)
+        d.text(((AVATAR_SIZE - (bbox[2] - bbox[0])) / 2, (AVATAR_SIZE - (bbox[3] - bbox[1])) / 2 - 4),
+               initial, font=f, fill=(255, 255, 255, 255))
+
+    edge = ImageDraw.Draw(inner)
+    edge.ellipse((1, 1, AVATAR_SIZE - 2, AVATAR_SIZE - 2), outline=(255, 255, 255, 245), width=3)
+    edge.ellipse((5, 5, AVATAR_SIZE - 6, AVATAR_SIZE - 6), outline=accent, width=4)
+
+    avatar_layer.alpha_composite(inner, (9, 9))
+    return avatar_layer
 
 
-def make_avatar_from_asset(src: Path, out: Path, speaker: str) -> None:
-    img = Image.open(src).convert("RGBA")
-    img = crop_square(img).resize((AVATAR_SIZE, AVATAR_SIZE), Image.Resampling.LANCZOS)
-    img = img.filter(ImageFilter.UnsharpMask(radius=1.2, percent=135, threshold=3))
-    avatar = Image.new("RGBA", (AVATAR_SIZE, AVATAR_SIZE), (255,255,255,0))
-    avatar.paste(img, (0, 0), circle_mask(AVATAR_SIZE))
-    d = ImageDraw.Draw(avatar)
-    c = speaker_rgba(speaker)
-    d.ellipse((1, 1, AVATAR_SIZE-2, AVATAR_SIZE-2), outline=(255,255,255,235), width=3)
-    d.ellipse((5, 5, AVATAR_SIZE-6, AVATAR_SIZE-6), outline=(c[0], c[1], c[2], 255), width=5)
-    avatar.save(out)
+def draw_centered_text(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int], text: str,
+                       font: ImageFont.ImageFont, fill: tuple[int, int, int, int],
+                       shadow: bool = True) -> None:
+    x0, y0, x1, y1 = box
+    bbox = draw.textbbox((0, 0), text, font=font)
+    tw = bbox[2] - bbox[0]
+    th = bbox[3] - bbox[1]
+    x = x0 + (x1 - x0 - tw) / 2
+    y = y0 + (y1 - y0 - th) / 2 - 2
+    if shadow:
+        draw.text((x + 1, y + 1), text, font=font, fill=(0, 0, 0, 110))
+    draw.text((x, y), text, font=font, fill=fill)
 
 
-def make_ring(out: Path, speaker: str) -> None:
-    c = speaker_rgba(speaker)
-    img = Image.new("RGBA", (RING_SIZE, RING_SIZE), (255,255,255,0))
-    d = ImageDraw.Draw(img)
-    # Constant subtle halo, not flashing.
-    for width, alpha, inset in [(12, 18, 11), (8, 34, 15), (4, 64, 19)]:
-        d.ellipse((inset, inset, RING_SIZE-inset, RING_SIZE-inset), outline=(c[0], c[1], c[2], alpha), width=width)
-    d.ellipse((23, 23, RING_SIZE-24, RING_SIZE-24), outline=(255, 255, 255, 140), width=3)
-    d.ellipse((26, 26, RING_SIZE-27, RING_SIZE-27), outline=(c[0], c[1], c[2], 96), width=3)
-    img = img.filter(ImageFilter.GaussianBlur(radius=0.9))
-    img.save(out)
-
-
-def make_subtitle_panel(out: Path) -> None:
-    """
-    Create a lighter translucent dark glass-style subtitle panel.
-
-    The panel separates subtitles from the whiteboard scene, but stays lower and
-    softer than a heavy black bar.
-    """
-    shadow = Image.new("RGBA", (SUBTITLE_BOX_W + 18, SUBTITLE_BOX_H + 18), (255, 255, 255, 0))
-    sd = ImageDraw.Draw(shadow)
-    sd.rounded_rectangle(
-        (9, 9, SUBTITLE_BOX_W + 8, SUBTITLE_BOX_H + 8),
-        radius=24,
-        fill=(0, 0, 0, 66),
-    )
-    shadow = shadow.filter(ImageFilter.GaussianBlur(radius=6))
-
-    panel = Image.new("RGBA", (SUBTITLE_BOX_W + 18, SUBTITLE_BOX_H + 18), (255, 255, 255, 0))
-    panel.alpha_composite(shadow, (0, 0))
-
+def create_subtitle_panel(size: tuple[int, int]) -> Image.Image:
+    w, h = size
+    panel = Image.new("RGBA", (w, h), (255, 255, 255, 0))
     d = ImageDraw.Draw(panel)
-    rect = (9, 9, SUBTITLE_BOX_W + 8, SUBTITLE_BOX_H + 8)
-
-    d.rounded_rectangle(
-        rect,
-        radius=24,
-        fill=(15, 23, 42, 138),
-        outline=(255, 255, 255, 96),
-        width=2,
-    )
-
-    highlight = Image.new("RGBA", (SUBTITLE_BOX_W, SUBTITLE_BOX_H), (255, 255, 255, 0))
-    hd = ImageDraw.Draw(highlight)
-    hd.rounded_rectangle(
-        (0, 0, SUBTITLE_BOX_W - 1, int(SUBTITLE_BOX_H * 0.45)),
-        radius=22,
-        fill=(255, 255, 255, 18),
-    )
-    panel.alpha_composite(highlight, (9, 9))
-
-    panel = panel.filter(ImageFilter.GaussianBlur(radius=0.12))
-    panel.crop((9, 9, SUBTITLE_BOX_W + 9, SUBTITLE_BOX_H + 9)).save(out)
-
-
-def prepare_avatars(tmp_dir: Path, fp: str | None) -> dict[str, dict[str, Path]]:
-    assets = {"Tom": Path("assets/tom.png"), "Miranda": Path("assets/miranda.png")}
-    result = {}
-    for speaker, src in assets.items():
-        base = tmp_dir / f"{speaker.lower()}_avatar.png"
-        ring = tmp_dir / f"{speaker.lower()}_ring.png"
-        if src.exists():
-            print(f"[INFO] Using avatar asset for {speaker}: {src}")
-            make_avatar_from_asset(src, base, speaker)
-        else:
-            print(f"[WARN] Missing avatar asset for {speaker}: {src}; fallback to initial.")
-            make_initial_avatar(base, speaker, fp)
-        make_ring(ring, speaker)
-        result[speaker] = {"base": base, "ring": ring}
-    return result
+    d.rounded_rectangle((4, 5, w - 4, h - 2), radius=PANEL_RADIUS, fill=(0, 0, 0, 55))
+    d.rounded_rectangle((0, 0, w - 8, h - 8), radius=PANEL_RADIUS,
+                        fill=(12, 22, 38, 158), outline=(255, 255, 255, 72), width=1)
+    d.rounded_rectangle((1, 1, w - 9, int(h * 0.45)), radius=PANEL_RADIUS - 2,
+                        fill=(255, 255, 255, 14))
+    return panel
 
 
 def build_buckets(sections: list[dict], images: list[Path]) -> list[list[dict]]:
@@ -484,7 +377,7 @@ def build_timeline(dialogue_json: Path, images: list[Path], seg_dir: Path) -> di
             for turn in sec["speaker_turns"]:
                 turns.append({
                     "scene_index": scene_idx,
-                    "scene_image": str(images[scene_idx-1]),
+                    "scene_image": str(images[scene_idx - 1]),
                     "section_id": sec["section_id"],
                     "section_title": sec["section_title"],
                     "speaker": normalize_speaker(turn.get("speaker", "Speaker")),
@@ -492,11 +385,13 @@ def build_timeline(dialogue_json: Path, images: list[Path], seg_dir: Path) -> di
                     "subtitle_text": (turn.get("subtitle_text") or "").strip(),
                     "estimated_seconds": float(turn.get("estimated_seconds") or 0),
                 })
+
     segs = sorted_segment_files(seg_dir)
     if len(segs) != len(turns):
         print(f"[WARN] Segment count ({len(segs)}) != turn count ({len(turns)}).")
         n = min(len(segs), len(turns))
         segs, turns = segs[:n], turns[:n]
+
     t = 0.0
     for i, (turn, seg) in enumerate(zip(turns, segs), start=1):
         dur = ffprobe_duration(seg)
@@ -508,6 +403,7 @@ def build_timeline(dialogue_json: Path, images: list[Path], seg_dir: Path) -> di
             "end_sec": round(t + dur, 3),
         })
         t += dur
+
     return {
         "dialogue_json": str(dialogue_json),
         "segment_dir": str(seg_dir),
@@ -518,86 +414,89 @@ def build_timeline(dialogue_json: Path, images: list[Path], seg_dir: Path) -> di
     }
 
 
-def drawtext_filter(input_label: str, output_label: str, textfile: Path, fp: str | None, fontsize: int,
-                    x: str, y: str, enable: str | None = None) -> str:
-    parts = [f"[{input_label}]drawtext="]
-    if fp:
-        parts.append(f"fontfile='{fp}':")
-    parts += [
-        "expansion=none:",
-        f"textfile='{textfile.as_posix()}':fontsize={fontsize}:fontcolor=white:",
-        f"x={x}:y={y}:line_spacing=4:",
-        "box=0:boxborderw=0:boxcolor=black@0.0:",
-        "borderw=1:bordercolor=black@0.42:shadowx=1:shadowy=1",
-    ]
-    if enable:
-        parts.append(f":enable='{enable}'")
-    parts.append(f"[{output_label}]")
-    return "".join(parts)
+def compose_frame(turn: dict, subtitle_text: str, avatar_cache: dict[str, Image.Image], out_path: Path) -> None:
+    frame = Image.new("RGB", (VIDEO_W, VIDEO_H), "white").convert("RGBA")
+
+    scene = Image.open(turn["scene_image"]).convert("RGBA")
+    scene = ImageOps.contain(scene, (SCENE_W, SCENE_H), method=Image.Resampling.LANCZOS)
+    sx = SCENE_X + (SCENE_W - scene.width) // 2
+    sy = SCENE_Y + (SCENE_H - scene.height) // 2
+    frame.alpha_composite(scene, (sx, sy))
+
+    band = Image.new("RGBA", (VIDEO_W, BAND_H), (255, 255, 255, 0))
+    bd = ImageDraw.Draw(band)
+    for s in range(BAND_H):
+        alpha = int(8 + 34 * (s / max(BAND_H - 1, 1)))
+        bd.line((0, s, VIDEO_W, s), fill=(10, 18, 34, alpha))
+    frame.alpha_composite(band, (0, BAND_Y))
+
+    speaker = normalize_speaker(turn["speaker"])
+    avatar = avatar_cache[speaker]
+    frame.alpha_composite(avatar, (AVATAR_X - 9, AVATAR_Y - 9))
+
+    d = ImageDraw.Draw(frame)
+    label_color = speaker_label_rgba(speaker)
+    d.rounded_rectangle((LABEL_X, LABEL_Y, LABEL_X + LABEL_W, LABEL_Y + LABEL_H), radius=9, fill=label_color)
+    name_font = load_font(22)
+    draw_centered_text(d, (LABEL_X, LABEL_Y - 1, LABEL_X + LABEL_W, LABEL_Y + LABEL_H - 1),
+                       speaker, name_font, (255, 255, 255, 245), shadow=False)
+
+    panel = create_subtitle_panel((PANEL_W, PANEL_H))
+    frame.alpha_composite(panel, (PANEL_X, PANEL_Y))
+
+    sub_font = load_font(SUBTITLE_FONT_SIZE)
+    text_box = (PANEL_X + 22, PANEL_Y + 5, PANEL_X + PANEL_W - 22, PANEL_Y + 50)
+    draw_centered_text(d, text_box, subtitle_text, sub_font, (244, 247, 251, 255), shadow=True)
+
+    frame.convert("RGB").save(out_path, quality=95)
 
 
-def render_clip(turn: dict, out: Path, avatar_map: dict, fp: str | None, fade_in: bool, fade_out: bool, text_dir: Path, subtitle_panel: Path) -> None:
+def render_clip(turn: dict, out: Path, frame_dir: Path, avatar_cache: dict[str, Image.Image]) -> None:
     duration = max(0.35, float(turn["duration_sec"]))
     speaker = normalize_speaker(turn["speaker"])
     chunks = split_subtitles(turn["spoken_text"])
     windows = subtitle_windows(chunks, duration)
 
-    chunk_files = []
+    chunk_video_files = []
     for i, chunk in enumerate(chunks):
-        p = text_dir / f"subtitle_{turn['segment_index']:03d}_{i:02d}.txt"
-        write_text(p, chunk)
-        chunk_files.append(p)
+        start, end = windows[i]
+        chunk_duration = max(0.20, end - start)
+        frame_path = frame_dir / f"frame_{turn['segment_index']:03d}_{i:02d}.png"
+        chunk_video = frame_dir / f"chunk_{turn['segment_index']:03d}_{i:02d}.mp4"
+        compose_frame(turn, chunk, avatar_cache, frame_path)
+
+        run([
+            "ffmpeg", "-y",
+            "-loop", "1", "-t", f"{chunk_duration:.3f}", "-i", str(frame_path),
+            "-r", str(FPS),
+            "-c:v", "libx264", "-preset", "fast", "-crf", "18",
+            "-pix_fmt", "yuv420p",
+            str(chunk_video),
+        ])
+        chunk_video_files.append(chunk_video)
+
+    concat_list = frame_dir / f"chunks_{turn['segment_index']:03d}.txt"
+    concat_list.write_text("".join(f"file '{p.resolve()}'\n" for p in chunk_video_files), encoding="utf-8")
+    silent_video = frame_dir / f"silent_{turn['segment_index']:03d}.mp4"
+    run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-c", "copy", str(silent_video)])
 
     wave_color = speaker_wave_hex(speaker)
-    filters = [
-        "[1:a]asplit=2[aout][wavein]",
-        f"[wavein]showwaves=s={WAVE_W}x{WAVE_H}:mode=cline:colors=0x{wave_color}:rate={FPS},format=rgba,colorkey=0x000000:0.18:0.04[wave]",
-        f"[0:v]scale={SCENE_TARGET_W}:{SCENE_TARGET_H}:force_original_aspect_ratio=decrease,pad={VIDEO_W}:{VIDEO_H}:(ow-iw)/2:{SCENE_PAD_TOP}:white,format=rgba[bg]",
-        f"[2:v]scale={AVATAR_SIZE}:{AVATAR_SIZE}[av]",
-        f"[3:v]scale={RING_SIZE}:{RING_SIZE}[ring]",
-        f"[4:v]scale={SUBTITLE_BOX_W}:{SUBTITLE_BOX_H}[panel]",
-        f"[bg][panel]overlay={SUBTITLE_BOX_X}:{SUBTITLE_BOX_Y}[vpanel]",
-        f"[vpanel][ring]overlay={RING_X}:{RING_Y}[vring]",
-        f"[vring][av]overlay={AVATAR_X}:{AVATAR_Y}[vavatar]",
-    ]
-    current = "vavatar"
-
-    for i, cf in enumerate(chunk_files):
-        start, end = windows[i]
-        out_label = f"vsub{i:02d}"
-        filters.append(drawtext_filter(current, out_label, cf, fp, SUBTITLE_FONT_SIZE,
-                                       x=SUBTITLE_TEXT_X_EXPR, y=SUBTITLE_TEXT_Y_EXPR,
-                                       enable=f"between(t,{start:.3f},{end:.3f})"))
-        current = out_label
-
-    filters.append(f"[{current}][wave]overlay={WAVE_X}:{WAVE_Y}[vwave]")
-    current = "vwave"
-
-    fades = []
-    if fade_in:
-        fades.append(f"fade=t=in:st=0:d={FADE_SEC}")
-    if fade_out and duration > FADE_SEC:
-        fades.append(f"fade=t=out:st={max(0, duration-FADE_SEC):.3f}:d={FADE_SEC}")
-    if fades:
-        filters.append(f"[{current}]{','.join(fades)}[vout]")
-        vout = "vout"
-    else:
-        vout = current
+    filter_complex = (
+        f"[1:a]asplit=2[aout][wavein];"
+        f"[wavein]showwaves=s={WAVE_W}x{WAVE_H}:mode=cline:colors=0x{wave_color}:rate={FPS}[wave];"
+        f"[0:v][wave]overlay={WAVE_X}:{WAVE_Y}[vout]"
+    )
 
     run([
         "ffmpeg", "-y",
-        "-loop", "1", "-t", f"{duration:.3f}", "-i", turn["scene_image"],
+        "-i", str(silent_video),
         "-i", turn["segment_audio"],
-        "-i", str(avatar_map[speaker]["base"]),
-        "-i", str(avatar_map[speaker]["ring"]),
-        "-i", str(subtitle_panel),
-        "-filter_complex", ";".join(filters),
-        "-map", f"[{vout}]",
+        "-filter_complex", filter_complex,
+        "-map", "[vout]",
         "-map", "[aout]",
-        "-r", str(FPS),
-        "-c:v", "libx264", "-preset", "veryfast", "-crf", "27",
-        "-pix_fmt", "yuv420p",
+        "-c:v", "libx264", "-preset", "fast", "-crf", "20",
         "-c:a", "aac", "-b:a", "128k",
+        "-pix_fmt", "yuv420p",
         "-shortest",
         str(out),
     ])
@@ -608,11 +507,18 @@ def concat_and_optimize(clips: list[Path], concat_file: Path, tmp_video: Path, f
     run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", str(concat_file), "-c", "copy", str(tmp_video)])
     run([
         "ffmpeg", "-y", "-i", str(tmp_video),
-        "-c:v", "libx264", "-preset", "veryfast", "-crf", "28",
+        "-c:v", "libx264", "-preset", "fast", "-crf", "22",
         "-c:a", "aac", "-b:a", "128k",
         "-pix_fmt", "yuv420p", "-movflags", "+faststart",
         str(final),
     ])
+
+
+def prepare_avatar_cache() -> dict[str, Image.Image]:
+    return {
+        "Tom": make_circle_avatar(Path("assets/tom.png"), "Tom"),
+        "Miranda": make_circle_avatar(Path("assets/miranda.png"), "Miranda"),
+    }
 
 
 def main() -> None:
@@ -642,42 +548,23 @@ def main() -> None:
         print("[TIP] Use --force-rebuild to regenerate")
         return
 
-    for old in ("clips", "avatars"):
-        p = out_dir / old
-        if p.exists():
-            shutil.rmtree(p)
+    timeline = build_timeline(dialogue_json, images, seg_dir)
+    timeline_json.write_text(json.dumps(timeline, ensure_ascii=False, indent=2), encoding="utf-8")
+    print(f"[OK] Wrote {timeline_json}")
 
-    fp = font_path()
+    avatar_cache = prepare_avatar_cache()
+
     with tempfile.TemporaryDirectory() as tmp:
         tmp_dir = Path(tmp)
         clip_dir = tmp_dir / "clips"
-        avatar_dir = tmp_dir / "avatars"
-        text_dir = tmp_dir / "text"
+        frame_dir = tmp_dir / "frames"
         clip_dir.mkdir()
-        avatar_dir.mkdir()
-        text_dir.mkdir()
-
-        avatar_map = prepare_avatars(avatar_dir, fp)
-        subtitle_panel = tmp_dir / "subtitle_panel.png"
-        make_subtitle_panel(subtitle_panel)
-        timeline = build_timeline(dialogue_json, images, seg_dir)
-        timeline_json.write_text(json.dumps(timeline, ensure_ascii=False, indent=2), encoding="utf-8")
-        print(f"[OK] Wrote {timeline_json}")
+        frame_dir.mkdir()
 
         clips = []
-        turns = timeline["turns"]
-        for idx, turn in enumerate(turns):
-            prev_scene = turns[idx - 1]["scene_index"] if idx > 0 else None
-            next_scene = turns[idx + 1]["scene_index"] if idx < len(turns) - 1 else None
-            scene = turn["scene_index"]
+        for turn in timeline["turns"]:
             clip = clip_dir / f"turn_{turn['segment_index']:03d}.mp4"
-            render_clip(
-                turn, clip, avatar_map, fp,
-                fade_in=(idx == 0 or scene != prev_scene),
-                fade_out=(idx == len(turns) - 1 or scene != next_scene),
-                text_dir=text_dir,
-                subtitle_panel=subtitle_panel,
-            )
+            render_clip(turn, clip, frame_dir, avatar_cache)
             clips.append(clip)
 
         concat_and_optimize(clips, tmp_dir / "concat.txt", tmp_dir / "concat.mp4", final)
