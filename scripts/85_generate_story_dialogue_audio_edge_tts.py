@@ -24,8 +24,10 @@ Environment variables / CLI:
 - WEEK_DIR: optional week directory.
 - TOM_VOICE: default zh-CN-YunxiNeural
 - MIRANDA_VOICE: default zh-TW-HsiaoChenNeural
-- TTS_RATE: default +0%
+- TTS_RATE: default -8%
 - TTS_VOLUME: default +0%
+- TOM_PITCH: default -5Hz
+- MIRANDA_PITCH: default +0Hz
 - FORCE_REBUILD_AUDIO: true/false
 """
 
@@ -55,10 +57,12 @@ FULL_AUDIO_FILENAME = "full_dialogue.mp3"
 TIMELINE_FILENAME = "audio_timeline.json"
 MANIFEST_FILENAME = "tts_manifest.json"
 
-DEFAULT_TOM_VOICE = "zh-CN-YunxiNeural"
+DEFAULT_TOM_VOICE = "zh-TW-YunJheNeural"
 DEFAULT_MIRANDA_VOICE = "zh-TW-HsiaoChenNeural"
-DEFAULT_TTS_RATE = "+0%"
+DEFAULT_TTS_RATE = "-8%"
 DEFAULT_TTS_VOLUME = "+0%"
+DEFAULT_TOM_PITCH = "-5Hz"
+DEFAULT_MIRANDA_PITCH = "+0Hz"
 
 
 def env_bool(name: str, default: str = "false") -> bool:
@@ -120,8 +124,29 @@ def edge_tts_command() -> List[str]:
 
 
 def clean_text(text: str) -> str:
+    """
+    Prepare text for edge-tts.
+
+    This does not rewrite narration. It only removes markdown markers and adds
+    small punctuation pauses around finance-specific English acronyms and
+    numeric values so TTS sounds less rushed.
+    """
     text = str(text or "").strip()
     text = text.replace("*", "").replace("#", "")
+
+    # Add micro-pauses around uppercase finance terms: WTI, PIMCO, AI, CPI, DXY, etc.
+    text = re.sub(r"(?<![A-Za-z])([A-Z]{2,})(?![A-Za-z])", r"，\1，", text)
+
+    # Add micro-pauses around key decimal numbers and percentages: 87.36, 4.453%, etc.
+    text = re.sub(r"([0-9]+\.[0-9]+%?)", r"，\1，", text)
+
+    # Clean duplicated punctuation introduced by the pause rules.
+    text = re.sub(r"，+", "，", text)
+    text = text.replace("，。", "。").replace("。，", "。")
+    text = text.replace("，？", "？").replace("？，", "？")
+    text = text.replace("，！", "！").replace("！，", "！")
+    text = text.replace("，，", "，")
+
     text = re.sub(r"\s+", " ", text)
     return text
 
@@ -182,6 +207,7 @@ def generate_segment_audio(
     out_path: Path,
     rate: str,
     volume: str,
+    pitch: str,
 ) -> None:
     out_path.parent.mkdir(parents=True, exist_ok=True)
 
@@ -197,6 +223,7 @@ def generate_segment_audio(
             "--voice", voice,
             "--rate", rate,
             "--volume", volume,
+            "--pitch", pitch,
             "--write-media", str(out_path),
         ]
         subprocess.run(cmd, check=True, timeout=120)
@@ -265,6 +292,8 @@ def main() -> None:
     miranda_voice = os.getenv("MIRANDA_VOICE", DEFAULT_MIRANDA_VOICE).strip() or DEFAULT_MIRANDA_VOICE
     rate = os.getenv("TTS_RATE", DEFAULT_TTS_RATE).strip() or DEFAULT_TTS_RATE
     volume = os.getenv("TTS_VOLUME", DEFAULT_TTS_VOLUME).strip() or DEFAULT_TTS_VOLUME
+    tom_pitch = os.getenv("TOM_PITCH", DEFAULT_TOM_PITCH).strip() or DEFAULT_TOM_PITCH
+    miranda_pitch = os.getenv("MIRANDA_PITCH", DEFAULT_MIRANDA_PITCH).strip() or DEFAULT_MIRANDA_PITCH
     force_rebuild = args.force or env_bool("FORCE_REBUILD_AUDIO", "false")
 
     out_dir = week_dir / OUTPUT_DIRNAME
@@ -283,6 +312,8 @@ def main() -> None:
     print(f"[INFO] Miranda voice: {miranda_voice}")
     print(f"[INFO] Rate: {rate}")
     print(f"[INFO] Volume: {volume}")
+    print(f"[INFO] Tom pitch: {tom_pitch}")
+    print(f"[INFO] Miranda pitch: {miranda_pitch}")
     print(f"[INFO] Force rebuild: {force_rebuild}")
 
     timeline: List[Dict[str, Any]] = []
@@ -292,19 +323,21 @@ def main() -> None:
     for i, turn in enumerate(turns):
         speaker = str(turn["speaker"])
         voice = speaker_voice(speaker, tom_voice, miranda_voice)
+        current_pitch = miranda_pitch if speaker.strip().lower() == "miranda" else tom_pitch
         safe_speaker = re.sub(r"[^A-Za-z0-9]+", "", speaker) or "Speaker"
         seg_path = segments_dir / f"seg_{i:03d}_{safe_speaker}.mp3"
 
         if seg_path.exists() and seg_path.stat().st_size > 0 and not force_rebuild:
             print(f"[SKIP] Existing audio: {seg_path}")
         else:
-            print(f"[INFO] Generate {speaker} audio {i+1}/{len(turns)}")
+            print(f"[INFO] Generate {speaker} audio {i+1}/{len(turns)} | pitch={current_pitch}")
             generate_segment_audio(
                 text=turn["spoken_text"],
                 voice=voice,
                 out_path=seg_path,
                 rate=rate,
                 volume=volume,
+                pitch=current_pitch,
             )
 
         duration = ffprobe_duration(seg_path)
@@ -316,6 +349,7 @@ def main() -> None:
         timeline.append({
             **turn,
             "voice": voice,
+            "pitch": current_pitch,
             "audio_path": str(seg_path),
             "start_seconds": round(start, 3),
             "end_seconds": round(end, 3),
@@ -338,9 +372,11 @@ def main() -> None:
             "miranda_voice": miranda_voice,
             "tts_rate": rate,
             "tts_volume": volume,
+            "tom_pitch": tom_pitch,
+            "miranda_pitch": miranda_pitch,
             "turn_count": len(turns),
             "full_duration_seconds": round(full_duration, 3),
-            "note": "edge-tts reads the original Step 82 spoken_text exactly; no narration regeneration.",
+            "note": "edge-tts reads Step 82 spoken_text with light punctuation pauses for more natural TTS; no narration regeneration.",
         },
         "timeline_file": str(out_dir / TIMELINE_FILENAME),
     }
