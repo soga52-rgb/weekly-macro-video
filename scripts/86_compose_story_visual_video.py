@@ -25,33 +25,33 @@ SCENE_H = 560
 SCENE_X = (VIDEO_W - SCENE_W) // 2
 SCENE_Y = 10
 
-BAND_Y = 586
+BAND_Y = 584
 BAND_H = VIDEO_H - BAND_Y
 
 AVATAR_SIZE = 104
 AVATAR_X = 56
-AVATAR_Y = 586
+AVATAR_Y = 584
 
 PANEL_X = 188
-PANEL_Y = 604
-PANEL_W = 690
-PANEL_H = 70
-PANEL_RADIUS = 22
+PANEL_Y = 606
+PANEL_W = 760
+PANEL_H = 50
+PANEL_RADIUS = 22  # retained for compatibility; inner panel is disabled in V10
 
 LABEL_W = 92
 LABEL_H = 30
 LABEL_X = AVATAR_X + (AVATAR_SIZE - LABEL_W) // 2
-LABEL_Y = AVATAR_Y + AVATAR_SIZE - 16
+LABEL_Y = AVATAR_Y + AVATAR_SIZE - 14
 
-SUBTITLE_FONT_SIZE = 28
-SUBTITLE_CHARS_PER_LINE = 20
-SUBTITLE_MAX_CHARS_PER_PAGE = 20
+SUBTITLE_FONT_SIZE = 29
+SUBTITLE_CHARS_PER_LINE = 24
+SUBTITLE_MAX_CHARS_PER_PAGE = 24
 SUBTITLE_MIN_PAGE_SEC = 0.75
 
-WAVE_W = 390
-WAVE_H = 10
+WAVE_W = 420
+WAVE_H = 12
 WAVE_X = PANEL_X + (PANEL_W - WAVE_W) // 2
-WAVE_Y = PANEL_Y + PANEL_H - 15
+WAVE_Y = PANEL_Y + 34
 
 PUNCTUATION_PATTERN = re.compile(r"([^，。；！？!?;：:、]+[，。；！？!?;：:、]?)")
 
@@ -379,21 +379,13 @@ def draw_centered_text(draw: ImageDraw.ImageDraw, box: tuple[int, int, int, int]
 
 def create_subtitle_panel(size: tuple[int, int]) -> Image.Image:
     """
-    Create a minimal inner subtitle card. The main subtitle background is the
-    lower gradient band; this card only gives the text a soft anchor.
+    No floating dialogue box.
+    The full-width lower gradient band is the only subtitle background.
+    Keep this function as a transparent placeholder so the rest of the layout
+    logic can stay simple.
     """
     w, h = size
-    panel = Image.new("RGBA", (w, h), (255, 255, 255, 0))
-    d = ImageDraw.Draw(panel)
-
-    d.rounded_rectangle(
-        (0, 0, w - 1, h - 1),
-        radius=PANEL_RADIUS,
-        fill=(10, 18, 32, 110),
-        outline=(255, 255, 255, 45),
-        width=1,
-    )
-    return panel
+    return Image.new("RGBA", (w, h), (255, 255, 255, 0))
 
 def build_buckets(sections: list[dict], images: list[Path]) -> list[list[dict]]:
     records = []
@@ -470,9 +462,10 @@ def compose_frame(turn: dict, subtitle_text: str, avatar_cache: dict[str, Image.
     band = Image.new("RGBA", (VIDEO_W, BAND_H), (255, 255, 255, 0))
     bd = ImageDraw.Draw(band)
     for s in range(BAND_H):
-        alpha = int(26 + 154 * (s / max(BAND_H - 1, 1)))
-        bd.line((0, s, VIDEO_W, s), fill=(8, 15, 28, alpha))
-    bd.rectangle((0, 0, VIDEO_W, 2), fill=(56, 189, 248, 150))
+        alpha = int(78 + 168 * (s / max(BAND_H - 1, 1)))
+        bd.line((0, s, VIDEO_W, s), fill=(6, 12, 22, alpha))
+    # subtle top accent line like the old video style
+    bd.rectangle((0, 0, VIDEO_W, 3), fill=(56, 189, 248, 180))
     frame.alpha_composite(band, (0, BAND_Y))
 
     speaker = normalize_speaker(turn["speaker"])
@@ -490,7 +483,7 @@ def compose_frame(turn: dict, subtitle_text: str, avatar_cache: dict[str, Image.
     frame.alpha_composite(panel, (PANEL_X, PANEL_Y))
 
     sub_font = load_font(SUBTITLE_FONT_SIZE)
-    text_box = (PANEL_X + 28, PANEL_Y + 6, PANEL_X + PANEL_W - 28, PANEL_Y + 44)
+    text_box = (PANEL_X + 8, PANEL_Y + 1, PANEL_X + PANEL_W - 8, PANEL_Y + 38)
     draw_centered_text(d, text_box, subtitle_text, sub_font, (244, 247, 251, 255), shadow=True)
 
     frame.convert("RGB").save(out_path, quality=95)
