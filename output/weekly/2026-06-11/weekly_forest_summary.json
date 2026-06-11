@@ -1,0 +1,306 @@
+{
+  "meta": {
+    "source": "weekly_market_series.json + weekly_news_context.json",
+    "data_status_note": "Data aligned with analysis window. Significant narrative shift from 'reflation' to 'growth concerns' observed.",
+    "week_range": "2026-06-05 ～ 2026-06-11",
+    "days_observed": "7",
+    "analysis_window": {
+      "start_date": "2026-06-05",
+      "end_date": "2026-06-11",
+      "source": "workflow_env"
+    },
+    "lookback_window": {
+      "start": "2026-05-15",
+      "end": "2026-06-11",
+      "rule": "default_2026_05_15_to_latest_yahoo_date"
+    }
+  },
+  "forest_summary": {
+    "weekly_main_theme": "市場從「再通膨定價」轉向「成長降溫」的體制轉換",
+    "main_question": "隨著油價重挫與就業數據降溫，高利率定價是否已見頂？這將如何重塑下半年的資產傳導邏輯？",
+    "one_sentence_verdict": "地緣風險消退與經濟數據邊際降溫，成功扭轉了本週初的高利率恐慌，帶動殖利率與美元雙雙回落。",
+    "overall_verdict": "部分成立",
+    "narrative_arc": "影片將從油價重挫切入，探討其如何瓦解再通膨預期，隨後檢視殖利率與美元的同步回落，最後解析黃金的弱勢與亞幣內部的分化現象，揭示市場在過渡期的局部矛盾。",
+    "why_it_matters": "市場預期的切換意味著資產配置邏輯的根本改變。若成長降溫成為主旋律，前期受壓抑的資產可能迎來轉機，但過程中的流動性與基本面差異將導致劇烈波動。"
+  },
+  "macro_storyline": {
+    "story_start": "本週初，美債殖利率一度突破4.5%，美元指數站上100，市場深陷於「高利率維持更久」的恐慌與再通膨定價中。",
+    "main_drivers": [
+      "伊朗和平協議進展導致地緣政治風險溢價消散，油價重挫。",
+      "初領失業金人數增加，顯示勞動市場出現邊際降溫訊號。"
+    ],
+    "market_transmission": "油價下跌有效削弱了通膨預期，結合就業數據的降溫，促使美國10年期公債殖利率由4.55%的高點回落至4.46%，美元指數也隨之跌破100關卡。傳導鏈在通膨、利率與美元之間呈現高度同頻的修正。",
+    "revision_or_noise": "然而，傳導並未完美覆蓋所有資產。黃金並未受惠於美元與殖利率的回落，反而出現顯著下跌；同時，亞幣內部出現分化，台幣與日圓在美元走弱時依然承壓，僅韓元展現出明顯的升值動能。這些分歧顯示市場仍受到流動性調節與局部基本面的干擾。",
+    "story_end": "市場敘事已由通膨擔憂轉向成長放緩。接下來的焦點將轉向聯準會對降溫數據的政策反應函數，以及各類資產在新敘事下的重新定價過程。"
+  },
+  "macro_variables": {
+    "inflation_view": "顯著降溫。受伊朗和平協議進展影響，地緣風險消退，WTI原油大幅下跌，成為修正前期再通膨定價的核心驅動力。",
+    "rate_view": "預期轉折。美債10年期殖利率觸及4.55%高點後，因就業數據降溫而快速回落至4.46%，顯示市場對持續升息的激進預期正在修正。",
+    "dollar_fx_view": "高檔回落。美元指數隨美債利差優勢縮減，由100.11的高點回落至99.67，結束了本週初的強勢表態。",
+    "asia_fx_view": "內部分化。在美元回落的背景下，韓元大幅反彈升值；但台幣受外資熱錢匯出影響，仍在高位震盪逼近31.6；日圓亦維持在160關口附近，顯示匯率受在地資金流影響大於單純的美元傳導。",
+    "gold_view": "結構性承壓。儘管美元與殖利率回落，黃金仍從4350美元上方跌至4229美元，反映花旗下調目標價的影響及市場流動性調節的賣壓。",
+    "energy_view": "大幅下挫。川普發言與伊朗和平協議進展使得地緣政治風險溢價快速消散，WTI跌破86美元，布蘭特原油跌破89美元。"
+  },
+  "evidence": {
+    "most_important_evidence": [
+      "WTI原油由6月7日的92.94美元跌至6月11日的85.75美元。",
+      "美國10年期公債殖利率由6月8日的4.552%降至6月11日的4.463%。",
+      "美元指數由6月7日的100.11降至6月11日的99.67。"
+    ],
+    "insufficient_evidence": [
+      "黃金在美元與殖利率雙降的環境下，由4352美元下跌至4229美元，未呈現典型的反向傳導。",
+      "台幣在美元指數跌破100時，匯率仍維持在31.58至31.62的高位震盪，未見明顯升值。"
+    ],
+    "watch_items_from_daily_summaries": [
+      "亞幣（尤其是台幣與日圓）在美元弱勢下的反彈動能是否浮現。",
+      "黃金價格在流動性賣壓釋放後是否能止跌企穩。"
+    ],
+    "watch_items_from_news_context": [
+      "聯準會官員對近期就業數據降溫的公開發言與政策指引。",
+      "伊朗和平協議的最終落實情況及其對全球能源供應的實質影響。"
+    ]
+  },
+  "video_planning": {
+    "suggested_video_title": "總經解析：再通膨預期瓦解，市場迎來「成長降溫」定價時刻",
+    "target_duration": "6-8 minutes",
+    "video_thesis": "本週市場經歷了從「通膨擔憂」到「成長放緩」的關鍵預期切換，油價重挫帶動殖利率與美元回落，但資產間的分歧顯示市場仍處於劇烈的重新定價陣痛期。",
+    "opening_hook": "當10年期美債殖利率衝破4.5%，市場一度以為高利率將永無止境。但短短幾天內，油價的重挫與就業數據的降溫，瞬間扭轉了整個總經局勢。本週，我們見證了定價體制的轉換。",
+    "video_segments": [
+      {
+        "segment_id": "seg_01",
+        "segment_title": "預期切換：從再通膨到成長降溫",
+        "segment_question": "本週市場情緒為何發生戲劇性轉折？",
+        "narration_focus": "說明本週初殖利率與美元雙雙見高，隨後市場敘事因總經數據與新聞事件發生根本性轉變。",
+        "main_point": "市場定價體制從擔憂通膨轉向關注經濟成長放緩。",
+        "estimated_duration": "60 seconds",
+        "visual_needed": true,
+        "visual_role": "主視覺建立背景",
+        "visual_concept": "展示美債殖利率與美元指數本週「先高後低」的倒V型走勢。"
+      },
+      {
+        "segment_id": "seg_02",
+        "segment_title": "第一張骨牌：油價重挫與通膨降溫",
+        "segment_question": "是什麼觸發了再通膨預期的瓦解？",
+        "narration_focus": "解析伊朗和平協議進展如何消除地緣政治風險溢價，導致WTI與布蘭特原油雙雙大跌。",
+        "main_point": "能源價格的大幅修正，直接削弱了市場對通膨黏性的擔憂。",
+        "estimated_duration": "75 seconds",
+        "visual_needed": true,
+        "visual_role": "數據佐證",
+        "visual_concept": "油價走勢圖結合地緣政治新聞標題，標示出價格快速下滑的區間。"
+      },
+      {
+        "segment_id": "seg_03",
+        "segment_title": "順暢的傳導：殖利率與美元回落",
+        "segment_question": "通膨預期的降溫如何傳導至金融市場？",
+        "narration_focus": "結合初領失業金人數增加的新聞，說明通膨預期與成長預期雙降，如何帶動美債殖利率與美元指數同步下行。",
+        "main_point": "油價與就業數據共同促成了利率預期的下修，符合標準的總經傳導邏輯。",
+        "estimated_duration": "75 seconds",
+        "visual_needed": true,
+        "visual_role": "傳導鏈演示",
+        "visual_concept": "油價、美債殖利率與美元指數的連動圖表，強調三者同頻向下的趨勢。"
+      },
+      {
+        "segment_id": "seg_04",
+        "segment_title": "市場分歧一：黃金的逆勢下挫",
+        "segment_question": "為何美元回落，黃金卻未能受惠？",
+        "narration_focus": "探討在美元與殖利率雙降的有利環境下，黃金價格卻逆勢下跌的原因，引入機構調降目標價與避險流動性調節的觀點。",
+        "main_point": "黃金走勢背離總經傳導，反映出市場深層的流動性壓力與機構預期修正。",
+        "estimated_duration": "60 seconds",
+        "visual_needed": true,
+        "visual_role": "異常現象解析",
+        "visual_concept": "美元指數與黃金價格的走勢對比圖，特別標示出兩者同步下跌的背離區間。"
+      },
+      {
+        "segment_id": "seg_05",
+        "segment_title": "市場分歧二：亞幣的內部分化",
+        "segment_question": "強美元暫歇，亞洲貨幣為何反應不一？",
+        "narration_focus": "逐一檢視台幣、日圓與韓圜。說明韓元大幅反彈，但台幣受外資匯出影響逼近31.6，日圓亦無明顯起色。",
+        "main_point": "亞幣並未全面受惠於美元回落，本地資金流向與基本面成為決定匯率表現的關鍵。",
+        "estimated_duration": "90 seconds",
+        "visual_needed": true,
+        "visual_role": "跨資產比較",
+        "visual_concept": "台幣、日圓、韓元對美元匯率的相對走勢圖，凸顯韓元升值與台幣、日圓承壓的分化現象。"
+      },
+      {
+        "segment_id": "seg_06",
+        "segment_title": "總結與展望",
+        "segment_question": "面對預期切換的過渡期，下週該關注什麼？",
+        "narration_focus": "總結本週「部分成立」的傳導邏輯，點出下週需密切關注聯準會的態度以及分歧資產的後續走向。",
+        "main_point": "市場正處於重新定價的陣痛期，需警惕局部基本面與資金流帶來的波動。",
+        "estimated_duration": "60 seconds",
+        "visual_needed": true,
+        "visual_role": "重點回顧",
+        "visual_concept": "條列式重點字卡，搭配關鍵數據變化的摘要。"
+      }
+    ],
+    "visual_sequence": [
+      {
+        "visual_id": "vis_01",
+        "source_segment_id": "seg_01",
+        "visual_title": "本週利率與美元走勢總覽",
+        "visual_purpose": "呈現本週初市場恐慌至週末回落的整體輪廓",
+        "visual_concept": "雙線圖：美國10年期公債殖利率與美元指數，標註6月8日的高點轉折。",
+        "key_labels": [
+          "US10Y突破4.55%",
+          "DXY站上100",
+          "轉折回落"
+        ],
+        "is_web_hero_candidate": false
+      },
+      {
+        "visual_id": "vis_02",
+        "source_segment_id": "seg_02",
+        "visual_title": "原油價格大跳水",
+        "visual_purpose": "說明通膨預期降溫的核心驅動力",
+        "visual_concept": "WTI與Brent原油價格走勢圖，配合「伊朗和平協議」新聞標題浮現。",
+        "key_labels": [
+          "地緣風險消退",
+          "WTI跌破86美元"
+        ],
+        "is_web_hero_candidate": true
+      },
+      {
+        "visual_id": "vis_03",
+        "source_segment_id": "seg_03",
+        "visual_title": "總經傳導同頻驗證",
+        "visual_purpose": "展示油價、殖利率與美元的聯動性",
+        "visual_concept": "三疊圖：由上至下分別為油價、美債殖利率、美元指數，用垂直虛線對齊轉折點。",
+        "key_labels": [
+          "通膨降溫",
+          "利率下修",
+          "美元走弱"
+        ],
+        "is_web_hero_candidate": true
+      },
+      {
+        "visual_id": "vis_04",
+        "source_segment_id": "seg_04",
+        "visual_title": "黃金走勢背離分析",
+        "visual_purpose": "凸顯黃金未隨美元走弱而上漲的異常",
+        "visual_concept": "美元指數與黃金價格對比圖，以紅色箭頭標示兩者同向下跌的分歧區域。",
+        "key_labels": [
+          "機構降評",
+          "流動性賣壓"
+        ],
+        "is_web_hero_candidate": false
+      },
+      {
+        "visual_id": "vis_05",
+        "source_segment_id": "seg_05",
+        "visual_title": "亞洲貨幣分化走勢",
+        "visual_purpose": "說明在地因素對匯率的影響大於單一美元因素",
+        "visual_concept": "基準化折線圖（以6月5日為起點），比較台幣、日圓、韓元本週的相對漲跌幅。",
+        "key_labels": [
+          "韓元強勢反彈",
+          "台幣外資匯出承壓",
+          "日圓維持160"
+        ],
+        "is_web_hero_candidate": false
+      }
+    ],
+    "web_hero_visual": {
+      "source_visual_id": "vis_03",
+      "purpose": "作為網頁主視覺，一目了然地呈現本週總經傳導的核心邏輯。",
+      "reason": "油價、殖利率與美元的同步回落，最能代表本週「再通膨預期瓦解」與「成長降溫定價」的主線敘事。"
+    },
+    "six_scene_outline": [
+      {
+        "scene_id": "scene_01",
+        "scene_title": "預期切換：從再通膨到成長降溫",
+        "scene_question": "本週市場情緒為何發生戲劇性轉折？",
+        "main_point": "市場定價體制從擔憂通膨轉向關注經濟成長放緩。",
+        "visual_hint": "展示美債殖利率與美元指數本週「先高後低」的倒V型走勢。"
+      },
+      {
+        "scene_id": "scene_02",
+        "scene_title": "第一張骨牌：油價重挫與通膨降溫",
+        "scene_question": "是什麼觸發了再通膨預期的瓦解？",
+        "main_point": "能源價格的大幅修正，直接削弱了市場對通膨黏性的擔憂。",
+        "visual_hint": "油價走勢圖結合地緣政治新聞標題，標示出價格快速下滑的區間。"
+      },
+      {
+        "scene_id": "scene_03",
+        "scene_title": "順暢的傳導：殖利率與美元回落",
+        "scene_question": "通膨預期的降溫如何傳導至金融市場？",
+        "main_point": "油價與就業數據共同促成了利率預期的下修，符合標準的總經傳導邏輯。",
+        "visual_hint": "油價、美債殖利率與美元指數的連動圖表，強調三者同頻向下的趨勢。"
+      },
+      {
+        "scene_id": "scene_04",
+        "scene_title": "市場分歧一：黃金的逆勢下挫",
+        "scene_question": "為何美元回落，黃金卻未能受惠？",
+        "main_point": "黃金走勢背離總經傳導，反映出市場深層的流動性壓力與機構預期修正。",
+        "visual_hint": "美元指數與黃金價格的走勢對比圖，特別標示出兩者同步下跌的背離區間。"
+      },
+      {
+        "scene_id": "scene_05",
+        "scene_title": "市場分歧二：亞幣的內部分化",
+        "scene_question": "強美元暫歇，亞洲貨幣為何反應不一？",
+        "main_point": "亞幣並未全面受惠於美元回落，本地資金流向與基本面成為決定匯率表現的關鍵。",
+        "visual_hint": "台幣、日圓、韓元對美元匯率的相對走勢圖，凸顯韓元升值與台幣、日圓承壓的分化現象。"
+      },
+      {
+        "scene_id": "scene_06",
+        "scene_title": "總結與展望",
+        "scene_question": "面對預期切換的過渡期，下週該關注什麼？",
+        "main_point": "市場正處於重新定價的陣痛期，需警惕局部基本面與資金流帶來的波動。",
+        "visual_hint": "條列式重點字卡，搭配關鍵數據變化的摘要。"
+      }
+    ],
+    "image_card_brief": [
+      {
+        "card_id": "card_01",
+        "headline": "本週利率與美元走勢總覽",
+        "short_labels": [
+          "US10Y突破4.55%",
+          "DXY站上100",
+          "轉折回落"
+        ],
+        "visual_concept": "雙線圖：美國10年期公債殖利率與美元指數，標註6月8日的高點轉折。"
+      },
+      {
+        "card_id": "card_02",
+        "headline": "原油價格大跳水",
+        "short_labels": [
+          "地緣風險消退",
+          "WTI跌破86美元"
+        ],
+        "visual_concept": "WTI與Brent原油價格走勢圖，配合「伊朗和平協議」新聞標題浮現。"
+      },
+      {
+        "card_id": "card_03",
+        "headline": "總經傳導同頻驗證",
+        "short_labels": [
+          "通膨降溫",
+          "利率下修",
+          "美元走弱"
+        ],
+        "visual_concept": "三疊圖：由上至下分別為油價、美債殖利率、美元指數，用垂直虛線對齊轉折點。"
+      },
+      {
+        "card_id": "card_04",
+        "headline": "黃金走勢背離分析",
+        "short_labels": [
+          "機構降評",
+          "流動性賣壓"
+        ],
+        "visual_concept": "美元指數與黃金價格對比圖，以紅色箭頭標示兩者同向下跌的分歧區域。"
+      },
+      {
+        "card_id": "card_05",
+        "headline": "亞洲貨幣分化走勢",
+        "short_labels": [
+          "韓元強勢反彈",
+          "台幣外資匯出承壓",
+          "日圓維持160"
+        ],
+        "visual_concept": "基準化折線圖（以6月5日為起點），比較台幣、日圓、韓元本週的相對漲跌幅。"
+      }
+    ],
+    "next_week_questions": [
+      "聯準會官員對勞動市場降溫數據的解讀為何？是否會調整利率點陣圖預期？",
+      "外資在台股的動向是否會持續對台幣匯率施加貶值壓力？",
+      "黃金在經歷本週的流動性賣壓後，是否會在4200美元附近尋得技術性支撐？"
+    ]
+  }
+}
