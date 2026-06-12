@@ -3,15 +3,15 @@
     "type": "story_edge_tts_audio_v1",
     "source_dialogue": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11/weekly_dialogue_story_only_v8.json",
     "output_audio": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11/story_audio/full_dialogue.mp3",
-    "generated_at": "2026-06-12T00:26:12",
+    "generated_at": "2026-06-12T01:29:46",
     "tom_voice": "zh-TW-YunJheNeural",
     "miranda_voice": "zh-TW-HsiaoChenNeural",
     "tts_rate": "+0%",
     "tts_volume": "+0%",
     "tom_pitch": "-5Hz",
     "miranda_pitch": "+0Hz",
-    "turn_count": 29,
-    "full_duration_seconds": 670.08,
+    "turn_count": 35,
+    "full_duration_seconds": 698.352,
     "note": "edge-tts reads Step 82 spoken_text with light punctuation pauses for more natural TTS; no narration regeneration."
   },
   "timeline_file": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11/story_audio/audio_timeline.json"
