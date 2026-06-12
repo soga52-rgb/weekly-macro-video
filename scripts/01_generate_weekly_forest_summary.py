@@ -27,7 +27,10 @@ Output:
 Required env:
 - GEMINI_API_KEY
 
-Optional env:
+Optional env / CLI:
+- ANALYSIS_START_DATE / --start = YYYY-MM-DD
+- ANALYSIS_END_DATE   / --end   = YYYY-MM-DD
+- WEEK_DIR / --week-dir = output/weekly/YYYY-MM-DD or YYYY-MM-DD
 - GEMINI_ANALYSIS_MODEL, preferred for this analysis step
 - GEMINI_MODEL, fallback if GEMINI_ANALYSIS_MODEL is not set
 - default fallback: gemini-3.5-pro
@@ -184,25 +187,74 @@ def find_latest_week_dir() -> Path:
     return week_dirs[0]
 
 
-def infer_analysis_window_from_source(week_dir: Path) -> Dict[str, str]:
+def resolve_week_dir(week_dir_arg: str) -> Path:
+    week_dir_arg = (week_dir_arg or "").strip()
+    if not week_dir_arg:
+        return find_latest_week_dir()
+
+    raw = Path(week_dir_arg)
+    if raw.is_absolute():
+        return raw
+
+    if len(week_dir_arg) == 10 and week_dir_arg[4] == "-" and week_dir_arg[7] == "-":
+        return OUTPUT_WEEKLY_DIR / week_dir_arg
+
+    return ROOT_DIR / raw
+
+
+def infer_analysis_window_from_source(
+    week_dir: Path,
+    start_override: str = "",
+    end_override: str = "",
+    weekly_market_series: Dict[str, Any] | None = None,
+    weekly_news_context_json: Dict[str, Any] | None = None,
+) -> Dict[str, str]:
     """
     Determine the formal weekly analysis window.
 
     Priority:
-    1) ANALYSIS_START_DATE / ANALYSIS_END_DATE env override from workflow.
-    2) weekly_source_text.md, because it is the formal source for this weekly issue.
-    3) data/weekly_video_source.json range.
-    4) week_dir name as end date only.
+    1) CLI overrides / workflow env ANALYSIS_START_DATE / ANALYSIS_END_DATE.
+    2) weekly_market_series.json meta.requested_analysis_window from Step 00 market fetch.
+    3) weekly_news_context.json meta.analysis_window from Step 00 news context.
+    4) weekly_source_text.md, because it is the formal source for this weekly issue.
+    5) data/weekly_video_source.json requested_analysis_window / range.
+    6) week_dir name as end date only.
     """
-    env_start = os.getenv("ANALYSIS_START_DATE", "").strip()
-    env_end = os.getenv("ANALYSIS_END_DATE", "").strip()
+    env_start = (start_override or os.getenv("ANALYSIS_START_DATE", "")).strip()
+    env_end = (end_override or os.getenv("ANALYSIS_END_DATE", "")).strip()
     if env_start and env_end:
         return {
             "start_date": env_start,
             "end_date": env_end,
             "label": f"{env_start} ～ {env_end}",
-            "source": "workflow_env",
+            "source": "workflow_env_or_cli",
         }
+
+    if isinstance(weekly_market_series, dict):
+        meta = weekly_market_series.get("meta", {})
+        requested = meta.get("requested_analysis_window", {}) if isinstance(meta, dict) else {}
+        start = str(requested.get("start_date") or "").strip()
+        end = str(requested.get("end_date") or "").strip()
+        if start and end:
+            return {
+                "start_date": start,
+                "end_date": end,
+                "label": f"{start} ～ {end}",
+                "source": "weekly_market_series.meta.requested_analysis_window",
+            }
+
+    if isinstance(weekly_news_context_json, dict):
+        meta = weekly_news_context_json.get("meta", {})
+        analysis_window = meta.get("analysis_window", {}) if isinstance(meta, dict) else {}
+        start = str(analysis_window.get("start_date") or "").strip()
+        end = str(analysis_window.get("end_date") or "").strip()
+        if start and end:
+            return {
+                "start_date": start,
+                "end_date": end,
+                "label": f"{start} ～ {end}",
+                "source": "weekly_news_context.meta.analysis_window",
+            }
 
     source_text = load_text(week_dir / "weekly_source_text.md")
     match = re.search(r"週期：\s*(\d{4}-\d{2}-\d{2})\s*[～~\-to]+\s*(\d{4}-\d{2}-\d{2})", source_text)
@@ -216,16 +268,30 @@ def infer_analysis_window_from_source(week_dir: Path) -> Dict[str, str]:
         }
 
     source_json = load_json(ROOT_DIR / "data" / "weekly_video_source.json", {}) or {}
-    range_data = source_json.get("range", {}) if isinstance(source_json, dict) else {}
-    start = str(range_data.get("start_date") or "")
-    end = str(range_data.get("end_date") or week_dir.name)
-    if start and end:
-        return {
-            "start_date": start,
-            "end_date": end,
-            "label": f"{start} ～ {end}",
-            "source": "data/weekly_video_source.json",
-        }
+    if isinstance(source_json, dict):
+        requested = source_json.get("requested_analysis_window", {})
+        if isinstance(requested, dict):
+            start = str(requested.get("start_date") or "").strip()
+            end = str(requested.get("end_date") or "").strip()
+            if start and end:
+                return {
+                    "start_date": start,
+                    "end_date": end,
+                    "label": f"{start} ～ {end}",
+                    "source": "data/weekly_video_source.requested_analysis_window",
+                }
+
+        range_data = source_json.get("range", {})
+        if isinstance(range_data, dict):
+            start = str(range_data.get("start_date") or "")
+            end = str(range_data.get("end_date") or week_dir.name)
+            if start and end:
+                return {
+                    "start_date": start,
+                    "end_date": end,
+                    "label": f"{start} ～ {end}",
+                    "source": "data/weekly_video_source.range",
+                }
 
     return {
         "start_date": "",
@@ -302,6 +368,27 @@ def build_market_payload_for_analysis(
         "analysis_series": analysis_series,
         "lookback_series": lookback_series,
     }
+
+
+def validate_analysis_series_points(market_payload: Dict[str, Any]) -> None:
+    analysis_series = market_payload.get("analysis_series", [])
+    if not isinstance(analysis_series, list):
+        return
+
+    empty_assets = []
+    for item in analysis_series:
+        if not isinstance(item, dict):
+            continue
+        points = item.get("points")
+        if isinstance(points, list) and len(points) == 0:
+            label = item.get("label") or item.get("name") or item.get("symbol") or item.get("asset") or "unknown"
+            empty_assets.append(str(label))
+
+    if empty_assets and len(empty_assets) == len(analysis_series):
+        print("[WARN] All market series have zero points inside the analysis window.")
+        print("[WARN] Check whether Step 00 market series fetched the requested custom date range.")
+    elif empty_assets:
+        print(f"[WARN] Some market series have zero analysis-window points: {', '.join(empty_assets[:8])}")
 
 
 def as_list(value: Any) -> List[Any]:
@@ -444,7 +531,9 @@ def build_user_prompt(
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--week-dir", type=str, default="")
+    parser.add_argument("--week-dir", type=str, default=os.getenv("WEEK_DIR", "").strip())
+    parser.add_argument("--start", type=str, default=os.getenv("ANALYSIS_START_DATE", "").strip())
+    parser.add_argument("--end", type=str, default=os.getenv("ANALYSIS_END_DATE", "").strip())
     args = parser.parse_args()
 
     api_key = os.getenv("GEMINI_API_KEY", "").strip()
@@ -457,12 +546,18 @@ def main() -> None:
         or DEFAULT_ANALYSIS_MODEL
     )
 
-    week_dir = Path(args.week_dir) if args.week_dir else find_latest_week_dir()
+    week_dir = resolve_week_dir(args.week_dir)
 
     weekly_market_series = load_json(week_dir / "weekly_market_series.json", {})
     weekly_news_context_md = load_text(week_dir / "weekly_news_context.md")
     weekly_news_context_json = load_json(week_dir / "weekly_news_context.json", {})
-    analysis_window = infer_analysis_window_from_source(week_dir)
+    analysis_window = infer_analysis_window_from_source(
+        week_dir,
+        start_override=args.start,
+        end_override=args.end,
+        weekly_market_series=weekly_market_series,
+        weekly_news_context_json=weekly_news_context_json,
+    )
 
     if not weekly_market_series:
         raise FileNotFoundError(f"Missing or empty weekly_market_series.json in {week_dir}")
@@ -471,6 +566,7 @@ def main() -> None:
         weekly_market_series=weekly_market_series,
         analysis_window=analysis_window,
     )
+    validate_analysis_series_points(market_payload)
 
     if not weekly_news_context_md and not weekly_news_context_json:
         weekly_news_context_md = (
