@@ -26,6 +26,7 @@ Required env:
 Optional env:
 - GEMINI_MODEL, default: gemini-3.5-flash
 - WEEKLY_NEWS_MAX_ITEMS, default: 30
+- WEEKLY_NEWS_LOOKBACK_DAYS, default: 14
 """
 
 import argparse
@@ -39,7 +40,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
@@ -50,6 +51,7 @@ OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
 
 DEFAULT_MODEL = "gemini-3.5-flash"
 DEFAULT_MAX_ITEMS = 30
+DEFAULT_LOOKBACK_DAYS = 14
 
 SOURCE_FILTERS = [
     "site:udn.com",
@@ -59,6 +61,20 @@ SOURCE_FILTERS = [
 ]
 
 NEWS_QUERY_GROUPS = [
+    {
+        "theme": "us_macro_data",
+        "queries": [
+            "美國 CPI 4.2 通膨 Fed",
+            "美國 CPI 通膨 超出預期 聯準會",
+            "美國 PPI 生產者物價 通膨 Fed",
+            "美國 非農 就業 大增 超出預期 Fed",
+            "美國 就業報告 非農 薪資 通膨",
+            "US CPI inflation 4.2 Federal Reserve",
+            "US PPI producer prices inflation Fed",
+            "nonfarm payrolls jobs report stronger than expected Fed",
+            "initial jobless claims labor market Fed",
+        ],
+    },
     {
         "theme": "long_bond_yields",
         "queries": [
@@ -153,7 +169,7 @@ B. weekly_news_candidates：
 重要規則：
 1. 不要逐篇摘要新聞。
 2. 請判斷新聞是否支持 weekly_source_text 的市場主線。
-3. 請特別檢查：通膨預期、Fed政策、長天期美債殖利率、美元、亞洲貨幣、黃金、能源、地緣政治、美中關係。
+3. 請特別檢查：CPI、PPI、非農就業、初領失業金、通膨預期、Fed政策、長天期美債殖利率、美元、亞洲貨幣、黃金、能源、地緣政治、美中關係。
 4. 若新聞支持「高利率 → 美元 → 亞幣 / 黃金」傳導，請列入 confirming_signals。
 5. 若新聞顯示單日背離或修正因子，請列入 contradicting_signals 或 news_based_corrections。
 6. 若只有單一新聞或佐證不足，請標示為「待觀察」，不要改寫整週主線。
@@ -165,13 +181,14 @@ B. weekly_news_candidates：
 - 不要平均分配新聞，也不要為了湊數把低相關新聞放進分類。
 - 請依本週新聞密度與重要性自然分配：新聞較少的類別可以只放 0～2 則；新聞明顯較多的類別可以放 5～8 則。
 - 每類最多 8 則，優先挑對本週主線最有佐證價值者。
-- 請優先保留靠近週末或最新交易日的新聞；若 5/20～5/21 有同類新聞，除非舊新聞更具代表性，否則不要大量使用 5/15～5/18 的新聞。
+- 請優先保留正式分析區間內或靠近週末最新交易日的新聞；較早新聞可作為前期脈絡，尤其是 PPI、CPI、非農、Fed 指引等會延續影響本週定價的總經參數，但不要讓舊新聞取代本週主線。
 - 一則新聞只能放在一類，不要重複。
 - news_categories 每則新聞都必須保留原始候選新聞的 title、source、url、published_at，並新增 why_it_matters。
 - top_news 每則新聞也必須保留 title、source、url、published_at，並新增 why_it_matters。
 - 不要改寫新聞標題；title 必須盡量沿用 weekly_news_candidates 的原始 title，以便後續網頁連結。
 - 分類以標題與新聞主題優先，why_it_matters 只作輔助。
 - 「油價、能源、CPI、PPI、物價、再通膨、通膨黏性」優先放「通膨預期」。
+- 「非農、就業報告、初領失業金」若標題主軸是就業數據本身，優先放「利率」或作為 Fed 政策路徑佐證；若明確連到薪資通膨，可放「通膨預期」。
 - 「美債殖利率、長債、Fed、聯準會、升息、降息、利率路徑」優先放「利率」。
 - 「美元、DXY、新台幣、日圓、韓元、人民幣、亞幣、匯率」優先放「貨幣」。
 - 地緣政治若主要影響油價或能源，放「通膨預期」；若無法明確歸類，放「其他」。
@@ -253,11 +270,12 @@ def infer_week_range(week_dir: Path) -> Tuple[str, str, str]:
 
 def build_queries() -> List[Tuple[str, str]]:
     source_clause = "(" + " OR ".join(SOURCE_FILTERS) + ")"
+    lookback_days = str(os.getenv("WEEKLY_NEWS_LOOKBACK_DAYS", str(DEFAULT_LOOKBACK_DAYS))).strip() or str(DEFAULT_LOOKBACK_DAYS)
     output = []
     for group in NEWS_QUERY_GROUPS:
         theme = group["theme"]
         for q in group["queries"]:
-            output.append((theme, f"{q} {source_clause} when:7d"))
+            output.append((theme, f"{q} {source_clause} when:{lookback_days}d"))
     return output
 
 
@@ -339,19 +357,30 @@ def fetch_rss_items(query: str, theme: str, max_items: int = 8) -> List[Dict[str
     return [x for x in items if x["title"] and x["url"]]
 
 
-def score_item(item: Dict[str, Any]) -> int:
-    text = f"{item.get('title','')} {item.get('source','')} {item.get('theme','')}".lower()
+def score_item(item: Dict[str, Any], week_start: str = "", week_end: str = "") -> int:
+    text = f"{item.get('title','')} {item.get('source','')} {item.get('theme','')} {item.get('query','')}".lower()
     score = 0
 
     keywords = [
         "美債", "殖利率", "利率", "美元", "通膨", "fed", "聯準會",
         "黃金", "原油", "油價", "台幣", "日圓", "亞洲貨幣",
         "treasury", "yield", "dollar", "inflation", "gold", "oil",
+        "cpi", "ppi", "物價", "非農", "就業", "就業報告", "初領失業金",
+        "payroll", "payrolls", "jobs report", "employment", "jobless claims",
     ]
 
     for kw in keywords:
         if kw.lower() in text:
             score += 2
+
+    # Keep macro hard-data releases from being crowded out by market-reaction news.
+    hard_data_keywords = [
+        "cpi", "ppi", "consumer price", "producer price", "物價", "通膨率",
+        "非農", "就業報告", "薪資", "失業率", "初領失業金",
+        "payroll", "payrolls", "jobs report", "employment report", "jobless claims",
+    ]
+    if any(kw.lower() in text for kw in hard_data_keywords):
+        score += 8
 
     preferred_sources = ["聯合", "經濟日報", "鉅亨", "MarketWatch", "Investing"]
     for src in preferred_sources:
@@ -360,20 +389,41 @@ def score_item(item: Dict[str, Any]) -> int:
 
     published = pubdate_to_datetime(str(item.get("published_at") or ""))
     if published:
-        date_key = published.strftime("%Y-%m-%d")
-        if date_key >= "2026-05-21":
-            score += 10
-        elif date_key == "2026-05-20":
-            score += 8
-        elif date_key == "2026-05-19":
-            score += 5
-        elif date_key == "2026-05-18":
-            score += 2
+        published_date = published.date()
+        start_dt = None
+        end_dt = None
+        try:
+            if week_start:
+                start_dt = datetime.strptime(week_start, "%Y-%m-%d").date()
+            if week_end:
+                end_dt = datetime.strptime(week_end, "%Y-%m-%d").date()
+        except ValueError:
+            start_dt = None
+            end_dt = None
+
+        if start_dt and end_dt:
+            # Formal weekly window gets the highest recency weight.
+            # A short pre-window buffer is still useful for macro parameters like PPI/CPI
+            # that can keep affecting this week's rate and FX pricing.
+            if start_dt <= published_date <= end_dt:
+                score += 12
+            elif start_dt - timedelta(days=7) <= published_date < start_dt:
+                score += 5
+            elif end_dt < published_date <= end_dt + timedelta(days=2):
+                score += 4
+        else:
+            # Generic fallback: newer RSS items rank higher without hard-coded calendar dates.
+            age_days = (datetime.now(timezone.utc) - published).days
+            if age_days <= 2:
+                score += 10
+            elif age_days <= 5:
+                score += 6
+            elif age_days <= 10:
+                score += 3
 
     return score
 
-
-def dedupe_and_rank(items: List[Dict[str, Any]], max_items: int) -> List[Dict[str, Any]]:
+def dedupe_and_rank(items: List[Dict[str, Any]], max_items: int, week_start: str = "", week_end: str = "") -> List[Dict[str, Any]]:
     seen = set()
     deduped = []
 
@@ -383,7 +433,7 @@ def dedupe_and_rank(items: List[Dict[str, Any]], max_items: int) -> List[Dict[st
             continue
         seen.add(key)
         item = dict(item)
-        item["score"] = score_item(item)
+        item["score"] = score_item(item, week_start=week_start, week_end=week_end)
         deduped.append(item)
 
     deduped.sort(key=lambda x: x.get("score", 0), reverse=True)
@@ -538,6 +588,7 @@ def classify_news_bucket(item: Dict[str, Any]) -> str:
     rate_keywords = [
         "美債", "殖利率", "長債", "fed", "聯準會", "利率", "降息", "升息",
         "treasury", "yield", "rate", "federal reserve", "期限溢價",
+        "非農", "就業報告", "初領失業金", "payroll", "jobs report", "jobless claims",
     ]
     currency_keywords = [
         "美元", "dxy", "台幣", "新台幣", "日圓", "日元", "韓元", "人民幣",
@@ -722,7 +773,7 @@ def main() -> None:
     week_dir = Path(args.week_dir) if args.week_dir else find_latest_week_dir()
 
     weekly_source_text = load_text(week_dir / "weekly_source_text.md")
-    _, _, week_label = infer_week_range(week_dir)
+    week_start, week_end, week_label = infer_week_range(week_dir)
 
     all_items: List[Dict[str, Any]] = []
     queries = build_queries()
@@ -732,7 +783,7 @@ def main() -> None:
         all_items.extend(fetch_rss_items(query, theme=theme, max_items=6))
         time.sleep(0.5)
 
-    ranked = dedupe_and_rank(all_items, max_items=args.max_items)
+    ranked = dedupe_and_rank(all_items, max_items=args.max_items, week_start=week_start, week_end=week_end)
 
     raw_package = {
         "meta": {
@@ -742,6 +793,7 @@ def main() -> None:
             "raw_count": len(all_items),
             "ranked_count": len(ranked),
             "sources_preferred": SOURCE_FILTERS,
+            "lookback_days": int(os.getenv("WEEKLY_NEWS_LOOKBACK_DAYS", str(DEFAULT_LOOKBACK_DAYS))),
         },
         "items": ranked,
     }
