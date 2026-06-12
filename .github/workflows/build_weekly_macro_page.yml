@@ -65,6 +65,8 @@ jobs:
         run: |
           if [ -n "${TARGET_WEEK_END_DATE}" ]; then
             echo "WEEK_DIR=output/weekly/${TARGET_WEEK_END_DATE}" >> "$GITHUB_ENV"
+          elif [ -n "${ANALYSIS_END_DATE}" ]; then
+            echo "WEEK_DIR=output/weekly/${ANALYSIS_END_DATE}" >> "$GITHUB_ENV"
           else
             echo "WEEK_DIR=" >> "$GITHUB_ENV"
           fi
@@ -72,23 +74,35 @@ jobs:
       - name: Fetch weekly source from Apps Script
         if: ${{ !inputs.use_existing_week_data }}
         run: |
-          python scripts/00_fetch_weekly_source_from_apps_script.py
+          if [ -n "${WEEK_DIR}" ]; then
+            python scripts/00_fetch_weekly_source_from_apps_script.py               --week-dir "${WEEK_DIR}"               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
+          else
+            python scripts/00_fetch_weekly_source_from_apps_script.py               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
+          fi
 
       - name: Fetch weekly market series from Apps Script
         if: ${{ !inputs.use_existing_week_data }}
         run: |
-          python scripts/00_fetch_weekly_market_series.py
+          if [ -n "${WEEK_DIR}" ]; then
+            python scripts/00_fetch_weekly_market_series.py               --week-dir "${WEEK_DIR}"               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
+          else
+            python scripts/00_fetch_weekly_market_series.py               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
+          fi
 
       - name: Build weekly news context
         if: ${{ !inputs.use_existing_week_data }}
         run: |
-          python scripts/00_fetch_weekly_news_context.py
+          if [ -n "${WEEK_DIR}" ]; then
+            python scripts/00_fetch_weekly_news_context.py               --week-dir "${WEEK_DIR}"               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
+          else
+            python scripts/00_fetch_weekly_news_context.py               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
+          fi
 
       - name: Verify existing weekly data
         if: ${{ inputs.use_existing_week_data }}
         run: |
           if [ -z "${WEEK_DIR}" ]; then
-            echo "[ERROR] target_week_end_date is required when use_existing_week_data is true."
+            echo "[ERROR] target_week_end_date or analysis_end_date is required when use_existing_week_data is true."
             exit 1
           fi
 
@@ -102,9 +116,9 @@ jobs:
       - name: Generate weekly forest summary
         run: |
           if [ -n "${WEEK_DIR}" ]; then
-            python scripts/01_generate_weekly_forest_summary.py --week-dir "${WEEK_DIR}"
+            python scripts/01_generate_weekly_forest_summary.py               --week-dir "${WEEK_DIR}"               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
           else
-            python scripts/01_generate_weekly_forest_summary.py
+            python scripts/01_generate_weekly_forest_summary.py               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
           fi
 
       - name: Generate weekly macro diagram prompt
@@ -135,6 +149,8 @@ jobs:
         run: |
           if [ -n "${TARGET_WEEK_END_DATE}" ]; then
             LATEST_WEEK_DIR="${TARGET_WEEK_END_DATE}"
+          elif [ -n "${ANALYSIS_END_DATE}" ]; then
+            LATEST_WEEK_DIR="${ANALYSIS_END_DATE}"
           else
             LATEST_WEEK_DIR="$(ls -1 output/weekly | sort | tail -n 1)"
           fi
