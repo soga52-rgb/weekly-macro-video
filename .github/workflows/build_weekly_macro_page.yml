@@ -75,27 +75,42 @@ jobs:
         if: ${{ !inputs.use_existing_week_data }}
         run: |
           if [ -n "${WEEK_DIR}" ]; then
-            python scripts/00_fetch_weekly_source_from_apps_script.py               --week-dir "${WEEK_DIR}"               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
+            python scripts/00_fetch_weekly_source_from_apps_script.py \
+              --week-dir "${WEEK_DIR}" \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
           else
-            python scripts/00_fetch_weekly_source_from_apps_script.py               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
+            python scripts/00_fetch_weekly_source_from_apps_script.py \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
           fi
 
       - name: Fetch weekly market series from Apps Script
         if: ${{ !inputs.use_existing_week_data }}
         run: |
           if [ -n "${WEEK_DIR}" ]; then
-            python scripts/00_fetch_weekly_market_series.py               --week-dir "${WEEK_DIR}"               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
+            python scripts/00_fetch_weekly_market_series.py \
+              --week-dir "${WEEK_DIR}" \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
           else
-            python scripts/00_fetch_weekly_market_series.py               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
+            python scripts/00_fetch_weekly_market_series.py \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
           fi
 
       - name: Build weekly news context
         if: ${{ !inputs.use_existing_week_data }}
         run: |
           if [ -n "${WEEK_DIR}" ]; then
-            python scripts/00_fetch_weekly_news_context.py               --week-dir "${WEEK_DIR}"               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
+            python scripts/00_fetch_weekly_news_context.py \
+              --week-dir "${WEEK_DIR}" \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
           else
-            python scripts/00_fetch_weekly_news_context.py               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
+            python scripts/00_fetch_weekly_news_context.py \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
           fi
 
       - name: Verify existing weekly data
@@ -116,9 +131,14 @@ jobs:
       - name: Generate weekly forest summary
         run: |
           if [ -n "${WEEK_DIR}" ]; then
-            python scripts/01_generate_weekly_forest_summary.py               --week-dir "${WEEK_DIR}"               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
+            python scripts/01_generate_weekly_forest_summary.py \
+              --week-dir "${WEEK_DIR}" \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
           else
-            python scripts/01_generate_weekly_forest_summary.py               --start "${ANALYSIS_START_DATE}"               --end "${ANALYSIS_END_DATE}"
+            python scripts/01_generate_weekly_forest_summary.py \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
           fi
 
       - name: Generate weekly macro diagram prompt
@@ -145,7 +165,7 @@ jobs:
             python scripts/04_build_weekly_macro_page.py
           fi
 
-      - name: Update latest page redirect
+      - name: Update latest app shell
         run: |
           if [ -n "${TARGET_WEEK_END_DATE}" ]; then
             LATEST_WEEK_DIR="${TARGET_WEEK_END_DATE}"
@@ -155,8 +175,104 @@ jobs:
             LATEST_WEEK_DIR="$(ls -1 output/weekly | sort | tail -n 1)"
           fi
 
+          BUILD_VERSION="$(date -u +%Y%m%d%H%M%S)-${GITHUB_RUN_NUMBER}-${GITHUB_RUN_ATTEMPT}"
           TARGET_PATH="output/weekly/${LATEST_WEEK_DIR}/index.html"
-          TARGET_URL="./${TARGET_PATH}"
+          TARGET_URL="./${TARGET_PATH}?v=${BUILD_VERSION}"
+
+          cat > latest.json <<EOF
+          {
+            "latest_week_dir": "${LATEST_WEEK_DIR}",
+            "target_path": "${TARGET_PATH}",
+            "target_url": "${TARGET_URL}",
+            "version": "${BUILD_VERSION}",
+            "generated_at_utc": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          }
+          EOF
+
+          cat > app.html <<'EOF'
+          <!DOCTYPE html>
+          <html lang="zh-Hant">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+            <meta name="apple-mobile-web-app-capable" content="yes">
+            <meta name="apple-mobile-web-app-title" content="本週總經摘要">
+            <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+            <meta name="theme-color" content="#0f172a">
+            <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+            <meta http-equiv="Pragma" content="no-cache">
+            <meta http-equiv="Expires" content="0">
+            <title>本週總經摘要</title>
+            <style>
+              html, body {
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                background: #0f172a;
+                overflow: hidden;
+                font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+              }
+              #frame {
+                width: 100%;
+                height: 100%;
+                border: 0;
+                display: block;
+                background: #ffffff;
+              }
+              #fallback {
+                position: fixed;
+                inset: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+                color: #e5e7eb;
+                text-align: center;
+                line-height: 1.7;
+              }
+              #fallback a {
+                color: #93c5fd;
+              }
+            </style>
+          </head>
+          <body>
+            <iframe id="frame" title="本週總經摘要"></iframe>
+            <div id="fallback" style="display:none;">
+              <div>
+                <div>正在載入本週總經摘要...</div>
+                <div id="fallback-link"></div>
+              </div>
+            </div>
+            <script>
+              async function loadLatest() {
+                const fallback = document.getElementById("fallback");
+                const fallbackLink = document.getElementById("fallback-link");
+                const frame = document.getElementById("frame");
+
+                try {
+                  const res = await fetch("./latest.json?ts=" + Date.now(), { cache: "no-store" });
+                  if (!res.ok) throw new Error("latest.json HTTP " + res.status);
+
+                  const latest = await res.json();
+                  const target = "./" + latest.target_path + "?v=" + encodeURIComponent(latest.version) + "&ts=" + Date.now();
+
+                  frame.src = target;
+                  fallback.style.display = "none";
+                } catch (err) {
+                  fallback.style.display = "flex";
+                  fallbackLink.innerHTML = '<a href="./latest.html?ts=' + Date.now() + '">改用 latest.html 開啟</a>';
+                  console.error(err);
+                }
+              }
+
+              loadLatest();
+              document.addEventListener("visibilitychange", function () {
+                if (!document.hidden) loadLatest();
+              });
+            </script>
+          </body>
+          </html>
+          EOF
 
           cat > index.html <<EOF
           <!DOCTYPE html>
@@ -164,9 +280,35 @@ jobs:
           <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+            <meta http-equiv="Pragma" content="no-cache">
+            <meta http-equiv="Expires" content="0">
+            <meta http-equiv="refresh" content="0; url=./app.html?v=${BUILD_VERSION}">
+            <title>本週總經摘要</title>
+            <script>
+              window.location.replace("./app.html?v=${BUILD_VERSION}");
+            </script>
+          </head>
+          <body>
+            <p>正在前往本週總經摘要：<a href="./app.html?v=${BUILD_VERSION}">app.html</a></p>
+          </body>
+          </html>
+          EOF
+
+          cat > latest.html <<EOF
+          <!DOCTYPE html>
+          <html lang="zh-Hant">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+            <meta http-equiv="Pragma" content="no-cache">
+            <meta http-equiv="Expires" content="0">
             <meta http-equiv="refresh" content="0; url=${TARGET_URL}">
             <title>本週總經摘要</title>
-            <script>window.location.replace("${TARGET_URL}");</script>
+            <script>
+              window.location.replace("${TARGET_URL}");
+            </script>
           </head>
           <body>
             <p>正在前往最新版本週總經摘要：<a href="${TARGET_URL}">${TARGET_PATH}</a></p>
@@ -174,15 +316,16 @@ jobs:
           </html>
           EOF
 
-          cp index.html latest.html
-          echo "[OK] Latest page redirects to ${TARGET_PATH}"
+          echo "[OK] App shell updated: app.html"
+          echo "[OK] Latest JSON points to ${TARGET_PATH}"
+          echo "[OK] Cache-busting version: ${BUILD_VERSION}"
 
       - name: Commit weekly macro page
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add index.html latest.html
+          git add index.html latest.html app.html latest.json
           git add data/weekly_video_source.json data/weekly_news_raw.json data/weekly_market_series.json || true
 
           if [ -n "${WEEK_DIR}" ]; then
