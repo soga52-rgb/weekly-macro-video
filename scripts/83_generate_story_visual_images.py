@@ -84,7 +84,9 @@ Series visual language:
 - avoid pale pinks, washed-out grays, low-saturation pastels, and colors too close to the background.
 - lots of whitespace, clean composition, modern and memorable.
 - simple icons, arrows, light charts, and clean symbolic objects only when they directly support the story.
-- Traditional Chinese only for very short labels if text is needed.
+- Avoid visible Chinese title text inside the image because image models often distort Chinese characters.
+- If text is absolutely necessary, use only very short numeric or ticker labels such as CPI, PPI, 4.2%, 10Y, DXY, 4.463%, 99.675.
+- Do not draw video player UI, red progress bars, playback controls, browser chrome, subtitles, lower-third captions, watermarks, or screenshots.
 - maintain continuity across all scenes so the full video feels like one story.
 - avoid PPT look, avoid stock-photo look, avoid photorealistic faces, avoid clutter.
 """.strip()
@@ -272,9 +274,11 @@ Design instructions:
 - Let the narration explain the full reasoning; the image should not become a dense infographic.
 - If useful, include a very light simple chart, a direction arrow, or a turning-point line to reflect price action.
 - Use simple macro-finance symbols only when they directly support the current section, such as oil, bond yields, gold, currency quotes, arrows, or a clean price line.
-- Keep on-screen text minimal: at most one short Traditional Chinese title and up to 2-4 tiny labels or numbers.
-- Do not render paragraphs, tables, or long subtitles.
-- Use the whole frame naturally as a clean whiteboard composition; do not create blank placeholder boxes or marked layout zones.
+- Do not place a large Chinese title inside the image.
+- Keep on-screen text extremely minimal: use only numeric/ticker labels when needed, such as CPI, PPI, 4.2%, 10Y, DXY, 4.463%, 99.675, WTI, USD/JPY, USD/KRW.
+- Do not render paragraphs, tables, long subtitles, or handwritten Chinese sentences.
+- Do not draw any video player interface, red progress bar, play button, timeline bar, YouTube controls, browser frame, screenshot frame, or lower-third caption area.
+- Use the whole frame naturally as a clean whiteboard composition; do not create blank placeholder boxes, marked layout zones, or UI-like frame elements.
 - Use only a few high-contrast accent colors so the image remains clear after video compositing.
 - Prefer accent colors such as orange, deep blue, gold, deep green, or brick red.
 - Avoid pale, washed-out, low-contrast colors that may become hard to see after compositing.
@@ -284,9 +288,12 @@ Design instructions:
 Output target:
 - 16:9 image.
 - Whiteboard sketch explainer / marker doodle style.
-- Traditional Chinese only for any visible text.
+- Avoid visible Chinese title text; let the video subtitles and narration carry the wording.
+- If text appears, keep it to clean numeric/ticker labels only.
 
 Avoid:
+- video player UI, progress bars, play buttons, timeline controls, YouTube-like controls, browser screenshots, lower-third caption bars
+- malformed Chinese characters or fake Chinese text
 - old-fashioned PPT layout
 - dense text blocks
 - photorealistic portraits
