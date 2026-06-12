@@ -10,9 +10,10 @@ Input:
   Example:
   https://script.google.com/macros/s/xxxxx/exec
 
-Optional env:
-- WEEKLY_SOURCE_START = YYYY-MM-DD
-- WEEKLY_SOURCE_END   = YYYY-MM-DD
+Optional env / CLI:
+- ANALYSIS_START_DATE / WEEKLY_SOURCE_START / --start = YYYY-MM-DD
+- ANALYSIS_END_DATE   / WEEKLY_SOURCE_END   / --end   = YYYY-MM-DD
+- WEEK_DIR / --week-dir = output/weekly/YYYY-MM-DD or YYYY-MM-DD
 - TODAY_DAILY_SOURCE_URL = optional separate endpoint for today's daily summary JSON
 - WEEKLY_INCLUDE_TODAY_SOURCE = true / false, default true
 
@@ -22,9 +23,10 @@ Output:
 
 Update:
 - Fetch mode=weekly_video_source first.
+- Support custom analysis window from workflow env ANALYSIS_START_DATE / ANALYSIS_END_DATE.
 - Then fetch TODAY_DAILY_SOURCE_URL if provided.
 - If TODAY_DAILY_SOURCE_URL is not provided, fall back to mode=today_daily_source from the same Apps Script endpoint.
-- If today's daily_summary.date is missing from daily_summaries, append it.
+- If today's daily_summary.date is missing from daily_summaries, append it only when inside requested date range.
 - De-duplicate by date and sort by date, so weekly history no longer misses the newest day.
 """
 
@@ -48,6 +50,7 @@ def add_query_params(url: str, params: Dict[str, str]) -> str:
     query = dict(urllib.parse.parse_qsl(parsed.query))
 
     for key, value in params.items():
+        value = (value or "").strip()
         if value:
             query[key] = value
 
@@ -139,17 +142,6 @@ def date_in_requested_range(date_text: str, start: str = "", end: str = "") -> b
 
 
 def normalize_today_daily_source(today_data: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-    """
-    Convert mode=today_daily_source response into one daily_summaries item.
-
-    Expected shape:
-    {
-      "mode": "today_daily_source",
-      "daily_summary": {...},
-      "visual_note": {...},
-      "news_narrative": {...}
-    }
-    """
     if not isinstance(today_data, dict):
         return None
 
@@ -159,7 +151,6 @@ def normalize_today_daily_source(today_data: Dict[str, Any]) -> Optional[Dict[st
 
     normalized = dict(day)
 
-    # Preserve root-level data for downstream use / traceability.
     for key in [
         "visual_note",
         "news_narrative",
@@ -181,15 +172,6 @@ def merge_today_daily_source(
     start: str = "",
     end: str = "",
 ) -> Dict[str, Any]:
-    """
-    Merge today_daily_source into weekly_video_source without duplicating dates.
-
-    Rules:
-    - If today_daily_source.daily_summary.date is inside the requested date range
-      and missing from weekly_data.daily_summaries, append it.
-    - If the same date already exists, keep the existing historical item.
-    - Sort by date after merge.
-    """
     today_summary = normalize_today_daily_source(today_data)
     if not today_summary:
         print("[INFO] today_daily_source has no usable daily_summary; skip merge.")
@@ -252,9 +234,39 @@ def merge_today_daily_source(
     return weekly_data
 
 
-def infer_week_label(data: Dict[str, Any]) -> str:
+def apply_requested_range_metadata(data: Dict[str, Any], start: str = "", end: str = "") -> Dict[str, Any]:
+    if not isinstance(data, dict):
+        return data
+
+    data["requested_analysis_window"] = {
+        "start_date": start,
+        "end_date": end,
+        "source": "workflow_env_or_cli",
+    }
+
+    # If the endpoint returned a valid range, keep it. If not, preserve the requested
+    # window so downstream steps can infer the formal analysis window.
+    range_data = data.get("range")
+    if not isinstance(range_data, dict):
+        range_data = {}
+        data["range"] = range_data
+
+    if start and not range_data.get("start_date"):
+        range_data["start_date"] = start
+    if end and not range_data.get("end_date"):
+        range_data["end_date"] = end
+
+    return data
+
+
+def infer_week_label(data: Dict[str, Any], week_dir_arg: str = "", end: str = "") -> str:
+    if week_dir_arg:
+        raw = Path(week_dir_arg)
+        if raw.name:
+            return raw.name
+
     range_data = data.get("range", {}) or {}
-    end_date = range_data.get("end_date") or data.get("end_date")
+    end_date = range_data.get("end_date") or data.get("end_date") or end
 
     if end_date:
         return str(end_date)
@@ -265,6 +277,18 @@ def infer_week_label(data: Dict[str, Any]) -> str:
         return str(max(dates))
 
     return datetime.utcnow().strftime("%Y-%m-%d")
+
+
+def resolve_week_dir(week_dir_arg: str, week_label: str) -> Path:
+    week_dir_arg = (week_dir_arg or "").strip()
+    if week_dir_arg:
+        raw = Path(week_dir_arg)
+        if raw.is_absolute():
+            return raw
+        if len(week_dir_arg) == 10 and week_dir_arg[4] == "-" and week_dir_arg[7] == "-":
+            return OUTPUT_WEEKLY_DIR / week_dir_arg
+        return ROOT_DIR / raw
+    return OUTPUT_WEEKLY_DIR / week_label
 
 
 def build_daily_section(day: Dict[str, Any], index: int) -> str:
@@ -364,8 +388,23 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", type=str, default=os.getenv("WEEKLY_SOURCE_URL", "").strip())
     parser.add_argument("--today-url", type=str, default=os.getenv("TODAY_DAILY_SOURCE_URL", "").strip())
-    parser.add_argument("--start", type=str, default=os.getenv("WEEKLY_SOURCE_START", "").strip())
-    parser.add_argument("--end", type=str, default=os.getenv("WEEKLY_SOURCE_END", "").strip())
+    parser.add_argument("--week-dir", type=str, default=os.getenv("WEEK_DIR", "").strip())
+    parser.add_argument(
+        "--start",
+        type=str,
+        default=(
+            os.getenv("WEEKLY_SOURCE_START", "").strip()
+            or os.getenv("ANALYSIS_START_DATE", "").strip()
+        ),
+    )
+    parser.add_argument(
+        "--end",
+        type=str,
+        default=(
+            os.getenv("WEEKLY_SOURCE_END", "").strip()
+            or os.getenv("ANALYSIS_END_DATE", "").strip()
+        ),
+    )
     parser.add_argument(
         "--include-today-source",
         action=argparse.BooleanOptionalAction,
@@ -384,7 +423,10 @@ def main() -> None:
     })
 
     print("[INFO] Fetching weekly source JSON from Apps Script endpoint...")
+    if args.start or args.end:
+        print(f"[INFO] Requested weekly source window: {args.start or '(default start)'} ～ {args.end or '(default end)'}")
     data = fetch_json(weekly_url)
+    data = apply_requested_range_metadata(data, start=args.start, end=args.end)
 
     if args.include_today_source:
         if args.today_url:
@@ -400,15 +442,14 @@ def main() -> None:
             today_data = fetch_json(today_url)
             data = merge_today_daily_source(data, today_data, start=args.start, end=args.end)
         except Exception as exc:
-            # Do not fail the weekly workflow if today's endpoint is temporarily unavailable.
             print(f"[WARN] Failed to merge today_daily_source: {exc}")
 
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     save_json(DATA_DIR / "weekly_video_source.json", data)
     print(f"[OK] Saved {DATA_DIR / 'weekly_video_source.json'}")
 
-    week_label = infer_week_label(data)
-    week_dir = OUTPUT_WEEKLY_DIR / week_label
+    week_label = infer_week_label(data, week_dir_arg=args.week_dir, end=args.end)
+    week_dir = resolve_week_dir(args.week_dir, week_label=week_label)
     week_dir.mkdir(parents=True, exist_ok=True)
 
     source_text = build_weekly_source_text(data)
