@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       week_dir:
-        description: "Optional week folder under output/weekly, e.g. 2026-05-28. Leave blank to use latest."
+        description: "Optional week folder, e.g. 2026-05-28 or output/weekly/2026-05-28. Leave blank to use latest or analysis_end_date."
         required: false
         default: ""
       analysis_start_date:
@@ -30,6 +30,7 @@ jobs:
     env:
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_ANALYSIS_MODEL: ${{ inputs.analysis_model }}
+      INPUT_WEEK_DIR: ${{ inputs.week_dir }}
       ANALYSIS_START_DATE: ${{ inputs.analysis_start_date }}
       ANALYSIS_END_DATE: ${{ inputs.analysis_end_date }}
 
@@ -42,10 +43,27 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Resolve target week dir
+        run: |
+          if [ -n "${INPUT_WEEK_DIR}" ]; then
+            case "${INPUT_WEEK_DIR}" in
+              output/weekly/*)
+                echo "WEEK_DIR=${INPUT_WEEK_DIR}" >> "$GITHUB_ENV"
+                ;;
+              *)
+                echo "WEEK_DIR=output/weekly/${INPUT_WEEK_DIR}" >> "$GITHUB_ENV"
+                ;;
+            esac
+          elif [ -n "${ANALYSIS_END_DATE}" ]; then
+            echo "WEEK_DIR=output/weekly/${ANALYSIS_END_DATE}" >> "$GITHUB_ENV"
+          else
+            echo "WEEK_DIR=" >> "$GITHUB_ENV"
+          fi
+
       - name: Run 80 test step91 analysis layer prompt
         run: |
-          if [ -n "${{ inputs.week_dir }}" ]; then
-            python scripts/80_test_step91_analysis_layer_prompt.py --week-dir "${{ inputs.week_dir }}"
+          if [ -n "${WEEK_DIR}" ]; then
+            python scripts/80_test_step91_analysis_layer_prompt.py --week-dir "${WEEK_DIR}"
           else
             python scripts/80_test_step91_analysis_layer_prompt.py
           fi
@@ -55,7 +73,11 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add output/weekly/**/weekly_forest_summary_analysis_layer_test.json || true
+          if [ -n "${WEEK_DIR}" ]; then
+            git add "${WEEK_DIR}/weekly_forest_summary_analysis_layer_test.json" || true
+          else
+            git add output/weekly/**/weekly_forest_summary_analysis_layer_test.json || true
+          fi
 
           if git diff --cached --quiet; then
             echo "No analysis layer test output changes to commit."
