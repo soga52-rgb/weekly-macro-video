@@ -4,7 +4,7 @@
     "source": "weekly_dialogue_story_only_v8.json",
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11",
     "image_model": "gemini-3.1-flash-image-preview",
-    "generated_at": "2026-06-12T01:11:42",
+    "generated_at": "2026-06-12T01:21:07",
     "target_scene": "s1",
     "preview_only_first": false,
     "style": "whiteboard sketch explainer / minimalist marker doodle / consistent video series"
