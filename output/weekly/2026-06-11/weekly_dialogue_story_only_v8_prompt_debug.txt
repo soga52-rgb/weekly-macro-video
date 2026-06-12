@@ -1,0 +1,979 @@
+你是機構級總經影片的 showrunner、主筆與敘事導演。
+
+你的任務不是把資料摘要改寫成對話，也不是替圖片寫旁白。
+你的任務是用本週新聞事件與市場價格變化，寫出一支 Tom 與 Miranda 的完整總經訪談故事。
+
+這一版是 Story-only：
+- 不處理圖片。
+- 不需要 visual_reference。
+- 不需要 visual_brief。
+- 不要依照圖卡數量切段。
+- 先讓語音故事本身成立。
+
+角色：
+Tom 是成熟的國際財經訪談主持人。他不是新聞播報員，也不是單純的問答機器。
+Tom 的工作是替聽眾打開問題：他擅長用敏銳的直覺指出市場矛盾，例如「油價跌了，為什麼利率不跌？」也擅長在聽完分析後，用生活化比喻或頓悟式短句幫聽眾提煉重點，例如「所以現在買黃金，不只是為了賺錢，而是為了買一份保險？」Tom 的語氣要自然、好奇、克制，但要能代表聽眾把反直覺的地方問清楚。
+
+Miranda 是機構級總經策略師。她不是念資料的人。
+Miranda 的工作是解釋市場價格背後的定價邏輯：事件為什麼重要、價格怎麼反應、這個反應驗證或抵銷了什麼判斷、下一步會傳導到哪個變數。她非常擅長把冷冰冰的宏觀數字落地，在解釋高利率、強美元、流動性壓力或避險需求時，會自然帶出實體經濟的微觀痛點，例如房貸凍結、企業融資成本上升、原物料進口壓力、外資撤離或央行外匯存底消耗。她也擅長指出央行、投資人或市場當下面臨的兩難困境，例如保匯率 vs 保外匯存底、打通膨 vs 救經濟、維持高利率 vs 實體經濟受傷。
+
+核心寫作原則：
+0. 【分析區間硬規則】input_bundle.meta.analysis_window 是本集唯一正式分析區間。storyline、main_event_threads、sections、price_reaction、spoken_text、subtitle_text、full_script_plain_text 的「本週」價格變化，只能使用 analysis window 內的數字與事件。
+0-1. lookback、macro_background、endpoint_context、weekly_source_text 中屬於 analysis window 以前的內容，只能作為「前期背景」或「延續性脈絡」用一兩句交代，不得成為第一段主軸，不得列為 main_event_threads 的主要價格反應。
+0-2. 嚴禁把 lookback window 的起點價格寫成本週起點。例如若 analysis window 內 WTI 是 96.6 → 88.5，就不可寫成 105 → 88.5；若 analysis window 內 US10Y 是 4.558 → 4.455，就不可寫成 4.66 → 4.45。
+0-3. 若需提到 30Y 破 5%、新任主席、前期長債恐慌等背景，必須明確稱為「前期背景」或「週初壓力」，並在同一段內快速轉回 analysis window 的本週主線，不可讓它成為整支影片的開場主軸。
+0-4. 本集主線應優先依 analysis_layer.main_theme_analysis_process.weekly_main_theme_conclusion 與 analysis_layer.main_theme_analysis_process.market_validation 展開。
+1. 這是一個故事，不是資料摘要。
+2. 前後邏輯必須接得上：上一段留下的問題，下一段要接著回答。
+3. 頭尾要呼應：開頭鋪陳過、尚未結束的事件線，必須自然變成下週觀察。
+4. 不要裸講數字。每個價格走勢都要由事件、新聞或市場疑問帶出。
+5. 每個重要變數都要判斷：它是上游傳導、本身驅動，還是兩者混合。
+6. 每一段都是傳導節點，不是封閉主題。可以自然觸碰下一個變數，作為下一段伏筆。
+7. 不要一開始就總結本週主線。先讓聽眾跟著事件與價格一步一步形成理解。
+8. 本週主線應在後段自然收斂，不要在開頭提前講完。
+9. 下週觀察不能突然出現，必須回扣前面已經鋪陳過的未解事件或價格線。
+10. 全片最後必須有正式收尾，但正式收尾不能取代下週觀察段。最後一段必須分成兩步：
+    - Miranda 先完整說明下週觀察，必須回扣本週已鋪陳的事件線，例如 Fed 表態、美伊談判、亞洲央行防禦等，最後用一句自然語把話交還給 Tom。
+    - Tom 最後只做簡短正式收尾：回扣本集主線、感謝 Miranda、提醒觀眾下週持續追蹤，並自然說「我們下週見」。Tom 收尾不得再展開新的分析。
+11. 不要為了進入下週觀察或正式收尾，而壓縮中間故事。每一條主要事件線都必須先完整展開「事件脈絡 → 價格反應 → 市場解讀 → Tom 追問 → Miranda 補充」之後，才能進入下一段或下週觀察。
+12. 下週觀察與正式收尾只是故事的收束，不是替代主體分析的段落。不得因為要完成結尾格式，就縮短前面各 section 的推論、追問與價格解讀。
+13. 主要事件線至少挑一個代表性價格走勢做「口語化走勢解讀」：不要只說價格到哪裡，要說它是快速回落、先上攻後回落、先受壓後反彈、高位震盪，或區間反覆，並解釋這代表市場在重新定價什麼。
+14. 【防壓縮規則】除結尾段外，每個 section 目標包含 5 到 6 個 speaker_turns。Tom 在 Miranda 第一次回答後，至少要有兩次獨立追問，避免固定成「Tom 問 → Miranda 答 → Tom 追問 → Miranda 收斂」的 4 回合公式。
+15. 【厚度防護指令】節目目標時長為 10 到 12 分鐘。你必須給中間劇情充分推論空間，禁止為了趕著進入下週觀察或正式收尾而壓縮中間 sections。不要急著過渡到下一個變數，要把當下的矛盾點挖深。
+16. 【具體情境要求】Miranda 解釋總經傳導時，必須帶入至少一個具體的實體經濟情境或資產範例，例如企業融資成本、房貸凍結、原物料進口壓力、新興市場資金外流、出口敏感型貨幣壓力等，讓宏觀邏輯落地。
+17. 【內容深度與質感要求】增加微觀痛點：Miranda 在解釋高利率、強美元、流動性壓力、匯率貶值或避險需求時，要舉出具體痛點，例如房地產產業鏈資金被凍結、企業融資成本上升、進口原物料變貴、外資撤離、央行外匯存底消耗等。
+18. 【兩難困境要求】在提到央行政策或市場抉擇時，必須強調局面中的兩難，例如保匯率 vs 保外匯存底、打通膨 vs 救經濟、維持高利率 vs 實體經濟受傷、追逐利差 vs 防範硬著陸。
+19. 【主持人頓悟金句】Tom 的追問不能只是平鋪直敘的過場；在聽完 Miranda 的分析後，Tom 應嘗試用一句生動但克制的「頓悟式總結」幫聽眾消化，例如「所以現在市場買黃金，不只是為了賺錢，而是為了買一份保險？」或「換句話說，這不是單純比誰經濟強，而是比誰比較沒那麼差？」
+11. Tom 的開場白不要先報新聞清單，也不要先下本週結論；Tom 要用主持人的方式打開問題，請 Miranda 先從本週市場價格走勢切入分析。
+    Tom 開場請使用自然節目開場，再請 Miranda 從本週市場價格走勢切入。
+    建議句型：
+    「歡迎來到本週總經報導。Miranda，在進入今天的主線分析之前，我想先從市場價格本身看起。這週有哪些重要財經數據的走勢，最值得我們注意？」
+    Miranda 第一段必須接著用事件脈絡帶出 2～3 個代表性價格走勢，並解釋這些走勢為什麼重要。
+
+追問、白話翻譯與呼吸感原則：
+- 保留 Tom 開場方式，不必再改開場。
+- 每條主要事件線至少安排一輪 Tom 追問，讓 Miranda 有機會把原因、傳導與市場含義講深一層。
+- Tom 的追問要有「解謎感」，不要只是換段落；要代表聽眾指出反直覺或未解矛盾，例如：
+  「這只是短期修正，還是真的改變了市場主線？」
+  「如果油價已經回落，為什麼利率還沒放鬆？」
+  「美元強勢如果不是完全來自利率，那是不是還有避險資金的需求？」
+  「等一下，這聽起來有點反直覺。價格明明往一個方向走，為什麼市場結論卻沒有跟著轉向？」
+- Miranda 的回答要像在解謎：先承認表面矛盾，再揭示背後的市場定價邏輯。
+- Miranda 使用專業術語後，必須立刻補一句白話翻譯。尤其是：期限溢價、結構性通膨、利差優勢、避險溢價、上游傳導、流動性壓力。
+  例如：「這就是期限溢價。白話說，就是投資人覺得長期不確定性變高，所以要求更高的補償。」
+- 增加對話呼吸感：Miranda 不要連續講太久。如果單一 Miranda spoken_text 可能超過 35 秒，請拆成「Miranda 先解釋 → Tom 短句確認或追問 → Miranda 補充」。
+- Tom 可以用短句幫聽眾消化，例如：「所以不是油價沒用，而是它被 Fed 的訊號抵銷了？」、「換句話說，市場不是不看通膨，而是看得更遠了？」
+- 價格走勢要用口語描述，不要用技術分類詞當台詞主體。
+- 可以使用「先被壓下去、後來又被買盤拉回」、「前段快速回落、後段低位整理」、「先上攻、後來被成長擔憂壓回」這類說法。
+- 避免在 spoken_text 裡直接把「V 型反轉」、「倒 V 型」、「L 型整理」當成主要表述；如果需要使用，必須立刻用一句口語原因解釋。
+
+價格走勢解讀範例：
+不要寫成：「黃金呈現 V 型反轉，價格在 4480 到 4577 美元之間震盪。」
+應該寫成：「黃金前段受高利率壓抑回落，但後段又因房市疲軟與避險需求升溫重新回升。這代表市場沒有單純交易利率，也在為成長放緩與地緣政治不確定性買保護。」
+
+建議故事推進方式：
+- 先從本週最重要的定價矛盾或淨方向切入，例如「油價上升但利率只小幅走高」、「美元整週走強但黃金週中反彈」、「亞幣整週承壓但台幣週內有資金流波動」。
+- 用整週淨方向建立主線，再用週內事件解釋中間的反覆。
+- 用價格反應解釋市場真正交易的是什麼，不要把單日波動寫成整週結論。
+- 如果價格走勢和直覺不同，要把它當作故事問題。
+- 讓 Tom 問出這個問題，讓 Miranda 解釋。
+- 每段結尾自然帶出下一個變數。
+
+請產生 10 到 12 分鐘左右的中文雙人對談稿。
+語氣：台灣專業財經節目口語，清楚、有節奏、有洞察，但不要浮誇。
+語言邊界：
+- 避免戲劇化或絕對化詞彙，例如：拉鋸、雙重夾擊、海嘯、毀滅性打擊、兩杯毒藥、終極考驗、狂飆、完全正確、屏息等待。請改用：訊號分歧、抵銷力量、修正因子、壓力升高、仍需驗證、局部反彈、區間震盪。
+- 匯率表述必須清楚：USD/TWD 上升代表台幣貶值，USD/KRW 上升代表韓元貶值，USD/JPY 上升代表日圓貶值。不要寫成「美元/台幣貶值」。
+- 請用「本週 / 本期 / 正式分析區間」描述週報，不要用「今天」代表整週。
+不要投資建議，不要買賣指令。
+請輸出合法 JSON，不要 Markdown，不要多餘文字。
+
+請根據下方資料，產生 Step 82 v8.11.2 Story-only Tom / Miranda 總經訪談稿。
+
+資料：
+{
+  "meta": {
+    "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11",
+    "generated_at": "2026-06-12T00:10:04",
+    "analysis_window": {
+      "start_date": "2026-06-05",
+      "end_date": "2026-06-11",
+      "label": "2026-06-05 ～ 2026-06-11",
+      "source": "workflow_env"
+    },
+    "input_files": {
+      "analysis": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11/weekly_forest_summary_analysis_layer_test.json",
+      "weekly_market_series": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11/weekly_market_series.json",
+      "weekly_news_context_json": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11/weekly_news_context.json",
+      "weekly_news_context_md": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11/weekly_news_context.md",
+      "weekly_source_text": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11/weekly_source_text.md",
+      "endpoint_json": "/home/runner/work/weekly-macro-video/weekly-macro-video/data/weekly_video_source.json"
+    },
+    "hard_rule": "The dialogue must use analysis_window as the only formal week range. Pre-analysis-window information is background only, never this-week price reaction."
+  },
+  "analysis_layer": {
+    "meta": {
+      "source": "analysis_input_bundle",
+      "data_status_note": "分析層使用 analysis window 作為正式判斷區間；lookback / background 資料僅作前期脈絡，不作為正式區間變動起點。",
+      "week_range": "2026-06-05 ～ 2026-06-11",
+      "analysis_window": {
+        "start_date": "2026-06-05",
+        "end_date": "2026-06-11",
+        "source": "workflow_env"
+      }
+    },
+    "main_theme_analysis_process": {
+      "material_inventory": {
+        "inflation_materials": [
+          "地緣政治降溫（伊朗和平協議進展）導致油價重挫，WTI跌至85.75美元。",
+          "亞銀示警中東衝突推升物價，面臨停滯性通膨風險。",
+          "強勁非農數據與通膨黏性預期（初期）。"
+        ],
+        "rate_materials": [
+          "10年期美債殖利率衝破4.5%心理關卡，反映高利率維持更久。",
+          "初領失業金人數激增，市場交易重心轉向成長放緩。",
+          "川普公開發聲反對加息，政治干預Fed政策預期。",
+          "市場估Fed 12月升息機率大增（初期）。"
+        ],
+        "dollar_materials": [
+          "美元指數升至2個月高點（100關卡附近），與美債利差優勢高度相關。",
+          "外資出走匯市，熱錢匯出新興市場。"
+        ],
+        "gold_materials": [
+          "花旗下調黃金目標價，示警跌至3500美元，Fed升息預期成最大壓力。",
+          "市場氛圍驟變引爆避險賣壓，股債黃金比特幣齊跌。"
+        ],
+        "asia_fx_materials": [
+          "台幣重貶1.05角，爆大量摜破31.6元。",
+          "外資趁台股大漲調節持股後匯出。"
+        ],
+        "inventory_summary": "本週素材顯示市場經歷了明顯的轉折：初期由強勁就業與通膨黏性推升利率與美元；後期因初領失業金激增與油價重挫，市場迅速轉向成長擔憂，帶動利率與美元回落。"
+      },
+      "inflation_expectation_formation": {
+        "energy": "川普喊停空襲伊朗，和平協議似將成形，地緣政治風險溢價消退，帶動WTI與Brent原油價格重挫。",
+        "supply_chain": "亞銀雖示警中東衝突推升物價，但隨後的地緣降溫消息大幅緩解了供應鏈中斷的擔憂。",
+        "price_data": "初期受通膨黏性預期影響，但後期被其他因子蓋過。",
+        "demand": "unclear",
+        "labor_market": "初期強勁非農支撐通膨預期，但隨後初領失業金人數激增，顯示勞動市場邊際降溫。",
+        "policy_expectation": "川普公開反對加息，增加政策不確定性。",
+        "upward_channels": [
+          "初期強勁非農數據",
+          "通膨黏性預期"
+        ],
+        "offsetting_channels": [
+          "伊朗和平協議帶動油價重挫",
+          "初領失業金人數激增"
+        ],
+        "direction": "mixed",
+        "strength": "medium",
+        "judgment": "通膨預期在本週呈現先升後降的格局。初期受就業數據支撐，但期末油價的大幅回落與勞動市場降溫訊號，成為主導通膨預期下修的關鍵力量。"
+      },
+      "rate_pricing": {
+        "direction": "mixed",
+        "same_direction_as_inflation": "yes",
+        "inflation_to_rate_transmission": "通膨預期的降溫（油價下跌）與成長擔憂（初領失業金增加）共同促使長債殖利率在衝破4.55%後快速回落至4.46%。",
+        "fed_policy_signal": "初期市場定價升息機率增加，後期因數據轉弱而修正；同時面臨政治人物反對加息的言論干擾。",
+        "bond_supply_demand": "unclear",
+        "term_premium": "unclear",
+        "safe_haven_bond_demand": "初期出現股債雙殺的流動性拋售，避險買盤並未在初期顯現。",
+        "growth_or_rate_cut_expectation": "初領失業金人數激增引發市場對經濟成長放緩的擔憂，壓抑了長端利率。",
+        "dominant_driver": "mixed",
+        "judgment": "利率定價經歷了從「政策指引（高利率維持更久）」到「成長擔憂」的轉換。10年期殖利率的衝高回落，完美映射了市場敘事的切換。"
+      },
+      "dollar_pricing": {
+        "direction": "mixed",
+        "same_direction_as_rates": "yes",
+        "rate_differential_effect": "美元指數走勢與美債殖利率高度同步，初期受利差優勢推升至100.11，後期隨殖利率回落而降至99.67。",
+        "safe_haven_dollar": "市場情緒轉變時，美元發揮了一定程度的避險與流動性蓄水池功能。",
+        "dollar_liquidity_demand": "外資從台股等新興市場提款匯出，顯示強美元環境下的流動性收緊壓力。",
+        "other_currency_weakness": "亞幣普遍承壓，進一步凸顯美元的相對強勢。",
+        "us_relative_resilience": "unclear",
+        "dominant_driver": "rate_differential",
+        "judgment": "美元主要受美債利差驅動，跟隨利率預期先升後降，但整體仍維持在相對高位，對非美貨幣持續施壓。"
+      },
+      "gold_pricing": {
+        "direction": "down",
+        "rate_real_yield_pressure": "初期美債殖利率衝破4.5%，大幅推升持有黃金的機會成本，引發機構下調目標價。",
+        "dollar_effect": "強勢美元對以美元計價的黃金構成直接壓抑。",
+        "safe_haven_demand": "避險情緒未能轉化為黃金買盤，反而出現「股債黃金齊跌」的流動性拋售特徵。",
+        "central_bank_buying": "unclear",
+        "geopolitics": "伊朗和平協議進展削弱了黃金的地緣政治避險溢價。",
+        "dominant_driver": "rates",
+        "judgment": "黃金本週主要受高利率預期與實質利率壓力主導，且地緣風險降溫移除了支撐力道，導致金價出現顯著回調。"
+      },
+      "asia_fx_pricing": {
+        "twd": {
+          "direction": "down",
+          "same_direction_as_dollar_pressure": "yes",
+          "local_flow": "外資趁台股大漲調節持股後大量匯出，爆出匯市第二大量。",
+          "central_bank_policy": "unclear",
+          "export_or_tech_sector": "晶片股遭拋售影響了外資在台股的資金配置。",
+          "regional_risk": "unclear",
+          "judgment": "台幣重貶主要受強美元與外資實質匯出雙重打擊，跌破31.6元心理關卡，符合基準傳導邏輯。"
+        },
+        "jpy": {
+          "direction": "mixed",
+          "same_direction_as_dollar_pressure": "yes",
+          "japan_policy": "unclear",
+          "rate_differential": "受美債殖利率波動影響，日圓在160關卡附近震盪。",
+          "safe_haven_demand": "unclear",
+          "other_factor": "unclear",
+          "judgment": "日圓走勢緊貼美元與美債殖利率的起伏，缺乏自身獨立的驅動訊號，維持在弱勢區間震盪。"
+        },
+        "krw": {
+          "direction": "up",
+          "same_direction_as_dollar_pressure": "no",
+          "korea_export": "unclear",
+          "equity_flow": "unclear",
+          "regional_risk": "unclear",
+          "other_factor": "可能受前期過度貶值後的技術性反彈或未知的本地資金流影響。",
+          "judgment": "韓圜本週逆勢大幅升值（從1558升至1516），與強美元背景及台幣貶值走勢形成顯著背離，目前資料不足以完全解釋此異常強勢。"
+        }
+      },
+      "market_contradictions_and_modifiers": {
+        "baseline_path": "通膨預期 → 利率預期 → 美元指數 → 亞洲貨幣 / 黃金",
+        "expected_baseline_script": "強勁數據推升殖利率與美元，壓抑黃金與所有亞洲貨幣。",
+        "most_unintuitive_market_reaction": "在美元維持相對高位且台幣爆量貶值的背景下，韓圜卻呈現單週大幅升值；同時，市場傳出避險情緒時，黃金卻遭遇拋售。",
+        "contradiction_type": "insufficient_data",
+        "how_it_fits_main_theme": "黃金的下跌可解釋為高利率機會成本壓過避險需求（流動性拋售）；但韓圜的逆勢升值則缺乏明確的新聞支撐，可能屬於區域性資金輪動或前期超跌修正，需保留為待確認的異常訊號。",
+        "presenter_opening_question": "本週美債殖利率一度衝破4.5%帶動美元走強，台幣也爆量重貶，但為何韓圜卻能逆勢大幅升值？同時，在市場避險情緒升溫下，黃金為何反而慘遭拋售？"
+      },
+      "main_theme_next_validation": {
+        "dominant_pricing_force": "勞動市場邊際降溫與地緣政治緩解帶動的「成長擔憂」與「降息預期」修正。",
+        "offsetting_or_modifying_force": "初期的強勁非農數據與通膨黏性預期。",
+        "one_sentence_to_remember": "市場定價在本週經歷了急轉彎，從『高利率維持更久』快速切換至『成長降溫』，帶動殖利率與美元高檔回落。",
+        "next_validation_point": "聯準會官員對近期就業降溫數據的政策反應函數，以及伊朗和平協議的最終落實情況。",
+        "overall_verdict": "部分成立",
+        "uncertainty_level": "medium"
+      }
+    },
+    "forest_summary": {
+      "weekly_main_theme": "從再通膨定價轉向成長降溫",
+      "main_question": "高利率預期與強美元的極限在哪？勞動市場降溫是否足以扭轉Fed的政策路徑？",
+      "one_sentence_verdict": "勞動市場邊際降溫與油價重挫，成功修正了市場對高利率維持更久的極端定價。",
+      "overall_verdict": "部分成立",
+      "narrative_arc": "本週市場經歷了戲劇性的轉折。初期受強勁就業與通膨黏性影響，美債殖利率衝破4.5%，美元強勢壓抑亞幣與黃金；但隨後初領失業金人數激增與伊朗和平協議傳出，市場迅速將交易重心轉向成長放緩，帶動殖利率與美元回落，完成了一次定價體制的轉換。",
+      "why_it_matters": "這標誌著市場對『不著陸』或『再通膨』劇本的懷疑加深。未來資產價格的驅動力將從『通膨數據』轉向『就業與成長數據』，這對股債配置的再平衡與非美貨幣的喘息空間至關重要。"
+    },
+    "evidence": {
+      "most_important_evidence": [
+        "10年期美債殖利率從4.55%高點回落至4.46%。",
+        "WTI原油價格從92.94美元重挫至85.75美元。",
+        "初領失業金人數激增與伊朗和平協議的新聞報導。"
+      ],
+      "insufficient_evidence": [
+        "韓圜逆勢大幅升值的具體本地驅動因素。",
+        "日本央行應對日圓弱勢的具體政策動態。"
+      ],
+      "watch_items_from_news_context": [
+        "聯準會官員對近期就業數據的談話。",
+        "伊朗和平協議談判的穩定性。",
+        "亞洲貨幣在美元波動下的干預風險與資金流向。"
+      ]
+    }
+  },
+  "market_series_analysis_window": {
+    "available": true,
+    "analysis_window": {
+      "start_date": "2026-06-05",
+      "end_date": "2026-06-11",
+      "label": "2026-06-05 ～ 2026-06-11",
+      "source": "workflow_env"
+    },
+    "assets": {
+      "US10Y": {
+        "asset_key": "US10Y",
+        "asset_name": "美國10年期公債殖利率",
+        "unit": "%",
+        "points_count": 5,
+        "points": [
+          {
+            "date": "2026-06-05",
+            "value": 4.535999774932861
+          },
+          {
+            "date": "2026-06-08",
+            "value": 4.552000045776367
+          },
+          {
+            "date": "2026-06-09",
+            "value": 4.5279998779296875
+          },
+          {
+            "date": "2026-06-10",
+            "value": 4.541999816894531
+          },
+          {
+            "date": "2026-06-11",
+            "value": 4.463000297546387
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-06-05",
+          "start_value": 4.535999774932861,
+          "end_date": "2026-06-11",
+          "end_value": 4.463000297546387,
+          "net_change": -0.07299947738647461,
+          "net_change_pct": -1.6093360010705708,
+          "net_direction": "down",
+          "high_date": "2026-06-08",
+          "high_value": 4.552000045776367,
+          "low_date": "2026-06-11",
+          "low_value": 4.463000297546387,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      },
+      "DXY": {
+        "asset_key": "DXY",
+        "asset_name": "美元指數",
+        "unit": "",
+        "points_count": 6,
+        "points": [
+          {
+            "date": "2026-06-05",
+            "value": 100.06999969482422
+          },
+          {
+            "date": "2026-06-07",
+            "value": 100.11199951171875
+          },
+          {
+            "date": "2026-06-08",
+            "value": 100.04499816894531
+          },
+          {
+            "date": "2026-06-09",
+            "value": 99.99500274658203
+          },
+          {
+            "date": "2026-06-10",
+            "value": 100.08200073242188
+          },
+          {
+            "date": "2026-06-11",
+            "value": 99.67500305175781
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-06-05",
+          "start_value": 100.06999969482422,
+          "end_date": "2026-06-11",
+          "end_value": 99.67500305175781,
+          "net_change": -0.39499664306640625,
+          "net_change_pct": -0.39472034003297407,
+          "net_direction": "down",
+          "high_date": "2026-06-07",
+          "high_value": 100.11199951171875,
+          "low_date": "2026-06-11",
+          "low_value": 99.67500305175781,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      },
+      "Gold": {
+        "asset_key": "Gold",
+        "asset_name": "黃金",
+        "unit": "USD/oz",
+        "points_count": 6,
+        "points": [
+          {
+            "date": "2026-06-05",
+            "value": 4337.10009765625
+          },
+          {
+            "date": "2026-06-07",
+            "value": 4352.5
+          },
+          {
+            "date": "2026-06-08",
+            "value": 4348.2998046875
+          },
+          {
+            "date": "2026-06-09",
+            "value": 4277.10009765625
+          },
+          {
+            "date": "2026-06-10",
+            "value": 4067.800048828125
+          },
+          {
+            "date": "2026-06-11",
+            "value": 4229.2001953125
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-06-05",
+          "start_value": 4337.10009765625,
+          "end_date": "2026-06-11",
+          "end_value": 4229.2001953125,
+          "net_change": -107.89990234375,
+          "net_change_pct": -2.4878351874345404,
+          "net_direction": "down",
+          "high_date": "2026-06-07",
+          "high_value": 4352.5,
+          "low_date": "2026-06-10",
+          "low_value": 4067.800048828125,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      },
+      "WTI": {
+        "asset_key": "WTI",
+        "asset_name": "西德州原油",
+        "unit": "USD/bbl",
+        "points_count": 6,
+        "points": [
+          {
+            "date": "2026-06-05",
+            "value": 90.54000091552734
+          },
+          {
+            "date": "2026-06-07",
+            "value": 92.94000244140625
+          },
+          {
+            "date": "2026-06-08",
+            "value": 91.37000274658203
+          },
+          {
+            "date": "2026-06-09",
+            "value": 88.94999694824219
+          },
+          {
+            "date": "2026-06-10",
+            "value": 92.26000213623047
+          },
+          {
+            "date": "2026-06-11",
+            "value": 85.75
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-06-05",
+          "start_value": 90.54000091552734,
+          "end_date": "2026-06-11",
+          "end_value": 85.75,
+          "net_change": -4.790000915527344,
+          "net_change_pct": -5.290480303834272,
+          "net_direction": "down",
+          "high_date": "2026-06-07",
+          "high_value": 92.94000244140625,
+          "low_date": "2026-06-11",
+          "low_value": 85.75,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      },
+      "Brent": {
+        "asset_key": "Brent",
+        "asset_name": "布蘭特原油",
+        "unit": "USD/bbl",
+        "points_count": 6,
+        "points": [
+          {
+            "date": "2026-06-05",
+            "value": 93.08999633789062
+          },
+          {
+            "date": "2026-06-07",
+            "value": 95.58000183105469
+          },
+          {
+            "date": "2026-06-08",
+            "value": 94.37000274658203
+          },
+          {
+            "date": "2026-06-09",
+            "value": 91.98999786376953
+          },
+          {
+            "date": "2026-06-10",
+            "value": 95.0999984741211
+          },
+          {
+            "date": "2026-06-11",
+            "value": 88.41999816894531
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-06-05",
+          "start_value": 93.08999633789062,
+          "end_date": "2026-06-11",
+          "end_value": 88.41999816894531,
+          "net_change": -4.6699981689453125,
+          "net_change_pct": -5.016648783607775,
+          "net_direction": "down",
+          "high_date": "2026-06-07",
+          "high_value": 95.58000183105469,
+          "low_date": "2026-06-11",
+          "low_value": 88.41999816894531,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      },
+      "USDJPY": {
+        "asset_key": "USDJPY",
+        "asset_name": "美元／日圓",
+        "unit": "JPY",
+        "points_count": 6,
+        "points": [
+          {
+            "date": "2026-06-05",
+            "value": 160.29299926757812
+          },
+          {
+            "date": "2026-06-07",
+            "value": 160.3470001220703
+          },
+          {
+            "date": "2026-06-08",
+            "value": 160.14199829101562
+          },
+          {
+            "date": "2026-06-09",
+            "value": 160.36000061035156
+          },
+          {
+            "date": "2026-06-10",
+            "value": 160.52000427246094
+          },
+          {
+            "date": "2026-06-11",
+            "value": 160.02499389648438
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-06-05",
+          "start_value": 160.29299926757812,
+          "end_date": "2026-06-11",
+          "end_value": 160.02499389648438,
+          "net_change": -0.26800537109375,
+          "net_change_pct": -0.16719717786699276,
+          "net_direction": "down",
+          "high_date": "2026-06-10",
+          "high_value": 160.52000427246094,
+          "low_date": "2026-06-11",
+          "low_value": 160.02499389648438,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      },
+      "USDTWD": {
+        "asset_key": "USDTWD",
+        "asset_name": "美元／台幣",
+        "unit": "TWD",
+        "points_count": 6,
+        "points": [
+          {
+            "date": "2026-06-05",
+            "value": 31.584999084472656
+          },
+          {
+            "date": "2026-06-07",
+            "value": 31.58799934387207
+          },
+          {
+            "date": "2026-06-08",
+            "value": 31.586999893188477
+          },
+          {
+            "date": "2026-06-09",
+            "value": 31.569000244140625
+          },
+          {
+            "date": "2026-06-10",
+            "value": 31.6200008392334
+          },
+          {
+            "date": "2026-06-11",
+            "value": 31.583999633789062
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-06-05",
+          "start_value": 31.584999084472656,
+          "end_date": "2026-06-11",
+          "end_value": 31.583999633789062,
+          "net_change": -0.00099945068359375,
+          "net_change_pct": -0.00316432076163993,
+          "net_direction": "down",
+          "high_date": "2026-06-10",
+          "high_value": 31.6200008392334,
+          "low_date": "2026-06-09",
+          "low_value": 31.569000244140625,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      },
+      "USDKRW": {
+        "asset_key": "USDKRW",
+        "asset_name": "美元／韓元",
+        "unit": "KRW",
+        "points_count": 6,
+        "points": [
+          {
+            "date": "2026-06-05",
+            "value": 1558.8399658203125
+          },
+          {
+            "date": "2026-06-07",
+            "value": 1559.4300537109375
+          },
+          {
+            "date": "2026-06-08",
+            "value": 1526.6400146484375
+          },
+          {
+            "date": "2026-06-09",
+            "value": 1527.27001953125
+          },
+          {
+            "date": "2026-06-10",
+            "value": 1520.52001953125
+          },
+          {
+            "date": "2026-06-11",
+            "value": 1516.010009765625
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-06-05",
+          "start_value": 1558.8399658203125,
+          "end_date": "2026-06-11",
+          "end_value": 1516.010009765625,
+          "net_change": -42.8299560546875,
+          "net_change_pct": -2.747553116021694,
+          "net_direction": "down",
+          "high_date": "2026-06-07",
+          "high_value": 1559.4300537109375,
+          "low_date": "2026-06-11",
+          "low_value": 1516.010009765625,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      }
+    },
+    "direction_rule": "For every asset, the formal this-week direction is start_value -> end_value inside analysis_window. The model may discuss high/low or mid-week reversals, but must label them as intra-week episodes and must not describe them as the whole-week direction.",
+    "instruction": "Use these filtered points and the computed summary for all this-week price reactions in the dialogue. Do not use lookback-window start prices as this-week starting points."
+  },
+  "market_series_lookback_note": {
+    "available": true,
+    "meta": {
+      "source": "Google Sheets Market_Source_Test",
+      "mode": "market_history_series",
+      "generated_at": "2026-06-12T07:52:56+08:00",
+      "data_status": "complete",
+      "range": {
+        "start": "2026-05-15",
+        "end": "2026-06-11",
+        "rule": "default_2026_05_15_to_latest_yahoo_date"
+      },
+      "value_source": "Yahoo數字 only",
+      "default_assets": [
+        "US10Y",
+        "DXY",
+        "Gold",
+        "WTI",
+        "Brent",
+        "USDJPY",
+        "USDTWD",
+        "USDKRW"
+      ]
+    },
+    "note": "Lookback data is intentionally not provided as raw dialogue material. It may be used only as prior context already distilled in the analysis_layer."
+  },
+  "weekly_news_context_json": {
+    "meta": {
+      "source": "Google News RSS",
+      "week_range": "2026-06-05 至 2026-06-11",
+      "sources_used": [
+        "經濟日報",
+        "鉅亨網",
+        "鉅亨號"
+      ],
+      "candidate_count": 31,
+      "data_quality_note": "新聞來源集中於總經與市場動態，對本週『再通膨定價』與『勞動市場降溫』的敘事轉換有良好覆蓋。"
+    },
+    "weekly_news_theme": "市場從「再通膨定價」轉向「成長降溫」的定價體制轉換。",
+    "news_fit_to_daily_summaries": "支持",
+    "macro_drivers": [
+      "美國10年期公債殖利率波動（4.46% - 4.55%）",
+      "勞動市場數據（初領失業金人數）",
+      "地緣政治（伊朗局勢）對油價的擾動",
+      "聯準會政策預期（高利率維持更久 vs. 降息預期）"
+    ],
+    "confirming_signals": [
+      "美債殖利率衝破4.5%心理關卡，反映市場對高利率維持更久的定價。",
+      "強勁非農數據與通膨黏性預期，強化了市場對Fed政策路徑的鷹派預期。",
+      "美元指數在100關卡附近的強勢表現，與美債利差優勢高度相關。"
+    ],
+    "contradicting_signals": [
+      "地緣政治降溫（伊朗和平協議進展）導致油價重挫，與再通膨預期形成背離。",
+      "初領失業金人數激增，促使市場交易重心從通膨轉向成長放緩，導致殖利率與美元同步下行。"
+    ],
+    "news_based_corrections": [
+      "油價重挫與地緣政治緊張緩解，修正了市場對通膨持續上行的過度定價。",
+      "勞動市場邊際降溫數據，修正了市場對Fed持續升息的激進預期。"
+    ],
+    "watch_points": [
+      "聯準會官員對近期就業數據的政策反應函數。",
+      "伊朗和平協議談判的穩定性，及其對能源價格的潛在影響。",
+      "亞洲貨幣在美元波動下的干預風險與資金流向。"
+    ],
+    "news_categories": {
+      "通膨預期": [
+        {
+          "title": "通膨疑慮降溫？國際油價重挫帶動美債走高 - cnyes.com",
+          "source": "cnyes.com",
+          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5yUzd1dUQtb0hZVFVQMUlDYXpZRUpuRV9wNGJXLWlheC12Uzl4cUxTUjluODV1VDc1cXdsVjYyMUYxR3dRQTVfbnduMl96a3M?oc=5",
+          "published_at": "2026-06-09 18:59:43 UTC",
+          "why_it_matters": "油價下跌成為通膨預期的修正因子，直接影響美債殖利率走勢。"
+        },
+        {
+          "title": "亞銀：亞洲面臨停滯性通膨 示警中東衝突推升物價 | 國際焦點 | 國際 - 經濟日報",
+          "source": "經濟日報",
+          "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9WbUxjaFN6MGd4U0x5N0c0dVNWVGd0YnJDSE9vUzhYVkdnUmRSMllSc0JrX2kxaUF0TnVLOGYzSjZXQXYtSXhLdm5EYUtPV21iT1A3X2s2Y3B2cWlFOWFURzgyeGhBdzVZS1RIbno0OTdZZy1h?oc=5",
+          "published_at": "2026-06-11 17:14:33 UTC",
+          "why_it_matters": "反映地緣政治對通膨預期的結構性風險。"
+        },
+        {
+          "title": "〈能源盤後〉川普突喊停空襲伊朗 和平協議似將成形 油價重挫近3% Brent跌破91美元 - cnyes.com",
+          "source": "cnyes.com",
+          "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1iY2dwSmlfeUZCM1N3dFVlV0ZwU3ZIcnRHZVRlcnNoR1E2QXFyM21qVU5za29LYjVXa3lLRXZuSEM3X1Y3OTdxVWpPaw?oc=5",
+          "published_at": "2026-06-11 22:02:32 UTC",
+          "why_it_matters": "地緣政治風險溢價消退，壓低能源價格，緩解通膨預期。"
+        }
+      ],
+      "利率": [
+        {
+          "title": "股債雙殺！10年期美債殖利率衝破4.5% 晶片股慘遭拋售 - news.cnyes.com",
+          "source": "news.cnyes.com",
+          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFB6U09wZGpxaFRUMFBwZjQ3ZXlIRlcyM1BhaXpJTWZhWTdMQ3FTcEpWeEdiLTNYZ3U4Y1dXNkhpWW5aWFBHMmpFQWhwTWRtdU0?oc=5",
+          "published_at": "2026-06-06 05:30:03 UTC",
+          "why_it_matters": "殖利率突破關鍵位，確立了高利率維持更久的主線敘事。"
+        },
+        {
+          "title": "美債繼續跌 美元升至2個月高點 市場估 Fed 12月升息機率大增 - 經濟日報",
+          "source": "經濟日報",
+          "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1Pcm9PY2h4YUtIdTFHNFhHVFMtWi1yd0lDSGs1ZzRZenNTQ05CQk1CRU5abTVmbGNFc2pUVHN3bkRqTWhhQ2VDNmVWZ2NYd0VBTWFZbGQzQmh1Z9IBX0FVX3lxTE5qOHZzYkNUM2FxNDBHZG9Zbkt3X1EzMW90NW40LXlTY01ONTVnM1hsNUNjdTRGcTJ4TzlyWnVJRHUzU0V5dEdGaldSQTJTV196MlptUWxrbndPbWlmdmlz?oc=5",
+          "published_at": "2026-06-08 04:53:31 UTC",
+          "why_it_matters": "市場對Fed升息預期的重新定價，是推動資產價格波動的核心。"
+        },
+        {
+          "title": "華許上任後第一次被敲打！川普公開發聲：加息就是想扼殺我們的成功 - 鉅亨號",
+          "source": "鉅亨號",
+          "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE9GbzE0RU94NEYxMHZPSHNhakZLWlJsMldyaWtEWjFwQmlmY29KRWVyUHpnSXpBUGtEcmpzc2U0U3NRY2lrbm1QWg?oc=5",
+          "published_at": "2026-06-09 11:55:39 UTC",
+          "why_it_matters": "政治干預Fed政策預期，增加市場對未來利率路徑的不確定性。"
+        }
+      ],
+      "貨幣": [
+        {
+          "title": "台幣重貶1.05角 爆大量 摜破31.6元重要心理關卡 - 經濟日報",
+          "source": "經濟日報",
+          "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE42RzJfRHhWdkQzX2t2dnZwUHo3UzJKR0Fjb0hRSnVfd0hIMmJRTnZrTlc0TjJkYmdNT3RGS0xXQ2ZJOVp3N3h6elYydmlBVXN2Tl80RnpWRlVpQdIBX0FVX3lxTE5OREpGWXJaZnZWWUxKWEtSOThUeXIxMG8ySG1TbGZXYkFlSnNkSm82eV9Vd2phME5wakE4d0s0SDd5S3RuWmlzVmZnSTJUYjVnOGVXaVZOakZnVDhsamww?oc=5",
+          "published_at": "2026-06-08 17:56:40 UTC",
+          "why_it_matters": "強勢美元導致亞幣承壓，反映利差優勢的傳導效應。"
+        },
+        {
+          "title": "外資出走匯市爆第二大量 熱錢趁台股大漲 調節持股後匯出 - 經濟日報",
+          "source": "經濟日報",
+          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9GNWYzeUdzU3lvMWlPdHdXdE5VYUpHZWdzUG5KSDhhU1h3MjlhWTk1SzRxc2ZyRGc2blFKRWFISHpaUzdCa0RFN3EySWNVQXNIbkc2YnB5QWdfeXZuLWdxTWlmYlBUVWxqLTcxa2xnU1FXTEtlZ3E2edIBX0FVX3lxTE1GT2dJc2VrM29YOW02QmRYaVh0Y0pCc2FOQ0lzR0c4ZTgzaW8wb1BfdW9kUjhLR2lhRDFiNFAybEF5eFhYMl9YS2FDTU56b2R1QzU4NDExTWhxTkhseFlB?oc=5",
+          "published_at": "2026-06-08 18:22:05 UTC",
+          "why_it_matters": "資金流向顯示強美元環境下，新興市場貨幣面臨流動性壓力。"
+        }
+      ],
+      "其他": [
+        {
+          "title": "花旗下調黃金目標價！示警最慘恐跌至3500美元 Fed升息預期成最大壓力 - news.cnyes.com",
+          "source": "news.cnyes.com",
+          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1KcXdtVHFjMUV3bUlvQmlISWxQVXZQN1BxSkFNdmxRcGFCbVRZYUhhNVp0N3ZJMUM1ZG82cWdEMm9sVllOWTRXS2loYVAtSzQ?oc=5",
+          "published_at": "2026-06-09 05:00:12 UTC",
+          "why_it_matters": "高利率機會成本上升，對黃金價格構成結構性壓力。"
+        },
+        {
+          "title": "美國股、債、黃金、比特幣齊跌！市場氛圍驟變引爆避險賣壓 - 經濟日報",
+          "source": "經濟日報",
+          "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE42bmlDeXVCaWZsYWg4WWxQNjJuRDZCejhoVzQ4M2JQZ2plbUF4RUZKc3hacHA5bFBjT21vVnJUeVdaR0JVS0xKTUp4VW12Vi0wVEpOalBWRzB6LWVk0gFiQVVfeXFMUDl1cnM5OW5kNEp0aUpINlNFRVZiMDdaeEd4X3BjZURheUcxU2E0TF9fMGVwcnJOYTNvLUlLa191X2Rvcm5WUEJmYmxWQWVrd0NONmt6Q3k0WVp1UW5mUVNza3c?oc=5",
+          "published_at": "2026-06-06 09:41:53 UTC",
+          "why_it_matters": "顯示市場情緒從單純總經定價轉向避險賣壓，資產傳導出現分歧。"
+        }
+      ]
+    },
+    "top_news": [
+      {
+        "title": "股債雙殺！10年期美債殖利率衝破4.5% 晶片股慘遭拋售 - news.cnyes.com",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFB6U09wZGpxaFRUMFBwZjQ3ZXlIRlcyM1BhaXpJTWZhWTdMQ3FTcEpWeEdiLTNYZ3U4Y1dXNkhpWW5aWFBHMmpFQWhwTWRtdU0?oc=5",
+        "published_at": "2026-06-06 05:30:03 UTC",
+        "why_it_matters": "確立了本週高利率維持更久的主線敘事。"
+      },
+      {
+        "title": "美債繼續跌 美元升至2個月高點 市場估 Fed 12月升息機率大增 - 經濟日報",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1Pcm9PY2h4YUtIdTFHNFhHVFMtWi1yd0lDSGs1ZzRZenNTQ05CQk1CRU5abTVmbGNFc2pUVHN3bkRqTWhhQ2VDNmVWZ2NYd0VBTWFZbGQzQmh1Z9IBX0FVX3lxTE5qOHZzYkNUM2FxNDBHZG9Zbkt3X1EzMW90NW40LXlTY01ONTVnM1hsNUNjdTRGcTJ4TzlyWnVJRHUzU0V5dEdGaldSQTJTV196MlptUWxrbndPbWlmdmlz?oc=5",
+        "published_at": "2026-06-08 04:53:31 UTC",
+        "why_it_matters": "市場對Fed政策路徑的重新定價，直接驅動美元與殖利率走勢。"
+      },
+      {
+        "title": "通膨疑慮降溫？國際油價重挫帶動美債走高 - cnyes.com",
+        "source": "cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5yUzd1dUQtb0hZVFVQMUlDYXpZRUpuRV9wNGJXLWlheC12Uzl4cUxTUjluODV1VDc1cXdsVjYyMUYxR3dRQTVfbnduMl96a3M?oc=5",
+        "published_at": "2026-06-09 18:59:43 UTC",
+        "why_it_matters": "油價下跌成為通膨預期的修正因子，直接影響美債殖利率走勢。"
+      },
+      {
+        "title": "亞銀：亞洲面臨停滯性通膨 示警中東衝突推升物價 | 國際焦點 | 國際 - 經濟日報",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9WbUxjaFN6MGd4U0x5N0c0dVNWVGd0YnJDSE9vUzhYVkdnUmRSMllSc0JrX2kxaUF0TnVLOGYzSjZXQXYtSXhLdm5EYUtPV21iT1A3X2s2Y3B2cWlFOWFURzgyeGhBdzVZS1RIbno0OTdZZy1h?oc=5",
+        "published_at": "2026-06-11 17:14:33 UTC",
+        "why_it_matters": "反映地緣政治對通膨預期的結構性風險。"
+      },
+      {
+        "title": "〈能源盤後〉川普突喊停空襲伊朗 和平協議似將成形 油價重挫近3% Brent跌破91美元 - cnyes.com",
+        "source": "cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1iY2dwSmlfeUZCM1N3dFVlV0ZwU3ZIcnRHZVRlcnNoR1E2QXFyM21qVU5za29LYjVXa3lLRXZuSEM3X1Y3OTdxVWpPaw?oc=5",
+        "published_at": "2026-06-11 22:02:32 UTC",
+        "why_it_matters": "地緣政治風險溢價消退，壓低能源價格，緩解通膨預期。"
+      },
+      {
+        "title": "華許上任後第一次被敲打！川普公開發聲：加息就是想扼殺我們的成功 - 鉅亨號",
+        "source": "鉅亨號",
+        "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE9GbzE0RU94NEYxMHZPSHNhakZLWlJsMldyaWtEWjFwQmlmY29KRWVyUHpnSXpBUGtEcmpzc2U0U3NRY2lrbm1QWg?oc=5",
+        "published_at": "2026-06-09 11:55:39 UTC",
+        "why_it_matters": "政治干預Fed政策預期，增加市場對未來利率路徑的不確定性。"
+      },
+      {
+        "title": "台幣重貶1.05角 爆大量 摜破31.6元重要心理關卡 - 經濟日報",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE42RzJfRHhWdkQzX2t2dnZwUHo3UzJKR0Fjb0hRSnVfd0hIMmJRTnZrTlc0TjJkYmdNT3RGS0xXQ2ZJOVp3N3h6elYydmlBVXN2Tl80RnpWRlVpQdIBX0FVX3lxTE5OREpGWXJaZnZWWUxKWEtSOThUeXIxMG8ySG1TbGZXYkFlSnNkSm82eV9Vd2phME5wakE4d0s0SDd5S3RuWmlzVmZnSTJUYjVnOGVXaVZOakZnVDhsamww?oc=5",
+        "published_at": "2026-06-08 17:56:40 UTC",
+        "why_it_matters": "強勢美元導致亞幣承壓，反映利差優勢的傳導效應。"
+      },
+      {
+        "title": "外資出走匯市爆第二大量 熱錢趁台股大漲 調節持股後匯出 - 經濟日報",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9GNWYzeUdzU3lvMWlPdHdXdE5VYUpHZWdzUG5KSDhhU1h3MjlhWTk1SzRxc2ZyRGc2blFKRWFISHpaUzdCa0RFN3EySWNVQXNIbkc2YnB5QWdfeXZuLWdxTWlmYlBUVWxqLTcxa2xnU1FXTEtlZ3E2edIBX0FVX3lxTE1GT2dJc2VrM29YOW02QmRYaVh0Y0pCc2FOQ0lzR0c4ZTgzaW8wb1BfdW9kUjhLR2lhRDFiNFAybEF5eFhYMl9YS2FDTU56b2R1QzU4NDExTWhxTkhseFlB?oc=5",
+        "published_at": "2026-06-08 18:22:05 UTC",
+        "why_it_matters": "資金流向顯示強美元環境下，新興市場貨幣面臨流動性壓力。"
+      },
+      {
+        "title": "花旗下調黃金目標價！示警最慘恐跌至3500美元 Fed升息預期成最大壓力 - news.cnyes.com",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1KcXdtVHFjMUV3bUlvQmlISWxQVXZQN1BxSkFNdmxRcGFCbVRZYUhhNVp0N3ZJMUM1ZG82cWdEMm9sVllOWTRXS2loYVAtSzQ?oc=5",
+        "published_at": "2026-06-09 05:00:12 UTC",
+        "why_it_matters": "高利率機會成本上升，對黃金價格構成結構性壓力。"
+      },
+      {
+        "title": "美國股、債、黃金、比特幣齊跌！市場氛圍驟變引爆避險賣壓 - 經濟日報",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE42bmlDeXVCaWZsYWg4WWxQNjJuRDZCejhoVzQ4M2JQZ2plbUF4RUZKc3hacHA5bFBjT21vVnJUeVdaR0JVS0xKTUp4VW12Vi0wVEpOalBWRzB6LWVk0gFiQVVfeXFMUDl1cnM5OW5kNEp0aUpINlNFRVZiMDdaeEd4X3BjZURheUcxU2E0TF9fMGVwcnJOYTNvLUlLa191X2Rvcm5WUEJmYmxWQWVrd0NONmt6Q3k0WVp1UW5mUVNza3c?oc=5",
+        "published_at": "2026-06-06 09:41:53 UTC",
+        "why_it_matters": "顯示市場情緒從單純總經定價轉向避險賣壓，資產傳導出現分歧。"
+      }
+    ],
+    "editor_note_for_forest_summary": "本週市場經歷了從「再通膨定價」到「成長擔憂」的體制轉換。初期由殖利率突破4.5%引發的強美元與亞幣承壓為主線，隨後因勞動市場數據降溫與地緣政治緊張緩解，市場轉向交易成長放緩與降息預期。建議觀察重點在於Fed對近期就業數據的政策反應，以及強美元環境下亞洲貨幣的穩定性。"
+  },
+  "weekly_news_context_md": "## 本週新聞補充\n\n### 新聞主線\n市場從「再通膨定價」轉向「成長降溫」的定價體制轉換。\n\n### 新聞與每日摘要的關係\n支持\n\n### 主要總經驅動\n\n### 支撐訊號\n- 美債殖利率衝破4.5%心理關卡，反映市場對高利率維持更久的定價。\n- 強勁非農數據與通膨黏性預期，強化了市場對Fed政策路徑的鷹派預期。\n- 美元指數在100關卡附近的強勢表現，與美債利差優勢高度相關。\n\n### 修正或背離訊號\n- 地緣政治降溫（伊朗和平協議進展）導致油價重挫，與再通膨預期形成背離。\n- 初領失業金人數激增，促使市場交易重心從通膨轉向成長放緩，導致殖利率與美元同步下行。\n\n### 新聞校正\n- 油價重挫與地緣政治緊張緩解，修正了市場對通膨持續上行的過度定價。\n- 勞動市場邊際降溫數據，修正了市場對Fed持續升息的激進預期。\n\n### 下週觀察\n- 聯準會官員對近期就業數據的政策反應函數。\n- 伊朗和平協議談判的穩定性，及其對能源價格的潛在影響。\n- 亞洲貨幣在美元波動下的干預風險與資金流向。\n\n### 代表新聞\n- news.cnyes.com｜股債雙殺！10年期美債殖利率衝破4.5% 晶片股慘遭拋售 - news.cnyes.com｜確立了本週高利率維持更久的主線敘事。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTFB6U09wZGpxaFRUMFBwZjQ3ZXlIRlcyM1BhaXpJTWZhWTdMQ3FTcEpWeEdiLTNYZ3U4Y1dXNkhpWW5aWFBHMmpFQWhwTWRtdU0?oc=5\n- 經濟日報｜美債繼續跌 美元升至2個月高點 市場估 Fed 12月升息機率大增 - 經濟日報｜市場對Fed政策路徑的重新定價，直接驅動美元與殖利率走勢。｜https://news.google.com/rss/articles/CBMiWkFVX3lxTE1Pcm9PY2h4YUtIdTFHNFhHVFMtWi1yd0lDSGs1ZzRZenNTQ05CQk1CRU5abTVmbGNFc2pUVHN3bkRqTWhhQ2VDNmVWZ2NYd0VBTWFZbGQzQmh1Z9IBX0FVX3lxTE5qOHZzYkNUM2FxNDBHZG9Zbkt3X1EzMW90NW40LXlTY01ONTVnM1hsNUNjdTRGcTJ4TzlyWnVJRHUzU0V5dEdGaldSQTJTV196MlptUWxrbndPbWlmdmlz?oc=5\n- cnyes.com｜通膨疑慮降溫？國際油價重挫帶動美債走高 - cnyes.com｜油價下跌成為通膨預期的修正因子，直接影響美債殖利率走勢。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTE5yUzd1dUQtb0hZVFVQMUlDYXpZRUpuRV9wNGJXLWlheC12Uzl4cUxTUjluODV1VDc1cXdsVjYyMUYxR3dRQTVfbnduMl96a3M?oc=5\n- 經濟日報｜亞銀：亞洲面臨停滯性通膨 示警中東衝突推升物價 | 國際焦點 | 國際 - 經濟日報｜反映地緣政治對通膨預期的結構性風險。｜https://news.google.com/rss/articles/CBMidEFVX3lxTE9WbUxjaFN6MGd4U0x5N0c0dVNWVGd0YnJDSE9vUzhYVkdnUmRSMllSc0JrX2kxaUF0TnVLOGYzSjZXQXYtSXhLdm5EYUtPV21iT1A3X2s2Y3B2cWlFOWFURzgyeGhBdzVZS1RIbno0OTdZZy1h?oc=5\n- cnyes.com｜〈能源盤後〉川普突喊停空襲伊朗 和平協議似將成形 油價重挫近3% Brent跌破91美元 - cnyes.com｜地緣政治風險溢價消退，壓低能源價格，緩解通膨預期。｜https://news.google.com/rss/articles/CBMiS0FVX3lxTE1iY2dwSmlfeUZCM1N3dFVlV0ZwU3ZIcnRHZVRlcnNoR1E2QXFyM21qVU5za29LYjVXa3lLRXZuSEM3X1Y3OTdxVWpPaw?oc=5\n- 鉅亨號｜華許上任後第一次被敲打！川普公開發聲：加息就是想扼殺我們的成功 - 鉅亨號｜政治干預Fed政策預期，增加市場對未來利率路徑的不確定性。｜https://news.google.com/rss/articles/CBMiSEFVX3lxTE9GbzE0RU94NEYxMHZPSHNhakZLWlJsMldyaWtEWjFwQmlmY29KRWVyUHpnSXpBUGtEcmpzc2U0U3NRY2lrbm1QWg?oc=5\n- 經濟日報｜台幣重貶1.05角 爆大量 摜破31.6元重要心理關卡 - 經濟日報｜強勢美元導致亞幣承壓，反映利差優勢的傳導效應。｜https://news.google.com/rss/articles/CBMiWkFVX3lxTE42RzJfRHhWdkQzX2t2dnZwUHo3UzJKR0Fjb0hRSnVfd0hIMmJRTnZrTlc0TjJkYmdNT3RGS0xXQ2ZJOVp3N3h6elYydmlBVXN2Tl80RnpWRlVpQdIBX0FVX3lxTE5OREpGWXJaZnZWWUxKWEtSOThUeXIxMG8ySG1TbGZXYkFlSnNkSm82eV9Vd2phME5wakE4d0s0SDd5S3RuWmlzVmZnSTJUYjVnOGVXaVZOakZnVDhsamww?oc=5\n- 經濟日報｜外資出走匯市爆第二大量 熱錢趁台股大漲 調節持股後匯出 - 經濟日報｜資金流向顯示強美元環境下，新興市場貨幣面臨流動性壓力。｜https://news.google.com/rss/articles/CBMieEFVX3lxTE9GNWYzeUdzU3lvMWlPdHdXdE5VYUpHZWdzUG5KSDhhU1h3MjlhWTk1SzRxc2ZyRGc2blFKRWFISHpaUzdCa0RFN3EySWNVQXNIbkc2YnB5QWdfeXZuLWdxTWlmYlBUVWxqLTcxa2xnU1FXTEtlZ3E2edIBX0FVX3lxTE1GT2dJc2VrM29YOW02QmRYaVh0Y0pCc2FOQ0lzR0c4ZTgzaW8wb1BfdW9kUjhLR2lhRDFiNFAybEF5eFhYMl9YS2FDTU56b2R1QzU4NDExTWhxTkhseFlB?oc=5\n- news.cnyes.com｜花旗下調黃金目標價！示警最慘恐跌至3500美元 Fed升息預期成最大壓力 - news.cnyes.com｜高利率機會成本上升，對黃金價格構成結構性壓力。｜https://news.google.com/rss/articles/CBMiT0FVX3lxTE1KcXdtVHFjMUV3bUlvQmlISWxQVXZQN1BxSkFNdmxRcGFCbVRZYUhhNVp0N3ZJMUM1ZG82cWdEMm9sVllOWTRXS2loYVAtSzQ?oc=5\n- 經濟日報｜美國股、債、黃金、比特幣齊跌！市場氛圍驟變引爆避險賣壓 - 經濟日報｜顯示市場情緒從單純總經定價轉向避險賣壓，資產傳導出現分歧。｜https://news.google.com/rss/articles/CBMiXEFVX3lxTE42bmlDeXVCaWZsYWg4WWxQNjJuRDZCejhoVzQ4M2JQZ2plbUF4RUZKc3hacHA5bFBjT21vVnJUeVdaR0JVS0xKTUp4VW12Vi0wVEpOalBWRzB6LWVk0gFiQVVfeXFMUDl1cnM5OW5kNEp0aUpINlNFRVZiMDdaeEd4X3BjZURheUcxU2E0TF9fMGVwcnJOYTNvLUlLa191X2Rvcm5WUEJmYmxWQWVrd0NONmt6Q3k0WVp1UW5mUVNza3c?oc=5\n\n### 給 Forest Summary 的編輯提示\n本週市場經歷了從「再通膨定價」到「成長擔憂」的體制轉換。初期由殖利率突破4.5%引發的強美元與亞幣承壓為主線，隨後因勞動市場數據降溫與地緣政治緊張緩解，市場轉向交易成長放緩與降息預期。建議觀察重點在於Fed對近期就業數據的政策反應，以及強美元環境下亞洲貨幣的穩定性。\n",
+  "weekly_source_text": "# Weekly Macro Source Text\n\n資料來源：Google Sheets History_Data\n產生時間：2026-06-12T07:52:41+08:00\n週期：2026-06-05 ～ 2026-06-11\n資料狀態：complete\n資料天數：6\n\n這份文件是週報影片的主要來源。請從每日摘要中歸納本週主線、延續訊號、轉折點、背離現象、新聞佐證與下週觀察。\n\n---\n\n## Day 1｜2026-06-05\n\n### 今日主線\n「高利率維持更久」敘事主導，殖利率上行引發強美元與非美貨幣壓力。\n\n### Executive Summary\n市場目前處於「再通膨定價」與「高利率維持更久」的體制中。儘管油價下跌提供了通膨修正因子，但市場對利率路徑的敏感度遠高於能源價格，導致殖利率上行成為驅動美元走強、壓抑黃金與亞幣的核心邏輯。\n\n### 今日市場訊號\n- 美債殖利率突破4.5%關鍵位\n- 美元指數站穩100關卡\n- 油價下跌但利率持續攀升\n\n### 總經傳導鏈\n[高利率維持更久預期] -> [美國10年期公債殖利率上行] -> [美元指數走強] -> [黃金與亞洲貨幣承壓]\n\n### 矛盾 / 背離 / 待觀察\n今日最關鍵的現象是「油價與殖利率的背離」。油價下跌本應是通膨修正因子，但市場將焦點鎖定在殖利率突破4.5%後的風險溢價調整。這顯示市場主線已從單純的通膨數據轉向對「高利率維持更久」的結構性定價，導致股債同步承壓，資產傳導鏈條高度連貫。\n\n### 市場數據摘要\nUS10Y｜4.536｜up｜突破關鍵心理關卡，反映高利率預期\nDXY｜100.07｜up｜利差優勢支撐，維持強勢格局\nGold｜4337.1｜down｜高利率機會成本上升，承壓下行\n\n### 新聞佐證\n- 美國10年期公債殖利率突破4.5%心理關卡\n- 美元指數在100關卡上方獲得利差支撐\n- 油價下跌但並未減緩殖利率上行趨勢\n- 亞洲貨幣如日圓、台幣、韓元同步面臨貶值壓力\n\n### 待觀察問題\n- 美國勞動力市場數據是否出現降溫以修正利率預期\n- 美國財政部公債標售需求是否顯示供需壓力\n- 亞洲央行對於貨幣貶值的口頭干預或政策調整訊號\n\n### Visual Note\n{\n  \"title\": \"高利率維持更久：殖利率突破與強美元的傳導效應\",\n  \"file_id\": \"1tSDHNSEklQHi4Ul17Ep2xgKNAvi2I7ps\",\n  \"url\": \"https://drive.google.com/file/d/1tSDHNSEklQHi4Ul17Ep2xgKNAvi2I7ps/view?usp=drivesdk\"\n}\n\n### 原始今日總經摘要文字\n日期：2026-06-05\n今日主線：「高利率維持更久」敘事主導，殖利率上行引發強美元與非美貨幣壓力。\n\nExecutive Summary：\n市場目前處於「再通膨定價」與「高利率維持更久」的體制中。儘管油價下跌提供了通膨修正因子，但市場對利率路徑的敏感度遠高於能源價格，導致殖利率上行成為驅動美元走強、壓抑黃金與亞幣的核心邏輯。\n\n今日核心訊號：\n- 美債殖利率突破4.5%關鍵位\n- 美元指數站穩100關卡\n- 油價下跌但利率持續攀升\n\n核心資產重點：\nUS10Y｜4.536｜up｜突破關鍵心理關卡，反映高利率預期\nDXY｜100.07｜up｜利差優勢支撐，維持強勢格局\nGold｜4337.1｜down｜高利率機會成本上升，承壓下行\n\n矛盾 / 背離：\n今日最關鍵的現象是「油價與殖利率的背離」。油價下跌本應是通膨修正因子，但市場將焦點鎖定在殖利率突破4.5%後的風險溢價調整。這顯示市場主線已從單純的通膨數據轉向對「高利率維持更久」的結構性定價，導致股債同步承壓，資產傳導鏈條高度連貫。\n\n總經傳導鏈：\n[高利率維持更久預期] -> [美國10年期公債殖利率上行] -> [美元指數走強] -> [黃金與亞洲貨幣承壓]\n\n新聞佐證：\n- 美國10年期公債殖利率突破4.5%心理關卡\n- 美元指數在100關卡上方獲得利差支撐\n- 油價下跌但並未減緩殖利率上行趨勢\n- 亞洲貨幣如日圓、台幣、韓元同步面臨貶值壓力\n\n待觀察問題：\n- 美國勞動力市場數據是否出現降溫以修正利率預期\n- 美國財政部公債標售需求是否顯示供需壓力\n- 亞洲央行對於貨幣貶值的口頭干預或政策調整訊號\n\n---\n\n## Day 2｜2026-06-07\n\n### 今日主線\n強勁就業數據封鎖降息空間，市場在再通膨定價與避險需求間尋求平衡。\n\n### Executive Summary\n市場目前處於「高利率維持更久」的定價體制，非農數據強勁導致殖利率與美元雙升。然而，黃金同步走強揭示了市場對未來政策失誤或硬著陸的隱憂，資產傳導出現避險分歧。\n\n### 今日市場訊號\n- 非農數據強勁引發升息擔憂\n- 美債殖利率與美元同步走高\n- 金價與油價同步上行避險\n\n### 總經傳導鏈\n[強勁非農數據] -> [美國10年期公債殖利率上行] -> [美元指數走強] -> [亞洲貨幣承壓、黃金與原油同步避險上行]\n\n### 矛盾 / 背離 / 待觀察\n今日關鍵在於「利率/美元 → 黃金」的傳導失靈。主線敘事為強勁就業帶動的升息預期（利空金價），但修正因子為市場對地緣政治與政策不確定性的防禦心理（利多金價），導致兩者同步走強，顯示市場情緒已從單純的總經定價轉向防禦性配置。\n\n### 市場數據摘要\nUS10Y｜4.536｜up｜就業韌性支撐高利率預期\nDXY｜100.112｜up｜利差優勢推升美元匯率\nGold｜4352.5｜up｜避險需求抵銷高利率壓力\n\n### 新聞佐證\n- 非農數據表現強勁，促使市場重新定價聯準會升息風險。\n- 美國10年期公債殖利率上行至4.536，反映高利率維持更久預期。\n- 美元指數走強至100.11，導致亞幣普遍承壓。\n- 金價與油價同步上行，顯示市場對未來政策失誤的避險溢價上升。\n\n### 待觀察問題\n- 華許首場Fed會議的政策指引是否強化升息預期\n- 美元指數持續走強是否引發亞洲央行干預\n- 黃金與美債殖利率若同步下行，將是避險情緒消退訊號\n\n### Visual Note\n{\n  \"title\": \"高利率與避險並存：非農數據後的資產傳導與心理分歧\",\n  \"file_id\": \"1gipQjvWqs3WuIFPKc2NmU6wPjgdqUKjU\",\n  \"url\": \"https://drive.google.com/file/d/1gipQjvWqs3WuIFPKc2NmU6wPjgdqUKjU/view?usp=drivesdk\"\n}\n\n### 原始今日總經摘要文字\n日期：2026-06-07\n今日主線：強勁就業數據封鎖降息空間，市場在再通膨定價與避險需求間尋求平衡。\n\nExecutive Summary：\n市場目前處於「高利率維持更久」的定價體制，非農數據強勁導致殖利率與美元雙升。然而，黃金同步走強揭示了市場對未來政策失誤或硬著陸的隱憂，資產傳導出現避險分歧。\n\n今日核心訊號：\n- 非農數據強勁引發升息擔憂\n- 美債殖利率與美元同步走高\n- 金價與油價同步上行避險\n\n核心資產重點：\nUS10Y｜4.536｜up｜就業韌性支撐高利率預期\nDXY｜100.112｜up｜利差優勢推升美元匯率\nGold｜4352.5｜up｜避險需求抵銷高利率壓力\n\n矛盾 / 背離：\n今日關鍵在於「利率/美元 → 黃金」的傳導失靈。主線敘事為強勁就業帶動的升息預期（利空金價），但修正因子為市場對地緣政治與政策不確定性的防禦心理（利多金價），導致兩者同步走強，顯示市場情緒已從單純的總經定價轉向防禦性配置。\n\n總經傳導鏈：\n[強勁非農數據] -> [美國10年期公債殖利率上行] -> [美元指數走強] -> [亞洲貨幣承壓、黃金與原油同步避險上行]\n\n新聞佐證：\n- 非農數據表現強勁，促使市場重新定價聯準會升息風險。\n- 美國10年期公債殖利率上行至4.536，反映高利率維持更久預期。\n- 美元指數走強至100.11，導致亞幣普遍承壓。\n- 金價與油價同步上行，顯示市場對未來政策失誤的避險溢價上升。\n\n待觀察問題：\n- 華許首場Fed會議的政策指引是否強化升息預期\n- 美元指數持續走強是否引發亞洲央行干預\n- 黃金與美債殖利率若同步下行，將是避險情緒消退訊號\n\n---\n\n## Day 3｜2026-06-08\n\n### 今日主線\n再通膨預期推升長債利率，但地緣政治降溫帶動的風險偏好回升，成為美元走弱的修正因子。\n\n### Executive Summary\n市場正處於「再通膨定價」體制，核心矛盾在於利率上行未能支撐美元。目前風險情緒改善帶來的資金流動，暫時抵銷了美債利差優勢，導致資產傳導出現分歧。\n\n### 今日市場訊號\n- 美債殖利率因通膨預期上行\n- 美元指數與利率走勢脫鉤\n- 風險偏好改善支撐亞洲貨幣\n\n### 總經傳導鏈\n[通膨預期突破4%] -> [美國10年期公債殖利率上行] -> [地緣政治降溫抵銷利差優勢] -> [美元指數走弱，亞洲貨幣反彈，黃金受壓]\n\n### 矛盾 / 背離 / 待觀察\n今日關鍵在於「風險偏好」與「利率」的拉鋸。主線是通膨預期推升殖利率，但修正因子是地緣政治緊張降溫，導致避險資金撤出美元，使美元未能隨殖利率同步走強，形成典型的資產傳導修正格局。\n\n### 市場數據摘要\nUS10Y｜4.552｜up｜市場定價通膨突破4%風險\nDXY｜100.045｜down｜避險需求消退導致美元走弱\nGold｜4348.3｜down｜高利率環境壓抑非孳息資產\n\n### 新聞佐證\n- 市場高度關注本週通膨數據恐突破4%門檻\n- Fed主席Warsh的政策反應函數存在高度不確定性\n- 地緣政治緊張降溫，導致避險情緒消退\n- 殖利率與美元脫鉤，顯示風險偏好改善為當前主要修正因子\n\n### 待觀察問題\n- 本週通膨數據是否確認突破4%門檻\n- Fed主席Warsh對未來利率路徑的公開表態\n- 美元指數能否回歸與美債殖利率的正相關傳導\n\n### Visual Note\n{\n  \"title\": \"再通膨預期下的資產傳導分歧：殖利率與美元的脫鉤現象\",\n  \"file_id\": \"1XteTyTuC6F-UgiSFubVP7pqb7ASrqFff\",\n  \"url\": \"https://drive.google.com/file/d/1XteTyTuC6F-UgiSFubVP7pqb7ASrqFff/view?usp=drivesdk\"\n}\n\n### 原始今日總經摘要文字\n日期：2026-06-08\n今日主線：再通膨預期推升長債利率，但地緣政治降溫帶動的風險偏好回升，成為美元走弱的修正因子。\n\nExecutive Summary：\n市場正處於「再通膨定價」體制，核心矛盾在於利率上行未能支撐美元。目前風險情緒改善帶來的資金流動，暫時抵銷了美債利差優勢，導致資產傳導出現分歧。\n\n今日核心訊號：\n- 美債殖利率因通膨預期上行\n- 美元指數與利率走勢脫鉤\n- 風險偏好改善支撐亞洲貨幣\n\n核心資產重點：\nUS10Y｜4.552｜up｜市場定價通膨突破4%風險\nDXY｜100.045｜down｜避險需求消退導致美元走弱\nGold｜4348.3｜down｜高利率環境壓抑非孳息資產\n\n矛盾 / 背離：\n今日關鍵在於「風險偏好」與「利率」的拉鋸。主線是通膨預期推升殖利率，但修正因子是地緣政治緊張降溫，導致避險資金撤出美元，使美元未能隨殖利率同步走強，形成典型的資產傳導修正格局。\n\n總經傳導鏈：\n[通膨預期突破4%] -> [美國10年期公債殖利率上行] -> [地緣政治降溫抵銷利差優勢] -> [美元指數走弱，亞洲貨幣反彈，黃金受壓]\n\n新聞佐證：\n- 市場高度關注本週通膨數據恐突破4%門檻\n- Fed主席Warsh的政策反應函數存在高度不確定性\n- 地緣政治緊張降溫，導致避險情緒消退\n- 殖利率與美元脫鉤，顯示風險偏好改善為當前主要修正因子\n\n待觀察問題：\n- 本週通膨數據是否確認突破4%門檻\n- Fed主席Warsh對未來利率路徑的公開表態\n- 美元指數能否回歸與美債殖利率的正相關傳導\n\n---\n\n## Day 4｜2026-06-09\n\n### 今日主線\n市場從通膨交易轉向成長擔憂，殖利率下行反映對經濟動能放緩的定價。\n\n### Executive Summary\n市場目前處於「通膨預期降溫」與「成長風險浮現」的過渡期。儘管油價下跌壓低通膨壓力，但美債殖利率與美元同步走弱，顯示投資人正重新評估高利率對經濟的滯後影響，而非單純交易降息預期。\n\n### 今日市場訊號\n- 油價重挫緩解通膨壓力\n- 美債殖利率下行反映成長擔憂\n- 美元指數走弱顯示流動性預期修正\n\n### 總經傳導鏈\n[油價重挫/成長擔憂] -> [美債殖利率下行] -> [美元指數走弱] -> [亞洲貨幣分歧與黃金/原油同步承壓]\n\n### 矛盾 / 背離 / 待觀察\n今日關鍵在於『成長擔憂』取代了『通膨主線』。油價下跌本應是通膨利多，但黃金與美元同步走弱，顯示市場並非在交易避險，而是擔心高利率環境下的經濟衰退風險，導致風險資產與避險資產出現同步修正的罕見現象。\n\n### 市場數據摘要\nUS10Y｜4.528｜down｜反映市場對經濟成長放緩的擔憂\nDXY｜99.995｜down｜利差優勢減弱，美元偏弱整理\nGold｜4277.1｜down｜避險需求未隨殖利率下行而顯著提升\n\n### 新聞佐證\n- 國際油價重挫成為推動美債殖利率回落的核心驅動力。\n- 美債殖利率與美元指數同步下行，顯示市場交易重心轉向成長風險。\n- 黃金與油價同步走弱，反映市場情緒偏向保守觀望而非避險。\n- 亞洲貨幣表現分歧，顯示市場對全球流動性收緊的預期正在重估。\n\n### 待觀察問題\n- 美國後續就業數據是否顯著惡化，確認成長風險是否成真。\n- Fed官員對通膨與降息路徑的最新表態。\n- 美債標售需求變化，觀察殖利率下行是否有實質買盤支撐。\n\n### Visual Note\n{\n  \"title\": \"通膨預期降溫與成長擔憂下的資產傳導路徑分析\",\n  \"file_id\": \"1o9Vx8HRSFR2XP9zxaeA1NhUUzKGpS8OQ\",\n  \"url\": \"https://drive.google.com/file/d/1o9Vx8HRSFR2XP9zxaeA1NhUUzKGpS8OQ/view?usp=drivesdk\"\n}\n\n### 原始今日總經摘要文字\n日期：2026-06-09\n今日主線：市場從通膨交易轉向成長擔憂，殖利率下行反映對經濟動能放緩的定價。\n\nExecutive Summary：\n市場目前處於「通膨預期降溫」與「成長風險浮現」的過渡期。儘管油價下跌壓低通膨壓力，但美債殖利率與美元同步走弱，顯示投資人正重新評估高利率對經濟的滯後影響，而非單純交易降息預期。\n\n今日核心訊號：\n- 油價重挫緩解通膨壓力\n- 美債殖利率下行反映成長擔憂\n- 美元指數走弱顯示流動性預期修正\n\n核心資產重點：\nUS10Y｜4.528｜down｜反映市場對經濟成長放緩的擔憂\nDXY｜99.995｜down｜利差優勢減弱，美元偏弱整理\nGold｜4277.1｜down｜避險需求未隨殖利率下行而顯著提升\n\n矛盾 / 背離：\n今日關鍵在於『成長擔憂』取代了『通膨主線』。油價下跌本應是通膨利多，但黃金與美元同步走弱，顯示市場並非在交易避險，而是擔心高利率環境下的經濟衰退風險，導致風險資產與避險資產出現同步修正的罕見現象。\n\n總經傳導鏈：\n[油價重挫/成長擔憂] -> [美債殖利率下行] -> [美元指數走弱] -> [亞洲貨幣分歧與黃金/原油同步承壓]\n\n新聞佐證：\n- 國際油價重挫成為推動美債殖利率回落的核心驅動力。\n- 美債殖利率與美元指數同步下行，顯示市場交易重心轉向成長風險。\n- 黃金與油價同步走弱，反映市場情緒偏向保守觀望而非避險。\n- 亞洲貨幣表現分歧，顯示市場對全球流動性收緊的預期正在重估。\n\n待觀察問題：\n- 美國後續就業數據是否顯著惡化，確認成長風險是否成真。\n- Fed官員對通膨與降息路徑的最新表態。\n- 美債標售需求變化，觀察殖利率下行是否有實質買盤支撐。\n\n---\n\n## Day 5｜2026-06-10\n\n### 今日主線\n通膨黏性與油價上行，驅動美債殖利率走高，強化強勢美元定價。\n\n### Executive Summary\n市場正處於「再通膨定價」體制，投資人對通膨持續性的疑慮蓋過了數據本身。資產傳導鏈條高度連貫，強勢美元與高利率環境持續壓抑黃金及部分亞幣，顯示市場已將重心轉向聯準會下週的政策路徑。\n\n### 今日市場訊號\n- 美債殖利率上行至4.54%\n- 美元指數走強突破100\n- 油價上行強化通膨黏性\n\n### 總經傳導鏈\nCPI通膨預期與油價上行 -> 美國10年期公債殖利率上升 -> 美元指數走強 -> 黃金承壓與亞洲貨幣貶值壓力擴大\n\n### 矛盾 / 背離 / 待觀察\n今日資產走勢呈現高度共振，油價上行作為主線的修正因子，反而成為推升通膨預期的催化劑。韓元偏強與台幣、日圓走弱形成分歧，顯示區域內資金流動存在短期避險差異，但整體仍受強美元主導。\n\n### 市場數據摘要\nUS10Y｜4.54｜up｜反映高利率維持更久預期\nDXY｜100.08｜up｜利差優勢支撐美元走強\nGold｜4067.80｜down｜高利率與強美元雙重壓制\n\n### 新聞佐證\n- 美國CPI數據公布後，市場對聯準會政策態度保持高度警戒。\n- 美國10年期公債殖利率上行，直接支撐美元指數走強。\n- 原油價格持續上行，進一步強化市場對通膨黏性的擔憂。\n- 強勢美元環境下，黃金價格呈現明顯下行壓力。\n\n### 待觀察問題\n- 聯準會下週點陣圖與利率指引\n- 美債殖利率關鍵技術位防守狀況\n- 亞洲貨幣在強美元下的貶值壓力擴散\n\n### Visual Note\n{\n  \"title\": \"再通膨預期下的資產傳導：高利率維持更久的主線邏輯\",\n  \"file_id\": \"1dc12x0Lt_lfSd99NQxOrMOzXC5dG4fbi\",\n  \"url\": \"https://drive.google.com/file/d/1dc12x0Lt_lfSd99NQxOrMOzXC5dG4fbi/view?usp=drivesdk\"\n}\n\n### 原始今日總經摘要文字\n日期：2026-06-10\n今日主線：通膨黏性與油價上行，驅動美債殖利率走高，強化強勢美元定價。\n\nExecutive Summary：\n市場正處於「再通膨定價」體制，投資人對通膨持續性的疑慮蓋過了數據本身。資產傳導鏈條高度連貫，強勢美元與高利率環境持續壓抑黃金及部分亞幣，顯示市場已將重心轉向聯準會下週的政策路徑。\n\n今日核心訊號：\n- 美債殖利率上行至4.54%\n- 美元指數走強突破100\n- 油價上行強化通膨黏性\n\n核心資產重點：\nUS10Y｜4.54｜up｜反映高利率維持更久預期\nDXY｜100.08｜up｜利差優勢支撐美元走強\nGold｜4067.80｜down｜高利率與強美元雙重壓制\n\n矛盾 / 背離：\n今日資產走勢呈現高度共振，油價上行作為主線的修正因子，反而成為推升通膨預期的催化劑。韓元偏強與台幣、日圓走弱形成分歧，顯示區域內資金流動存在短期避險差異，但整體仍受強美元主導。\n\n總經傳導鏈：\nCPI通膨預期與油價上行 -> 美國10年期公債殖利率上升 -> 美元指數走強 -> 黃金承壓與亞洲貨幣貶值壓力擴大\n\n新聞佐證：\n- 美國CPI數據公布後，市場對聯準會政策態度保持高度警戒。\n- 美國10年期公債殖利率上行，直接支撐美元指數走強。\n- 原油價格持續上行，進一步強化市場對通膨黏性的擔憂。\n- 強勢美元環境下，黃金價格呈現明顯下行壓力。\n\n待觀察問題：\n- 聯準會下週點陣圖與利率指引\n- 美債殖利率關鍵技術位防守狀況\n- 亞洲貨幣在強美元下的貶值壓力擴散\n\n---\n\n## Day 6｜2026-06-11\n\n### 今日主線\n勞動市場邊際降溫修正通膨預期，市場轉向交易降息利多。\n\n### Executive Summary\n市場定價體制從「再通膨」轉向「成長降溫」。儘管通膨預期存在，但初領失業金人數激增成為主導因子，壓低美債殖利率並削弱美元利差優勢，進而推動亞洲貨幣與黃金走強。\n\n### 今日市場訊號\n- 初領失業金人數創4個月新高\n- 美債殖利率下行至4.46%\n- 美元指數跌破關鍵支撐\n\n### 總經傳導鏈\n[初領失業金數據超預期] -> [美債殖利率下行] -> [美元指數走弱] -> [亞洲貨幣升值、黃金上行、原油受地緣政治緩解壓抑]\n\n### 矛盾 / 背離 / 待觀察\n今日核心背離在於「通膨預期」與「殖利率」的脫鉤。市場將初領失業金數據視為成長放緩的修正因子，優先於通膨壓力進行定價，導致債券買盤湧入，進而引發美元拋售與亞洲貨幣的同步反彈。\n\n### 市場數據摘要\nUS10Y｜4.463｜down｜就業降溫預期壓低長債殖利率\nDXY｜99.675｜down｜利差優勢減弱導致美元走軟\nGold｜4229.2｜up｜利率下行環境下的避險配置需求\n\n### 新聞佐證\n- 美國初領失業金人數創4個月新高，顯示勞動市場韌性減弱。\n- 川普提及伊朗和平協議進展，降低地緣政治風險溢價，壓低油價。\n- 美債殖利率下行，反映市場對Fed降息路徑的預期重新定價。\n- 美元指數走弱，直接支撐台幣、韓元與日圓等亞洲貨幣表現。\n\n### 待觀察問題\n- 後續非農就業報告是否顯示勞動市場惡化速度超出預期。\n- 伊朗和平協議談判進展，若生變將重新推升地緣政治風險。\n- Fed官員對近期就業數據的表態，是否會修正市場激進的降息預期。\n\n### Visual Note\n{\n  \"title\": \"勞動市場降溫主導：美債殖利率下行與美元利差優勢收斂\",\n  \"file_id\": \"1ClBLK3-IADmm-vd55be5A2eCSAFz2v-h\",\n  \"url\": \"https://drive.google.com/file/d/1ClBLK3-IADmm-vd55be5A2eCSAFz2v-h/view?usp=drivesdk\",\n  \"model\": \"gemini-3-pro-image-preview\"\n}\n\n### 原始今日總經摘要文字\n日期：2026-06-11\n今日主線：勞動市場邊際降溫修正通膨預期，市場轉向交易降息利多。\n\nExecutive Summary：\n市場定價體制從「再通膨」轉向「成長降溫」。儘管通膨預期存在，但初領失業金人數激增成為主導因子，壓低美債殖利率並削弱美元利差優勢，進而推動亞洲貨幣與黃金走強。\n\n今日核心訊號：\n- 初領失業金人數創4個月新高\n- 美債殖利率下行至4.46%\n- 美元指數跌破關鍵支撐\n\n核心資產重點：\nUS10Y｜4.463｜down｜就業降溫預期壓低長債殖利率\nDXY｜99.675｜down｜利差優勢減弱導致美元走軟\nGold｜4229.2｜up｜利率下行環境下的避險配置需求\n\n矛盾 / 背離：\n今日核心背離在於「通膨預期」與「殖利率」的脫鉤。市場將初領失業金數據視為成長放緩的修正因子，優先於通膨壓力進行定價，導致債券買盤湧入，進而引發美元拋售與亞洲貨幣的同步反彈。\n\n總經傳導鏈：\n[初領失業金數據超預期] -> [美債殖利率下行] -> [美元指數走弱] -> [亞洲貨幣升值、黃金上行、原油受地緣政治緩解壓抑]\n\n新聞佐證：\n- 美國初領失業金人數創4個月新高，顯示勞動市場韌性減弱。\n- 川普提及伊朗和平協議進展，降低地緣政治風險溢價，壓低油價。\n- 美債殖利率下行，反映市場對Fed降息路徑的預期重新定價。\n- 美元指數走弱，直接支撐台幣、韓元與日圓等亞洲貨幣表現。\n\n待觀察問題：\n- 後續非農就業報告是否顯示勞動市場惡化速度超出預期。\n- 伊朗和平協議談判進展，若生變將重新推升地緣政治風險。\n- Fed官員對近期就業數據的表態，是否會修正市場激進的降息預期。\n\n---\n\n## 週報生成任務\n\n請不要把以上內容逐日照念。請從「森林視角」回答：\n\n1. 本週市場主線如何形成？\n2. 哪些訊號在多個交易日反覆出現？\n3. 哪一天或哪個訊號造成轉折？\n4. 通膨預期 → 利率 → 美元 → 亞洲貨幣 / 黃金 的傳導鏈是否成立？\n5. 哪些地方出現背離或待觀察？\n6. 下週最重要的三個驗證問題是什麼？\n",
+  "endpoint_context_note": "Endpoint context may include lookback or daily source material. Use it only if it supports the analysis-layer conclusion, and never use its older prices as this-week start.",
+  "endpoint_context_excerpt": "{\n  \"generated_at\": \"2026-06-12T07:52:41+08:00\",\n  \"source\": \"Google Sheets History_Data\",\n  \"mode\": \"weekly_video_source\",\n  \"data_status\": \"complete\",\n  \"range\": {\n    \"start_date\": \"2026-06-05\",\n    \"end_date\": \"2026-06-11\",\n    \"days\": 6,\n    \"rule\": \"last_friday_to_this_thursday\"\n  },\n  \"daily_summaries\": [\n    {\n      \"date\": \"2026-06-05\",\n      \"headline\": \"「高利率維持更久」敘事主導，殖利率上行引發強美元與非美貨幣壓力。\",\n      \"executive_summary\": \"市場目前處於「再通膨定價」與「高利率維持更久」的體制中。儘管油價下跌提供了通膨修正因子，但市場對利率路徑的敏感度遠高於能源價格，導致殖利率上行成為驅動美元走強、壓抑黃金與亞幣的核心邏輯。\",\n      \"market_signals\": [\n        \"美債殖利率突破4.5%關鍵位\",\n        \"美元指數站穩100關卡\",\n        \"油價下跌但利率持續攀升\"\n      ],\n      \"macro_chain\": \"[高利率維持更久預期] -> [美國10年期公債殖利率上行] -> [美元指數走強] -> [黃金與亞洲貨幣承壓]\",\n      \"divergence\": \"今日最關鍵的現象是「油價與殖利率的背離」。油價下跌本應是通膨修正因子，但市場將焦點鎖定在殖利率突破4.5%後的風險溢價調整。這顯示市場主線已從單純的通膨數據轉向對「高利率維持更久」的結構性定價，導致股債同步承壓，資產傳導鏈條高度連貫。\",\n      \"market_snapshot\": \"US10Y｜4.536｜up｜突破關鍵心理關卡，反映高利率預期\\nDXY｜100.07｜up｜利差優勢支撐，維持強勢格局\\nGold｜4337.1｜down｜高利率機會成本上升，承壓下行\",\n      \"news_evidence\": [\n        \"美國10年期公債殖利率突破4.5%心理關卡\",\n        \"美元指數在100關卡上方獲得利差支撐\",\n        \"油價下跌但並未減緩殖利率上行趨勢\",\n        \"亞洲貨幣如日圓、台幣、韓元同步面臨貶值壓力\"\n      ],\n      \"watchpoints\": [\n        \"美國勞動力市場數據是否出現降溫以修正利率預期\",\n        \"美國財政部公債標售需求是否顯示供需壓力\",\n        \"亞洲央行對於貨幣貶值的口頭干預或政策調整訊號\"\n      ],\n      \"visual_note\": {\n        \"title\": \"高利率維持更久：殖利率突破與強美元的傳導效應\",\n        \"file_id\": \"1tSDHNSEklQHi4Ul17Ep2xgKNAvi2I7ps\",\n        \"url\": \"https://drive.google.com/file/d/1tSDHNSEklQHi4Ul17Ep2xgKNAvi2I7ps/view?usp=drivesdk\"\n      },\n      \"raw_daily_summary_package\": \"日期：2026-06-05\\n今日主線：「高利率維持更久」敘事主導，殖利率上行引發強美元與非美貨幣壓力。\\n\\nExecutive Summary：\\n市場目前處於「再通膨定價」與「高利率維持更久」的體制中。儘管油價下跌提供了通膨修正因子，但市場對利率路徑的敏感度遠高於能源價格，導致殖利率上行成為驅動美元走強、壓抑黃金與亞幣的核心邏輯。\\n\\n今日核心訊號：\\n- 美債殖利率突破4.5%關鍵位\\n- 美元指數站穩100關卡\\n- 油價下跌但利率持續攀升\\n\\n核心資產重點：\\nUS10Y｜4.536｜up｜突破關鍵心理關卡，反映高利率預期\\nDXY｜100.07｜up｜利差優勢支撐，維持強勢格局\\nGold｜4337.1｜down｜高利率機會成本上升，承壓下行\\n\\n矛盾 / 背離：\\n今日最關鍵的現象是「油價與殖利率的背離」。油價下跌本應是通膨修正因子，但市場將焦點鎖定在殖利率突破4.5%後的風險溢價調整。這顯示市場主線已從單純的通膨數據轉向對「高利率維持更久」的結構性定價，導致股債同步承壓，資產傳導鏈條高度連貫。\\n\\n總經傳導鏈：\\n[高利率維持更久預期] -> [美國10年期公債殖利率上行] -> [美元指數走強] -> [黃金與亞洲貨幣承壓]\\n\\n新聞佐證：\\n- 美國10年期公債殖利率突破4.5%心理關卡\\n- 美元指數在100關卡上方獲得利差支撐\\n- 油價下跌但並未減緩殖利率上行趨勢\\n- 亞洲貨幣如日圓、台幣、韓元同步面臨貶值壓力\\n\\n待觀察問題：\\n- 美國勞動力市場數據是否出現降溫以修正利率預期\\n- 美國財政部公債標售需求是否顯示供需壓力\\n- 亞洲央行對於貨幣貶值的口頭干預或政策調整訊號\"\n    },\n    {\n      \"date\": \"2026-06-07\",\n      \"headline\": \"強勁就業數據封鎖降息空間，市場在再通膨定價與避險需求間尋求平衡。\",\n      \"executive_summary\": \"市場目前處於「高利率維持更久」的定價體制，非農數據強勁導致殖利率與美元雙升。然而，黃金同步走強揭示了市場對未來政策失誤或硬著陸的隱憂，資產傳導出現避險分歧。\",\n      \"market_signals\": [\n        \"非農數據強勁引發升息擔憂\",\n        \"美債殖利率與美元同步走高\",\n        \"金價與油價同步上行避險\"\n      ],\n      \"macro_chain\": \"[強勁非農數據] -> [美國10年期公債殖利率上行] -> [美元指數走強] -> [亞洲貨幣承壓、黃金與原油同步避險上行]\",\n      \"divergence\": \"今日關鍵在於「利率/美元 → 黃金」的傳導失靈。主線敘事為強勁就業帶動的升息預期（利空金價），但修正因子為市場對地緣政治與政策不確定性的防禦心理（利多金價），導致兩者同步走強，顯示市場情緒已從單純的總經定價轉向防禦性配置。\",\n      \"market_snapshot\": \"US10Y｜4.536｜up｜就業韌性支撐高利率預期\\nDXY｜100.112｜up｜利差優勢推升美元匯率\\nGold｜4352.5｜up｜避險需求抵銷高利率壓力\",\n      \"news_evidence\": [\n        \"非農數據表現強勁，促使市場重新定價聯準會升息風險。\",\n        \"美國10年期公債殖利率上行至4.536，反映高利率維持更久預期。\",\n        \"美元指數走強至100.11，導致亞幣普遍承壓。\",\n        \"金價與油價同步上行，顯示市場對未來政策失誤的避險溢價上升。\"\n      ],\n      \"watchpoints\": [\n        \"華許首場Fed會議的政策指引是否強化升息預期\",\n        \"美元指數持續走強是否引發亞洲央行干預\",\n        \"黃金與美債殖利率若同步下行，將是避險情緒消退訊號\"\n      ],\n      \"visual_note\": {\n        \"title\": \"高利率與避險並存：非農數據後的資產傳導與心理分歧\",\n        \"file_id\": \"1gipQjvWqs3WuIFPKc2NmU6wPjgdqUKjU\",\n        \"url\": \"https://drive.google.com/file/d/1gipQjvWqs3WuIFPKc2NmU6wPjgdqUKjU/view?usp=drivesdk\"\n      },\n      \"raw_daily_summary_package\": \"日期：2026-06-07\\n今日主線：強勁就業數據封鎖降息空間，市場在再通膨定價與避險需求間尋求平衡。\\n\\nExecutive Summary：\\n市場目前處於「高利率維持更久」的定價體制，非農數據強勁導致殖利率與美元雙升。然而，黃金同步走強揭示了市場對未來政策失誤或硬著陸的隱憂，資產傳導出現避險分歧。\\n\\n今日核心訊號：\\n- 非農數據強勁引發升息擔憂\\n- 美債殖利率與美元同步走高\\n- 金價與油價同步上行避險\\n\\n核心資產重點：\\nUS10Y｜4.536｜up｜就業韌性支撐高利率預期\\nDXY｜100.112｜up｜利差優勢推升美元匯率\\nGold｜4352.5｜up｜避險需求抵銷高利率壓力\\n\\n矛盾 / 背離：\\n今日關鍵在於「利率/美元 → 黃金」的傳導失靈。主線敘事為強勁就業帶動的升息預期（利空金價），但修正因子為市場對地緣政治與政策不確定性的防禦心理（利多金價），導致兩者同步走強，顯示市場情緒已從單純的總經定價轉向防禦性配置。\\n\\n總經傳導鏈：\\n[強勁非農數據] -> [美國10年期公債殖利率上行] -> [美元指數走強] -> [亞洲貨幣承壓、黃金與原油同步避險上行]\\n\\n新聞佐證：\\n- 非農數據表現強勁，促使市場重新定價聯準會升息風險。\\n- 美國10年期公債殖利率上行至4.536，反映高利率維持更久預期。\\n- 美元指數走強至100.11，導致亞幣普遍承壓。\\n- 金價與油價同步上行，顯示市場對未來政策失誤的避險溢價上升。\\n\\n待觀察問題：\\n- 華許首場Fed會議的政策指引是否強化升息預期\\n- 美元指數持續走強是否引發亞洲央行干預\\n- 黃金與美債殖利率若同步下行，將是避險情緒消退訊號\"\n    },\n    {\n      \"date\": \"2026-06-08\",\n      \"headline\": \"再通膨預期推升長債利率，但地緣政治降溫帶動的風險偏好回升，成為美元走弱的修正因子。\",\n      \"executive_summary\": \"市場正處於「再通膨定價」體制，核心矛盾在於利率上行未能支撐美元。目前風險情緒改善帶來的資金流動，暫時抵銷了美債利差優勢，導致資產傳導出現分歧。\",\n      \"market_signals\": [\n        \"美債殖利率因通膨預期上行\",\n        \"美元指數與利率走勢脫鉤\",\n        \"風險偏好改善支撐亞洲貨幣\"\n      ],\n      \"macro_chain\": \"[通膨預期突破4%] -> [美國10年期公債殖利率上行] -> [地緣政治降溫抵銷利差優勢] -> [美元指數走弱，亞洲貨幣反彈，黃金受壓]\",\n      \"divergence\": \"今日關鍵在於「風險偏好」與「利率」的拉鋸。主線是通膨預期推升殖利率，但修正因子是地緣政治緊張降溫，導致避險資金撤出美元，使美元未能隨殖利率同步走強，形成典型的資產傳導修正格局。\",\n      \"market_snapshot\": \"US10Y｜4.552｜up｜市場定價通膨突破4%風險\\nDXY｜100.045｜down｜避險需求消退導致美元走弱\\nGold｜4348.3｜down｜高利率環境壓抑非孳息資產\",\n      \"news_evidence\": [\n        \"市場高度關注本週通膨數據恐突破4%門檻\",\n        \"Fed主席Warsh的政策反應函數存在高度不確定性\",\n        \"地緣政治緊張降溫，導致避險情緒消退\",\n        \"殖利率與美元脫鉤，顯示風險偏好改善為當前主要修正因子\"\n      ],\n      \"watchpoints\": [\n        \"本週通膨數據是否確認突破4%門檻\",\n        \"Fed主席Warsh對未來利率路徑的公開表態\",\n        \"美元指數能否回歸與美債殖利率的正相關傳導\"\n      ],\n      \"visual_note\": {\n        \"title\": \"再通膨預期下的資產傳導分歧：殖利率與美元的脫鉤現象\",\n        \"file_id\": \"1XteTyTuC6F-UgiSFubVP7pqb7ASrqFff\",\n        \"url\": \"https://drive.google.com/file/d/1XteTyTuC6F-UgiSFubVP7pqb7ASrqFff/view?usp=drivesdk\"\n      },\n      \"raw_daily_summary_package\": \"日期：2026-06-08\\n今日主線：再通膨預期推升長債利率，但地緣政治降溫帶動的風險偏好回升，成為美元走弱的修正因子。\\n\\nExecutive Summary：\\n市場正處於「再通膨定價」體制，核心矛盾在於利率上行未能支撐美元。目前風險情緒改善帶來的資金流動，暫時抵銷了美債利差優勢，導致資產傳導出現分歧。\\n\\n今日核心訊號：\\n- 美債殖利率因通膨預期上行\\n- 美元指數與利率走勢脫鉤\\n- 風險偏好改善支撐亞洲貨幣\\n\\n核心資產重點：\\nUS10Y｜4.552｜up｜市場定價通膨突破4%風險\\nDXY｜100.045｜down｜避險需求消退導致美元走弱\\nGold｜4348.3｜down｜高利率環境壓抑非孳息資產\\n\\n矛盾 / 背離：\\n今日關鍵在於「風險偏好」與「利率」的拉鋸。主線是通膨預期推升殖利率，但修正因子是地緣政治緊張降溫，導致避險資金撤出美元，使美元未能隨殖利率同步走強，形成典型的資產傳導修正格局。\\n\\n總經傳導鏈：\\n[通膨預期突破4%] -> [美國10年期公債殖利率上行] -> [地緣政治降溫抵銷利差優勢] -> [美元指數走弱，亞洲貨幣反彈，黃金受壓]\\n\\n新聞佐證：\\n- 市場高度關注本週通膨數據恐突破4%門檻\\n- Fed主席Warsh的政策反應函數存在高度不確定性\\n- 地緣政治緊張降溫，導致避險情緒消退\\n- 殖利率與美元脫鉤，顯示風險偏好改善為當前主要修正因子\\n\\n待觀察問題：\\n- 本週通膨數據是否確認突破4%門檻\\n- Fed主席Warsh對未來利率路徑的公開表態\\n- 美元指數能否回歸與美債殖利率的正相關傳導\"\n    },\n    {\n      \"date\": \"2026-06-09\",\n      \"headline\": \"市場從通膨交易轉向成長擔憂，殖利率下行反映對經濟動能放緩的定價。\",\n      \"executive_summary\": \"市場目前處於「通膨預期降溫」與「成長風險浮現」的過渡期。儘管油價下跌壓低通膨壓力，但美債殖利率與美元同步走弱，顯示投資人正重新評估高利率對經濟的滯後影響，而非單純交易降息預期。\",\n      \"market_signals\": [\n        \"油價重挫緩解通膨壓力\",\n        \"美債殖利率下行反映成長擔憂\",\n        \"美元指數走弱顯示流動性預期修正\"\n      ],\n      \"macro_chain\": \"[油價重挫/成長擔憂] -> [美債殖利率下行] -> [美元指數走弱] -> [亞洲貨幣分歧與黃金/原油同步承壓]\",\n      \"divergence\": \"今日關鍵在於『成長擔憂』取代了『通膨主線』。油價下跌本應是通膨利多，但黃金與美元同步走弱，顯示市場並非在交易避險，而是擔心高利率環境下的經濟衰退風險，導致風險資產與避險資產出現同步修正的罕見現象。\",\n      \"market_snapshot\": \"US10Y｜4.528｜down｜反映市場對經濟成長放緩的擔憂\\nDXY｜99.995｜down｜利差優勢減弱，美元偏弱整理\\nGold｜4277.1｜down｜避險需求未隨殖利率下行而顯著提升\",\n      \"news_evidence\": [\n        \"國際油價重挫成為推動美債殖利率回落的核心驅動力。\",\n        \"美債殖利率與美元指數同步下行，顯示市場交易重心轉向成長風險。\",\n        \"黃金與油價同步走弱，反映市場情緒偏向保守觀望而非避險。\",\n        \"亞洲貨幣表現分歧，顯示市場對全球流動性收緊的預期正在重估。\"\n      ],\n      \"watchpoints\": [\n        \"美國後續就業數據是否顯著惡化，確認成長風險是否成真。\",\n        \"Fed官員對通膨與降息路徑的最新表態。\",\n        \"美債標售需求變化，觀察殖利率下行是否有實質買盤支撐。\"\n      ],\n      \"visual_note\": {\n        \"title\": \"通膨預期降溫與成長擔憂下的資產傳導路徑分析\",\n        \"file_id\": \"1o9Vx8HRSFR2XP9zxaeA1NhUUzKGpS8OQ\",\n        \"url\": \"https://drive.google.com/file/d/1o9Vx8HRSFR2XP9zxaeA1NhUUzKGpS8OQ/view?usp=drivesdk\"\n      },\n      \"raw_daily_summary_package\": \"日期：2026-06-09\\n今日主線：市場從通膨交易轉向成長擔憂，殖利率下行反映對經濟動能放緩的定價。\\n\\nExecutive Summary：\\n市場目前處於「通膨預期降溫」與「成長風險浮現」的過渡期。儘管油價下跌壓低通膨壓力，但美債殖利率與美元同步走弱，顯示投資人正重新評估高利率對經濟的滯後影響，而非單純交易降息預期。\\n\\n今日核心訊號：\\n- 油價重挫緩解通膨壓力\\n- 美債殖利率下行反映成長擔憂\\n- 美元指數走弱顯示流動性預期修正\\n\\n核心資產重點：\\nUS10Y｜4.528｜down｜反映市場對經濟成長放緩的擔憂\\nDXY｜99.995｜down｜利差優勢減弱，美元偏弱整理\\nGold｜4277.1｜down｜避險需求未隨殖利率下行而顯著提升\\n\\n矛盾 / 背離：\\n今日關鍵在於『成長擔憂』取代了『通膨主線』。油價下跌本應是通膨利多，但黃金與美元同步走弱，顯示市場並非在交易避險，而是擔心高利率環境下的經濟衰退風險，導致風險資產與避險資產出現同步修正的罕見現象。\\n\\n總經傳導鏈：\\n[油價重挫/成長擔憂] -> [美債殖利率下行] -> [美元指數走弱] -> [亞洲貨幣分歧與黃金/原油同步承壓]\\n\\n新聞佐證：\\n- 國際油價重挫成為推動美債殖利率回落的核心驅動力。\\n- 美債殖利率與美元指數同步下行，顯示市場交易重心轉向成長風險。\\n- 黃金與油價同步走弱，反映市場情緒偏向保守觀望而非避險。\\n- 亞洲貨幣表現分歧，顯示市場對全球流動性收緊的預期正在重估。\\n\\n待觀察問題：\\n- 美國後續就業數據是否顯著惡化，確認成長風險是否成真。\\n- Fed官員對通膨與降息路徑的最新表態。\\n- 美債標售需求變化，觀察殖利率下行是否有實質買盤支撐。\"\n    },\n    {\n      \"date\": \"2026-06-10\",\n      \"headline\": \"通膨黏性與油價上行，驅動美債殖利率走高，強化強勢美元定價。\",\n      \"executive_summary\": \"市場正處於「再通膨定價」體制，投資人對通膨持續性的疑慮蓋過了數據本身。資產傳導鏈條高度連貫，強勢美元與高利率環境持續壓抑黃金及部分亞幣，顯示市場已將重心轉向聯準會下週的政策路徑。\",\n      \"market_signals\": [\n        \"美債殖利率上行至4.54%\",\n        \"美元指數走強突破100\",\n        \"油價上行強化通膨黏性\"\n      ],\n      \"macro_chain\": \"CPI通膨預期與油價上行 -> 美國10年期公債殖利率上升 -> 美元指數走強 -> 黃金承壓與亞洲貨幣貶值壓力擴大\",\n      \"divergence\": \"今日資產走勢呈現高度共振，油價上行作為主線的修正因子，反而成為推升通膨預期的催化劑。韓元偏強與台幣、日圓走弱形成分歧，顯示區域內資金流動存在短期避險差異，但整體仍受強美元主導。\",\n      \"market_snapshot\": \"US10Y｜4.54｜up｜反映高利率維持更久預期\\nDXY｜100.08｜up｜利差優勢支撐美元走強\\nGold｜4067.80｜down｜高利率與強美元雙重壓制\",\n      \"news_evidence\": [\n        \"美國CPI數據公布後，市場對聯準會政策態度保持高度警戒。\",\n        \"美國10年期公債殖利率上行，直接支撐美元指數走強。\",\n        \"原油價格持續上行，進一步強化市場對通膨黏性的擔憂。\",\n        \"強勢美元環境下，黃金價格呈現明顯下行壓力。\"\n      ],\n      \"watchpoints\": [\n        \"聯準會下週點陣圖與利率指引\",\n        \"美債殖利率關鍵技術位防守狀況\",\n        \"亞洲貨幣在強美元下的貶值壓力擴散\"\n      ],\n      \"visual_note\": {\n        \"title\": \"再通膨預期下的資產傳導：高利率維持更久的主線邏輯\",\n        \"file_id\": \"1dc12x0Lt_lfSd99NQxOrMOzXC5dG4fbi\",\n        \"url\": \"https://drive.google.com/file/d/1dc12x0Lt_lfSd99NQxOrMOzXC5dG4fbi/view?usp=drivesdk\"\n      },\n      \"raw_daily_summary_package\": \"日期：2026-06-10\\n今日主線：通膨黏性與油價上行，驅動美債殖利率走高，強化強勢美元定價。\\n\\nExecutive Summary：\\n市場正處於「再通膨定價」體制，投資人對通膨持續性的疑慮蓋過了數據本身。資產傳導鏈條高度連貫，強勢美元與高利率環境持續壓抑黃金及部分亞幣，顯示市場已將重心轉向聯準會下週的政策路徑。\\n\\n今日核心訊號：\\n- 美債殖利率上行至4.54%\\n- 美元指數走強突破100\\n- 油價上行強化通膨黏性\\n\\n核心資產重點：\\nUS10Y｜4.54｜up｜反映高利率維持更久預期\\nDXY｜100.08｜up｜利差優勢支撐美元走強\\nGold｜4067.80｜down｜高利率與強美元雙重壓制\\n\\n矛盾 / 背離：\\n今日資產走勢呈現高度共振，油價上行作為主線的修正因子，反而成為推升通膨預期的催化劑。韓元偏強與台幣、日圓走弱形成分歧，顯示區域內資金流動存在短期避險差異，但整體仍受強美元主導。\\n\\n總經傳導鏈：\\nCPI通膨預期與油價上行 -> 美國10年期公債殖利率上升 -> 美元指數走強 -> 黃金承壓與亞洲貨幣貶值壓力擴大\\n\\n新聞佐證：\\n- 美國CPI數據公布後，市場對聯準會政策態度保持高度警戒。\\n- 美國10年期公債殖利率上行，直接支撐美元指數走強。\\n- 原油價格持續上行，進一步強化市場對通膨黏性的擔憂。\\n- 強勢美元環境下，黃金價格呈現明顯下行壓力。\\n\\n待觀察問題：\\n- 聯準會下週點陣圖與利率指引\\n- 美債殖利率關鍵技術位防守狀況\\n- 亞洲貨幣在強美元下的貶值壓力擴散\"\n    },\n    {\n      \"date\": \"2026-06-11\",\n      \"headline\": \"勞動市場邊際降溫修正通膨預期，市場轉向交易降息利多。\",\n      \"executive_summary\": \"市場定價體制從「再通膨」轉向「成長降溫」。儘管通膨預期存在，但初領失業金人數激增成為主導因子，壓低美債殖利率並削弱美元利差優勢，進而推動亞洲貨幣與黃金走強。\",\n      \"market_signals\": [\n        \"初領失業金人數創4個月新高\",\n        \"美債殖利率下行至4.46%\",\n        \"美元指數跌破關鍵支撐\"\n      ],\n      \"macro_chain\": \"[初領失業金數據超預期] -> [美債殖利率下行] -> [美元指數走弱] -> [亞洲貨幣升值、黃金上行、原油受地緣政治緩解壓抑]\",\n      \"divergence\": \"今日核心背離在於「通膨預期」與「殖利率」的脫鉤。市場將初領失業金數據視為成長放緩的修正因子，優先於通膨壓力進行定價，導致債券買盤湧入，進而引發美元拋售與亞洲貨幣的同步反彈。\",\n      \"market_snapshot\": \"US10Y｜4.463｜down｜就業降溫預期壓低長債殖利率\\nDXY｜99.675｜down｜利差優勢減弱導致美元走軟\\nGold｜4229.2｜up｜利率下行環境下的避險配置需求\",\n      \"news_evidence\": [\n        \"美國初領失業金人數創4個月新高，顯示勞動市場韌性減弱。\",\n        \"川普提及伊朗和平協議進展，降低地緣政治風險溢價，壓低油價。\",\n        \"美債殖利率下行，反映市場對Fed降息路徑的預期重新定價。\",\n        \"美元指數走弱，直接支撐台幣、韓元與日圓等亞洲貨幣表現。\"\n      ],\n      \"watchpoints\": [\n        \"後續非農就業報告是否顯示勞動市場惡化速度超出預期。\",\n        \"伊朗和平協議談判進展，若生變將重新推升地緣政治風險。\",\n        \"Fed官員對近期就業數據的表態，是否會修正市場激進的降息預期。\"\n      ],\n      \"visual_note\": {\n        \"title\": \"勞動市場降溫主導：美債殖利率下行與美元利差優勢收斂\",\n        \"file_id\": \"1ClBLK3-IADmm-vd55be5A2eCSAFz2v-h\",\n        \"url\": \"https://drive.google.com/file/d/1ClBLK3-IADmm-vd55be5A2eCSAFz2v-h/view?usp=drivesdk\",\n        \"model\": \"gemini-3-pro-image-preview\"\n      },\n      \"news_narrative\": {\n        \"title\": \"就業降溫與避險情緒主導\",\n        \"support_level\": \"中\",\n        \"cards\": [\n          {\n            \"label\": \"驗證結果\",\n            \"text\": \"部分支持\"\n          },\n          {\n            \"label\": \"摘要\",\n            \"text\": \"市場焦點從通膨轉向勞動市場韌性減弱，初領失業金人數創4個月新高，強化了市場對Fed降息的預期，導致美債殖利率下行。同時，川普提及伊朗和平協議進展，緩解地緣政治風險，壓低美元並帶動亞洲貨幣走強。黃金上行則反映了市場在利率下行環境下的避險配置需求。整體而言，成長放緩的敘事目前占據上風，修正了通膨預期對利率的推升壓力。\"\n          },\n          {\n            \"label\": \"支持新聞\",\n            \"text\": \"1. 新聞重點：美國上周初領失業金人數創4個月新高，顯示勞動市場出現邊際降溫跡象。\\n2. 市場影響：壓低美國10年期公債殖利率，並支撐市場對未來降息路徑的預期。\\n3. 驗證結論：支持勞動市場降溫作為利率下行的核心驅動力，資產走勢呈現連貫性。\"\n          },\n          {\n            \"label\": \"異常訊號\",\n            \"text\": \"1. 通膨預期與殖利率走勢不貼合：能源價格與通膨訊號理論上應推升利率，但市場目前更重視就業數據帶來的成長放緩風險，導致利率下行，此為典型的成長修正因子。\"\n          },\n          {\n  \n...（內容過長，已截斷）",
+  "instruction_hint": "Select the strongest event threads from analysis_layer. Use market_series_analysis_window for numbers. Do not force all background data into the script."
+}
+
+硬性生成規則：
+- 你必須先讀取 input_bundle.meta.analysis_window，並將其作為本集唯一正式週期。
+- meta.week_range 必須等於 input_bundle.meta.analysis_window.label。
+- 所有「本週」價格反應必須優先使用 input_bundle.market_series_analysis_window.assets.*.summary。
+- 任何資產的整週方向必須以 summary.start_value → summary.end_value / summary.net_direction 為準。
+- 若要描述 summary.high_value / summary.low_value 或中間某一天走勢，必須明確寫成「週內一度」或「週中波動」，不得寫成本週主線方向。
+- input_bundle.market_series_lookback_note、weekly_source_text、endpoint_context_excerpt 若包含更早日期，只能用於前期背景，不可作為本週起點。
+- storyline.main_event_threads 不得把 lookback 起點價格當成本週主要事件線。
+- 第一段可簡短交代前期高利率背景，但必須快速轉入 analysis window 內的本週變化，不可整段都圍繞前期長債恐慌。
+- 嚴禁使用 analysis window 外的價格區間描述本週變化。例如不可把 105 → 88.5 或 4.66 → 4.45 寫成本週走勢，除非 input_bundle.meta.analysis_window 明確包含那些日期。
+
+請輸出 JSON，結構如下：
+
+{{
+  "meta": {{
+    "script_type": "story_only_dialogue_v8",
+    "week_range": "",
+    "estimated_duration_minutes": "10-12",
+    "story_thesis": "用一句話描述本集故事核心，但不要像投資建議"
+  }},
+  "storyline": {{
+    "opening_question": "本集一開始要打開的市場問題",
+    "main_event_threads": [
+      {{
+        "thread_name": "事件線名稱",
+        "why_it_matters": "為什麼重要",
+        "price_reaction": "價格如何反應",
+        "unresolved_question": "為什麼延伸到後面或下週"
+      }}
+    ],
+    "closing_callback": "結尾如何回扣開頭"
+  }},
+  "sections": [
+    {{
+      "section_id": "s1",
+      "section_title": "自然語意標題，不要像簡報標題",
+      "story_purpose": "這段在整支故事中的任務",
+      "event_setup": "這段先鋪陳的事件或背景",
+      "price_reaction": "這段要使用的價格反應",
+      "driver_judgment": "上游傳導 / 本身驅動 / 混合",
+      "macro_interpretation": "這段真正要讓聽眾理解的洞察",
+      "micro_pain_point": "這段可落地的實體經濟痛點或資產範例，例如房貸、企業融資、原物料進口、外資流出",
+      "dilemma": "這段涉及的兩難困境，例如保匯率 vs 保外匯存底、打通膨 vs 救經濟；若無則簡短說明",
+      "tom_insight_line": "Tom 可用來幫聽眾頓悟的金句式總結",
+      "bridge_question": "自然帶到下一段的問題",
+      "speaker_turns": [
+        {{
+          "speaker": "Tom",
+          "spoken_text": "正式可進 TTS 的台詞",
+          "subtitle_text": "25字以內字幕",
+          "estimated_seconds": 20
+        }}
+      ]
+    }}
+  ],
+  "next_week_watch": [
+    {{
+      "watch_item": "下週觀察項目",
+      "callback_to_story": "它回扣前面哪條事件線",
+      "why_it_matters": "為什麼要追蹤"
+    }}
+  ],
+  "closing_handoff_turn": {
+    "speaker": "Miranda",
+    "spoken_text": "下週觀察摘要分析後，把話自然交還 Tom，例如：Tom，以上就是下週最需要追蹤的幾個關鍵訊號。",
+    "subtitle_text": "25字以內字幕",
+    "estimated_seconds": 10
+  },
+  "closing_turn": {
+    "speaker": "Tom",
+    "spoken_text": "簡短正式收尾，回扣主線、感謝 Miranda、提醒下週追蹤，並自然說我們下週見；不得再展開新分析",
+    "subtitle_text": "25字以內字幕",
+    "estimated_seconds": 12
+  },
+  "full_script_plain_text": "[Tom]: ...\n[Miranda]: ..."
+}}
+
+生成要求：
+- sections 數量由故事需要決定，建議 5 到 7 段，不要為了固定張數硬切。
+- 除結尾段外，每個 section 目標 5 到 6 個 speaker_turns；重要段落可以更多。
+- 主要事件線至少要有兩輪 Tom 追問與 Miranda 補充，不要只用一問一答或固定 4 回合公式就結束。
+- 若 Miranda 單次 spoken_text 預估超過 35 秒，優先拆成多個 turn，中間插入 Tom 的確認、頓悟式總結或追問。
+- Tom 負責打開問題與承接，不要替 Miranda 下完整結論；但 Tom 必須用頓悟式金句幫聽眾消化至少 2 個關鍵段落。
+- Miranda 負責解釋事件、價格與總經傳導；使用專業術語後，必須補一句白話翻譯。
+- Miranda 在解釋宏觀邏輯時，必須加入具體實體經濟痛點或資產範例，避免只停留在抽象概念。
+- 涉及央行或市場選擇時，必須把兩難困境講出來，讓故事有張力。
+- 價格走勢必須服務故事，不要變成數字清單。
+- 如果某個事件最後列為 next_week_watch，前面故事中必須已經鋪陳過。
+- 不得為了趕進下週觀察或正式收尾而壓縮前面 sections；每個主要事件線都要有足夠的推論、追問與補充。
+- 最後一個 section 的 speaker_turns 必須先由 Miranda 完整說明下週觀察，並自然把話交還給 Tom。
+- Miranda 的下週觀察說明不得只列清單，必須回扣前面故事已鋪陳的事件線。
+- closing_handoff_turn 必須與最後一段中 Miranda 交還主持人的 speaker_turn 內容一致。
+- closing_turn 必須與最後一個 Tom speaker_turn 內容一致。
+- full_script_plain_text 必須由 speaker_turns 重新組成，保留 [Tom] / [Miranda] 標籤，且最後一行必須是 Tom 的簡短正式收尾。
+- sections 未來會交給圖片層使用，所以每個 section 的 story_purpose、event_setup、price_reaction、macro_interpretation 要保持清楚，但不要在這版生成圖片提示詞。
