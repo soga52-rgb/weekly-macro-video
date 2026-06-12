@@ -5,8 +5,9 @@
 Weekly Macro Video Engine - Weekly News Context v3
 
 Purpose:
-- Build a dynamic one-week macro news context for weekly video generation.
-- Search Google News RSS for the same weekly window used by weekly_video_source.
+- Build a dynamic macro news context for weekly video generation.
+- Search Google News RSS for the same analysis window used by weekly source.
+- Keep a lookback window for macro hard-data releases with continuing effects.
 - Preferred sources: UDN / Cnyes / MarketWatch / Investing.
 - Reuters and CNBC are excluded in this version.
 - Output is used as a correction layer for weekly_forest_summary.
@@ -24,6 +25,9 @@ Required env:
 - GEMINI_API_KEY
 
 Optional env:
+- ANALYSIS_START_DATE / --start = YYYY-MM-DD
+- ANALYSIS_END_DATE   / --end   = YYYY-MM-DD
+- WEEK_DIR / --week-dir
 - GEMINI_MODEL, default: gemini-3.5-flash
 - WEEKLY_NEWS_MAX_ITEMS, default: 30
 - WEEKLY_NEWS_LOOKBACK_DAYS, default: 14
@@ -160,11 +164,12 @@ A. weekly_source_text.md：
 這是最近 3～5 天每日總經摘要整合而成的週報來源。
 
 B. weekly_news_candidates：
-這是一週內由 Google News RSS 搜尋出的新聞候選。
+這是由 Google News RSS 搜尋出的新聞候選。
 來源優先包含聯合新聞網、鉅亨網，也可包含 MarketWatch / Investing 等白名單來源。
 本版本不使用 Reuters 與 CNBC。
 
-請根據兩者，輸出 weekly_news_context.json。
+正式分析區間：
+{analysis_window_label}
 
 重要規則：
 1. 不要逐篇摘要新聞。
@@ -192,7 +197,6 @@ B. weekly_news_candidates：
 - 「美債殖利率、長債、Fed、聯準會、升息、降息、利率路徑」優先放「利率」。
 - 「美元、DXY、新台幣、日圓、韓元、人民幣、亞幣、匯率」優先放「貨幣」。
 - 地緣政治若主要影響油價或能源，放「通膨預期」；若無法明確歸類，放「其他」。
-- 下方 JSON 結構只是格式示例，不代表每類必須輸出相同數量。
 
 請輸出 JSON 結構：
 
@@ -259,11 +263,36 @@ def find_latest_week_dir() -> Path:
     return week_dirs[0]
 
 
-def infer_week_range(week_dir: Path) -> Tuple[str, str, str]:
+def resolve_week_dir(week_dir_arg: str) -> Path:
+    week_dir_arg = (week_dir_arg or "").strip()
+    if not week_dir_arg:
+        return find_latest_week_dir()
+
+    raw = Path(week_dir_arg)
+    if raw.is_absolute():
+        return raw
+    if len(week_dir_arg) == 10 and week_dir_arg[4] == "-" and week_dir_arg[7] == "-":
+        return OUTPUT_WEEKLY_DIR / week_dir_arg
+    return ROOT_DIR / raw
+
+
+def infer_week_range(week_dir: Path, start_override: str = "", end_override: str = "") -> Tuple[str, str, str]:
+    if start_override or end_override:
+        start = start_override
+        end = end_override or week_dir.name
+        label = f"{start} ～ {end}" if start else end
+        return start, end, label
+
     source_json = load_json(DATA_DIR / "weekly_video_source.json")
-    range_data = source_json.get("range", {}) or {}
-    start = str(range_data.get("start_date") or "")
-    end = str(range_data.get("end_date") or week_dir.name)
+    requested = source_json.get("requested_analysis_window", {}) if isinstance(source_json, dict) else {}
+    start = str(requested.get("start_date") or "")
+    end = str(requested.get("end_date") or "")
+
+    if not start or not end:
+        range_data = source_json.get("range", {}) or {}
+        start = str(range_data.get("start_date") or "")
+        end = str(range_data.get("end_date") or week_dir.name)
+
     label = f"{start} ～ {end}" if start else end
     return start, end, label
 
@@ -373,7 +402,6 @@ def score_item(item: Dict[str, Any], week_start: str = "", week_end: str = "") -
         if kw.lower() in text:
             score += 2
 
-    # Keep macro hard-data releases from being crowded out by market-reaction news.
     hard_data_keywords = [
         "cpi", "ppi", "consumer price", "producer price", "物價", "通膨率",
         "非農", "就業報告", "薪資", "失業率", "初領失業金",
@@ -402,9 +430,6 @@ def score_item(item: Dict[str, Any], week_start: str = "", week_end: str = "") -
             end_dt = None
 
         if start_dt and end_dt:
-            # Formal weekly window gets the highest recency weight.
-            # A short pre-window buffer is still useful for macro parameters like PPI/CPI
-            # that can keep affecting this week's rate and FX pricing.
             if start_dt <= published_date <= end_dt:
                 score += 12
             elif start_dt - timedelta(days=7) <= published_date < start_dt:
@@ -412,7 +437,6 @@ def score_item(item: Dict[str, Any], week_start: str = "", week_end: str = "") -
             elif end_dt < published_date <= end_dt + timedelta(days=2):
                 score += 4
         else:
-            # Generic fallback: newer RSS items rank higher without hard-coded calendar dates.
             age_days = (datetime.now(timezone.utc) - published).days
             if age_days <= 2:
                 score += 10
@@ -422,6 +446,7 @@ def score_item(item: Dict[str, Any], week_start: str = "", week_end: str = "") -
                 score += 3
 
     return score
+
 
 def dedupe_and_rank(items: List[Dict[str, Any]], max_items: int, week_start: str = "", week_end: str = "") -> List[Dict[str, Any]]:
     seen = set()
@@ -511,11 +536,10 @@ def build_news_context_markdown(context: Dict[str, Any]) -> str:
     ]
 
     for driver in context.get("macro_drivers", []) or []:
-        if not isinstance(driver, dict):
-            continue
-        lines.append(f"- {driver.get('driver', '')}｜{driver.get('impact', '')}｜信心：{driver.get('confidence', '')}")
-        for ev in driver.get("evidence", []) if isinstance(driver.get("evidence", []), list) else []:
-            lines.append(f"  - {ev}")
+        if isinstance(driver, dict):
+            lines.append(f"- {driver.get('driver', '')}｜{driver.get('impact', '')}｜信心：{driver.get('confidence', '')}")
+        else:
+            lines.append(f"- {driver}")
 
     def add_list(title: str, items: Any) -> None:
         lines.extend(["", f"### {title}"])
@@ -577,7 +601,6 @@ def news_title_similarity(a: Any, b: Any) -> float:
 
 
 def classify_news_bucket(item: Dict[str, Any]) -> str:
-    """Rule-based fallback category for natural-weighted news display."""
     text = f"{item.get('title','')} {item.get('theme','')} {item.get('query','')}".lower()
 
     inflation_keywords = [
@@ -629,7 +652,6 @@ def build_url_candidates(ranked_items: List[Dict[str, Any]], top_news: List[Any]
 
 
 def enrich_news_item(item: Dict[str, Any], url_candidates: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Restore URL/source/published_at from original RSS candidates when Gemini omitted them."""
     merged = dict(item)
 
     if safe_news_text(merged.get("url")):
@@ -656,12 +678,6 @@ def news_card_from_item(item: Dict[str, Any]) -> Dict[str, Any]:
     source = safe_news_text(item.get("source"))
     theme = safe_news_text(item.get("theme"))
     published_at = safe_news_text(item.get("published_at"))
-
-    why_parts = []
-    if theme:
-        why_parts.append(f"主題：{theme}")
-    if published_at:
-        why_parts.append(f"時間：{published_at[:10]}")
 
     return {
         "title": title,
@@ -700,7 +716,6 @@ def build_fallback_news_categories(ranked_items: List[Dict[str, Any]]) -> Dict[s
 
 
 def normalize_news_categories(context: Dict[str, Any], ranked_items: List[Dict[str, Any]] | None = None) -> Dict[str, Any]:
-    """Ensure categorized news fields exist, keep URLs, and provide fallback cards when Gemini returns empty buckets."""
     categories = context.get("news_categories")
     if not isinstance(categories, dict):
         context["news_categories"] = {
@@ -740,7 +755,6 @@ def normalize_news_categories(context: Dict[str, Any], ranked_items: List[Dict[s
         seen.add(key)
         normalized_top.append(enriched)
 
-    # Fallback: Gemini may summarize well but return empty news_categories/top_news.
     if not has_category_cards and not normalized_top and ranked_items:
         fallback_categories = build_fallback_news_categories(ranked_items)
         for key in ["通膨預期", "利率", "貨幣", "其他"]:
@@ -761,7 +775,9 @@ def normalize_news_categories(context: Dict[str, Any], ranked_items: List[Dict[s
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--week-dir", type=str, default="")
+    parser.add_argument("--week-dir", type=str, default=os.getenv("WEEK_DIR", "").strip())
+    parser.add_argument("--start", type=str, default=os.getenv("ANALYSIS_START_DATE", "").strip())
+    parser.add_argument("--end", type=str, default=os.getenv("ANALYSIS_END_DATE", "").strip())
     parser.add_argument("--max-items", type=int, default=int(os.getenv("WEEKLY_NEWS_MAX_ITEMS", str(DEFAULT_MAX_ITEMS))))
     args = parser.parse_args()
 
@@ -770,10 +786,10 @@ def main() -> None:
         raise EnvironmentError("Missing GEMINI_API_KEY.")
 
     model = os.getenv("GEMINI_MODEL", DEFAULT_MODEL).strip() or DEFAULT_MODEL
-    week_dir = Path(args.week_dir) if args.week_dir else find_latest_week_dir()
+    week_dir = resolve_week_dir(args.week_dir)
 
     weekly_source_text = load_text(week_dir / "weekly_source_text.md")
-    week_start, week_end, week_label = infer_week_range(week_dir)
+    week_start, week_end, week_label = infer_week_range(week_dir, start_override=args.start, end_override=args.end)
 
     all_items: List[Dict[str, Any]] = []
     queries = build_queries()
@@ -789,6 +805,11 @@ def main() -> None:
         "meta": {
             "source": "Google News RSS",
             "week_range": week_label,
+            "analysis_window": {
+                "start_date": week_start,
+                "end_date": week_end,
+                "source": "workflow_env_or_weekly_video_source",
+            },
             "query_count": len(queries),
             "raw_count": len(all_items),
             "ranked_count": len(ranked),
@@ -803,6 +824,8 @@ def main() -> None:
     print(f"[OK] Saved {DATA_DIR / 'weekly_news_raw.json'}")
 
     user_prompt = USER_PROMPT_TEMPLATE.replace(
+        "{analysis_window_label}", week_label
+    ).replace(
         "{weekly_source_text}", weekly_source_text
     ).replace(
         "{weekly_news_candidates}", json.dumps(ranked, ensure_ascii=False, indent=2)
@@ -822,6 +845,11 @@ def main() -> None:
     context.setdefault("meta", {})
     context["meta"]["source"] = "Google News RSS"
     context["meta"]["week_range"] = context["meta"].get("week_range") or week_label
+    context["meta"]["analysis_window"] = {
+        "start_date": week_start,
+        "end_date": week_end,
+        "source": "workflow_env_or_weekly_video_source",
+    }
     context["meta"]["candidate_count"] = context["meta"].get("candidate_count") or len(ranked)
 
     out_json = week_dir / "weekly_news_context.json"
