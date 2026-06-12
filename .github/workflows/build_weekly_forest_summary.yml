@@ -2,6 +2,22 @@ name: Build Weekly Forest Summary
 
 on:
   workflow_dispatch:
+    inputs:
+      target_week_end_date:
+        description: "Target output weekly folder end date, e.g. 2026-05-28. Leave blank for endpoint default."
+        required: false
+        default: ""
+        type: string
+      analysis_start_date:
+        description: "Formal analysis window start date, e.g. 2026-05-22. Leave blank for endpoint default."
+        required: false
+        default: ""
+        type: string
+      analysis_end_date:
+        description: "Formal analysis window end date, e.g. 2026-05-28. Leave blank for endpoint default."
+        required: false
+        default: ""
+        type: string
 
 permissions:
   contents: write
@@ -19,6 +35,9 @@ jobs:
       GEMINI_MODEL: gemini-3.1-flash-lite
       GEMINI_ANALYSIS_MODEL: gemini-3.1-pro-preview
       WEEKLY_NEWS_MAX_ITEMS: "30"
+      TARGET_WEEK_END_DATE: ${{ inputs.target_week_end_date }}
+      ANALYSIS_START_DATE: ${{ inputs.analysis_start_date }}
+      ANALYSIS_END_DATE: ${{ inputs.analysis_end_date }}
 
     steps:
       - name: Checkout repository
@@ -29,21 +48,67 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Resolve target week dir
+        run: |
+          if [ -n "${TARGET_WEEK_END_DATE}" ]; then
+            echo "WEEK_DIR=output/weekly/${TARGET_WEEK_END_DATE}" >> "$GITHUB_ENV"
+          elif [ -n "${ANALYSIS_END_DATE}" ]; then
+            echo "WEEK_DIR=output/weekly/${ANALYSIS_END_DATE}" >> "$GITHUB_ENV"
+          else
+            echo "WEEK_DIR=" >> "$GITHUB_ENV"
+          fi
+
       - name: Fetch weekly source from Apps Script
         run: |
-          python scripts/00_fetch_weekly_source_from_apps_script.py
+          if [ -n "${WEEK_DIR}" ]; then
+            python scripts/00_fetch_weekly_source_from_apps_script.py \
+              --week-dir "${WEEK_DIR}" \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
+          else
+            python scripts/00_fetch_weekly_source_from_apps_script.py \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
+          fi
 
       - name: Fetch weekly market series from Apps Script
         run: |
-          python scripts/00_fetch_weekly_market_series.py
+          if [ -n "${WEEK_DIR}" ]; then
+            python scripts/00_fetch_weekly_market_series.py \
+              --week-dir "${WEEK_DIR}" \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
+          else
+            python scripts/00_fetch_weekly_market_series.py \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
+          fi
 
       - name: Build weekly news context
         run: |
-          python scripts/00_fetch_weekly_news_context.py
+          if [ -n "${WEEK_DIR}" ]; then
+            python scripts/00_fetch_weekly_news_context.py \
+              --week-dir "${WEEK_DIR}" \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
+          else
+            python scripts/00_fetch_weekly_news_context.py \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
+          fi
 
       - name: Generate weekly forest summary
         run: |
-          python scripts/01_generate_weekly_forest_summary.py
+          if [ -n "${WEEK_DIR}" ]; then
+            python scripts/01_generate_weekly_forest_summary.py \
+              --week-dir "${WEEK_DIR}" \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
+          else
+            python scripts/01_generate_weekly_forest_summary.py \
+              --start "${ANALYSIS_START_DATE}" \
+              --end "${ANALYSIS_END_DATE}"
+          fi
 
       - name: Commit weekly forest summary
         run: |
