@@ -12,100 +12,106 @@
   "main_theme_analysis_process": {
     "material_inventory": {
       "inflation_materials": [
-        "地緣政治降溫（伊朗和平協議進展）導致油價重挫，WTI跌至85.75美元。",
-        "亞銀示警中東衝突推升物價，面臨停滯性通膨風險。",
-        "強勁非農數據與通膨黏性預期（初期）。"
+        "美國5月CPI年增4.2%創三年新高",
+        "美5月PPI創逾3年半新高",
+        "川普取消對伊朗軍事行動計畫，地緣政治降溫",
+        "WTI原油價格從92.94美元回落至85.75美元"
       ],
       "rate_materials": [
-        "10年期美債殖利率衝破4.5%心理關卡，反映高利率維持更久。",
-        "初領失業金人數激增，市場交易重心轉向成長放緩。",
-        "川普公開發聲反對加息，政治干預Fed政策預期。",
-        "市場估Fed 12月升息機率大增（初期）。"
+        "非農就業數據強勁",
+        "初領失業金人數激增創4個月新高",
+        "市場對Fed升息預期與成長擔憂的拉鋸",
+        "新任Fed主席華許即將進行政策首秀",
+        "10年期美債殖利率先升後降，收於4.463%"
       ],
       "dollar_materials": [
-        "美元指數升至2個月高點（100關卡附近），與美債利差優勢高度相關。",
-        "外資出走匯市，熱錢匯出新興市場。"
+        "強美元格局初期受通膨與非農支撐",
+        "後期因成長擔憂與殖利率回落而修正",
+        "美元指數從100.07回落至99.67"
       ],
       "gold_materials": [
-        "花旗下調黃金目標價，示警跌至3500美元，Fed升息預期成最大壓力。",
-        "市場氛圍驟變引爆避險賣壓，股債黃金比特幣齊跌。"
+        "強美元環境下的避險溢價",
+        "川普取消對伊朗軍事行動計畫後黃金跳漲2%",
+        "金價區間內劇烈波動，整體微幅收跌"
       ],
       "asia_fx_materials": [
-        "台幣重貶1.05角，爆大量摜破31.6元。",
-        "外資趁台股大漲調節持股後匯出。"
+        "伊朗局勢與升息疑慮拖累亞股普遍收跌",
+        "日圓維持在160關口震盪",
+        "台幣持平震盪",
+        "韓圜顯著升值（1558至1516）"
       ],
-      "inventory_summary": "本週素材顯示市場經歷了明顯的轉折：初期由強勁就業與通膨黏性推升利率與美元；後期因初領失業金激增與油價重挫，市場迅速轉向成長擔憂，帶動利率與美元回落。"
+      "inventory_summary": "本週市場素材呈現強烈的分歧：一方面CPI與PPI數據強勁推升通膨黏性預期；另一方面，初領失業金激增與油價回落引發成長擔憂，導致美債殖利率與美元在區間後段反轉向下。"
     },
     "inflation_expectation_formation": {
-      "energy": "川普喊停空襲伊朗，和平協議似將成形，地緣政治風險溢價消退，帶動WTI與Brent原油價格重挫。",
-      "supply_chain": "亞銀雖示警中東衝突推升物價，但隨後的地緣降溫消息大幅緩解了供應鏈中斷的擔憂。",
-      "price_data": "初期受通膨黏性預期影響，但後期被其他因子蓋過。",
+      "energy": "川普取消對伊朗軍事行動計畫，地緣風險降溫帶動WTI原油顯著下跌，緩解能源通膨壓力。",
+      "supply_chain": "unclear",
+      "price_data": "5月CPI年增4.2%及PPI創逾3年半新高，為推升通膨預期的核心數據。",
       "demand": "unclear",
-      "labor_market": "初期強勁非農支撐通膨預期，但隨後初領失業金人數激增，顯示勞動市場邊際降溫。",
-      "policy_expectation": "川普公開反對加息，增加政策不確定性。",
+      "labor_market": "非農數據強勁，但初領失業金人數激增創4個月新高，勞動市場訊號由熱轉冷。",
+      "policy_expectation": "市場在Fed被迫升息與經濟放緩之間重新定價。",
       "upward_channels": [
-        "初期強勁非農數據",
-        "通膨黏性預期"
+        "CPI與PPI創高",
+        "非農就業強勁"
       ],
       "offsetting_channels": [
-        "伊朗和平協議帶動油價重挫",
+        "油價大幅回落",
         "初領失業金人數激增"
       ],
       "direction": "mixed",
       "strength": "medium",
-      "judgment": "通膨預期在本週呈現先升後降的格局。初期受就業數據支撐，但期末油價的大幅回落與勞動市場降溫訊號，成為主導通膨預期下修的關鍵力量。"
+      "judgment": "通膨預期在區間內經歷顯著轉折。初期受CPI突破4%與非農數據推升，但隨後因油價大幅下跌與初領失業金激增而顯著緩解，整體呈現先升後降的混合態勢。"
     },
     "rate_pricing": {
-      "direction": "mixed",
+      "direction": "down",
       "same_direction_as_inflation": "yes",
-      "inflation_to_rate_transmission": "通膨預期的降溫（油價下跌）與成長擔憂（初領失業金增加）共同促使長債殖利率在衝破4.55%後快速回落至4.46%。",
-      "fed_policy_signal": "初期市場定價升息機率增加，後期因數據轉弱而修正；同時面臨政治人物反對加息的言論干擾。",
-      "bond_supply_demand": "unclear",
+      "inflation_to_rate_transmission": "初期通膨數據推升殖利率，但後期通膨預期因油價與就業降溫而緩解，帶動殖利率同步回落。",
+      "fed_policy_signal": "市場高度關注新任Fed主席華許的反應函數，政策不確定性仍存。",
+      "bond_supply_demand": "31兆美元美債市場對Fed政策形成壓力。",
       "term_premium": "unclear",
-      "safe_haven_bond_demand": "初期出現股債雙殺的流動性拋售，避險買盤並未在初期顯現。",
-      "growth_or_rate_cut_expectation": "初領失業金人數激增引發市場對經濟成長放緩的擔憂，壓抑了長端利率。",
-      "dominant_driver": "mixed",
-      "judgment": "利率定價經歷了從「政策指引（高利率維持更久）」到「成長擔憂」的轉換。10年期殖利率的衝高回落，完美映射了市場敘事的切換。"
+      "safe_haven_bond_demand": "成長擔憂可能引發了部分避險買債需求。",
+      "growth_or_rate_cut_expectation": "初領失業金激增成為市場從通膨交易轉向成長擔憂的關鍵轉折點。",
+      "dominant_driver": "growth_concern",
+      "judgment": "利率定價從「再通膨與升息預期」轉向「成長擔憂」。儘管通膨數據偏高，但勞動市場邊際降溫主導了區間後段的定價，壓過通膨黏性敘事，帶動10年期美債殖利率從4.55%高點回落至4.46%。"
     },
     "dollar_pricing": {
-      "direction": "mixed",
+      "direction": "down",
       "same_direction_as_rates": "yes",
-      "rate_differential_effect": "美元指數走勢與美債殖利率高度同步，初期受利差優勢推升至100.11，後期隨殖利率回落而降至99.67。",
-      "safe_haven_dollar": "市場情緒轉變時，美元發揮了一定程度的避險與流動性蓄水池功能。",
-      "dollar_liquidity_demand": "外資從台股等新興市場提款匯出，顯示強美元環境下的流動性收緊壓力。",
-      "other_currency_weakness": "亞幣普遍承壓，進一步凸顯美元的相對強勢。",
-      "us_relative_resilience": "unclear",
+      "rate_differential_effect": "隨著美債殖利率回落，美國的利差優勢邊際削弱，導致美元指數失去上行動能。",
+      "safe_haven_dollar": "成長擔憂尚未轉化為強烈的流動性恐慌，避險美元需求不明顯。",
+      "dollar_liquidity_demand": "unclear",
+      "other_currency_weakness": "unclear",
+      "us_relative_resilience": "初領失業金激增削弱了美國經濟絕對韌性的敘事。",
       "dominant_driver": "rate_differential",
-      "judgment": "美元主要受美債利差驅動，跟隨利率預期先升後降，但整體仍維持在相對高位，對非美貨幣持續施壓。"
+      "judgment": "美元走勢與利率高度共振。初期受通膨數據支撐維持在100以上，但隨著成長擔憂浮現及美債殖利率回落，美元指數出現修正，收於99.67。"
     },
     "gold_pricing": {
       "direction": "down",
-      "rate_real_yield_pressure": "初期美債殖利率衝破4.5%，大幅推升持有黃金的機會成本，引發機構下調目標價。",
-      "dollar_effect": "強勢美元對以美元計價的黃金構成直接壓抑。",
-      "safe_haven_demand": "避險情緒未能轉化為黃金買盤，反而出現「股債黃金齊跌」的流動性拋售特徵。",
+      "rate_real_yield_pressure": "初期高利率預期對金價造成沉重打擊，一度跌至4067美元。",
+      "dollar_effect": "美元先強後弱，對黃金的壓抑力道隨之減弱。",
+      "safe_haven_demand": "成長擔憂與政策失誤隱憂在低檔提供支撐。",
       "central_bank_buying": "unclear",
-      "geopolitics": "伊朗和平協議進展削弱了黃金的地緣政治避險溢價。",
-      "dominant_driver": "rates",
-      "judgment": "黃金本週主要受高利率預期與實質利率壓力主導，且地緣風險降溫移除了支撐力道，導致金價出現顯著回調。"
+      "geopolitics": "川普取消對伊朗軍事行動計畫後，黃金出現跳漲2%的強烈反彈。",
+      "dominant_driver": "mixed",
+      "judgment": "黃金走勢劇烈波動。初期受高利率與強美元預期壓抑大幅下跌，但後期受美債殖利率回落及地緣政治消息帶動反彈，整體區間仍小幅收跌，顯示實質利率壓力與避險情緒的激烈拉鋸。"
     },
     "asia_fx_pricing": {
       "twd": {
-        "direction": "down",
+        "direction": "mixed",
         "same_direction_as_dollar_pressure": "yes",
-        "local_flow": "外資趁台股大漲調節持股後大量匯出，爆出匯市第二大量。",
+        "local_flow": "unclear",
         "central_bank_policy": "unclear",
-        "export_or_tech_sector": "晶片股遭拋售影響了外資在台股的資金配置。",
-        "regional_risk": "unclear",
-        "judgment": "台幣重貶主要受強美元與外資實質匯出雙重打擊，跌破31.6元心理關卡，符合基準傳導邏輯。"
+        "export_or_tech_sector": "unclear",
+        "regional_risk": "亞股收跌帶來一定的資金外流壓力。",
+        "judgment": "台幣在強美元壓力與後續美元回落之間取得平衡，區間內呈現31.56至31.62的橫盤震盪。"
       },
       "jpy": {
         "direction": "mixed",
         "same_direction_as_dollar_pressure": "yes",
         "japan_policy": "unclear",
-        "rate_differential": "受美債殖利率波動影響，日圓在160關卡附近震盪。",
+        "rate_differential": "美債殖利率回落稍微緩解了美日利差壓力。",
         "safe_haven_demand": "unclear",
         "other_factor": "unclear",
-        "judgment": "日圓走勢緊貼美元與美債殖利率的起伏，缺乏自身獨立的驅動訊號，維持在弱勢區間震盪。"
+        "judgment": "日圓維持在160關口上方的高檔震盪，美債殖利率的回落僅提供微幅的貶值壓力緩解，尚未形成趨勢性反轉。"
       },
       "krw": {
         "direction": "up",
@@ -113,49 +119,50 @@
         "korea_export": "unclear",
         "equity_flow": "unclear",
         "regional_risk": "unclear",
-        "other_factor": "可能受前期過度貶值後的技術性反彈或未知的本地資金流影響。",
-        "judgment": "韓圜本週逆勢大幅升值（從1558升至1516），與強美元背景及台幣貶值走勢形成顯著背離，目前資料不足以完全解釋此異常強勢。"
+        "other_factor": "可能反映前期過度貶值的修正或特定本地資金匯入。",
+        "judgment": "韓圜表現顯著脫鉤，在美元僅微幅修正的背景下出現大幅升值（1558至1516），可能反映本地資金流動或對美元觸頂預期的敏銳反應，為本週亞幣中最突出的反常訊號。"
       }
     },
     "market_contradictions_and_modifiers": {
       "baseline_path": "通膨預期 → 利率預期 → 美元指數 → 亞洲貨幣 / 黃金",
-      "expected_baseline_script": "強勁數據推升殖利率與美元，壓抑黃金與所有亞洲貨幣。",
-      "most_unintuitive_market_reaction": "在美元維持相對高位且台幣爆量貶值的背景下，韓圜卻呈現單週大幅升值；同時，市場傳出避險情緒時，黃金卻遭遇拋售。",
-      "contradiction_type": "insufficient_data",
-      "how_it_fits_main_theme": "黃金的下跌可解釋為高利率機會成本壓過避險需求（流動性拋售）；但韓圜的逆勢升值則缺乏明確的新聞支撐，可能屬於區域性資金輪動或前期超跌修正，需保留為待確認的異常訊號。",
-      "presenter_opening_question": "本週美債殖利率一度衝破4.5%帶動美元走強，台幣也爆量重貶，但為何韓圜卻能逆勢大幅升值？同時，在市場避險情緒升溫下，黃金為何反而慘遭拋售？"
+      "expected_baseline_script": "CPI高達4.2%與PPI創高應推升通膨預期，帶動美債殖利率與美元上漲，並壓抑黃金與亞幣。",
+      "most_unintuitive_market_reaction": "儘管通膨數據極度強勁，美債殖利率與美元卻在區間末段顯著回落；同時，韓圜在亞股收跌背景下大幅升值。",
+      "contradiction_type": "offsetting_force",
+      "how_it_fits_main_theme": "初領失業金激增引發的「成長擔憂」壓過了CPI帶來的「通膨黏性」敘事。市場定價邏輯從「Fed被迫升息」迅速切換至「高利率正在破壞經濟」，導致殖利率與美元反轉。",
+      "presenter_opening_question": "當美國CPI飆破4.2%，為什麼美債殖利率和美元卻不漲反跌？市場到底看到了什麼比通膨更可怕的訊號？"
     },
     "main_theme_next_validation": {
-      "dominant_pricing_force": "勞動市場邊際降溫與地緣政治緩解帶動的「成長擔憂」與「降息預期」修正。",
-      "offsetting_or_modifying_force": "初期的強勁非農數據與通膨黏性預期。",
-      "one_sentence_to_remember": "市場定價在本週經歷了急轉彎，從『高利率維持更久』快速切換至『成長降溫』，帶動殖利率與美元高檔回落。",
-      "next_validation_point": "聯準會官員對近期就業降溫數據的政策反應函數，以及伊朗和平協議的最終落實情況。",
-      "overall_verdict": "部分成立",
-      "uncertainty_level": "medium"
+      "dominant_pricing_force": "成長擔憂（勞動市場邊際降溫）",
+      "offsetting_or_modifying_force": "通膨黏性（CPI/PPI數據）",
+      "one_sentence_to_remember": "市場敘事正經歷關鍵轉折，初領失業金的激增讓「成長擔憂」成功突圍，壓過了4.2%通膨帶來的升息恐懼。",
+      "next_validation_point": "Fed主席華許的政策首秀談話，以及後續勞動市場數據是否持續惡化。",
+      "overall_verdict": "分歧待觀察",
+      "uncertainty_level": "high"
     }
   },
   "forest_summary": {
-    "weekly_main_theme": "從再通膨定價轉向成長降溫",
-    "main_question": "高利率預期與強美元的極限在哪？勞動市場降溫是否足以扭轉Fed的政策路徑？",
-    "one_sentence_verdict": "勞動市場邊際降溫與油價重挫，成功修正了市場對高利率維持更久的極端定價。",
-    "overall_verdict": "部分成立",
-    "narrative_arc": "本週市場經歷了戲劇性的轉折。初期受強勁就業與通膨黏性影響，美債殖利率衝破4.5%，美元強勢壓抑亞幣與黃金；但隨後初領失業金人數激增與伊朗和平協議傳出，市場迅速將交易重心轉向成長放緩，帶動殖利率與美元回落，完成了一次定價體制的轉換。",
-    "why_it_matters": "這標誌著市場對『不著陸』或『再通膨』劇本的懷疑加深。未來資產價格的驅動力將從『通膨數據』轉向『就業與成長數據』，這對股債配置的再平衡與非美貨幣的喘息空間至關重要。"
+    "weekly_main_theme": "再通膨定價與成長擔憂的拉鋸",
+    "main_question": "在通膨數據創高與就業市場降溫同時出現時，市場將選擇定價「更高更久的利率」還是「迫在眉睫的經濟放緩」？",
+    "one_sentence_verdict": "初領失業金數據成為敘事轉折點，成長擔憂暫時壓過通膨黏性，帶動殖利率與美元修正。",
+    "overall_verdict": "分歧待觀察",
+    "narrative_arc": "本週市場經歷了戲劇性的轉折。初期CPI與非農數據強化了高利率維持更久的預期；但隨後初領失業金人數的激增與油價回落，促使市場重新評估經濟動能，導致美債殖利率與美元從高點回落，黃金與部分亞幣（如韓圜）獲得喘息空間。",
+    "why_it_matters": "這標誌著市場可能正在從單一的「通膨交易」過渡到更複雜的「停滯性通膨」或「衰退交易」早期階段。若成長擔憂持續發酵，將根本性改變下半年的資產配置邏輯。"
   },
   "evidence": {
     "most_important_evidence": [
-      "10年期美債殖利率從4.55%高點回落至4.46%。",
-      "WTI原油價格從92.94美元重挫至85.75美元。",
-      "初領失業金人數激增與伊朗和平協議的新聞報導。"
+      "美國5月CPI年增4.2%",
+      "初領失業金人數創4個月新高",
+      "10年期美債殖利率從4.552%回落至4.463%",
+      "WTI原油從92.94美元跌至85.75美元"
     ],
     "insufficient_evidence": [
-      "韓圜逆勢大幅升值的具體本地驅動因素。",
-      "日本央行應對日圓弱勢的具體政策動態。"
+      "亞洲央行具體的干預動作",
+      "韓圜大幅升值的確切本地驅動因子"
     ],
     "watch_items_from_news_context": [
-      "聯準會官員對近期就業數據的談話。",
-      "伊朗和平協議談判的穩定性。",
-      "亞洲貨幣在美元波動下的干預風險與資金流向。"
+      "Fed主席華許（Warsh）的政策首秀與反應函數",
+      "勞動市場邊際降溫是否演變為實質經濟成長風險",
+      "亞洲央行在強美元壓力下的政策調整"
     ]
   }
 }
