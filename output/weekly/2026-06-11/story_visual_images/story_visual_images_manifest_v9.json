@@ -4,7 +4,7 @@
     "source": "weekly_dialogue_story_only_v8.json",
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11",
     "image_model": "gemini-3.1-flash-image-preview",
-    "generated_at": "2026-06-12T00:18:01",
+    "generated_at": "2026-06-12T01:07:12",
     "target_scene": "",
     "preview_only_first": false,
     "style": "whiteboard sketch explainer / minimalist marker doodle / consistent video series"
@@ -13,42 +13,42 @@
     {
       "section_id": "s1",
       "visual_id": "scene_01",
-      "section_title": "體制轉換的開端：當高利率預期撞上現實",
+      "section_title": "當4.2%的通膨創下新高，為什麼市場卻不害怕了？",
       "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11/story_visual_images/scene_01.jpg",
       "status": "created_or_existing"
     },
     {
       "section_id": "s2",
       "visual_id": "scene_02",
-      "section_title": "地緣政治的修正因子：油價大跌釋放通膨壓力",
+      "section_title": "初領失業金人數激增，勞動市場的黃金盾牌裂開了？",
       "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11/story_visual_images/scene_02.jpg",
       "status": "created_or_existing"
     },
     {
       "section_id": "s3",
       "visual_id": "scene_03",
-      "section_title": "勞動市場的裂縫：初領失業金激增帶來的警訊",
+      "section_title": "川普的一句話，讓高懸的油價和地緣溢價瞬間消退？",
       "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11/story_visual_images/scene_03.jpg",
       "status": "created_or_existing"
     },
     {
       "section_id": "s4",
       "visual_id": "scene_04",
-      "section_title": "避險資產的奇特背離：黃金的流動性拋售與防禦性反彈",
+      "section_title": "黃金的兩難：高利率的枷鎖 vs 避險的安全感",
       "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11/story_visual_images/scene_04.jpg",
       "status": "created_or_existing"
     },
     {
       "section_id": "s5",
       "visual_id": "scene_05",
-      "section_title": "亞洲匯市的生存戰：台幣爆量重貶與韓元的逆勢之謎",
+      "section_title": "亞幣大分化：日圓的160防線與韓元的意外突圍",
       "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11/story_visual_images/scene_05.jpg",
       "status": "created_or_existing"
     },
     {
       "section_id": "s6",
       "visual_id": "scene_06",
-      "section_title": "森林視角與下週展望：體制轉換的下一步驗證",
+      "section_title": "下週關鍵驗證：新任主席的政策首秀與就業市場的續航力",
       "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-06-11/story_visual_images/scene_06.jpg",
       "status": "created_or_existing"
     }
