@@ -65,10 +65,22 @@ SYSTEM_PROMPT = """
 
 任務定位：
 把 weekly_dialogue_story_only_v8.json 中已完成的故事稿轉成白板圖像。
-圖片只根據輸入 JSON 的 storyline 與 sections 生成，不重新判斷市場主線，不加入新的總經結論。
-每張 section 圖只轉譯一個 section 的核心故事節點：市場問題、事件線索、價格反應與下一段銜接。
+圖片只根據輸入 JSON 的 storyline 與 sections 生成，不重新判斷市場主線，不加入新的總經結論，不自行補充新聞或數字。
+每張 section 圖只轉譯一個 section 的核心故事節點：市場問題、事件線索、價格反應、主導因子、修正因子、背離訊號或下一段銜接。
 全部圖片要像同一個系列，風格、筆觸、構圖語言要一致。
-若畫外匯或匯率，請清楚標示是匯率報價還是本幣方向。例如：USD/TWD 下降代表台幣升值；USD/KRW 下降代表韓元升值；USD/JPY 上升代表日圓偏弱。
+
+V35 對齊原則：
+- 83 是圖像轉譯層，不是分析層。
+- 圖像不得推翻 82 故事稿已形成的主線、修正因子、背離訊號、資產方向或下期觀察。
+- 若 section 沒有明確資產方向，不要自己畫上升或下降箭頭；請用問號、分歧路口、待觀察標記或中性符號。
+- 不要畫出輸入資料沒有的數字、日期、政策結論或市場因果。
+- 若畫價格線或箭頭，方向必須直接來自 current_section.price_reaction 或 speaker_turn_excerpt。
+- 若畫外匯或匯率，請清楚標示是匯率報價還是本幣方向。例如：USD/TWD 下降代表台幣升值；USD/KRW 下降代表韓元升值；USD/JPY 上升代表日圓偏弱。
+
+白話化視覺語言：
+- 優先視覺化「市場更關注什麼」、「主導因子」、「修正因子」、「背離訊號」、「資產驗證」、「下期觀察」。
+- 避免把畫面做成抽象金融術語海報，例如定價、體制、風險溢價、傳導源。
+- 圖像要幫觀眾理解故事，不要自己做新的總經判斷。
 
 """.strip()
 
@@ -269,11 +281,18 @@ Continuity cues:
 
 Design instructions:
 - Translate the current section into a simple but memorable visual scene.
+- This is visual translation only: do not re-analyze macro conditions, do not invent a new story, and do not add conclusions not present in current_section.
+- Prefer visual ideas such as: market question, dominant driver, correction factor, divergence signal, asset validation, or next-period watch.
 - Use one main visual idea, plus a few supporting symbols only.
 - The image should help the audience immediately feel what this section is about.
 - Let the narration explain the full reasoning; the image should not become a dense infographic.
-- If useful, include a very light simple chart, a direction arrow, or a turning-point line to reflect price action.
+- If useful, include a very light simple chart, a direction arrow, a forked path, a pressure gauge, or a turning-point line to reflect the section's price reaction.
 - Use simple macro-finance symbols only when they directly support the current section, such as oil, bond yields, gold, currency quotes, arrows, or a clean price line.
+- Do not invent new macro conclusions. Do not add news, numbers, dates, labels, arrows, or causal links that are not present in current_section or speaker_turn_excerpt.
+- If current_section does not clearly state an asset direction, do not draw a strong up/down arrow. Use neutral symbols such as a question mark, split arrows, balance scale, or watch-style visual.
+- If current_section describes a divergence, show it as two forces pulling in different directions, not as a single confident trend.
+- If current_section describes a correction factor, show it as a secondary smaller force, not as the main driver.
+- If current_section describes asset validation, show the checked assets calmly; do not exaggerate or turn it into a crisis image.
 - Do not place a large Chinese title inside the image.
 - Keep on-screen text extremely minimal: use only numeric/ticker labels when needed, such as CPI, PPI, 4.2%, 10Y, DXY, 4.463%, 99.675, WTI, USD/JPY, USD/KRW.
 - Do not render paragraphs, tables, long subtitles, or handwritten Chinese sentences.
@@ -300,6 +319,9 @@ Avoid:
 - 3D glossy business graphics
 - messy clutter
 - sensational disaster imagery
+- exaggerated crisis visuals unless the current section explicitly supports that tone
+- invented asset directions, invented price levels, invented arrows, invented policy conclusions
+- abstract jargon posters built around words like pricing, regime, risk premium, transmission source
 - conflicting visual styles
 """.strip()
 
@@ -451,6 +473,7 @@ def main() -> None:
             "target_scene": normalized_target or "",
             "preview_only_first": preview_only_first,
             "style": "whiteboard sketch explainer / minimalist marker doodle / consistent video series",
+            "v35_visual_rule": "visual translation only; do not re-analyze or invent macro conclusions",
         },
         "images": [],
         "failed_images": [],
