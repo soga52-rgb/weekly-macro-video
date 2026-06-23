@@ -33,21 +33,23 @@ DEFAULT_MODEL = "gemini-3.5-pro"
 
 
 SYSTEM_PROMPT = """
-你是一位精通全球宏觀經濟、交叉資產策略與市場心理學的資深總經分析師。
+你是一位精通全球宏觀經濟、交叉資產策略與市場心理學的資深總經分析師，也是一位能把複雜市場訊號整理成清楚影片主線的總經解說者。
 
-你的任務是根據輸入資料中的新聞、價格與市場訊號，產生 Step 80 / Step 91 分析層測試結果。
-本次任務只驗證分析層，不處理圖像層與語音層。
+你的任務是根據輸入資料中的新聞、價格、市場訊號與 weekly_v35_diagnosis，產生 Step 80 / Step 91 分析層測試結果。
+本次任務只驗證影片分析層，不處理圖像層與語音層。
 請不要產生影片分鏡、圖片提示詞、Tom / Miranda 對話稿。
 
 核心原則：
 - 總經不是數學公式，不是 A 上升就必然 B 上升。
-- 固定基準檢查路徑是：通膨預期 → 利率預期 → 美元指數 → 亞洲貨幣 / 黃金。
-- 這只是基準路徑，不是鐵律；市場預期、資金流向、政策訊號會共同決定最後定價。
-- 每一層都必須先看 analysis_input_bundle 提供的新聞、價格與市場訊號，再判斷 up / down / mixed / unclear，不得預設方向。
+- 基準檢查路徑是：通膨預期 → 利率走向 → 美元指數 → 亞洲貨幣 / 黃金。
+- 這只是基準路徑，不是鐵律；市場預期、資金流向與政策訊號會共同影響最後走勢。
+- 每一層都必須先看 analysis_input_bundle 提供的新聞、價格、市場訊號與 weekly_v35_diagnosis，再判斷 up / down / mixed / unclear，不得預設方向。
+- 若 analysis_input_bundle 提供 weekly_v35_diagnosis，請優先把它視為 rule-based 診斷層，用來統一主導因子、修正因子、背離訊號、資產驗證與下一期觀察。
 - 市場矛盾不是錯誤；若價格與基準傳導不一致，請保留矛盾，並解釋它是修正因子、抵銷力量、資料不足，或新主線早期訊號。
-- 分析語氣應採中性、客觀、機構級研究口吻。即使訊號明顯，也應使用「主導、壓過、支撐、削弱、修正、尚待驗證、可能代表」等分析語言描述，不把單日訊號直接定調為確定的新趨勢。
-- 對市場轉向、共振或異常訊號，應說明其「目前可能代表的定價變化」與「後續仍需驗證的條件」。若資料只支持短期判斷，請避免將其延伸為長期結論。
+- 分析語氣應採中性、客觀、機構級研究口吻。即使訊號明顯，也應使用「主導、壓過、支撐、削弱、修正、尚待驗證、可能代表」等分析語言描述，不把本期訊號直接定調為確定的新趨勢。
+- 對市場轉向、共振或異常訊號，應說明其「目前可能代表的市場看法變化」與「後續仍需驗證的條件」。若資料只支持短期判斷，請避免將其延伸為長期結論。
 - 結論應保留不確定性層次，例如「目前較像」、「短線主導」、「仍需觀察」、「資料不足以確認」；分析語氣應避免過度戲劇化或絕對化。
+- 對外文字請避免使用「交易、定價、體制、風險溢價、傳導源」等生硬名詞；優先使用「主導因子、修正因子、背離訊號、資產驗證、下期觀察、市場重新評估、市場更關注」。
 - 不可新增 analysis_input_bundle 沒有的數字。
 - 不可創造新聞。
 - 不可給投資建議。
@@ -59,129 +61,60 @@ SYSTEM_PROMPT = """
 
 USER_PROMPT_TEMPLATE = """
 資料說明：
-本程式提供的 analysis_input_bundle 是 Step 80 由既有 weekly 資料組成的分析資料包，內容包含：
+本程式提供的 analysis_input_bundle 是 Step 80 由既有 weekly 資料組成的影片分析資料包，內容包含：
 1. weekly_news_context.json / md：正式分析區間內的新聞脈絡與市場關注訊號。
 2. macro_background_context.json / md：近 2～4 週仍影響正式分析區間的背景新聞。
 3. weekly_market_series.json：市場價格與資產走勢；其中 analysis_series 是正式分析區間，lookback_series 是背景參考區間。
+4. weekly_v35_diagnosis.json：Python rule-based V35 診斷層，提供主導因子、修正因子、背離訊號、資產驗證與下一期觀察。
 
 重要區間原則：
 - 本次正式分析區間是：{analysis_window_label}
-- 今日 / 本週主線、市場驗證、資產變化與結論，必須以 analysis_input_bundle.weekly_market_series.analysis_series 為準。
+- 本期主線、市場驗證、資產變化與結論，必須以 analysis_input_bundle.weekly_market_series.analysis_series 為準。
 - lookback_series / macro_background_context 只能用作前期背景與延續性脈絡，不可當成正式分析區間的變動起點。
 - 若提到 analysis window 之前的事件或價格，必須標示為「前期背景」或「延續性脈絡」。
 - 不得把 lookback window 的起點數字寫成正式分析區間的漲跌起點。
 - 輸出的 meta.week_range 必須等於正式分析區間：{analysis_window_label}
 
-分析順序必須固定：
+weekly_v35_diagnosis 使用規則：
+- weekly_v35_diagnosis 是 rule-based 診斷層，不是影片旁白文案。
+- 請優先使用它來對齊影片主線與網頁主線，尤其是 dominant_driver、correction_factors、divergence_signal、asset_validation、next_period_watch。
+- 影片分析可以重新組織語言，但不可忽略或推翻其油價 / 通膨方向規則與資產方向。
+- 若你的分層分析與 weekly_v35_diagnosis 出現張力，請寫成分歧、修正因子或待觀察，不要硬改成另一套主線。
 
-一、新聞與市場素材盤點
-請先整理 analysis_input_bundle 中可用的新聞、政策訊號與市場價格反應。
-本段只歸類，不直接下今日主線結論。
+分析順序：
+一、素材盤點
+- 整理本期新聞、政策訊號與市場價格反應。
+- 只歸類，不急著下結論。
+- 請分成：通膨 / 利率 / 美元 / 黃金 / 亞洲貨幣五類。
 
-請分成：
-1. 通膨相關素材：
-   油價、能源、CPI / PPI / PCE、PMI / NMI、零售銷售、就業、Fed 通膨說法、地緣政治。
-2. 利率相關素材：
-   Fed 政策、公債供需、期限溢價、避險買債、成長擔憂、降息 / 升息預期變化。
-3. 美元相關素材：
-   利差、避險美元、美元流動性需求、其他貨幣自身弱點、美國相對經濟韌性。
-4. 黃金相關素材：
-   利率 / 實質利率、美元方向、避險需求、央行買盤、地緣政治。
-5. 亞洲貨幣相關素材：
-   美元壓力、本地資金流、央行政策、出口 / 科技產業、區域風險。
+二、V35 主線確認
+- 先讀 weekly_v35_diagnosis 的 dominant_driver、correction_factors、divergence_signal、asset_validation、next_period_watch。
+- 說明本期最重要的主導因子。
+- 說明哪些只是修正因子。
+- 說明最重要的背離訊號。
+- 說明哪些資產走勢支持或挑戰這條主線。
 
-二、通膨預期形成
-請先判斷今日通膨預期如何形成。
-CPI / PPI / PCE、油價、PMI / NMI、就業與 Fed 通膨說法，應先進入本段，不可直接跳去解釋利率。
+三、分層補充分析
+請用簡潔方式補充 V35 沒有說清楚的地方：
+- 通膨預期：區分通膨硬數據、油價、需求、勞動、政策預期。
+- 利率走向：檢查 Fed 政策、公債供需、期限溢價、避險買債、成長擔憂。
+- 美元走向：檢查利差、避險美元、美元流動性需求、非美貨幣自身弱點。
+- 黃金走向：檢查利率 / 實質利率、美元、避險需求、央行買盤、地緣政治。
+- 亞洲貨幣：分別檢查台幣、日圓、韓圜，不可只寫「亞幣」。
 
-請檢查：
-- energy：油價、OPEC、EIA、IEA、頁岩油、戰略儲備、荷姆茲海峽、戰爭供給風險。
-- supply_chain：運價、原物料、制裁、港口、航道、供應瓶頸。
-- price_data：CPI、PPI、PCE、核心 PCE、物價分項。
-- demand：PMI、NMI、零售銷售、消費信心、企業訂單。
-- labor_market：非農、ADP、初領失業金、續領失業金、薪資成長、聘僱或裁員新聞。
-- policy_expectation：Fed 談話、通膨預期調查、關稅、財政刺激、政策不確定性。
-
-請判斷：
-- 哪些通道推升通膨預期？
-- 哪些通道緩解或抵銷通膨預期？
-- 今日通膨預期是 up / down / mixed / unclear？
-- 強度是 strong / medium / weak？
-
-三、利率定價
-請承接第二段「通膨預期形成」的結論，分析今日利率偏強、偏弱或分歧的來源。
-
-請先回答：
-- 利率是否與通膨預期同向？
-- 如果同向，是通膨預期如何傳導到利率？
-- 如果不同向，是不是利率自身因子主導？
-
-利率自身因子至少檢查：
-1. Fed 政策訊號
-2. 公債供需 / 長債賣壓
-3. 期限溢價
-4. 避險買債需求
-5. 成長擔憂或降息預期變化
-
-注意：
-- CPI / PPI / PCE 只能作為第二段通膨預期判斷的背景，不應在本段重新獨立判斷通膨方向。
-- 不可只寫「Fed 偏鷹」或「市場避險」，必須說明具體內容。
-- 不得預設利率一定偏強。
-- 若利率方向 mixed / unclear，請說明是哪幾股力量訊號交錯。
-
-四、美元定價
-請承接第三段「利率定價」，分析美元。
-
+四、影片敘事收斂
 請回答：
-- 美元是否與利率方向同向？
-- 若同向，是利差 / 高利率預期如何影響美元？
-- 若不同向，是否受到避險美元、美元流動性需求、其他貨幣自身弱點或美國相對經濟韌性修正？
-- 不可預設美元一定受高利率支撐。
-- 若 mixed / unclear，請說明是哪幾股力量訊號交錯。
+- 本期市場最後最重要的主導因子是什麼？
+- 主要修正因子是什麼？
+- 最值得用來開場的問題是什麼？
+- 一句話應該讓觀眾記住什麼？
+- 下一期要觀察什麼來驗證或推翻目前主線？
 
-五、黃金定價
-請承接第三段「利率定價」與第四段「美元定價」，分析黃金。
-
-請檢查：
-1. 高利率 / 實質利率壓力
-2. 美元方向
-3. 避險需求
-4. 央行買盤
-5. 地緣政治
-
-請回答：
-- 黃金主要受哪一股力量主導？
-- 若黃金與利率 / 美元不同向，是哪個因素修正？
-- 不可預設黃金一定受高利率壓抑，也不可預設一定受避險推升。
-
-六、亞洲貨幣：台幣、日圓、韓圜
-請承接第四段「美元定價」，分別分析台幣、日圓、韓圜，不可只寫「亞幣」。
-
-請回答：
-- 台幣是否與美元壓力同向？若不同向，是本地資金流、央行政策、出口 / 科技產業、區域風險或其他因素修正？
-- 日圓是否與美元壓力同向？若不同向，是日本自身政策、利差、避險需求或其他因素修正？
-- 韓圜是否與美元壓力同向？若不同向，是韓國出口、股市資金、區域風險或其他因素修正？
-- 若資料不足，請標示待確認。
-
-七、市場矛盾與修正因子
-請根據第二段到第六段，找出今日最值得追問的市場矛盾。
-
-請回答：
-- 正常基準傳導劇本應該怎麼走？
-- 今日實際市場反應哪一段最不直覺？
-- 這個矛盾是修正因子、抵銷力量、資料不足，還是新主線早期訊號？
-- 它如何嵌入今日主線，避免敘事前後自我打架？
-- AI Presenter 應該用哪個問題開場？
-
-八、今日主線與下一個驗證點
-請根據前面分析，收斂今日主線。
-
-請回答：
-- 今日市場最後最主導的定價力量是什麼？
-- 主要抵銷或修正力量是什麼？
-- 今日真正要記住的一句話是什麼？
-- 下一個要觀察什麼來驗證？
-
+用語要求：
+- 請避免「交易、定價、體制、風險溢價、傳導源」等生硬詞。
+- 優先使用「主導因子、修正因子、背離訊號、資產驗證、下期觀察、市場重新評估、市場更關注」。
+- JSON key 若因舊流程相容仍保留 pricing 字樣，內容文字仍請使用較自然的「走向、主導因子、修正因子」。
+- 若證據不足，請明確寫 unclear / 待確認 / 待觀察，不要硬湊因果。
 
 請輸出以下 JSON 結構。請保留所有 key，即使資料不足也要填入 unclear / 待確認 / []：
 
@@ -429,6 +362,7 @@ def build_analysis_input_bundle(
     macro_background_context_md: str,
     market_payload: Dict[str, Any],
     analysis_window: Dict[str, str],
+    weekly_v35_diagnosis: Dict[str, Any] | None = None,
 ) -> Dict[str, Any]:
     """
     Step 80 still reads weekly files, but the prompt uses the generic name
@@ -444,6 +378,7 @@ def build_analysis_input_bundle(
                 "macro_background_context.json",
                 "macro_background_context.md",
                 "weekly_market_series.json",
+                "weekly_v35_diagnosis.json",
             ],
             "note": (
                 "Use weekly_market_series.analysis_series for formal price validation. "
@@ -459,6 +394,7 @@ def build_analysis_input_bundle(
             "markdown": macro_background_context_md,
         },
         "weekly_market_series": market_payload,
+        "weekly_v35_diagnosis": weekly_v35_diagnosis or {},
     }
 
 
@@ -536,6 +472,7 @@ def build_user_prompt(week_dir: Path) -> str:
     macro_background_context_json = load_json(week_dir / "macro_background_context.json", {})
     macro_background_context_md = load_text(week_dir / "macro_background_context.md")
     weekly_market_series_json = load_json(week_dir / "weekly_market_series.json", {})
+    weekly_v35_diagnosis = load_json(week_dir / "weekly_v35_diagnosis.json", {})
     analysis_window = infer_analysis_window_from_source(week_dir)
 
     if not weekly_market_series_json:
@@ -549,6 +486,7 @@ def build_user_prompt(week_dir: Path) -> str:
         macro_background_context_md=macro_background_context_md,
         market_payload=market_payload,
         analysis_window=analysis_window,
+        weekly_v35_diagnosis=weekly_v35_diagnosis,
     )
 
     print(f"[INFO] Analysis window: {analysis_window.get('label')} ({analysis_window.get('source')})")
@@ -631,6 +569,7 @@ def main() -> None:
     print(f"[INFO] macro_background_context.json included: {(week_dir / 'macro_background_context.json').exists()}")
     print(f"[INFO] macro_background_context.md included: {(week_dir / 'macro_background_context.md').exists()}")
     print(f"[INFO] weekly_market_series.json included: {(week_dir / 'weekly_market_series.json').exists()}")
+    print(f"[INFO] weekly_v35_diagnosis.json included: {(week_dir / 'weekly_v35_diagnosis.json').exists()}")
 
     user_prompt = build_user_prompt(week_dir)
     result = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
