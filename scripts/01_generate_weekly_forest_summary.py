@@ -14,7 +14,10 @@ Design:
 - Do not use weekly_source_text.md as the main analysis input.
 - Produce a 6-8 minute World Economic Forum-style macro explainer brief.
 - Emphasize transmission checks among market data, news events, expectations, and asset price moves.
+- Add a V3.5 structured diagnosis for downstream weekly diagrams:
+  dominant driver, correction factors, divergence signal, asset validation, and next-period watch.
 - Keep the existing weekly_forest_summary.json schema for downstream compatibility.
+- Although the product name may be "weekly", the analysis period is controlled by the formal analysis window and is not assumed to be exactly 7 days.
 
 Input:
 - output/weekly/YYYY-MM-DD/weekly_market_series.json
@@ -53,39 +56,58 @@ DEFAULT_ANALYSIS_MODEL = "gemini-3.5-pro"
 
 
 SYSTEM_PROMPT = """
-你是一位冷靜、專業、具權威感的總經學者。
+你是一位冷靜、專業、具權威感的總經學者，也是一位熟悉全球宏觀經濟、交叉資產策略與市場心理的總經解說者。
 
-請製作一支約 6～8 分鐘的世界經濟論壇式總經說明影片，條理分明地呈現市場數據、新聞事件與資產價格變化之間的關聯性。
+你的任務是根據正式 analysis window 內的市場數據、新聞事件、V35 rule-based 診斷結果與資產價格變化，製作一支約 6～8 分鐘的總經說明影片，並產生可供本週總經摘要網頁與後續影片流程共用的結構化分析結果。
 
-請使用繁體中文。
+請使用繁體中文。語氣要像機構級總經導讀：清楚、克制、有邏輯，不誇大，不硬湊因果，也不要使用過度生硬的金融術語。
+
+請條理分明地說明：
+1. 本期市場最關注什麼；
+2. 哪些新聞、數據或資產走勢形成主導因子；
+3. 哪些訊號只是修正因子；
+4. 哪些地方出現背離或仍待觀察；
+5. 哪些資產走勢支持或挑戰這條主線；
+6. 接下來需要觀察什麼。
+
+請把重點放在市場數據、新聞事件、V35 診斷層與資產價格變化之間如何互相印證、互相修正，或形成值得解釋的分歧。
 """
 
 
 USER_PROMPT_TEMPLATE = """
-以下資料包含本週正式分析區間（analysis window）與較長的背景參考區間（lookback/context window）。
+以下資料包含正式 analysis window 與較長的 lookback/context window。
 
 請根據來源資料產生 weekly_forest_summary.json。
 
 重要區間原則：
 - 本次正式分析區間是：{analysis_window_label}
+- 本期主線、漲跌、傳導檢查、影片段落與視覺描述，必須以 analysis window 為準。
 - market series 可能包含較長 lookback/context window，這是為了提供前期位置與延續性背景。
-- 本週主線、本週漲跌、本週傳導檢查、影片段落與視覺描述，必須以 analysis window 為準。
-- analysis window 之前的資料只能作背景，不可當成本週變動起點。
-- 如果需要提到前期背景，請明確寫成「前期背景」或「延續性脈絡」，不要把它寫成本週走勢。
+- analysis window 之前的資料只能作為前期背景，不可當成本期變動起點。
+- 若提到前期資料，請明確寫成「前期背景」或「延續性脈絡」，不要把它寫成本期走勢。
 
-這支影片的格式是：說明影片。
-目標是條理分明地呈現來源之間的關聯性，讓觀眾理解市場數據、新聞事件與資產價格變化如何互相印證、互相修正，或形成值得解釋的分歧。
+任務目標：
+請產生一份可供本週總經摘要網頁與後續影片流程共用的 weekly_forest_summary.json。
+內容要條理分明地呈現市場數據、新聞事件、V35 診斷層與資產價格變化之間如何互相印證、互相修正，或形成值得解釋的分歧。
 
-分析方法：
-請參考總經傳遞鏈概念，根據市場數據逐段檢查傳導是否同頻：通膨預期與利率預期、利率預期與美元、美元與亞洲貨幣 / 黃金 / 商品。若同頻，請結合新聞消息與市場預期，說明該段傳導為何受到支持；若不同頻，請將其視為需要解釋的市場訊號，並找出可能的替代傳導源、局部基本面、資金流或政策因素。
+weekly_v35_diagnosis 使用規則：
+- weekly_v35_diagnosis 是前一階段由 Python rule-based V35 診斷層產生的結構化結果。
+- 請優先使用其中的 dominant_driver、correction_factors、divergence_signal、asset_validation、next_period_watch。
+- weekly_v35_diagnosis 是診斷框架，不是最終文案；你可以改寫成自然主管摘要語氣，但不要推翻其資產方向、油價 / 通膨方向規則與背離判斷。
+- 若 weekly_v35_diagnosis 與新聞文字看似衝突，請呈現為分歧、修正因子或待觀察，不要自行創造新的因果鏈。
+- 若 weekly_v35_diagnosis 缺漏或空白，才回到 weekly_market_series 與 weekly_news_context 自行判斷，並在 insufficient_evidence 說明。
 
-在檢查美元與亞洲貨幣傳導時，請不要只以「亞幣」作為集合判斷，而應逐一檢視台幣、日圓、韓圜的走勢是否與美元壓力同頻。若三者反應不同，請將其視為亞洲貨幣內部分化訊號，並嘗試結合本地經濟數據、出口動能、股市資金流、央行政策、避險需求或結匯需求解釋差異。
-
-新聞與經濟數據的用途，是協助解釋同頻或不同頻的原因，並判斷這些證據是否可能在下週或後續造成定價質變，最後據此自然產生影片段落。
+分析要求：
+- 先說明本期主導因子。
+- 再說明修正因子。
+- 再說明最重要的背離訊號。
+- 再用 US10Y、DXY、WTI / Brent、Gold、USDJPY、USDTWD、USDKRW 做資產驗證。
+- 最後提出下期觀察重點。
+- 若證據不足，請明確寫待觀察，不要硬湊因果。
+- 請使用自然主管摘要語氣，避免「交易、定價、體制、風險溢價、傳導源」等生硬名詞。
+- 請使用繁體中文。
 
 請注意：
-- 影片段落與視覺需求由本週資料自然決定。
-- 若某個結論無法由來源資料直接支持，請呈現為分歧、待觀察或資料不足。
 - video_segments 請依內容自行產生；每一項請包含 segment_id、segment_title、segment_question、narration_focus、main_point、estimated_duration、visual_needed、visual_role、visual_concept。
 - visual_sequence 請依內容自行產生；每一項請包含 visual_id、source_segment_id、visual_title、visual_purpose、visual_concept、key_labels、is_web_hero_candidate。
 - web_hero_visual 請指出最適合作為網頁主視覺或影片總結圖的視覺。
@@ -93,11 +115,11 @@ USER_PROMPT_TEMPLATE = """
 
 請只輸出合法 JSON，不要加 Markdown，不要加解釋文字。
 
-JSON 結構請維持如下：
+JSON 結構請維持如下；可以新增 weekly_v35_diagnosis，但不要移除既有欄位：
 
 {
   "meta": {
-    "source": "weekly_market_series.json + weekly_news_context.md/json",
+    "source": "weekly_market_series.json + weekly_news_context.md/json + weekly_v35_diagnosis.json",
     "data_status_note": "",
     "week_range": "",
     "days_observed": ""
@@ -130,6 +152,13 @@ JSON 結構請維持如下：
     "insufficient_evidence": [],
     "watch_items_from_daily_summaries": [],
     "watch_items_from_news_context": []
+  },
+  "weekly_v35_diagnosis": {
+    "dominant_driver": "",
+    "correction_factors": [],
+    "divergence_signal": "",
+    "asset_validation": [],
+    "next_period_watch": []
   },
   "video_planning": {
     "suggested_video_title": "",
@@ -422,11 +451,41 @@ def extract_json_from_text(text: str) -> Dict[str, Any]:
         raise ValueError(f"Unable to parse Gemini JSON. Error: {exc}. Preview: {preview}") from exc
 
 
+def normalize_weekly_v35_diagnosis(summary: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Ensure the V3.5 diagnosis block exists for downstream weekly diagram prompts.
+    This keeps older Gemini outputs compatible if the model omits the new field.
+    """
+    diag = summary.setdefault("weekly_v35_diagnosis", {})
+
+    if not isinstance(diag, dict):
+        diag = {}
+        summary["weekly_v35_diagnosis"] = diag
+
+    diag.setdefault("dominant_driver", "")
+    diag.setdefault("correction_factors", [])
+    diag.setdefault("divergence_signal", "")
+    diag.setdefault("asset_validation", [])
+    diag.setdefault("next_period_watch", [])
+
+    if not isinstance(diag.get("correction_factors"), list):
+        diag["correction_factors"] = as_list(diag.get("correction_factors"))
+
+    if not isinstance(diag.get("asset_validation"), list):
+        diag["asset_validation"] = as_list(diag.get("asset_validation"))
+
+    if not isinstance(diag.get("next_period_watch"), list):
+        diag["next_period_watch"] = as_list(diag.get("next_period_watch"))
+
+    return summary
+
+
 def normalize_video_planning(summary: Dict[str, Any]) -> Dict[str, Any]:
     """
     Fill legacy fields from the flexible video fields so older workflows can continue to run.
     The legacy field names are kept only for compatibility and do not imply a fixed scene count.
     """
+    summary = normalize_weekly_v35_diagnosis(summary)
     video = summary.setdefault("video_planning", {})
 
     segments = as_list(video.get("video_segments"))
@@ -513,10 +572,14 @@ def build_user_prompt(
     weekly_news_context_md: str,
     weekly_news_context_json: Dict[str, Any],
     analysis_window: Dict[str, str],
+    weekly_v35_diagnosis: Dict[str, Any] | None = None,
 ) -> str:
     return USER_PROMPT_TEMPLATE.replace(
         "{analysis_window_label}",
         analysis_window.get("label", "資料週期待確認"),
+    ).replace(
+        "{weekly_v35_diagnosis_json}",
+        json.dumps(weekly_v35_diagnosis or {}, ensure_ascii=False, indent=2),
     ).replace(
         "{weekly_market_series_json}",
         json.dumps(weekly_market_series, ensure_ascii=False, indent=2),
@@ -551,6 +614,7 @@ def main() -> None:
     weekly_market_series = load_json(week_dir / "weekly_market_series.json", {})
     weekly_news_context_md = load_text(week_dir / "weekly_news_context.md")
     weekly_news_context_json = load_json(week_dir / "weekly_news_context.json", {})
+    weekly_v35_diagnosis = load_json(week_dir / "weekly_v35_diagnosis.json", {}) or {}
     analysis_window = infer_analysis_window_from_source(
         week_dir,
         start_override=args.start,
@@ -579,6 +643,7 @@ def main() -> None:
         weekly_news_context_md=weekly_news_context_md,
         weekly_news_context_json=weekly_news_context_json,
         analysis_window=analysis_window,
+        weekly_v35_diagnosis=weekly_v35_diagnosis,
     )
 
     print(f"[INFO] Generating weekly forest summary with analysis model: {model}")
@@ -591,8 +656,11 @@ def main() -> None:
     forest_summary = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
     forest_summary = normalize_video_planning(forest_summary)
 
+    if weekly_v35_diagnosis and not forest_summary.get("weekly_v35_diagnosis"):
+        forest_summary["weekly_v35_diagnosis"] = weekly_v35_diagnosis.get("weekly_v35_diagnosis", {})
+
     forest_summary.setdefault("meta", {})
-    forest_summary["meta"]["source"] = "weekly_market_series.json + weekly_news_context.json"
+    forest_summary["meta"]["source"] = "weekly_market_series.json + weekly_news_context.json + weekly_v35_diagnosis"
     forest_summary["meta"]["week_range"] = analysis_window.get("label", "")
     forest_summary["meta"]["analysis_window"] = {
         "start_date": analysis_window.get("start_date", ""),
@@ -600,6 +668,7 @@ def main() -> None:
         "source": analysis_window.get("source", ""),
     }
     forest_summary["meta"]["lookback_window"] = market_payload.get("meta", {}).get("lookback_window", {})
+    forest_summary["meta"]["weekly_v35_diagnosis_included"] = bool(weekly_v35_diagnosis)
 
     out_path = week_dir / "weekly_forest_summary.json"
     save_json(out_path, forest_summary)
