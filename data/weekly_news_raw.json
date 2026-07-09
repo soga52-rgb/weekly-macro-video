@@ -1,9 +1,14 @@
 {
   "meta": {
     "source": "Google News RSS",
-    "week_range": "2026-06-05 ～ 2026-06-11",
+    "week_range": "2026-07-03 ～ 2026-07-09",
+    "analysis_window": {
+      "start_date": "2026-07-03",
+      "end_date": "2026-07-09",
+      "source": "workflow_env_or_weekly_video_source"
+    },
     "query_count": 30,
-    "raw_count": 121,
+    "raw_count": 117,
     "ranked_count": 30,
     "sources_preferred": [
       "site:udn.com",
@@ -16,273 +21,273 @@
   "items": [
     {
       "theme": "us_macro_data",
-      "query": "美國 PPI 生產者物價 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "美通膨看升預期5月 CPI 年增4.2% Fed 鷹派抬頭將帶動美債殖利率續揚 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9SYjJabWcxZmFDWFo1YVh2SUlWRjhkLWNDR2lRbDF0MlFmNnhWRGYxbEw5TnJjbW56OEdGdWVFZ2JHMkg5VV9xb2RDWEJHX0VRM1dLQW5oa3BPQdIBX0FVX3lxTE5zZ19pWjNrdEVqZl85MjR1SFc1VW83cm90WFp5NFA2Ql9vdU1jMXlFcVR6dW9UMjU0S29pcWhQZUNEc3BvbEhTS2htOGFNTjN6UlZPNVFuN3lFVGV3UHNn?oc=5",
-      "published_at": "2026-06-07 19:05:34 UTC",
-      "score": 45
+      "query": "美國 就業報告 非農 薪資 通膨 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "VAHA Financial : 非農意外降溫緩解升息擔憂，美股反彈，黃金大漲，油價承壓回落 - 鉅亨號",
+      "source": "鉅亨號",
+      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE1hY3lIa051OFUxdW1ENlhUVF9Rd0hlcEVLLVRvNG9iZGtuVWl0QlRwRWw3eVZXLVl4UVFXbXNVMG9aaFlSZXN3TA?oc=5",
+      "published_at": "2026-07-03 06:29:57 UTC",
+      "score": 41
     },
     {
-      "theme": "fed_policy",
-      "query": "聯準會 高利率 維持更久 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "澤平宏觀—非農超預期，聯準會要加息了嗎？ - 鉅亨號",
-      "source": "鉅亨號",
-      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE1ZSldNZUNMUjZ1cGNiWWN4bDRtemJqU1F2MUxMNXpKVGdoNkhIUXZPTWpkLXBNWE5iZkluMEw2bndHQTFLcVFzZw?oc=5",
-      "published_at": "2026-06-09 01:40:28 UTC",
+      "theme": "us_macro_data",
+      "query": "美國 PPI 生產者物價 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "陸6月CPI降溫、PPI升溫 內需疲弱與成本壓力並存 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE5ZZVNDajRVd1ZXOGp2Q1FFZVdxV2Z0Y3REVURaSGZKd0loa01pNUFoMmpvWER4TDFYc25TenBHRU5tUDhRN0N2QkpROVBfSUVNRTN6R0E1bjhsVmRxM1g0X09hNEtwZkpmYTNibTBZbDAwaURBNXNV0gFfQVVfeXFMTjdaRWk0QVB1Q2JfdENPaWFJRWtabEdoZVpXaGUxRkNLdFFZTHUteHQ2aF9faVpic1ZpRTQ4RFpSdV92R1dkX3UzQkJrQUxNODliNHo5bHJ5ZWJZU01fZGc?oc=5",
+      "published_at": "2026-07-09 03:45:04 UTC",
       "score": 39
     },
     {
       "theme": "us_macro_data",
-      "query": "美國 CPI 通膨 超出預期 聯準會 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "花旗下調黃金目標價！示警最慘恐跌至3500美元 Fed升息預期成最大壓力 - news.cnyes.com",
-      "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1KcXdtVHFjMUV3bUlvQmlISWxQVXZQN1BxSkFNdmxRcGFCbVRZYUhhNVp0N3ZJMUM1ZG82cWdEMm9sVllOWTRXS2loYVAtSzQ?oc=5",
-      "published_at": "2026-06-09 05:00:12 UTC",
-      "score": 38
+      "query": "美國 PPI 生產者物價 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "【遠東商銀】未見干預跡象，日圓再度走貶 - 鉅亨網",
+      "source": "鉅亨網",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9iakhjQ2ViUzVqTHpnTGd6bEYwdzhXQmJQeXlNcjRJdThrWlNRakN1aGxjRE5oTGhWcmI5Q3BkS0lsS0owU0NySmpMcHd6R3c?oc=5",
+      "published_at": "2026-07-07 06:56:57 UTC",
+      "score": 39
     },
     {
       "theme": "us_macro_data",
       "query": "美國 PPI 生產者物價 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "本週操盤筆記：美通膨數據、歐加央行利率決議、陸CPI與出口數據 - news.cnyes.com",
-      "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5rOUlBMW5zdVNOeHpMVXd3WDZsWWdIVWcwQnVpZ2g5Y1hMX04yTHh1U29rclVTRG5GdXZrQWFIMmd0aHpGeENzOGNNeG1xOVE?oc=5",
-      "published_at": "2026-06-07 13:50:04 UTC",
-      "score": 38
+      "title": "陸6月CPI降溫、PPI升溫 內需疲弱與成本壓力並存 - 聯合新聞網",
+      "source": "聯合新聞網",
+      "url": "https://news.google.com/rss/articles/CBMiVkFVX3lxTE81aWdMd21mNlQ2R0k2c3I3TWVaWGw5aUNfbUI3cHJHRU0yVC1fakl5VUNTbkNJeWpuTXN4cmNLdVY1Z01ZTXVYSnRGNUZDMVZMUW84UkRB0gFWQVVfeXFMTzVpZ0x3bWY2VDZHSTZzcjdNZVpYbDlpQ19tQjdwckdFTTJULV9qSXlVQ1NuQ0l5am5Nc3hyY0t1VjVnTVlNdVhKdEY1RkMxVkxRbzhSREE?oc=5",
+      "published_at": "2026-07-09 03:45:03 UTC",
+      "score": 39
+    },
+    {
+      "theme": "us_macro_data",
+      "query": "美國 PPI 生產者物價 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "〈陸股盤後〉中國6月CPI年升1% 市場不甩通膨放緩 - 鉅亨網",
+      "source": "鉅亨網",
+      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFAyUko4bFdPSXFGQ0RJTzkxWGlUTUdEY2VpSFFiS0FQX1NRaGYzQkl1dHdrNkVZdkhWajZzbkU1b1ZOT3FDM3RoVWY0MA?oc=5",
+      "published_at": "2026-07-09 08:30:05 UTC",
+      "score": 39
     },
     {
       "theme": "us_macro_data",
       "query": "美國 就業報告 非農 薪資 通膨 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "今晚，全球資金等一個答案！ - 鉅亨號",
+      "title": "澤平宏觀—重大利多！非農大降，聯準會不加息了 - 鉅亨號",
       "source": "鉅亨號",
-      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE1HU3FFWW54WTFoQVhhUUJuMUIyWTU4SGtoMDktYUlZNnBTQ2w2Y0FxMWNwc2ctcTY3X0pwVVdLcnk0aHR4b3F4MQ?oc=5",
-      "published_at": "2026-06-05 00:36:07 UTC",
+      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE01UWR3WUtSUDJuR3BoQkVHRFNKMHgyMk9Ic2thS1FFczlzbFlNSDhsVjI0dnVER09jNnhQOG5fYjVmelhBM1RTaA?oc=5",
+      "published_at": "2026-07-04 06:53:42 UTC",
+      "score": 39
+    },
+    {
+      "theme": "us_macro_data",
+      "query": "美國 PPI 生產者物價 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "〈紐約匯市〉美元持平 市場聚焦聯準會政策前景 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFByUjlDVUJpRUlGSElyYk9IN0s2M1hqSVNPWTZHbWlMdGZxNFdpQ2JYTGpqbmFxWHdybzJwdWR5c0dXcVlFX2MzRXdmZFAxSEU?oc=5",
+      "published_at": "2026-07-07 06:49:14 UTC",
+      "score": 38
+    },
+    {
+      "theme": "us_macro_data",
+      "query": "美國 就業報告 非農 薪資 通膨 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "晶圓代工、ASIC 逢低分批布局| 股市要聞| 股市 - 聯合新聞網",
+      "source": "聯合新聞網",
+      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9OTWtFR2lpa2lZbU9iOElBd3ZNRnptblI1WU9xMFNUdmozSER6UDFFMWVkdFFNZU1zSHlEc01oeTV4Rk5uU1FiSU9ObXE1NUtI?oc=5",
+      "published_at": "2026-07-05 16:22:12 UTC",
       "score": 37
     },
     {
       "theme": "us_macro_data",
-      "query": "US CPI inflation 4.2 Federal Reserve (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "董瑞斌：通膨壓力一直在 基本上美國無升息必要 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5BY0tGMm9lZjZTUzNod2VKWEU4bHktSUN4NGRkYVhZMGRua1dGV3FnTzdtYXN1TGxzdldNT19yaV93bjFpblZHRi1MSnVxTFlIN3QyYlhWWVJ1QdIBX0FVX3lxTE1qdzdlckVMU25LTXBpWHVuSUM0THdoNzdIS0NzcjRnMUx5WFFnOUlveFlLaVFsSXhZT2RMOU93dllnSVhpN096bVNzcHQ5bWRNSmhxY1RIc2hNNGNUdUdR?oc=5",
-      "published_at": "2026-06-11 11:45:43 UTC",
-      "score": 37
+      "query": "美國 PPI 生產者物價 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "通膨放緩！中國6月CPI年升1% - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5wRThYYVd4ZVBpWS10YzNyV1RBRjRKWjlFNi1JdzlGeXBCV1JCdlh6WUU2RUxzZXphTmRJSXoyUThlWWxOLU9hZlFVZHQtSkE?oc=5",
+      "published_at": "2026-07-09 02:10:32 UTC",
+      "score": 36
     },
     {
       "theme": "us_macro_data",
-      "query": "US CPI inflation 4.2 Federal Reserve (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "通膨壓力升溫 ECB 如預期升息1碼 2023年來首見 - 經濟日報",
+      "query": "美國 就業報告 非農 薪資 通膨 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "非農「爆冷」 失業率意外下降 市場推遲聯準會升息時點預期 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9idVJUT0JsUUpnbTV6dm9MVGxXRVVraGlMRld4VkR3cWRhSjJsenFBamxvR1E4aDFCRm1zVW5idVJ4N3Y1RXVYbUlFUG1mV0s5WjI0?oc=5",
+      "published_at": "2026-07-03 16:05:12 UTC",
+      "score": 36
+    },
+    {
+      "theme": "us_macro_data",
+      "query": "美國 CPI 4.2 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "2026富邦財經趨勢論壇年中場 專家齊聚解鎖下半年投資密碼 | 財富管理 | 商情 - 經濟日報",
       "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9SSGhlRUx3SS0xVnhpVHdBU3pjR2lXME5FQmpwTEV6OFljQUZpQ1c5Nk95dWdLN2lUSzlVUlFzZDROUXNnVlF5akNudUJadHRVTEdDMHlCb0U0UdIBX0FVX3lxTE9Vakc3UmNHcG1RZ25NMG5hNkN1dXg3YTgtbHZzSWlYMGRjQldaSV9JOEJtU0o0S2hWX3pUSHBjMWlBRzNIZFFFUmdQUVBHMnVoMDJBSUt4eHkwMHp4V09F?oc=5",
-      "published_at": "2026-06-11 12:38:26 UTC",
-      "score": 37
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1HTTY5R2VMd2IyM0VxVWZoRUhrS0VlbnRpdS1ZaURjWVNpN0UybXBCcUV5RXB4bVJTaXN2QkJqYjU4dVlLaTBibEZZMGtubkM0SVdwa0NSZk50UQ?oc=5",
+      "published_at": "2026-07-03 08:01:05 UTC",
+      "score": 35
+    },
+    {
+      "theme": "us_macro_data",
+      "query": "美國 CPI 4.2 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "MLCC 需求大增 台廠吃補 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9MeDRuWkdieTlKTFYtc1ZhdUNycFZZUmhsRDV3RDVFOHpEQnJpY3JnMDI5cGhocTlIOHlhQ1VaaXU4UkhZS1phcHlNODBWYWJpZUlzR2pUV01RUdIBX0FVX3lxTE1YSlhFT09KY2dNTV80RVpXMUFZM05GYkI3UzJQbkgxR0xOVFQ4Y1pMeFVCOGtMd2xzNFU0a1hxRXRsQlVSU2ZyNUExUVBPSzdJbktoZ3REamdiRHdnVGNF?oc=5",
+      "published_at": "2026-07-06 18:09:41 UTC",
+      "score": 35
+    },
+    {
+      "theme": "us_macro_data",
+      "query": "美國 CPI 4.2 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "定存單未到期餘額大減 央行今年來放水逾兆元 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBzek05SVViQjBKeTFYdFBjOWIxYkszR2lTTER5SmxSdHVDbHBxUEtIc1RwSEdsNVRLeldOZ1E2enRyN3ptdm00bmJhcGVWazR6Mm8yaXE4R0J3UdIBX0FVX3lxTE1xdDh3T0dNRjZSMktlNFNJSFF5YmpUOWoyaTI0LXBxa2Y3eW1OOUtqQWVEa3Nfb0c0U1BEeWJnXzZWRFZKbVNzTGRqOWJUSEMydWZuREpqNjE1V0FLNmNB?oc=5",
+      "published_at": "2026-07-05 18:13:57 UTC",
+      "score": 35
     },
     {
       "theme": "us_macro_data",
       "query": "美國 CPI 通膨 超出預期 聯準會 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "華許首場大考：31 兆美元美債市場「逼宮」聯準會升息 - news.cnyes.com",
-      "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE85X0ZLOWJEQnpCeTFzdjc2cHZWV1V0b1JmRGRZbWFjaEl1YWRuVm1WWjdHZzFzS29zZjFmYWZjTThpTDQ1UjRITk9FQy1XS0U?oc=5",
-      "published_at": "2026-06-09 11:20:03 UTC",
-      "score": 36
+      "title": "中華信評上修台灣今年GDP增速至8.2% 仍有7大風險 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMifEFVX3lxTE5SLUs4dFFTVUhFUk9BeUpza2g0OEFuUHN1R3h5MENvS2dxeUUxMlVtSkUxMGkzeWtDWXBGYjNrWUhmWmRIREMxU3gxSmh2ekRkeGlEdDNqWHFvQVFUYWctV01pRXJOakdBRU1naEk5RlNnckRlbnNkRGs0QWvSAWBBVV95cUxOTVZCX0Vmc3Bwa2k2UWI5WUVxTHBhU3lTQl9kMDVGZVpRa0NzclNlYmc0dkwzNk16WFREZXV6U0FxMmFXM09XSVBDVzF6bEw4ZlM5VkdtVFhJbzhyMV90SXE?oc=5",
+      "published_at": "2026-07-09 05:45:40 UTC",
+      "score": 35
     },
     {
       "theme": "us_macro_data",
-      "query": "美國 PPI 生產者物價 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "債券交易員下注：本週美國CPI會爆、加劇Fed升息壓力 - news.cnyes.com",
-      "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5tbURkN3oxZ2ZTY3FYNFprMFZ3Z1V6eXkxcWhaX3N2ckxST0xZbEVjaUtueVYyMzhJUGplWW5yaHhRWmo0WHBKUkRPbnFvcXM?oc=5",
-      "published_at": "2026-06-08 02:36:30 UTC",
-      "score": 36
+      "query": "美國 CPI 通膨 超出預期 聯準會 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "桃機新代理董座上任 陳彥伯：首要任務拚第三航廈如期完工 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxNQ0hTNlNMVHg3SFhhSFNjLXh2T1VZaUJoenFYejdWSXVfRmFPZnFFZGhibFBRYWVTU3NjbTVxV0ZPNzQ0RktnRVhoM3VGZ0VCb1BIbGN0YUE0Z21BWjBJeXlhd3MwTW1Vd19FYlowcVVva01oTUNRWjRBaGxXZXhYVtIBX0FVX3lxTE1Ed09OYWh3Nm91OGpfWnI1b2x3VzBWOXZKbDRqeTVMSGhsc0dwMWU1YWRWYlFOTHFScHRjV2hHR1BBa01mTmpnNmdJLWNzYlIyek16RG5vUDdBNDZuRHZn?oc=5",
+      "published_at": "2026-07-08 09:57:58 UTC",
+      "score": 35
     },
     {
       "theme": "us_macro_data",
-      "query": "美國 PPI 生產者物價 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "今夜美國CPI「喜憂參半」？整體通膨或破4創三年新高、核心通膨或顯著低於預期 - news.cnyes.com",
+      "query": "美國 CPI 通膨 超出預期 聯準會 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "桃機召開臨時董事會 新任董座由交通部政次陳彥伯代理 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE54Uk9oRVhQUmhWUG5xU0MtVW8zSVhpQ1lHT0FCdEgtUXpUdkRGMDI3RjRlVXBwZ21XeG1yV0ViM1BTbGVtU3pHYTJzcGRvYWNrV1RwenlOQzlvZ9IBX0FVX3lxTE9kamhscDc1ZlVlbU41WGFqemlzSDNBZl9HbU53R1R5djRrbjJkYXBqUllZTUoyNkc5RnA0MGF0NXgydDBoQ0NKcDljMThvQnJOckZVeHB2WFlYbjYzd0NZ?oc=5",
+      "published_at": "2026-07-08 10:51:16 UTC",
+      "score": 35
+    },
+    {
+      "theme": "us_macro_data",
+      "query": "美國 CPI 通膨 超出預期 聯準會 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "陳彥伯代理桃機董事長 盼第三航廈工程如期完工 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5vNjhMaWp2enRIaGJDeTEwXzdhazVoRGZ3dUs2eW96RXRVWkc4cFZlUmp6SlMwQUxwVm53NUdLRW92NGVQclhuV2syNm4yRGkxODRMTk9VN1ZNUdIBX0FVX3lxTE5NVnBVRkEtVDZqTkd3WWw5ei1xOGw5VHRpM2J0dmU3M0VLM3psYU96a0NHYm90Rlo0ZjZDZFJ1VVNGN2hObzhXRC1BS0dxa19Oc2JhQ2VWSnp5UUkzSkdJ?oc=5",
+      "published_at": "2026-07-08 11:12:53 UTC",
+      "score": 35
+    },
+    {
+      "theme": "us_macro_data",
+      "query": "美國 CPI 通膨 超出預期 聯準會 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "高鐵維修督導未依SOP釀斷電還隱匿 遭記3大過免職 | 熱門話題 | 要聞 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMie0FVX3lxTE1aeFdubkJRbVdaZTBxZGdDZVdKdXhYYUthXzVSaklqUjZ0WTU1NjUzQXJZZ1FMUHYxNDdWUTNGdXpjQ2VhWUJLS0pCVU1GTTctSFkzcFlUcTdEN3pvZXZpc3c5aFlIaC1wQ3BtMVZsNDVYSGVnZXBoeEFodw?oc=5",
+      "published_at": "2026-07-08 08:45:58 UTC",
+      "score": 35
+    },
+    {
+      "theme": "us_macro_data",
+      "query": "美國 CPI 通膨 超出預期 聯準會 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "高鐵維修督導未依SOP釀斷電還隱匿 遭記3大過免職 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE8zR0NrVURJRFhjeGpVa2MzdmNBVDVPbWlrR2JtSm5JWFlyWW5KUllDRVB2ZVBBaHlaTUViTlZHcDdCUTBiRjV5ajJrT3NseUN4eUI1c0MyTWVXZ9IBX0FVX3lxTE5YWXQ3MHF5MThNNWNab2hrUFpFT0l2VkNwUnJuN0E2Si00MU0wYjY1Y292cXFjMjNYZVpFZE15V1BJeURGWGhfR2FtUHVIdkN2eVduUlJVS2lwcUVSQkNV?oc=5",
+      "published_at": "2026-07-08 08:45:58 UTC",
+      "score": 35
+    },
+    {
+      "theme": "us_macro_data",
+      "query": "美國 非農 就業 大增 超出預期 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "鉅亨網 - 鉅亨網",
+      "source": "鉅亨網",
+      "url": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE00Snpfa3A5Z3BuNktfT0FQdGpadlFMcGFlckdUcFdpOGVFemVkLV83bVE4M29hdjB6N091akRMOWdINEFoTkM0RlBpdllvMW5WV3J2TjQ0Q3dtVUllU1diRm9VWEs?oc=5",
+      "published_at": "2026-07-03 19:05:45 UTC",
+      "score": 35
+    },
+    {
+      "theme": "us_macro_data",
+      "query": "美國 CPI 4.2 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "油價金價全漲 台灣6月CPI年增率衝上2.6% 創近1年半新高 - news.cnyes.com",
       "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9BMWtaZ3hReUctMkI0R0dOY1NDWk1jcUtsa1lvbjhWWXQyTHlENWY1NllMZWlYZHEyaHo5dU9EQzk1NVpEUmNNUUVQSnZlUUU?oc=5",
-      "published_at": "2026-06-10 07:30:09 UTC",
-      "score": 36
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9zUW00YVA3VW5tTHlMM1FCMVZwSmtuNWZtZ3JzTzd4STZhRHZUdXBrUkxHeVhPYW95MTZRamc0WnZKaU5XMzZLVTVvRUZ0VTQ?oc=5",
+      "published_at": "2026-07-07 09:50:22 UTC",
+      "score": 34
+    },
+    {
+      "theme": "us_macro_data",
+      "query": "美國 非農 就業 大增 超出預期 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "日元貶至新低引發市場擔憂，全球經濟面臨通膨與地緣政治挑戰，投資者需謹慎應對未來波動 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE9oRTJsRl9BYUFNT0RoMG4zSzdxTHB1SGE0bnFsYUxBLXJQUGxUZVRfc05rWTIxcUw0eVRiLTZjdGo4dHRaSWRIYThfZmhPLWNjb1pV?oc=5",
+      "published_at": "2026-07-03 07:00:00 UTC",
+      "score": 34
     },
     {
       "theme": "us_macro_data",
       "query": "美國 就業報告 非農 薪資 通膨 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "美國5月就業數據強勁，市場對聯準會升息預期升溫 - news.cnyes.com",
+      "title": "美財經名嘴Cramer：不知該如何相信最新就業數據 - news.cnyes.com",
       "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5XU3hpNlhQZnU3RzZuTk9ycnRkQjlNSHo4cjdBMmVEXzhmU1VwSU5BZkhTYVlib3RnbFp1MlNmeW9TZnhFN0lYRF9aSEZjZVlOYjFr?oc=5",
-      "published_at": "2026-06-07 07:00:00 UTC",
-      "score": 36
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE0zd0t4VURLcnhuT0dzNGc4aUtoS0hVZC1zXzA3MjNYWW11NWxPRGN4NGNqRTNBYVpCdlBSZUx6WGJ0VTN1OHZNSENHeERpc0E?oc=5",
+      "published_at": "2026-07-03 09:10:03 UTC",
+      "score": 34
     },
     {
-      "theme": "us_macro_data",
-      "query": "美國 就業報告 非農 薪資 通膨 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "非農太強重擊股市 Fed若被迫升息才是真正災難 - news.cnyes.com",
+      "theme": "energy_inflation",
+      "query": "WTI Brent 原油 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "中東停火協議瀕破裂！美軍強力空襲伊朗還撤原油豁免 油價、美債殖利率應聲飆 - news.cnyes.com",
       "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE04ZVlVd0tOTGphc0xYTnVtalNRbURLcGRqTUZERDYzc3pPMFBpd18tX1gxM1NXVmowcnpCajVLbVJzWXNiaktLM0k1N3NaNWM?oc=5",
-      "published_at": "2026-06-07 22:21:33 UTC",
-      "score": 36
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBGdVdLeUEyV2JESk9HeHpOYWZlcEt5bTR4QjIwX1QyWkxOcl9nZExpazlONXUtZDlndlZCTV9JSzJYVF9LeDNfeElrQ1NqeU0?oc=5",
+      "published_at": "2026-07-08 02:21:45 UTC",
+      "score": 34
     },
     {
-      "theme": "us_macro_data",
-      "query": "美國 就業報告 非農 薪資 通膨 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "美國5月就業超強「非農就業人數大增」 市場預期Fed今年內將升息| 全球財經| 全球 - UDN",
-      "source": "UDN",
-      "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9aZkNPVGNPUGdYRFFKY29veUxpSHZXOTRrYlE5N1hpeDYzSUdGTkFFZUlzOEQtODlwNWJpSnhld2lYOFZpd3hrTnNxWHpkdTJC?oc=5",
-      "published_at": "2026-06-05 13:18:00 UTC",
-      "score": 36
-    },
-    {
-      "theme": "us_macro_data",
-      "query": "美國 就業報告 非農 薪資 通膨 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "非農今晚八點半揭曉：就業若超預期 「高利率時代」或再延長 - news.cnyes.com",
-      "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBtTFE0WXdfWUdwS0tWd3ZvYkZKaDlJdks0YkRHU2FTc3BWcW5PRk4wTkFmQmF4WlMzMDUxZF9uZWdkci05ZmtqRWI4VkFwdFE?oc=5",
-      "published_at": "2026-06-05 03:30:08 UTC",
-      "score": 36
+      "theme": "fed_policy",
+      "query": "Fed 降息 縮表 美債 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "聯準會會議紀要：AI躋身三大通膨風險，少數官員支援6月加息 - 鉅亨號",
+      "source": "鉅亨號",
+      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE1hSWtWcEtQd3M5RURBanFwMkZic051Qm9NNm5XMHBHN0VjQThsMEQwWEpsdUJsUDQxd19RRnpkRUkteVB6RE5seg?oc=5",
+      "published_at": "2026-07-08 23:27:42 UTC",
+      "score": 33
     },
     {
       "theme": "fed_policy",
       "query": "聯準會 高利率 維持更久 殖利率 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "美國CPI創三年新高 華爾街不慌 這份報告什麼都沒解決 - news.cnyes.com",
-      "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTFBDb1k2c3E3dGNacm54T2o1OHlZZWlsUnFsSGVCVnJWdUFMTi1fZ19NdjNKc0ZhQnYzTi1FLXQwQXJiNnR5TWJ5Szgwaw?oc=5",
-      "published_at": "2026-06-11 02:30:07 UTC",
-      "score": 36
-    },
-    {
-      "theme": "energy_inflation",
-      "query": "油價 原油 通膨 預期 地緣政治 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "符合預期反成利多？美5月CPI飆至4.2% 市場聚焦華許18日首秀鷹鴿走向 - anuenews.cnyes.com",
-      "source": "anuenews.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTFBGOVNtVUh2MlNKNnNpYUlOc2MxdzN4U1J6ZkF1RktxMER2d3VPSkRRSTNBcVZybTc5SFpSeGRZUGIyNm1NUUZsY1Y3QXBwVF9yQU5YOQ?oc=5",
-      "published_at": "2026-06-10 14:35:13 UTC",
-      "score": 36
-    },
-    {
-      "theme": "us_macro_data",
-      "query": "美國 CPI 4.2 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "美 CPI 年增4.2% 三年高點 細項顯示通膨轉趨溫和 市場仍認為 Fed 今年將升息 - 經濟日報",
+      "title": "金價跌向4,000美元關卡 專家：短線承壓、長線仍看多 黃金買點還沒到 - 經濟日報",
       "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFAxUTVrUm1CdEJYVXV0RF9fc2N5bkJoSlgwX1hvY3liNFZHTkoybmtiTkNaV2RjQVY0YmFiUVItREZsRjNyYVVuRVI5c280Qmoyb3Rsc2Q2SWxRQdIBX0FVX3lxTFBFOFhEZWhzUFlPaVZkVG1ldHF4T1VsMXRiT0FYang4a1M2cnVQay1xakNkV24wQmNOWnQ4dWJxMXg0NG5fRkpQd0hHRHhCSmdSN3p4NVhDY1RVU2xHTVpr?oc=5",
-      "published_at": "2026-06-10 18:14:42 UTC",
-      "score": 35
-    },
-    {
-      "theme": "us_macro_data",
-      "query": "美國 CPI 4.2 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "美 CPI 升破4%不意外 驚喜的是這個訊息讓 Fed 不急於升息 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9xUVI3ZU9WU1ZHNHBwQmN4ckd3Z1I5a0R1eTNKMnlwRjJtM3BMdzhtbkZodXl6RUF5LTlMNmE4MVFSUWlCbmJnZTZScGc4SWtEWW13M2VRTWFJQdIBX0FVX3lxTE16aWFnUE80X3NDSHh3Vkpndk9oZFBIeVI5VmVHNWJBR3gyX1dxVk1fMEtfa3B5MVJrQ1k5TFpHa1MxWnU1clhndU9ldVBqSlZMamp1cUhBNTJkVHRybVJR?oc=5",
-      "published_at": "2026-06-10 14:53:18 UTC",
-      "score": 35
-    },
-    {
-      "theme": "us_macro_data",
-      "query": "美國 CPI 4.2 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "美國5月CPI年增4.2% 創3年新高 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5rUVR3T1NRb0RsZDV4V1hBTXMtWUt6M2xWR1haa1JUR0dPc21VMU9ndk1DU3R1SDhEcTQtUEpPVG9KX0ZCckpKVWw1LWc4WDdTUUZBLVdOZzdSZ9IBX0FVX3lxTE5VdW9RS3pHZ1dyLVU5V2FRQUhxT3oyVjJ5aklodWNJNjlRcFVXa1c3YnFJMFBfTGZlanN2S214QzN4Smd2NndIWHN1ZTBBclRFVTFGSWxmQnVwb3hHdUc4?oc=5",
-      "published_at": "2026-06-10 14:01:06 UTC",
-      "score": 35
-    },
-    {
-      "theme": "us_macro_data",
-      "query": "美國 CPI 通膨 超出預期 聯準會 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "美國5月CPI符合預期，川普再放狠話：華許首秀面臨考驗 - 鉅亨號",
-      "source": "鉅亨號",
-      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE8xUlBfbE5xUE8wMWpQTmxwMmdEbUVkZmphSXBLVUExdVpTNTBXbExJdEF3N01DNmMzODBlNTJKWmR1WV9Rc0V1eQ?oc=5",
-      "published_at": "2026-06-11 00:53:22 UTC",
-      "score": 35
-    },
-    {
-      "theme": "us_macro_data",
-      "query": "美國 CPI 通膨 超出預期 聯準會 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "伊朗局勢與升息疑慮拖累 亞股普遍收跌 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMigAFBVV95cUxObUoyNkh6NVc1UDR1YVBOWFlrQTVtYmhhTTE0MFd2RENvaWk2N3I2MEZwZ1VNYzhBMUpQWFRxaE96X1JQUHd3bWpxM0FRcmJZM0hnUURZUWtFREowVEthX1o1X21aNTZ3WGYtcTd3dGs2Uy1HUEVleFhQVUlIQVl1aNIBX0FVX3lxTE5hUm1DNkpIdUFPMDB0ZWZIZGd0UjR2d01DTEJuNG9IWDB0bmdpYm4xVHJObGJvMUJPeU1FZjB3cHEwOFlORzhVOGZ3RFFlOHNzR1FQdllBV3NWMGpZT0Fj?oc=5",
-      "published_at": "2026-06-11 09:54:29 UTC",
-      "score": 35
-    },
-    {
-      "theme": "us_macro_data",
-      "query": "美國 非農 就業 大增 超出預期 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "美國5月就業超強 市場進一步預期 Fed 今年內將升息 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9KeDF3cjRXUEJ0MHAtSS04aHZBQ2RsNGJSSDNKcHRhZ204M1pQcG5UZUNDRm8yeThnY25iMjRHZUh4a0NwZU8zdVIwQ0V6VG1mNkdfa0JHVF9EQdIBX0FVX3lxTE5uVUdraWpmejhvT2lnUWdyQ1dZVlRib2c3c2g1VFduQjdRbXRBaGdFdURWMTRNc1BwM3VnT1BWT0pKWGhBazNiLTZkVlJYYVdiMk9IQjJ6SHh6dzY2WE5B?oc=5",
-      "published_at": "2026-06-05 13:18:01 UTC",
-      "score": 35
-    },
-    {
-      "theme": "us_macro_data",
-      "query": "美國 非農 就業 大增 超出預期 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "升息憂慮升高台股重挫 分析師：今年不會進入升息循環 「搶錢趁現在」 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBkY1BMa1pSLUZrUm1RU3VaQWdCR2tBcXk1N2UwcXB4eERoSEpYWGxhS3B4Rzd4LVpzWXhhNGo2ZGtxVmpBN3FtTm5aYWJLWHpnallsRVJFb0lCQnF3bW1N0gFfQVVfeXFMUGRjUExrWlItRmtSbVFTdVpBZ0JHa0FxeTU3ZTBxcHh4RGhISlhYbGFLcHhHN3gtWnNZeGE0ajZka3FWakE3cW1OblphYktYemdqWWxFUkVvSUJCcXdtbU0?oc=5",
-      "published_at": "2026-06-08 04:41:14 UTC",
-      "score": 35
-    },
-    {
-      "theme": "us_macro_data",
-      "query": "US CPI inflation 4.2 Federal Reserve (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "三年來首見 美 CPI 年增率破4% 美股期指跌 - 經濟日報",
-      "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBOMmNNWTRCNDhHMV93enJxakJHTnd2MTBKcC1RYkFONkgzbnlDemk0QWdnUFFjTDFHNnEzbmp4QlBLN2E0dDYyRjd0ekUtd0JxNm9QbGlNcFZ4d9IBX0FVX3lxTE1yVkpnYzF5Z2xjR2d5MjFkS0dacjdRLUd2eGFoT2YxODQ5X2dpdWR2cWZia3FDY1J0VFA0UXVPaTNWVE8wUVgyRl9ITjE1a0dTTlp3UUhsREtOLVZ5RC1J?oc=5",
-      "published_at": "2026-06-10 12:39:04 UTC",
-      "score": 35
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE16dllsTWR5VHZPMEhVZkoyYktyQURhVWNSWlRxYVBrUFBhTG5ZWk5hX01aNTFvamJ0X0tmVlVadWc2Vkx1cXAxaVRrTXA2UWpqNURHbzZLYUF3aUJzenlOWtIBYEFVX3lxTE16dllsTWR5VHZPMEhVZkoyYktyQURhVWNSWlRxYVBrUFBhTG5ZWk5hX01aNTFvamJ0X0tmVlVadWc2Vkx1cXAxaVRrTXA2UWpqNURHbzZLYUF3aUJzenlOWg?oc=5",
+      "published_at": "2026-07-09 05:05:12 UTC",
+      "score": 33
     },
     {
       "theme": "gold",
       "query": "金價 美債殖利率 美元 避險 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "金價重挫2.9% 因美就業數據引發市場押注Fed升息 1跡象顯示可能再跌 - 經濟日報",
+      "title": "黃金期 伺機布局 - 經濟日報",
       "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1MU2JHMTExOEZaQXZKZkJvN0VnX1JMMUZDQk9qbmM0ck94NERwUEdfSUViRzBOT1Rmck1ieGdxXzgxRk9tcnh1VzB5cWYyM2I0cEt3Si1RSkxTZ9IBX0FVX3lxTE5XUVpvWmZOcUZRQTBFdmk5M09vTjZibDE1cG1pTmh3RC1ZemJLd2JxMVpYcEtzRjAxYVZnY0Z2YXd0WGtsRVdwc2J1UGZxa01fWjhfejc1ZC1fQ1lMbjd3?oc=5",
-      "published_at": "2026-06-05 14:52:18 UTC",
-      "score": 35
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9kc0pyUDFtcXg4bUZTdnFJQmNDOVJxTUw0TjNyc2VDbE5HbjFmWmstRXg3TDFfOG5aMjBRM2Fqa1ZvSldqcHpJMUpzdThuOWM3NnNJdnVtX0kxZE3SAWBBVV95cUxOYlRQVE5obXR2WDZnSnh2NDlMVGZnelRLVVdfX2Y2akl3UWI3MHNneHpvVlIzVGUydl9yNTN3LTdRWmhpclZOeUkwX1RnMldOdHhpbW9Ib1lLYnphU1QzQ3I?oc=5",
+      "published_at": "2026-07-06 16:12:48 UTC",
+      "score": 33
     },
     {
-      "theme": "geopolitics",
-      "query": "中東 地緣政治 原油 通膨 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "亞銀：亞洲面臨停滯性通膨 示警中東衝突推升物價 | 國際焦點 | 國際 - 經濟日報",
+      "theme": "gold",
+      "query": "金價 美債殖利率 美元 避險 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "黃金期 後市可期 - 經濟日報",
       "source": "經濟日報",
-      "url": "https://news.google.com/rss/articles/CBMidEFVX3lxTE9WbUxjaFN6MGd4U0x5N0c0dVNWVGd0YnJDSE9vUzhYVkdnUmRSMllSc0JrX2kxaUF0TnVLOGYzSjZXQXYtSXhLdm5EYUtPV21iT1A3X2s2Y3B2cWlFOWFURzgyeGhBdzVZS1RIbno0OTdZZy1h?oc=5",
-      "published_at": "2026-06-11 17:14:33 UTC",
-      "score": 35
-    },
-    {
-      "theme": "us_macro_data",
-      "query": "美國 CPI 通膨 超出預期 聯準會 (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "〈貴金屬盤後〉川普取消對伊朗軍事行動計畫 黃金跳漲2% - news.cnyes.com",
-      "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFA3SXNUWTJISHl2ZDI0ZjRmREczYVpKQl9qYlNMZGd6Z3c1Zm9TdmY2MVMzMlpyYmNvZUh2VnNvbS1zMjk0bTMzOFdoZUJHMVk?oc=5",
-      "published_at": "2026-06-11 23:01:49 UTC",
-      "score": 34
-    },
-    {
-      "theme": "us_macro_data",
-      "query": "美國 PPI 生產者物價 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "能源成本續推通膨！美5月PPI創逾3年半新高 Fed升息預期升溫 - news.cnyes.com",
-      "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1CczVxVG9FV19kb0VEckJvczBRYWsyc3FuZXJURnRPS0V6bElfYjZLVHItZE9OellDY1NWbGtOXzJncWNyMHhiQ2pZWTFIak0?oc=5",
-      "published_at": "2026-06-11 12:41:07 UTC",
-      "score": 34
-    },
-    {
-      "theme": "us_macro_data",
-      "query": "美國 PPI 生產者物價 通膨 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "美5月PPI年升6.5% 略高預期 - news.cnyes.com",
-      "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE8yUmQtV1FFTWpiSVNOUnJLUC1XVXRUa1UzT0NuVGpydXU2THJRblUzMTMyTnQ2bS1iRlBMLTJGQTgyRkM1Tk9KQURlbw?oc=5",
-      "published_at": "2026-06-11 12:41:07 UTC",
-      "score": 34
+      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9KZzQ5T21UdGc5aFRLSTJCU0JSQTNPVXN5WjM0NHRacTZCX1M2cDFVSjB5aTFXZ1VNVzJveXYwcm9HOWVmT0lxWllMZmluLXN1cnVoaTNpcDR4OUHSAWBBVV95cUxQTEF5RVdjMk1uWFlQRzNuYzJ4RWMxVGhaNXlfZDgzT1JmOTNrd2dTSjMycDUxZzhsMVRaZGltamZfYXAtTXN2amZTeUdyRWlYejRpTE1ZdVE0TmZ1TUd2QzY?oc=5",
+      "published_at": "2026-07-07 16:25:45 UTC",
+      "score": 33
     },
     {
       "theme": "us_macro_data",
       "query": "美國 非農 就業 大增 超出預期 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
-      "title": "施壓華許？川普：Fed升息將是「錯誤」、「沒有理由提高利率」 - news.cnyes.com",
+      "title": "日元貶值創新低，美國就業數據不佳，科技股成未來增長焦點，全球市場情緒承壓 - news.cnyes.com",
       "source": "news.cnyes.com",
-      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5hTWpBeG5nOUhQcVMyYUlsU1YwSGpEd1lXRWUtbUVtR1Rhejd0WkVlWGNpU2pZOUJrLU5uUmFVQWh0UWVuNVNnb0NaYVYwSHM?oc=5",
-      "published_at": "2026-06-07 22:29:34 UTC",
-      "score": 34
+      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE82OTlTZVJIUGhjOUFtZWdvU0dockJMRlVBLTlaNmVrSWs0dHAtX3k3bS13UkNZejliZnhzc0lmcW9WUWRuazNxVjg0NUVGVFliQUFr?oc=5",
+      "published_at": "2026-07-03 07:00:00 UTC",
+      "score": 32
+    },
+    {
+      "theme": "us_macro_data",
+      "query": "美國 非農 就業 大增 超出預期 Fed (site:udn.com OR site:cnyes.com OR site:marketwatch.com OR site:investing.com) when:14d",
+      "title": "全球經濟挑戰下 台股受外資賣壓影響 科技股成長潛力成焦點 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiU0FVX3lxTFBKdHA3eTRTNWQwZE5CVGF6SC1yenBxdUlVU2RYdDJQZURFWWxvY3lMbmxpU3d2aG5CWWRoUUFhb2paMVI1RU95VmlJNmhUUGUtTHhz?oc=5",
+      "published_at": "2026-07-03 07:05:04 UTC",
+      "score": 32
     }
   ]
 }
