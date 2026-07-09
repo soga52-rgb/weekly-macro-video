@@ -2,10 +2,11 @@
 # -*- coding: utf-8 -*-
 
 """
-Step 80 Test - Step 91 Analysis Layer Prompt
+Step 80 - Weekly Video Analysis Layer (legacy test output name retained for workflow compatibility)
 
 Purpose:
-- Test the redesigned Step 91 analysis-layer prompt only.
+- Generate the formal analysis layer used by the downstream weekly video story workflow.
+- Keep the existing output filename for workflow compatibility.
 - Read:
   1) weekly_market_series.json
   2) weekly_news_context.json / md
@@ -80,6 +81,24 @@ weekly_v35_diagnosis 使用規則：
 - 請優先使用它來對齊影片主線與網頁主線，尤其是 dominant_driver、correction_factors、divergence_signal、asset_validation、next_period_watch。
 - 影片分析可以重新組織語言，但不可忽略或推翻其油價 / 通膨方向規則與資產方向。
 - 若你的分層分析與 weekly_v35_diagnosis 出現張力，請寫成分歧、修正因子或待觀察，不要硬改成另一套主線。
+
+油價方向規則：
+- 油價方向必須優先依 weekly_v35_diagnosis.observed_market 或 weekly_market_series.analysis_series 中 WTI / Brent 的實際方向，不得只憑新聞標題猜測。
+- WTI / Brent 上行：代表能源成本與短期通膨預期的上行壓力增加；若不是本期主線，應列為修正因子或並行訊號。
+- WTI / Brent 下行：可能緩和能源通膨壓力；若由需求疲弱造成，也應同時視為成長降溫訊號。
+- 不得把油價變動直接寫成由財政赤字、高利率或公債供需所造成；這些因子可影響利率，但不是油價方向的直接原因。
+
+就業方向規則：
+- 指標名稱不等於方向。只有看到「上升 / 高於預期 / 下降 / 低於預期」等明確方向，才能判斷初領失業金、非農、失業率或薪資。
+- 初領失業金上升或高於預期才屬就業降溫；下降或低於預期才屬就業偏強。
+- 非農低於預期或明顯放緩屬就業降溫；非農高於預期或明顯強勁才屬就業偏強。
+- 失業率下降先視為勞動市場韌性，不可單獨改寫成全面就業強勁；若非農偏弱但失業率下降，應呈現為就業訊號分歧。
+- laborStrength 本身不得直接推升綜合通膨預期；只有薪資壓力、需求偏強、通膨硬數據或能源供給風險，才可作為通膨預期上行來源。
+- 不得為了配合 US10Y、DXY 或其他資產方向，而把低於預期、轉弱或混合的就業新聞改寫成強勁。
+
+美元方向規則：
+- 美元方向優先以 DXY 實際走勢判斷；新聞只用來解釋利差、避險美元、流動性需求或非美貨幣自身因素。
+- 新聞只出現「美元 / DXY」名稱但沒有明確方向時，不得自行判定美元走強或走弱。
 
 分析順序：
 一、素材盤點
@@ -283,23 +302,51 @@ def resolve_week_dir(value: str) -> Path:
     return find_latest_week_dir()
 
 def infer_analysis_window_from_source(week_dir: Path) -> Dict[str, str]:
+    """Resolve one formal analysis window shared by V35, web, and video layers."""
     env_start = os.getenv("ANALYSIS_START_DATE", "").strip()
     env_end = os.getenv("ANALYSIS_END_DATE", "").strip()
     if env_start and env_end:
         return {"start_date": env_start, "end_date": env_end, "label": f"{env_start} ～ {env_end}", "source": "workflow_env"}
+
+    market_series = load_json(week_dir / "weekly_market_series.json", {})
+    if isinstance(market_series, dict):
+        meta = market_series.get("meta", {}) if isinstance(market_series.get("meta"), dict) else {}
+        requested = meta.get("requested_analysis_window", {}) if isinstance(meta.get("requested_analysis_window"), dict) else {}
+        start = str(requested.get("start_date") or "").strip()
+        end = str(requested.get("end_date") or "").strip()
+        if start and end:
+            return {
+                "start_date": start,
+                "end_date": end,
+                "label": f"{start} ～ {end}",
+                "source": "weekly_market_series.meta.requested_analysis_window",
+            }
+
+    news_context = load_json(week_dir / "weekly_news_context.json", {})
+    if isinstance(news_context, dict):
+        meta = news_context.get("meta", {}) if isinstance(news_context.get("meta"), dict) else {}
+        analysis_window = meta.get("analysis_window", {}) if isinstance(meta.get("analysis_window"), dict) else {}
+        start = str(analysis_window.get("start_date") or "").strip()
+        end = str(analysis_window.get("end_date") or "").strip()
+        if start and end:
+            return {
+                "start_date": start,
+                "end_date": end,
+                "label": f"{start} ～ {end}",
+                "source": "weekly_news_context.meta.analysis_window",
+            }
+
+        week_range = str(meta.get("week_range") or "").strip()
+        match = re.search(r"(\d{4}-\d{2}-\d{2})\s*(?:～|~|to|-)\s*(\d{4}-\d{2}-\d{2})", week_range)
+        if match:
+            start, end = match.group(1), match.group(2)
+            return {"start_date": start, "end_date": end, "label": f"{start} ～ {end}", "source": "weekly_news_context.meta.week_range"}
 
     source_text = load_text(week_dir / "weekly_source_text.md")
     match = re.search(r"週期：\s*(\d{4}-\d{2}-\d{2})\s*[～~\-to]+\s*(\d{4}-\d{2}-\d{2})", source_text)
     if match:
         start, end = match.group(1), match.group(2)
         return {"start_date": start, "end_date": end, "label": f"{start} ～ {end}", "source": "weekly_source_text.md"}
-
-    news_context = load_json(week_dir / "weekly_news_context.json", {})
-    week_range = str(news_context.get("meta", {}).get("week_range") or "") if isinstance(news_context, dict) else ""
-    match = re.search(r"(\d{4}-\d{2}-\d{2})\s*(?:～|~|to|-)\s*(\d{4}-\d{2}-\d{2})", week_range)
-    if match:
-        start, end = match.group(1), match.group(2)
-        return {"start_date": start, "end_date": end, "label": f"{start} ～ {end}", "source": "weekly_news_context.json"}
 
     return {"start_date": "", "end_date": week_dir.name, "label": week_dir.name, "source": "week_dir"}
 
@@ -478,6 +525,17 @@ def build_user_prompt(week_dir: Path) -> str:
     if not weekly_market_series_json:
         raise FileNotFoundError(f"Missing or empty weekly_market_series.json in {week_dir}")
 
+    compact_v35 = (
+        weekly_v35_diagnosis.get("weekly_v35_diagnosis", {})
+        if isinstance(weekly_v35_diagnosis, dict)
+        else {}
+    )
+    if not isinstance(compact_v35, dict) or not compact_v35:
+        raise FileNotFoundError(
+            f"Missing or empty weekly_v35_diagnosis.weekly_v35_diagnosis in {week_dir}. "
+            "Run scripts/macro_v35_diagnosis.py before Step 80."
+        )
+
     market_payload = build_market_payload_for_analysis(weekly_market_series_json, analysis_window)
     analysis_input_bundle = build_analysis_input_bundle(
         weekly_news_context_json=weekly_news_context_json,
@@ -514,7 +572,8 @@ def normalize_result_for_downstream(result: Dict[str, Any], analysis_window: Dic
     }
     result["meta"]["data_status_note"] = (
         "分析層使用 analysis window 作為正式判斷區間；"
-        "lookback / background 資料僅作前期脈絡，不作為正式區間變動起點。"
+        "lookback / background 資料僅作前期脈絡，不作為正式區間變動起點；"
+        "主導因子、修正因子、背離訊號與資產方向以 weekly_v35_diagnosis 為共同診斷基礎。"
     )
 
     process = result.setdefault("main_theme_analysis_process", {})
@@ -562,7 +621,7 @@ def main() -> None:
 
     week_dir = resolve_week_dir(args.week_dir)
 
-    print(f"[INFO] Step 80 analysis-layer test model: {model}")
+    print(f"[INFO] Step 80 analysis-layer model: {model}")
     print(f"[INFO] Week dir: {week_dir}")
     print(f"[INFO] weekly_news_context.json included: {(week_dir / 'weekly_news_context.json').exists()}")
     print(f"[INFO] weekly_news_context.md included: {(week_dir / 'weekly_news_context.md').exists()}")
