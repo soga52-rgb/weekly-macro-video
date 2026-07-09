@@ -25,6 +25,7 @@ Design principles:
 - It creates factor groups, rate factor map, core contradiction, primary macro story,
   expected chain, asset validation, and a compact weekly_v35_diagnosis block.
 - Downstream Gemini prompts should read this file instead of re-inventing the macro logic.
+- Synced with current Apps Script labor direction guards, labor-mixed logic, wage-pressure rule, and directional dollar detection.
 - The analysis period is controlled by the formal analysis window; do not assume 7 days.
 """
 
@@ -371,24 +372,82 @@ def collect_news_text(
 
 
 def extract_macro_event_flags_v35(news_text: str) -> Dict[str, Any]:
+    """Extract directional macro event flags using the current Apps Script V35/V36 rules.
+
+    Important safeguards:
+    - An indicator name alone is not a direction.
+    - Labor data is split into weak, strong, resilient, mixed, wage-cooling, and wage-pressure signals.
+    - Labor strength alone affects the Fed path, but does not directly raise inflation expectations.
+    - Oil news describes the cause; actual WTI / Brent direction is validated later from market data.
+    """
     text = news_text or ""
 
     inflation_hot = regex_has(
-        r"\b(cpi|ppi|pce|core cpi|core pce|consumer prices|producer prices|personal consumption expenditures|import prices|prices paid|inflation)\b.*(hot|higher|above|accelerat|sticky|surpris|rise|rose|jump|increase)|通膨.*(高於預期|升溫|黏性|加速|反彈)|物價.*(高於預期|上升|加速)|ppi.*高於|cpi.*高於|pce.*高於|價格分項.*上升",
+        r"\b(cpi|ppi|pce|core cpi|core pce|consumer prices|producer prices|personal consumption expenditures|import prices|prices paid|inflation)\b.*(hot|higher|above|accelerat|sticky|surpris|rise|rose|jump|increase|beat)|通膨.*(高於預期|升溫|黏性|加速|反彈)|物價.*(高於預期|上升|加速)|ppi.*高於|cpi.*高於|pce.*高於|價格分項.*上升",
         text,
     )
     inflation_cooling = regex_has(
-        r"\b(cpi|ppi|pce|core cpi|core pce|inflation|prices)\b.*(cool|lower|below|ease|eased|slowed|moderate|decelerate)|通膨.*(降溫|低於預期|放緩)|物價.*(降溫|低於預期|放緩)|價格壓力.*緩和",
+        r"\b(cpi|ppi|pce|core cpi|core pce|inflation|prices|consumer prices|producer prices)\b.*(cool|lower|below|miss|ease|eased|slowed|moderate|decelerate)|通膨.*(降溫|低於預期|放緩)|物價.*(降溫|低於預期|放緩)|價格壓力.*緩和",
         text,
     )
-    labor_cooling = regex_has(
-        r"jobless claims|initial claims|weekly claims|continuing claims|unemployment benefits|layoffs|job cuts|labor market cool|labour market cool|unemployment.*rise|payrolls.*slow|wage growth.*slow|adp.*slow|ai.*layoff|ai.*job cuts|初領失業金|續領失業金|申請失業救濟|失業率.*上升|就業.*降溫|就業.*轉弱|非農.*放緩|薪資.*放緩|裁員|企業裁員|ai.*裁員|ai替代",
+
+    # Labor market direction reading. Indicator names alone are not directional.
+    payroll_weak_signal = regex_has(
+        r"\b(payrolls|nonfarm payrolls|job growth|jobs growth|jobs report|hiring)\b.*(miss|misses|below|weaker|weak|slowed|slow|disappoint|undershoot|revis(ed|ion).*down|downward revision)|非農.*(爆冷|遜於預期|低於預期|不如預期|放緩|下修)|就業.*(遜於預期|低於預期|不如預期|放緩|轉弱)",
         text,
     )
-    labor_strength = regex_has(
-        r"payrolls.*strong|jobs report.*strong|unemployment.*fall|wage growth.*accelerat|adp.*strong|labor market.*tight|labour market.*tight|非農.*強|就業.*強勁|失業率.*下降|薪資.*加速|勞動市場.*緊俏",
+    payroll_strong_signal = regex_has(
+        r"\b(payrolls|nonfarm payrolls|job growth|jobs growth|jobs report|hiring)\b.*(beat|beats|above|strong|stronger|surpris(e|ed).*up|accelerat)|非農.*(強|強勁|優於預期|高於預期)|就業.*強勁",
         text,
     )
+    claims_weak_signal = regex_has(
+        r"\b(initial claims|weekly claims|jobless claims|continuing claims|unemployment benefits|claims)\b.*(rise|rose|rising|jump|increase|higher|above|elevated)|初領失業金.*(上升|增加|高於預期)|續領失業金.*(上升|增加|高於預期)|申請失業救濟.*(上升|增加)",
+        text,
+    )
+    claims_strong_signal = regex_has(
+        r"\b(initial claims|weekly claims|jobless claims|continuing claims|unemployment benefits|claims)\b.*(fall|fell|drop|decline|decrease|lower|below)|初領失業金.*(下降|減少|低於預期)|續領失業金.*(下降|減少|低於預期)|申請失業救濟.*(下降|減少)",
+        text,
+    )
+    unemployment_weak_signal = regex_has(
+        r"unemployment rate.*(rise|rose|rising|increase|higher|above)|失業率.*(上升|高於預期)",
+        text,
+    )
+    unemployment_resilience_signal = regex_has(
+        r"unemployment rate.*(fall|fell|drop|decline|decrease|lower|below)|失業率.*(下降|低於預期)",
+        text,
+    )
+    wage_cooling_signal = regex_has(
+        r"wage growth.*(slow|slowed|cool|cooling|moderate|decelerate|weaker)|average hourly earnings.*(slow|slowed|below|weaker)|薪資.*(放緩|降溫|低於預期)",
+        text,
+    )
+    wage_pressure_signal = regex_has(
+        r"wage growth.*(accelerat|strong|hot|higher|above)|average hourly earnings.*(accelerat|strong|higher|above)|薪資.*(加速|強勁|高於預期)",
+        text,
+    )
+    layoff_weak_signal = regex_has(
+        r"layoffs|job cuts|ai.*layoff|ai.*job cuts|裁員|企業裁員|ai.*裁員|ai替代",
+        text,
+    )
+
+    labor_weak_signal = (
+        payroll_weak_signal
+        or claims_weak_signal
+        or unemployment_weak_signal
+        or wage_cooling_signal
+        or layoff_weak_signal
+        or regex_has(r"labor market.*(cool|soft|weaken)|labour market.*(cool|soft|weaken)|就業.*降溫|就業.*轉弱|勞動市場.*(降溫|轉弱)", text)
+    )
+    labor_strong_signal = (
+        payroll_strong_signal
+        or claims_strong_signal
+        or wage_pressure_signal
+        or regex_has(r"labor market.*tight|labour market.*tight|adp.*strong|勞動市場.*緊俏", text)
+    )
+    labor_resilience_signal = unemployment_resilience_signal or claims_strong_signal
+    labor_mixed = labor_weak_signal and (labor_strong_signal or labor_resilience_signal)
+    labor_cooling = labor_weak_signal
+    labor_strength = labor_strong_signal and not labor_weak_signal
+
     growth_cooling = regex_has(
         r"retail sales.*weak|consumer spending.*weak|housing starts.*fall|building permits.*fall|home sales.*fall|industrial production.*weak|gdp.*slow|pmi.*slow|ism.*slow|growth slowdown|growth warning|recession risk|零售銷售.*弱|消費.*放緩|房市.*降溫|房屋開工.*下滑|營建許可.*下滑|工業生產.*弱|gdp.*放緩|pmi.*放緩|ism.*放緩|成長放緩|景氣降溫|衰退風險",
         text,
@@ -402,13 +461,15 @@ def extract_macro_event_flags_v35(news_text: str) -> Dict[str, Any]:
         text,
     )
     market_expectation_shift = regex_has(
-        r"ceasefire|talks|negotiation|probability|uncertainty|market expectations|policy signal|停火|談判|協商|機率|不確定性|風險擔憂|市場預期|政策訊號|重新評估",
+        r"ceasefire|talks|negotiation|probability|uncertainty|risk premium|market expectations|policy signal|停火|談判|協商|機率|不確定性|風險擔憂|市場預期|政策訊號|重新評估",
         text,
     )
     geopolitical_cooling = regex_has(
-        r"ceasefire|peace deal|peace talks|talks resume|de-escalation|risk.*fade|risk.*ease|停火|和平協議|和談|談判重啟|地緣.*降溫|風險擔憂.*消退|風險擔憂.*下降",
+        r"ceasefire|peace deal|peace talks|talks resume|de-escalation|risk premium.*fade|risk premium.*ease|risk.*fade|risk.*ease|停火|和平協議|和談|談判重啟|地緣.*降溫|風險擔憂.*消退|風險擔憂.*下降",
         text,
     )
+
+    # Oil news is a cause signal. Actual WTI / Brent direction is checked later.
     oil_supply_shock = regex_has(
         r"oil supply|crude supply|oil disruption|crude disruption|supply disruption|supply outage|supply shock|oil sanctions|crude sanctions|opec.*cut|production cut|output cut|hormuz|middle east.*oil|war.*oil|oil.*war|sanction.*oil|oil.*sanction|原油.*供給|油價.*供給|能源供給|供給中斷|供給衝擊|原油.*減產|油價.*減產|opec.*減產|庫存下降|荷姆茲|戰爭.*油價|油價.*戰爭|制裁.*原油|原油.*制裁",
         text,
@@ -417,6 +478,7 @@ def extract_macro_event_flags_v35(news_text: str) -> Dict[str, Any]:
         r"oil.*demand|crude.*demand|inventory build|stockpile rise|demand weak|growth concern.*oil|原油需求|油品需求|庫存增加|需求疲弱|需求放緩|油價.*需求",
         text,
     )
+
     fed_hawkish = regex_has(
         r"fed.*hawk|fomc.*hawk|powell.*hawk|rate hike|higher for longer|hold rates high|not ready to cut|not prepared to cut|rate cuts.*delay|rate cut.*delay|fewer cuts|less easing|cut rates.*later|rates.*higher.*longer|dot plot.*higher|聯準會.*偏鷹|fed.*偏鷹|鮑爾.*偏鷹|升息|高利率維持更久|降息.*延後|降息.*推遲|不急於降息|尚未準備降息|降息次數.*減少|點陣圖.*上修",
         text,
@@ -434,11 +496,11 @@ def extract_macro_event_flags_v35(news_text: str) -> Dict[str, Any]:
         text,
     )
     refunding_pressure = regex_has(
-        r"treasury refunding|quarterly refunding|debt rollover|rollover risk|maturity wall|refinancing pressure|再融資|再續發|到期再發|債務到期|發債壓力",
+        r"treasury refunding|quarterly refunding|debt rollover|rollover risk|maturity wall|refinancing pressure|refunding|再融資|季度再融資|再續發|到期再發|債務到期|發債壓力",
         text,
     )
     term_premium_pressure = regex_has(
-        r"term premium|long-end premium|duration risk|long bond yield|期限溢價|長端利率|長債|存續期間風險",
+        r"term premium|long-end premium|duration risk|long bond yield|期限溢價|長端利率|長債|長債溢價|存續期間風險",
         text,
     )
     fed_balance_sheet_tightening = regex_has(
@@ -450,19 +512,28 @@ def extract_macro_event_flags_v35(news_text: str) -> Dict[str, Any]:
         text,
     )
     fed_leadership_shift = regex_has(
-        r"kevin warsh|warsh|new fed chair|fed chair nominee|fed chair candidate|next fed chair|successor to powell|powell successor|fed leadership|fed independence|central bank independence|policy reaction function|fed reaction function|monetary policy framework|新任主席|新任fed主席|新任聯準會主席|聯準會主席.*人選|fed主席.*人選|鮑爾接班|鮑威爾接班|主席風格|政策反應函數|貨幣政策框架|央行獨立性|聯準會獨立性",
+        r"kevin warsh|warsh|new fed chair|fed chair nominee|fed chair candidate|next fed chair|successor to powell|powell successor|fed leadership|fed independence|central bank independence|policy reaction function|fed reaction function|monetary policy framework|fed chair|聯準會主席|新任主席|新任fed主席|新任聯準會主席|聯準會主席.*人選|fed主席.*人選|鮑爾接班|鮑威爾接班|鮑爾接班人|主席風格|政策反應函數|貨幣政策框架|央行獨立性|聯準會獨立性|政策首秀",
         text,
     )
     financial_stress = regex_has(
-        r"bank crisis|bank stress|credit stress|credit spreads.*widen|high yield.*stress|commercial real estate.*risk|liquidity crisis|financial conditions.*tighten|stock market.*selloff|equities.*plunge|銀行危機|銀行壓力|信用風險|信用利差.*擴大|高收益債.*壓力|商業不動產.*風險|流動性危機|金融條件.*收緊|股市.*大跌|證券市場.*下跌",
+        r"bank crisis|bank stress|credit stress|credit spreads.*widen|high yield.*stress|commercial real estate.*risk|liquidity crisis|financial conditions.*tighten|stock market.*selloff|equities.*plunge|financial stress|liquidity stress|銀行危機|銀行壓力|信用風險|信用壓力|信用利差.*擴大|高收益債.*壓力|商業不動產.*風險|流動性危機|流動性壓力|金融條件.*收緊|金融壓力|股市.*大跌|證券市場.*下跌",
         text,
     )
-    dollar_strength = regex_has(r"dollar|dxy|greenback|usd strength|美元|美元指數|強美元", text)
-    dollar_weakness = regex_has(r"dollar weak|dxy falls|greenback slips|美元走弱|美元指數下跌|美元回落", text)
-    gold_pressure = regex_has(r"gold drops|gold falls|gold pressured|金價大跌|黃金.*跌|金價.*跌|黃金承壓", text)
-    gold_safe_haven = regex_has(r"gold rises|gold gains|gold safe haven|黃金上漲|金價上漲|黃金避險", text)
 
-    inflation_expectation_up = inflation_hot or oil_supply_shock or labor_strength or growth_strength
+    # Directional guards: merely mentioning dollar / DXY is not enough.
+    dollar_weakness = regex_has(
+        r"dollar.*(weak|weaken|weakened|weaker)|dxy.*(fall|falls|fell|drop|drops|dropped|decline|declines|declined)|greenback.*(fall|falls|fell|slip|slips|slipped|weaken)|美元.*走弱|美元指數.*(下跌|回落)|美元.*回落",
+        text,
+    )
+    dollar_strength = regex_has(
+        r"dollar.*(strong|stronger|strengthen|strengthened)|dxy.*(rise|rises|rose|rising|gain|gains|gained)|greenback.*(rise|rises|rose|gain|gains|gained|strengthen)|usd strength|美元.*走強|美元指數.*(上漲|走高)|美元.*偏強|強美元",
+        text,
+    )
+    gold_pressure = regex_has(r"gold drops|gold falls|gold.*down|gold pressured|金價大跌|黃金.*跌|金價.*跌|黃金承壓", text)
+    gold_safe_haven = regex_has(r"gold.*safe haven|gold.*risk|gold.*geopolitical|gold rises|gold gains|黃金.*避險|金價.*避險|黃金.*地緣|黃金上漲|金價上漲", text)
+
+    # Current Apps Script rule: labor strength alone affects the Fed path, not inflation expectations.
+    inflation_expectation_up = inflation_hot or oil_supply_shock or wage_pressure_signal or growth_strength
     inflation_expectation_down = inflation_cooling or oil_demand_weakness or labor_cooling or growth_cooling or geopolitical_cooling
     inflation_expectation_mixed = inflation_expectation_up and inflation_expectation_down
     inflation_expectation_shift = market_expectation_shift or inflation_expectation_mixed or (
@@ -470,18 +541,27 @@ def extract_macro_event_flags_v35(news_text: str) -> Dict[str, Any]:
     )
 
     return {
-        "inflationPressure": inflation_expectation_up,
+        "inflationPressure": inflation_hot or inflation_expectation_up,
         "inflationRelief": inflation_expectation_down,
+        "inflationCoolingSignal": inflation_cooling,
         "inflationMixed": inflation_expectation_mixed,
         "inflationExpectationShift": inflation_expectation_shift,
         "highRateExpectation": fed_hawkish or regex_has(r"higher for longer|高利率維持更久|降息.*延後|not ready to cut", text),
         "fedHawkish": fed_hawkish,
+        "fedDovish": fed_dovish,
         "laborCooling": labor_cooling,
+        "laborStrength": labor_strength,
+        "laborMixed": labor_mixed,
+        "laborResilience": labor_resilience_signal,
+        "laborWagePressure": wage_pressure_signal,
         "growthCooling": growth_cooling,
+        "growthStrength": growth_strength,
         "oilInflationPressure": oil_supply_shock or regex_has(r"oil prices.*inflation|油價.*通膨|能源.*通膨", text),
         "oilInflationRelief": oil_demand_weakness or geopolitical_cooling,
         "dollarStrength": dollar_strength,
+        "dollarWeakness": dollar_weakness,
         "goldPressure": gold_pressure,
+        "goldSafeHaven": gold_safe_haven,
         "riskOff": risk_off,
         "inflationHot": inflation_hot,
         "inflationCooling": inflation_cooling,
@@ -490,9 +570,6 @@ def extract_macro_event_flags_v35(news_text: str) -> Dict[str, Any]:
         "inflationExpectationMixed": inflation_expectation_mixed,
         "inflationExpectationMixedSignal": inflation_expectation_mixed,
         "inflationExpectationShiftSignal": inflation_expectation_shift,
-        "laborStrength": labor_strength,
-        "growthStrength": growth_strength,
-        "fedDovish": fed_dovish,
         "treasurySupplyPressure": treasury_supply_pressure,
         "treasuryDemandStrong": treasury_demand_strong,
         "refundingPressure": refunding_pressure,
@@ -505,12 +582,38 @@ def extract_macro_event_flags_v35(news_text: str) -> Dict[str, Any]:
         "geopoliticalCooling": geopolitical_cooling,
         "oilSupplyShock": oil_supply_shock,
         "oilDemandWeakness": oil_demand_weakness,
-        "dollarWeakness": dollar_weakness,
-        "goldSafeHaven": gold_safe_haven,
         "factor_groups": {
-            "inflation": {"detected": inflation_hot or inflation_cooling, "hot": inflation_hot, "cooling": inflation_cooling},
-            "labor_market": {"detected": labor_cooling or labor_strength, "cooling": labor_cooling, "strength": labor_strength},
-            "growth_demand": {"detected": growth_cooling or growth_strength, "cooling": growth_cooling, "strength": growth_strength},
+            "inflation": {
+                "detected": inflation_hot or inflation_cooling,
+                "hot": inflation_hot,
+                "cooling": inflation_cooling,
+            },
+            "labor_market": {
+                "detected": labor_cooling or labor_strength or labor_mixed or labor_resilience_signal,
+                "cooling": labor_cooling,
+                "strength": labor_strength,
+                "mixed": labor_mixed,
+                "resilience": labor_resilience_signal,
+                "wage_pressure": wage_pressure_signal,
+                "weak_signals": {
+                    "payroll_weak": payroll_weak_signal,
+                    "claims_weak": claims_weak_signal,
+                    "unemployment_rise": unemployment_weak_signal,
+                    "wage_cooling": wage_cooling_signal,
+                    "layoffs": layoff_weak_signal,
+                },
+                "strong_or_resilient_signals": {
+                    "payroll_strong": payroll_strong_signal,
+                    "claims_down": claims_strong_signal,
+                    "unemployment_fall": unemployment_resilience_signal,
+                    "wage_pressure": wage_pressure_signal,
+                },
+            },
+            "growth_demand": {
+                "detected": growth_cooling or growth_strength,
+                "cooling": growth_cooling,
+                "strength": growth_strength,
+            },
             "oil_energy": {
                 "detected": oil_supply_shock or oil_demand_weakness or geopolitical_cooling,
                 "supply_shock": oil_supply_shock,
@@ -533,22 +636,63 @@ def extract_macro_event_flags_v35(news_text: str) -> Dict[str, Any]:
                     "geopolitical_cooling": geopolitical_cooling,
                     "labor_strength": labor_strength,
                     "labor_cooling": labor_cooling,
+                    "labor_mixed": labor_mixed,
+                    "wage_pressure": wage_pressure_signal,
                     "growth_strength": growth_strength,
                     "growth_cooling": growth_cooling,
                     "risk_off": risk_off,
                     "market_expectation_shift": market_expectation_shift,
                 },
             },
-            "fed_policy_path": {"detected": fed_hawkish or fed_dovish or fed_leadership_shift, "hawkish": fed_hawkish, "dovish": fed_dovish, "leadership_shift": fed_leadership_shift},
-            "treasury_market": {"detected": treasury_supply_pressure or treasury_demand_strong or refunding_pressure or term_premium_pressure, "supply_pressure": treasury_supply_pressure, "demand_strong": treasury_demand_strong, "refunding_pressure": refunding_pressure, "term_premium_pressure": term_premium_pressure},
-            "liquidity_balance_sheet": {"detected": fed_balance_sheet_tightening or fed_balance_sheet_easing, "tightening": fed_balance_sheet_tightening, "easing": fed_balance_sheet_easing},
-            "financial_conditions": {"detected": financial_stress, "stress": financial_stress},
-            "market_psychology": {"detected": risk_off or market_expectation_shift, "risk_off": risk_off, "expectation_shift": market_expectation_shift},
-            "dollar_external": {"detected": dollar_strength or dollar_weakness, "dollar_strength": dollar_strength, "dollar_weakness": dollar_weakness},
-            "gold_risk": {"detected": gold_pressure or gold_safe_haven, "pressure": gold_pressure, "safe_haven": gold_safe_haven},
+            "fed_policy_path": {
+                "detected": fed_hawkish or fed_dovish or fed_leadership_shift or labor_strength or labor_cooling or labor_mixed,
+                "hawkish": fed_hawkish,
+                "dovish": fed_dovish,
+                "leadership_shift": fed_leadership_shift,
+                "labor_strength_effect": labor_strength,
+                "labor_cooling_effect": labor_cooling,
+                "labor_mixed_effect": labor_mixed,
+            },
+            "treasury_market": {
+                "detected": treasury_supply_pressure or treasury_demand_strong or refunding_pressure or term_premium_pressure,
+                "supply_pressure": treasury_supply_pressure,
+                "demand_strong": treasury_demand_strong,
+                "refunding_pressure": refunding_pressure,
+                "term_premium_pressure": term_premium_pressure,
+            },
+            # Keep the legacy group for downstream compatibility.
+            "liquidity_balance_sheet": {
+                "detected": fed_balance_sheet_tightening or fed_balance_sheet_easing,
+                "tightening": fed_balance_sheet_tightening,
+                "easing": fed_balance_sheet_easing,
+            },
+            "financial_conditions": {
+                "detected": fed_balance_sheet_tightening or fed_balance_sheet_easing or financial_stress,
+                "tightening": fed_balance_sheet_tightening,
+                "easing": fed_balance_sheet_easing,
+                "stress": financial_stress,
+            },
+            "market_psychology": {
+                "detected": risk_off or market_expectation_shift or gold_safe_haven or dollar_weakness or dollar_strength,
+                "risk_off": risk_off,
+                "expectation_shift": market_expectation_shift,
+                "gold_safe_haven": gold_safe_haven,
+                "dollar_weakness": dollar_weakness,
+                "dollar_strength": dollar_strength,
+            },
+            # Keep these legacy groups for downstream compatibility.
+            "dollar_external": {
+                "detected": dollar_strength or dollar_weakness,
+                "dollar_strength": dollar_strength,
+                "dollar_weakness": dollar_weakness,
+            },
+            "gold_risk": {
+                "detected": gold_pressure or gold_safe_haven,
+                "pressure": gold_pressure,
+                "safe_haven": gold_safe_haven,
+            },
         },
     }
-
 
 def add_factor(target: List[Dict[str, str]], label: str, reason: str) -> None:
     target.append({"label": label, "reason": reason})
@@ -583,11 +727,23 @@ def build_rate_factor_map_v35(flags: Dict[str, Any], observed: Dict[str, Dict[st
         add_factor(down, "油價需求面壓力", "油價下跌若來自需求疲弱或庫存增加，可能反映成長降溫與通膨壓力緩和。")
     if flags.get("geopoliticalCooling"):
         add_factor(down, "地緣風險擔憂降溫", "停火、和談或地緣風險降溫，可能壓低能源風險擔憂與通膨預期。")
+    labor_group = flags.get("factor_groups", {}).get("labor_market", {})
+    if flags.get("laborMixed") or labor_group.get("mixed"):
+        add_factor(
+            offsetting,
+            "就業訊號分歧",
+            "就業資料內部同時出現轉弱與韌性訊號，例如非農或薪資轉弱但失業率或初領失業金仍顯示韌性；不應直接寫成勞動市場強勁。",
+        )
+        add_factor(
+            policy,
+            "Fed 路徑待確認",
+            "就業訊號分歧時，市場通常需要下一筆非農、初領失業金、薪資或勞動參與率資料確認方向。",
+        )
     if flags.get("laborCooling"):
-        add_factor(down, "勞動市場降溫", "非農、ADP、初領失業金、失業率、薪資或裁員消息轉弱，可能提高降息或成長放緩預期。")
+        add_factor(down, "勞動市場降溫訊號", "非農、ADP、初領失業金、失業率、薪資或裁員消息若明確轉弱，可能提高降息或成長放緩預期。")
         add_factor(policy, "降息預期上升", "勞動市場轉弱會使市場更關注 Fed 雙重使命中的就業風險。")
     if flags.get("laborStrength"):
-        add_factor(up, "勞動市場仍強", "就業或薪資偏強可能支撐服務通膨與需求韌性。")
+        add_factor(up, "勞動市場偏強", "非農、薪資、初領失業金或勞動市場緊俏訊號若明確偏強，可能支撐需求韌性與較高利率路徑。")
         add_factor(policy, "降息預期下降 / 升息風險上升", "就業仍強可能讓 Fed 較不急於降息。")
     if flags.get("growthCooling"):
         add_factor(down, "成長動能降溫", "GDP、PMI、零售、房市或消費數據轉弱，可能壓低利率預期。")
@@ -825,6 +981,9 @@ def build_transmission_diagnosis_v35(
     elif oil_down:
         modifiers.append("WTI 或 Brent 下行，屬於能源通膨降溫或通膨下修因子；是否影響利率需看 Fed 路徑與公債供需是否壓過此修正。")
 
+    if not wti_dir and not brent_dir and (flags.get("oilSupplyShock") or flags.get("oilDemandWeakness")):
+        modifiers.append("油價新聞已出現，但 WTI / Brent 方向不足，能源通膨判斷需降低結論強度。")
+
     if observed.get("DXY", {}).get("direction") == "up":
         matched_links.append("美元指數偏強，需檢查是利差支撐、避險美元，還是非美貨幣弱勢所造成。")
         for key, label in [("USDJPY", "日圓"), ("USDTWD", "台幣"), ("USDKRW", "韓元")]:
@@ -894,7 +1053,9 @@ def build_compact_weekly_v35_diagnosis(diagnosis: Dict[str, Any]) -> Dict[str, A
         next_period_watch.append("通膨上行與下行訊號誰會成為下一期主導因子")
     if observed.get("WTI", {}).get("direction") == "down" or observed.get("Brent", {}).get("direction") == "down":
         next_period_watch.append("油價下行是否開始壓低利率與通膨預期")
-    if flags.get("laborCooling") or flags.get("growthCooling"):
+    if flags.get("laborMixed"):
+        next_period_watch.append("就業分歧訊號將由非農、初領失業金、失業率或薪資中的哪一項確認方向")
+    elif flags.get("laborCooling") or flags.get("growthCooling"):
         next_period_watch.append("勞動或成長降溫是否擴大")
     if flags.get("fedHawkish") or flags.get("highRateExpectation"):
         next_period_watch.append("Fed 是否延續高利率維持更久的訊號")
