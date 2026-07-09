@@ -68,11 +68,19 @@ Miranda 的工作是解釋市場價格背後的市場走勢背後的判斷：事
 核心寫作原則：
 0. 【分析區間硬規則】input_bundle.meta.analysis_window 是本集唯一正式分析區間。storyline、main_event_threads、sections、price_reaction、spoken_text、subtitle_text、full_script_plain_text 的「本週」價格變化，只能使用 analysis window 內的數字與事件。
 0-1. lookback、macro_background、endpoint_context、weekly_source_text 中屬於 analysis window 以前的內容，只能作為「前期背景」或「延續性脈絡」用一兩句交代，不得成為第一段主軸，不得列為 main_event_threads 的主要價格反應。
-0-2. 嚴禁把 lookback window 的起點價格寫成本週起點。例如若 analysis window 內 WTI 是 96.6 → 88.5，就不可寫成 105 → 88.5；若 analysis window 內 US10Y 是 4.558 → 4.455，就不可寫成 4.66 → 4.45。
-0-3. 若需提到 30Y 破 5%、新任主席、前期長債恐慌等背景，必須明確稱為「前期背景」或「週初壓力」，並在同一段內快速轉回 analysis window 的本週主線，不可讓它成為整支影片的開場主軸。
-0-4. 本集主線應優先依 weekly_v35_diagnosis.weekly_v35_diagnosis 與 analysis_layer.main_theme_analysis_process.weekly_main_theme_conclusion / market_validation 展開。
+0-2. 嚴禁把 lookback window 的起點價格寫成本週起點。本週任何資產的起點、終點與淨方向，只能使用 input_bundle.market_series_analysis_window.assets.*.summary 的 start_value、end_value 與 net_direction。
+0-3. 若需提到 analysis window 以前的長債壓力、政策人事、地緣政治或其他背景，必須明確稱為「前期背景」或「延續性脈絡」，並在同一段內快速轉回 analysis window 的本週主線，不可讓背景事件成為整支影片的開場主軸。
+0-4. 本集主線的資料優先序為：
+    第一順位：weekly_v35_diagnosis.weekly_v35_diagnosis；
+    第二順位：analysis_layer.main_theme_analysis_process.main_theme_next_validation；
+    第三順位：analysis_layer.main_theme_analysis_process.market_contradictions_and_modifiers；
+    第四順位：analysis_layer.forest_summary。
+    不得引用不存在的 analysis-layer 欄位，也不得繞過 V35 另建一套主線。
 0-5. weekly_v35_diagnosis 是 Python rule-based V35 診斷層，不是旁白文案；你可以重新組織故事語言，但不可推翻其主導因子、修正因子、背離訊號、資產驗證、油價 / 通膨方向規則與資產方向。
 0-6. 若 analysis_layer、新聞素材與 weekly_v35_diagnosis 出現張力，請寫成分歧、修正因子或待觀察，不要自行改成另一套主線。
+0-7. 油價方向必須以 weekly_v35_diagnosis.observed_market 或 market_series_analysis_window 的 WTI / Brent 實際方向為準。油價上行代表能源成本與短期通膨預期上行壓力；油價下行可能緩和能源通膨，若源自需求疲弱也可能代表成長降溫。若油價不是本期主線，應描述為修正因子或並行訊號。不得把油價變動直接歸因於財政赤字、高利率或公債供需。
+0-8. 就業指標名稱不等於方向。初領失業金、非農、失業率與薪資必須有明確方向或相對預期才能判斷。失業率下降先視為韌性訊號，不可單獨改寫成全面就業強勁；非農偏弱但失業率下降時應呈現為就業訊號分歧。勞動市場韌性本身不得直接推升通膨預期，只有薪資壓力或需求偏強等訊號才可進入通膨上行敘事。
+0-9. 不得為了配合 US10Y、DXY、Gold、WTI 或亞洲貨幣方向，而把低於預期、轉弱或混合的新聞改寫成強勁，也不得創造 input_bundle 未提供的事件、數字或政策結論。
 1. 這是一個故事，不是資料摘要。
 2. 前後邏輯必須接得上：上一段留下的問題，下一段要接著回答。
 3. 頭尾要呼應：開頭鋪陳過、尚未結束的事件線，必須自然變成下週觀察。
@@ -83,7 +91,7 @@ Miranda 的工作是解釋市場價格背後的市場走勢背後的判斷：事
 8. 本週主線應在後段自然收斂，不要在開頭提前講完。
 9. 下週觀察不能突然出現，必須回扣前面已經鋪陳過的未解事件或價格線。
 10. 全片最後必須有正式收尾，但正式收尾不能取代下週觀察段。最後一段必須分成兩步：
-    - Miranda 先完整說明下週觀察，必須回扣本週已鋪陳的事件線，例如 Fed 表態、美伊談判、亞洲央行防禦等，最後用一句自然語把話交還給 Tom。
+    - Miranda 先完整說明下週觀察，必須回扣本週輸入資料與前文已鋪陳的事件線，最後用一句自然語把話交還給 Tom；不得因範例文字自行加入未出現在 input_bundle 的 Fed 表態、地緣談判、央行干預或其他事件。
     - Tom 最後只做簡短正式收尾：回扣本集主線、感謝 Miranda、提醒觀眾下週持續追蹤，並自然說「我們下週見」。Tom 收尾不得再展開新的分析。
 11. 不要為了進入下週觀察或正式收尾，而壓縮中間故事。每一條主要事件線都必須先完整展開「事件脈絡 → 價格反應 → 市場解讀 → Tom 追問 → Miranda 補充」之後，才能進入下一段或下週觀察。
 12. 下週觀察與正式收尾只是故事的收束，不是替代主體分析的段落。不得因為要完成結尾格式，就縮短前面各 section 的推論、追問與價格解讀。
@@ -162,7 +170,7 @@ weekly_v35_diagnosis 使用規則：
 - input_bundle.market_series_lookback_note、weekly_source_text、endpoint_context_excerpt 若包含更早日期，只能用於前期背景，不可作為本週起點。
 - storyline.main_event_threads 不得把 lookback 起點價格當成本週主要事件線。
 - 第一段可簡短交代前期高利率背景，但必須快速轉入 analysis window 內的本週變化，不可整段都圍繞前期長債恐慌。
-- 嚴禁使用 analysis window 外的價格區間描述本週變化。例如不可把 105 → 88.5 或 4.66 → 4.45 寫成本週走勢，除非 input_bundle.meta.analysis_window 明確包含那些日期。
+- 嚴禁使用 analysis window 外的價格區間描述本週變化。正式區間的起點、終點與淨方向，只能使用 input_bundle.market_series_analysis_window.assets.*.summary；lookback 或 endpoint context 中的更早價格不得寫成本週走勢。
 
 請輸出 JSON，結構如下：
 
@@ -525,6 +533,29 @@ def build_input_bundle(week_dir: Path) -> Dict[str, Any]:
     market_series_raw = load_json(week_dir / MARKET_SERIES_FILENAME, {})
     news_context_json = load_json(week_dir / NEWS_CONTEXT_JSON_FILENAME, {})
     endpoint_json = load_json(ENDPOINT_JSON_PATH, {})
+
+    if not analysis:
+        raise FileNotFoundError(
+            f"Missing or empty analysis layer: {week_dir / ANALYSIS_FILENAME}. "
+            "Run Step 80 before Step 82."
+        )
+
+    compact_v35 = (
+        weekly_v35_diagnosis.get("weekly_v35_diagnosis", {})
+        if isinstance(weekly_v35_diagnosis, dict)
+        else {}
+    )
+    if not isinstance(compact_v35, dict) or not compact_v35:
+        raise FileNotFoundError(
+            f"Missing or empty V35 diagnosis: {week_dir / WEEKLY_V35_DIAGNOSIS_FILENAME}. "
+            "Run scripts/macro_v35_diagnosis.py before Step 82."
+        )
+
+    if not market_series_raw:
+        raise FileNotFoundError(
+            f"Missing or empty market series: {week_dir / MARKET_SERIES_FILENAME}."
+        )
+
     analysis_window = infer_analysis_window(analysis, week_dir)
 
     return {
@@ -589,7 +620,7 @@ def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: 
     payload = {
         "contents": [{"role": "user", "parts": [{"text": system_prompt.strip() + "\n\n" + user_prompt.strip()}]}],
         "generationConfig": {
-            "temperature": 0.75,
+            "temperature": 0.65,
             "topP": 0.95,
             "maxOutputTokens": 24576,
             "responseMimeType": "application/json",
