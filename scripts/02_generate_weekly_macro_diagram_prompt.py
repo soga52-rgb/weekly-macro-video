@@ -7,6 +7,7 @@ Generate the image prompt for the first block: weekly macro transmission diagram
 
 Input:
 - output/weekly/YYYY-MM-DD/weekly_forest_summary.json
+- output/weekly/YYYY-MM-DD/weekly_v35_diagnosis.json
 - output/weekly/YYYY-MM-DD/weekly_news_context.json optional
 
 Output:
@@ -18,10 +19,12 @@ Skip logic:
   skip prompt generation. This avoids regenerating the diagram when only page CSS/HTML changes.
 
 V3.5 update:
-- Align weekly visual prompt with Daily V35 macro reasoning.
+- Align weekly visual prompt with the current Daily V35/V36 macro reasoning.
+- Use weekly_forest_summary.json as the final narrative layer and weekly_v35_diagnosis.json as the rule-based guardrail.
 - Distinguish dominant driver, correction factor, divergence signal, asset validation, and next-week watch.
 - Avoid fixed "reflation-only" diagram.
-- Clarify that falling oil prices are inflation downside / energy disinflation factors.
+- Explain rising and falling oil prices symmetrically before classifying them as the main line, a correction factor, a parallel signal, or a divergence.
+- Preserve USDKRW / KRW as a visible Asia-FX validation asset when supported by the source.
 - Avoid stiff front-end wording such as 「交易」「定價」「體制」「風險溢價」.
 """
 
@@ -104,7 +107,27 @@ def build_source_pack(forest: Dict[str, Any], news: Dict[str, Any], v35: Dict[st
     evidence = forest.get("evidence") or {}
     video = forest.get("video_planning") or {}
     v35 = v35 or {}
-    compact_v35 = v35.get("weekly_v35_diagnosis", {}) if isinstance(v35, dict) else {}
+
+    # Prefer the V35 block embedded in the final Step 01 forest summary so the
+    # diagram stays downstream of the final narrative. Fall back to the
+    # standalone rule-based file for older forest summaries or missing fields.
+    forest_compact_v35 = forest.get("weekly_v35_diagnosis", {})
+    if not isinstance(forest_compact_v35, dict):
+        forest_compact_v35 = {}
+
+    external_compact_v35 = v35.get("weekly_v35_diagnosis", {}) if isinstance(v35, dict) else {}
+    if not isinstance(external_compact_v35, dict):
+        external_compact_v35 = {}
+
+    compact_keys = (
+        "dominant_driver",
+        "correction_factors",
+        "divergence_signal",
+        "asset_validation",
+        "next_period_watch",
+    )
+    forest_v35_has_content = any(forest_compact_v35.get(key) not in (None, "", []) for key in compact_keys)
+    compact_v35 = forest_compact_v35 if forest_v35_has_content else external_compact_v35
 
     return {
         "week_range": (forest.get("meta") or {}).get("week_range", ""),
@@ -135,6 +158,7 @@ def build_source_pack(forest: Dict[str, Any], news: Dict[str, Any], v35: Dict[st
         "rule_based_core_contradiction": v35.get("core_contradiction", "") if isinstance(v35, dict) else "",
         "rule_based_primary_macro_story": v35.get("primary_macro_story", "") if isinstance(v35, dict) else "",
         "rule_based_expected_chain": v35.get("expected_chain", []) if isinstance(v35, dict) else [],
+        "rule_based_observed_market": v35.get("observed_market", {}) if isinstance(v35, dict) else {},
         "rule_based_asset_validation": compact_v35.get("asset_validation", []) if isinstance(compact_v35, dict) else [],
     }
 
@@ -153,18 +177,26 @@ V3.5 macro reasoning rules:
 - Do not assume the analysis window is always exactly 7 days.
 - Use the week range / analysis window from the source content as the official period.
 - Do not over-focus on only the last trading day.
-- Use weekly_v35_diagnosis as the primary diagram structure when available:
+- Use weekly_forest_summary.json as the final narrative layer. Its main theme, verdict, storyline, and revision/correction description should remain mutually consistent.
+- Use weekly_v35_diagnosis as the primary structured guardrail when available:
   dominant_driver, correction_factors, divergence_signal, asset_validation, next_period_watch.
 - weekly_v35_diagnosis is produced by the rule-based V35 diagnosis layer; do not contradict its oil / inflation direction rules or asset directions.
+- Do not create a second, unrelated macro main line for the image. If wording differs between the final forest summary and V35 diagnosis, preserve the same economic direction and present the difference as a correction factor, divergence, or uncertainty.
 - First identify the period dominant driver.
 - Then show correction factors that challenged or softened the main driver.
 - Then show asset validation: whether US10Y, DXY, WTI / Brent, Gold, USDJPY, USDTWD, and USDKRW support or contradict the story.
 - Then show the key divergence: where news and asset prices did not move in the same direction.
 - Finally show 2–3 next-week watch questions.
 - Distinguish inflation hard data from inflation expectations.
-- Falling oil prices are inflation downside factors: 油價下行，壓低通膨預期 / 能源通膨降溫 / 通膨下修因子.
+- Indicator names are not directions. CPI, PPI, nonfarm payrolls, initial claims, unemployment, and oil inventories require explicit direction or surprise wording before they can be called hot, cooling, strong, or weak.
+- Preserve the source direction. Never rewrite below-expectation, slowing, or weakening data as strong merely to fit asset prices; show it as a divergence, correction factor, or item to watch.
+- If labor signals are mixed, use 就業訊號分歧 / Fed 路徑待確認. Do not turn weak payrolls plus a falling unemployment rate into 非農強勁. Labor resilience alone does not raise inflation expectations unless wage pressure or demand strength is also present.
+- Determine oil direction from rule_based_observed_market.WTI / Brent and V35 asset validation first. EIA, OPEC, war, ceasefire, sanctions, inventories, and geopolitics explain the cause; they do not replace the observed oil-price direction.
+- Rising oil prices increase energy costs and upward pressure on near-term inflation expectations: 油價上行，增加能源成本與短期通膨預期的上行壓力. If rising oil is not the dominant driver, show it as a correction factor or parallel signal rather than forcing it into the main line.
+- Falling oil prices are inflation downside factors: 油價下行，可能緩和能源通膨壓力；若由需求疲弱造成，也可能是成長降溫訊號.
 - Never imply that falling oil prices raise inflation expectations.
-- If yields rise while oil falls, explain it as Fed path, high-rate expectations, or Treasury pressure outweighing the oil correction factor.
+- If yields rise while oil falls, explain it as Fed path, high-rate expectations, Treasury supply, refinancing, or term-premium pressure outweighing the oil correction factor.
+- Explain oil's own economic meaning first, then classify it as the dominant driver, a correction factor, a parallel signal, or a divergence. Do not hard-link oil moves to fiscal deficits or a high-rate main line.
 - Risk-off or market psychology is not an inflation direction by itself.
 - Do not write that the market "ignored" inflation. Explain which factor dominated and which factor became a correction factor.
 
@@ -233,6 +265,7 @@ Source content:
 - Rule-based core contradiction: {source.get("rule_based_core_contradiction")}
 - Rule-based primary macro story: {source.get("rule_based_primary_macro_story")}
 - Rule-based expected chain: {json.dumps(source.get("rule_based_expected_chain", []), ensure_ascii=False)}
+- Rule-based observed market: {json.dumps(source.get("rule_based_observed_market", {}), ensure_ascii=False)}
 - Rule-based asset validation: {json.dumps(source.get("rule_based_asset_validation", []), ensure_ascii=False)}
 
 Suggested visible label pool:
@@ -250,6 +283,9 @@ Use these only if supported by the source content. Do not force all labels.
 - 黃金壓力
 - 避險需求
 - 勞動降溫風險
+- 就業訊號分歧
+- Fed 路徑待確認
+- 能源通膨上行壓力
 - 成長擔憂
 - 修正因子
 - 背離訊號
@@ -268,6 +304,10 @@ Avoid:
 - exact NotebookLM logo
 - Google branding
 - fake extra data
+- rewriting weak or below-expectation data as strong
+- 「油價上行，但通膨預期受財政赤字與高利率主線主導」
+- 「油價上行，因為財政赤字導致高利率」
+- 「油價變動由財政赤字主導」
 - fixed reflation-only chain when source content does not support it
 """
 
