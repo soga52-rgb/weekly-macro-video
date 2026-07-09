@@ -97,7 +97,8 @@ Series visual language:
 - lots of whitespace, clean composition, modern and memorable.
 - simple icons, arrows, light charts, and clean symbolic objects only when they directly support the story.
 - Avoid visible Chinese title text inside the image because image models often distort Chinese characters.
-- If text is absolutely necessary, use only very short numeric or ticker labels such as CPI, PPI, 4.2%, 10Y, DXY, 4.463%, 99.675.
+- If text is absolutely necessary, prefer very short ticker labels such as CPI, PPI, 10Y, DXY, WTI, USD/JPY, or USD/KRW.
+- Numeric labels are allowed only when the exact number already appears in current_section.price_reaction or speaker_turn_excerpt; never use sample numbers, decorative numbers, or values from another week.
 - Do not draw video player UI, red progress bars, playback controls, browser chrome, subtitles, lower-third captions, watermarks, or screenshots.
 - maintain continuity across all scenes so the full video feels like one story.
 - avoid PPT look, avoid stock-photo look, avoid photorealistic faces, avoid clutter.
@@ -294,7 +295,8 @@ Design instructions:
 - If current_section describes a correction factor, show it as a secondary smaller force, not as the main driver.
 - If current_section describes asset validation, show the checked assets calmly; do not exaggerate or turn it into a crisis image.
 - Do not place a large Chinese title inside the image.
-- Keep on-screen text extremely minimal: use only numeric/ticker labels when needed, such as CPI, PPI, 4.2%, 10Y, DXY, 4.463%, 99.675, WTI, USD/JPY, USD/KRW.
+- Keep on-screen text extremely minimal: use short ticker labels when needed, such as CPI, PPI, 10Y, DXY, WTI, USD/JPY, or USD/KRW.
+- Show a numeric value only when that exact value appears in current_section.price_reaction or speaker_turn_excerpt. Do not invent, round, reuse, or decorate with any number that is absent from the current section.
 - Do not render paragraphs, tables, long subtitles, or handwritten Chinese sentences.
 - Do not draw any video player interface, red progress bar, play button, timeline bar, YouTube controls, browser frame, screenshot frame, or lower-third caption area.
 - Use the whole frame naturally as a clean whiteboard composition; do not create blank placeholder boxes, marked layout zones, or UI-like frame elements.
@@ -308,7 +310,7 @@ Output target:
 - 16:9 image.
 - Whiteboard sketch explainer / marker doodle style.
 - Avoid visible Chinese title text; let the video subtitles and narration carry the wording.
-- If text appears, keep it to clean numeric/ticker labels only.
+- If text appears, keep it to clean ticker labels and source-supported numeric labels only.
 
 Avoid:
 - video player UI, progress bars, play buttons, timeline controls, YouTube-like controls, browser screenshots, lower-third caption bars
