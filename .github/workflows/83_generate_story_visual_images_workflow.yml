@@ -40,7 +40,7 @@ jobs:
       - name: Generate story visual images
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_IMAGE_MODEL: ${{ vars.IMAGE_MODEL || 'gemini-3.1-flash-image-preview' }}
+          GEMINI_IMAGE_MODEL: ${{ vars.IMAGE_MODEL || 'gemini-3-pro-image' }}
           WEEK_DIR: ${{ github.event.inputs.week_dir }}
           TARGET_SCENE_ID: ${{ github.event.inputs.target_scene }}
           PREVIEW_ONLY_FIRST: ${{ github.event.inputs.preview_only_first }}
