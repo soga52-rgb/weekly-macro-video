@@ -1,0 +1,1215 @@
+你是機構級總經影片的 showrunner、主筆與敘事導演。
+
+你的任務不是把資料摘要改寫成對話，也不是替圖片寫旁白。
+你的任務是使用已由 Step 80 篩選、並與 V35 對齊的事件證據，以及正式分析區間內的市場價格變化，寫出一支 Tom 與 Miranda 的完整總經訪談故事。
+你不會收到完整 weekly_news_context.md、舊背景新聞、weekly_source_text 或 endpoint 原文；不得自行補回未提供的新聞敘事。
+
+這一版是 Story-only：
+- 不處理圖片。
+- 不需要 visual_reference。
+- 不需要 visual_brief。
+- 不要依照圖卡數量切段。
+- 先讓語音故事本身成立。
+
+角色：
+Tom 是成熟的國際財經訪談主持人。他不是新聞播報員，也不是單純的問答機器。
+Tom 的工作是替聽眾打開問題：他擅長用敏銳的直覺指出市場矛盾，例如「價格明明往一個方向走，為什麼市場的結論沒有跟著改變？」也擅長在聽完分析後，用生活化比喻或頓悟式短句幫聽眾提煉重點。Tom 的語氣要自然、好奇、克制，但要能代表聽眾把反直覺的地方問清楚。
+
+Miranda 是機構級總經策略師。她不是念資料的人。
+Miranda 的工作是解釋市場價格背後的市場走勢背後的判斷：事件為什麼重要、價格怎麼反應、這個反應驗證或抵銷了什麼判斷、下一步會傳導到哪個變數。她非常擅長把冷冰冰的宏觀數字落地，在解釋高利率、強美元、流動性壓力或避險需求時，會自然帶出實體經濟的微觀痛點，例如房貸凍結、企業融資成本上升、原物料進口壓力、外資撤離或央行外匯存底消耗。她也擅長指出央行、投資人或市場當下面臨的兩難困境，例如保匯率 vs 保外匯存底、打通膨 vs 救經濟、維持高利率 vs 實體經濟受傷。
+
+核心寫作原則：
+0. 【分析區間硬規則】input_bundle.meta.analysis_window 是本集唯一正式分析區間。storyline、main_event_threads、sections、price_reaction、spoken_text、subtitle_text、full_script_plain_text 的「本週」價格變化，只能使用 analysis window 內的數字與事件。
+0-1. lookback、macro_background、endpoint_context、weekly_source_text 中屬於 analysis window 以前的內容，只能作為「前期背景」或「延續性脈絡」用一兩句交代，不得成為第一段主軸，不得列為 main_event_threads 的主要價格反應。
+0-2. 嚴禁把 lookback window 的起點價格寫成本週起點。本週任何資產的起點、終點與淨方向，只能使用 input_bundle.market_series_analysis_window.assets.*.summary 的 start_value、end_value 與 net_direction。
+0-3. 若需提到 analysis window 以前的長債壓力、政策人事、地緣政治或其他背景，必須明確稱為「前期背景」或「延續性脈絡」，並在同一段內快速轉回 analysis window 的本週主線，不可讓背景事件成為整支影片的開場主軸。
+0-4. 本集主線的資料優先序為：
+    第一順位：weekly_v35_diagnosis.weekly_v35_diagnosis；
+    第二順位：analysis_layer.main_theme_analysis_process.main_theme_next_validation；
+    第三順位：analysis_layer.main_theme_analysis_process.market_contradictions_and_modifiers；
+    第四順位：analysis_layer.forest_summary。
+    不得引用不存在的 analysis-layer 欄位，也不得繞過 V35 另建一套主線。
+0-4-1. analysis_layer 已是 Step 80 篩選後的事件證據與分析層。不得把其中的修正因子、背離訊號或單一新聞重新升格為另一條主線。
+0-4-2. meta.story_thesis、storyline.main_event_threads、各 section 的 story_purpose 與 macro_interpretation 必須共同服務 V35 dominant_driver；可以延後揭示主線，但不可在中後段改成另一套結論。
+0-5. weekly_v35_diagnosis 是 Python rule-based V35 診斷層，不是旁白文案；你可以重新組織故事語言，但不可推翻其主導因子、修正因子、背離訊號、資產驗證、油價 / 通膨方向規則與資產方向。
+0-6. 若 analysis_layer 與 weekly_v35_diagnosis 出現張力，請寫成分歧、修正因子或待觀察，不要自行改成另一套主線。
+0-6-1. 對 analysis_layer.evidence.insufficient_evidence 已標示不足的原因，只能說「待確認、資料不足、可能但無法確認」，不得自行補成資金流、央行干預、政策立場或其他確定因果。
+0-7. 油價方向必須以 weekly_v35_diagnosis.observed_market 或 market_series_analysis_window 的 WTI / Brent 實際方向為準。油價上行代表能源成本與短期通膨預期上行壓力；油價下行可能緩和能源通膨，若源自需求疲弱也可能代表成長降溫。若油價不是本期主線，應描述為修正因子或並行訊號。不得把油價變動直接歸因於財政赤字、高利率或公債供需。
+0-8. 就業指標名稱不等於方向。初領失業金、非農、失業率與薪資必須有明確方向或相對預期才能判斷。失業率下降先視為韌性訊號，不可單獨改寫成全面就業強勁；非農偏弱但失業率下降時應呈現為就業訊號分歧。勞動市場韌性本身不得直接推升通膨預期，只有薪資壓力或需求偏強等訊號才可進入通膨上行敘事。
+0-9. 不得為了配合 US10Y、DXY、Gold、WTI 或亞洲貨幣方向，而把低於預期、轉弱或混合的新聞改寫成強勁，也不得創造 input_bundle 未提供的事件、數字或政策結論。
+1. 這是一個故事，不是資料摘要。
+2. 前後邏輯必須接得上：上一段留下的問題，下一段要接著回答。
+3. 頭尾要呼應：開頭鋪陳過、尚未結束的事件線，必須自然變成下週觀察。
+4. 不要裸講數字。每個價格走勢都要由事件、新聞或市場疑問帶出。
+5. 每個重要變數都要判斷：它是上游影響、本身驅動，還是兩者混合。
+6. 每一段都是傳導節點，不是封閉主題。可以自然觸碰下一個變數，作為下一段伏筆。
+7. 不要一開始就總結本週主線。先讓聽眾跟著事件與價格一步一步形成理解。
+8. 本週主線應在後段自然收斂，不要在開頭提前講完。
+9. 下週觀察不能突然出現，必須回扣前面已經鋪陳過的未解事件或價格線。
+10. 全片最後必須有正式收尾，但正式收尾不能取代下週觀察段。最後一段必須分成兩步：
+    - Miranda 先完整說明下週觀察，必須回扣本週輸入資料與前文已鋪陳的事件線，最後用一句自然語把話交還給 Tom；不得因範例文字自行加入未出現在 input_bundle 的 Fed 表態、地緣談判、央行干預或其他事件。
+    - Tom 最後只做簡短正式收尾：回扣本集主線、感謝 Miranda、提醒觀眾下週持續追蹤，並自然說「我們下週見」。Tom 收尾不得再展開新的分析。
+11. 不要為了進入下週觀察或正式收尾，而壓縮中間故事。每一條主要事件線都必須先完整展開「事件脈絡 → 價格反應 → 市場解讀 → Tom 追問 → Miranda 補充」之後，才能進入下一段或下週觀察。
+12. 下週觀察與正式收尾只是故事的收束，不是替代主體分析的段落。不得因為要完成結尾格式，就縮短前面各 section 的推論、追問與價格解讀。
+13. 主要事件線至少挑一個代表性價格走勢做「口語化走勢解讀」：不要只說價格到哪裡，要說它是快速回落、先上攻後回落、先受壓後反彈、高位震盪，或區間反覆，並解釋這代表市場在重新評估什麼。
+14. 【防壓縮規則】除結尾段外，每個 section 目標包含 5 到 6 個 speaker_turns。Tom 在 Miranda 第一次回答後，至少要有兩次獨立追問，避免固定成「Tom 問 → Miranda 答 → Tom 追問 → Miranda 收斂」的 4 回合公式。
+15. 【厚度防護指令】節目目標時長為 10 到 12 分鐘。你必須給中間劇情充分推論空間，禁止為了趕著進入下週觀察或正式收尾而壓縮中間 sections。不要急著過渡到下一個變數，要把當下的矛盾點挖深。
+16. 【具體情境要求】Miranda 解釋總經傳導時，必須帶入至少一個具體的實體經濟情境或資產範例，例如企業融資成本、房貸凍結、原物料進口壓力、新興市場資金外流、出口敏感型貨幣壓力等，讓宏觀邏輯落地。
+17. 【內容深度與質感要求】增加微觀痛點：Miranda 在解釋高利率、強美元、流動性壓力、匯率貶值或避險需求時，要舉出具體痛點，例如房地產產業鏈資金被凍結、企業融資成本上升、進口原物料變貴、外資撤離、央行外匯存底消耗等。
+18. 【兩難困境要求】在提到央行政策或市場抉擇時，必須強調局面中的兩難，例如保匯率 vs 保外匯存底、打通膨 vs 救經濟、維持高利率 vs 實體經濟受傷、追逐利差 vs 防範硬著陸。
+19. 【主持人頓悟金句】Tom 的追問不能只是平鋪直敘的過場；在聽完 Miranda 的分析後，Tom 應嘗試用一句生動但克制的「頓悟式總結」幫聽眾消化，例如「所以現在市場買黃金，不只是為了賺錢，而是為了買一份保險？」或「換句話說，這不是單純比誰經濟強，而是比誰比較沒那麼差？」
+11. Tom 的開場白不要先報新聞清單，也不要先下本週結論；Tom 要用主持人的方式打開問題，請 Miranda 先從本週市場價格走勢切入分析。
+    Tom 開場請使用自然節目開場，再請 Miranda 從本週市場價格走勢切入。
+    建議句型：
+    「歡迎來到本週總經報導。Miranda，在進入今天的主線分析之前，我想先從市場價格本身看起。這週有哪些重要財經數據的走勢，最值得我們注意？」
+    Miranda 第一段必須接著用事件脈絡帶出 2～3 個代表性價格走勢，並解釋這些走勢為什麼重要。
+
+追問、白話翻譯與呼吸感原則：
+- 保留 Tom 開場方式，不必再改開場。
+- 每條主要事件線至少安排一輪 Tom 追問，讓 Miranda 有機會把原因、傳導與市場含義講深一層。
+- Tom 的追問要有「解謎感」，不要只是換段落；要代表聽眾指出反直覺或未解矛盾，例如：
+  「這只是短期修正，還是真的改變了市場主線？」
+  「這個價格反應，究竟是在驗證主線，還是只反映短期雜訊？」
+  「如果主要資產大致同向，為什麼仍有局部市場出現背離？」
+  「等一下，這聽起來有點反直覺。價格明明往一個方向走，為什麼市場結論卻沒有跟著轉向？」
+- Miranda 的回答要像在解謎：先承認表面矛盾，再揭示背後的市場市場走勢背後的判斷。
+- Miranda 使用專業術語後，必須立刻補一句白話翻譯。尤其是：期限溢價、結構性通膨、利差優勢、避險需求、上游影響、流動性壓力。
+  例如：「這就是期限溢價。白話說，就是投資人覺得長期不確定性變高，所以要求更高的補償。」
+- 增加對話呼吸感：Miranda 不要連續講太久。如果單一 Miranda spoken_text 可能超過 35 秒，請拆成「Miranda 先解釋 → Tom 短句確認或追問 → Miranda 補充」。
+- Tom 可以用短句幫聽眾消化，例如：「所以這個訊號不是失效，而是被更強的力量暫時壓過？」、「換句話說，市場不是忽略這項資料，而是在重新比較不同因素的權重？」
+- 價格走勢要用口語描述，不要用技術分類詞當台詞主體。
+- 可以使用「先被壓下去、後來又被買盤拉回」、「前段快速回落、後段低位整理」、「先上攻、後來被成長擔憂壓回」這類說法。
+- 避免在 spoken_text 裡直接把「V 型反轉」、「倒 V 型」、「L 型整理」當成主要表述；如果需要使用，必須立刻用一句口語原因解釋。
+
+價格走勢解讀範例：
+不要寫成：「某資產呈現 V 型反轉，價格在某個區間震盪。」
+應該寫成：「這項資產前段先受主要因子影響，後段又因另一股力量出現局部修正。這代表市場沒有只看單一訊號，而是在重新比較不同因素的權重。」
+
+建議故事推進方式：
+- 先從本週最重要的市場矛盾或淨方向切入；範例只能示範敘事方法，不可預設任何資產本週一定上漲或下跌。
+- 用整週淨方向建立主線，再用週內事件解釋中間的反覆。
+- 用價格反應解釋市場目前更關注什麼，不要把單日波動寫成整週結論。
+- 如果價格走勢和直覺不同，要把它當作故事問題。
+- 讓 Tom 問出這個問題，讓 Miranda 解釋。
+- 每段結尾自然帶出下一個變數。
+
+請產生 10 到 12 分鐘左右的中文雙人對談稿。
+語氣：台灣專業財經節目口語，清楚、有節奏、有洞察，但不要浮誇。
+語言邊界：
+- 避免戲劇化或絕對化詞彙，例如：拉鋸、雙重夾擊、海嘯、毀滅性打擊、兩杯毒藥、終極考驗、狂飆、完全正確、屏息等待。請改用：訊號分歧、抵銷力量、修正因子、壓力升高、仍需驗證、局部反彈、區間震盪。
+- 匯率表述必須清楚：USD/TWD 上升代表台幣貶值，USD/KRW 上升代表韓元貶值，USD/JPY 上升代表日圓貶值。不要寫成「美元/台幣貶值」。
+- 請用「本週 / 本期 / 正式分析區間」描述週報，不要用「今天」代表整週。
+不要投資建議，不要買賣指令。
+請輸出合法 JSON，不要 Markdown，不要多餘文字。
+
+請根據下方資料，產生 Step 82 v8.11.2 Story-only Tom / Miranda 總經訪談稿。
+
+資料：
+{
+  "meta": {
+    "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-07-09",
+    "generated_at": "2026-07-10T02:23:53",
+    "analysis_window": {
+      "start_date": "2026-07-03",
+      "end_date": "2026-07-09",
+      "label": "2026-07-03 ～ 2026-07-09",
+      "source": "workflow_env"
+    },
+    "input_files": {
+      "analysis": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-07-09/weekly_forest_summary_analysis_layer_test.json",
+      "weekly_v35_diagnosis": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-07-09/weekly_v35_diagnosis.json",
+      "weekly_market_series": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-07-09/weekly_market_series.json"
+    },
+    "excluded_from_gemini": [
+      "weekly_news_context.json",
+      "weekly_news_context.md",
+      "macro_background_context.json",
+      "macro_background_context.md",
+      "weekly_source_text.md",
+      "data/weekly_video_source.json"
+    ],
+    "hard_rule": "The dialogue must use analysis_window as the only formal week range. V35 is the main-theme authority. Step 80 is the filtered event-evidence layer. Pre-analysis-window and raw-news narrative are not provided to Gemini."
+  },
+  "analysis_layer": {
+    "meta": {
+      "source": "analysis_input_bundle",
+      "data_status_note": "分析層只使用正式 analysis window；weekly_v35_diagnosis 為主線權威；市場價格用於方向驗證；代表新聞只作事件佐證；weekly_news_context.md、背景新聞與新聞模型先前生成的主線文字均未送入 Gemini。",
+      "week_range": "2026-07-03 ～ 2026-07-09",
+      "analysis_window": {
+        "start_date": "2026-07-03",
+        "end_date": "2026-07-09",
+        "source": "workflow_env"
+      },
+      "v35_authority_applied": true,
+      "v35_dominant_driver": "油價上行與高利率定價並存，美元偏強但亞洲貨幣分化"
+    },
+    "main_theme_analysis_process": {
+      "material_inventory": {
+        "inflation_materials": [
+          "伊朗危機再起！專家：油價恐漲到這價位、甚至迫使 Fed 升息 - 經濟日報",
+          "陸6月CPI降溫、PPI升溫 內需疲弱與成本壓力並存 - 經濟日報"
+        ],
+        "rate_materials": [
+          "非農「爆冷」 失業率意外下降 市場推遲聯準會升息時點預期 - news.cnyes.com",
+          "聯準會會議紀要：AI躋身三大通膨風險，少數官員支援6月加息 - 鉅亨號"
+        ],
+        "dollar_materials": [],
+        "gold_materials": [],
+        "asia_fx_materials": [],
+        "inventory_summary": "本期新聞與市場訊號聚焦於油價上行帶來的通膨隱憂、Fed 會議紀要的偏鷹表態，以及勞動市場的數據分歧（非農降溫但失業率下降）。市場價格反映出美債殖利率與美元同步走強、黃金承壓，但亞洲貨幣呈現日圓與台幣貶值、韓元升值的分化現象。"
+      },
+      "inflation_expectation_formation": {
+        "energy": "WTI 與 Brent 實際上行，短期能源通膨壓力增加。",
+        "supply_chain": "unclear",
+        "price_data": "中國 6 月 CPI 降溫但 PPI 升溫，顯示內需疲弱與成本壓力並存。",
+        "demand": "unclear",
+        "labor_market": "就業訊號分歧，非農數據爆冷但失業率意外下降。",
+        "policy_expectation": "Fed 會議紀要顯示 AI 躋身三大通膨風險，少數官員支持升息，推升政策緊縮預期。",
+        "upward_channels": [
+          "油價上行推升能源通膨預期",
+          "Fed 關注 AI 帶來的潛在通膨風險"
+        ],
+        "offsetting_channels": [
+          "非農就業數據降溫",
+          "中國 CPI 降溫顯示部分需求疲弱"
+        ],
+        "direction": "mixed",
+        "strength": "medium",
+        "judgment": "通膨預期呈現多空拉鋸。一方面油價實際上行與 Fed 關注的新型通膨風險形成上行壓力；另一方面，非農就業降溫與部分物價數據放緩作為修正因子。整體而言，能源通膨壓力在短線主導，但並非單向定價。"
+      },
+      "rate_pricing": {
+        "direction": "up",
+        "same_direction_as_inflation": "yes",
+        "inflation_to_rate_transmission": "能源通膨壓力與 Fed 偏鷹態度共同推升了高利率維持更久的預期。",
+        "fed_policy_signal": "會議紀要偏鷹，少數官員支持升息，使市場維持對高利率的定價。",
+        "bond_supply_demand": "unclear",
+        "term_premium": "unclear",
+        "safe_haven_bond_demand": "unclear",
+        "growth_or_rate_cut_expectation": "非農爆冷帶來部分成長降溫訊號，但被失業率下降與 Fed 偏鷹態度抵銷。",
+        "dominant_driver": "mixed",
+        "judgment": "美國10年期公債殖利率上行。儘管非農數據爆冷，但失業率下降及 Fed 會議紀要釋放的偏鷹訊號，加上油價上行帶來的通膨隱憂，使市場維持高利率定價。"
+      },
+      "dollar_pricing": {
+        "direction": "up",
+        "same_direction_as_rates": "yes",
+        "rate_differential_effect": "美債殖利率上行支撐了美元的利差優勢。",
+        "safe_haven_dollar": "unclear",
+        "dollar_liquidity_demand": "unclear",
+        "other_currency_weakness": "日圓與台幣走弱被動推升美元相對強勢。",
+        "us_relative_resilience": "失業率下降顯示美國勞動市場仍具一定韌性。",
+        "dominant_driver": "rate_differential",
+        "judgment": "美元指數偏強，主要受到美債殖利率上行帶來的利差優勢支撐，同時日圓與台幣等非美貨幣的弱勢也提供部分推力。"
+      },
+      "gold_pricing": {
+        "direction": "down",
+        "rate_real_yield_pressure": "美債殖利率上行增加持有黃金的機會成本。",
+        "dollar_effect": "美元偏強對黃金計價形成壓抑。",
+        "safe_haven_demand": "unclear",
+        "central_bank_buying": "unclear",
+        "geopolitics": "伊朗危機雖有提及，但未能壓過利率與美元的負面影響。",
+        "dominant_driver": "rates",
+        "judgment": "黃金價格下行，主要反映高利率定價與美元偏強的雙重壓力，地緣政治風險未能提供足夠的避險支撐。"
+      },
+      "asia_fx_pricing": {
+        "twd": {
+          "direction": "down",
+          "same_direction_as_dollar_pressure": "yes",
+          "local_flow": "unclear",
+          "central_bank_policy": "unclear",
+          "export_or_tech_sector": "unclear",
+          "regional_risk": "unclear",
+          "judgment": "台幣兌美元貶值，走勢符合強美元與高利率環境下的外溢承壓效果。"
+        },
+        "jpy": {
+          "direction": "down",
+          "same_direction_as_dollar_pressure": "yes",
+          "japan_policy": "unclear",
+          "rate_differential": "美債殖利率上行擴大美日利差，使日圓承壓。",
+          "safe_haven_demand": "unclear",
+          "other_factor": "unclear",
+          "judgment": "日圓兌美元貶值，主要受到美債殖利率上行與美元偏強的利差壓力主導。"
+        },
+        "krw": {
+          "direction": "up",
+          "same_direction_as_dollar_pressure": "no",
+          "korea_export": "unclear",
+          "equity_flow": "unclear",
+          "regional_risk": "unclear",
+          "other_factor": "具體原因待確認",
+          "judgment": "韓元兌美元升值，與美元偏強及其他亞幣走勢背離，具體支撐原因待確認，顯示亞洲資金流並未全面同步。"
+        }
+      },
+      "market_contradictions_and_modifiers": {
+        "baseline_path": "通膨預期 → 利率預期 → 美元指數 → 亞洲貨幣 / 黃金",
+        "expected_baseline_script": "油價上行推升通膨預期，帶動美債殖利率與美元上行，進而壓抑黃金並使亞洲貨幣全面承壓。",
+        "most_unintuitive_market_reaction": "韓元在美元偏強與美債殖利率上行的環境下逆勢升值；同時就業數據內部呈現非農爆冷與失業率下降的分歧。",
+        "contradiction_type": "modifier",
+        "how_it_fits_main_theme": "WTI 與 Brent 上行、美國10年期公債殖利率與美元指數同步偏強、黃金下跌，顯示能源通膨與高利率定價仍在；但日圓、台幣與韓元反應分化，亞洲資金流並未全面同步。",
+        "presenter_opening_question": "當油價上漲與 Fed 偏鷹推升美債殖利率與美元時，為何亞洲貨幣沒有全面倒下，韓元甚至逆勢走強？"
+      },
+      "main_theme_next_validation": {
+        "dominant_pricing_force": "油價上行與高利率定價並存，美元偏強但亞洲貨幣分化",
+        "offsetting_or_modifying_force": "通膨硬數據降溫；綜合通膨預期下行；勞動市場降溫訊號",
+        "one_sentence_to_remember": "能源通膨隱憂與 Fed 偏鷹態度支撐了高利率與強美元，但亞洲貨幣走勢分化與就業數據分歧提醒我們市場並非單向定價。",
+        "next_validation_point": "通膨上行與下行訊號誰會成為下一期主導因子；就業分歧訊號將由非農、初領失業金、失業率或薪資中的哪一項確認方向；Fed 是否延續高利率維持更久的訊號",
+        "overall_verdict": "成立",
+        "uncertainty_level": "medium"
+      }
+    },
+    "forest_summary": {
+      "weekly_main_theme": "油價上行與高利率定價並存，美元偏強但亞洲貨幣分化",
+      "main_question": "在能源通膨壓力與高利率定價主導下，市場如何消化就業數據的分歧？亞幣又為何走向分化？",
+      "one_sentence_verdict": "油價與 Fed 偏鷹態度推升利率與美元，黃金承壓，但就業數據分歧與韓元逆勢走強成為重要的修正與背離訊號。",
+      "overall_verdict": "成立",
+      "narrative_arc": "本週市場主線由油價上行與 Fed 會議紀要偏鷹帶動，美債殖利率與美元同步走強，黃金順勢回落。然而，非農就業爆冷與失業率下降形成數據分歧，加上韓元在強美元下逆勢升值，顯示市場在通膨預期與資金流向上仍存在多空拉鋸與區域分化。後續需密切觀察通膨數據與就業指標以確認 Fed 政策路徑。",
+      "why_it_matters": "這顯示市場雖然維持高利率定價，但對經濟基本面（如就業）的擔憂已開始浮現，且非美貨幣不再無差別承壓。理解這些分歧有助於判斷未來趨勢反轉的早期訊號。"
+    },
+    "evidence": {
+      "most_important_evidence": [
+        "美國10年期公債殖利率上行，與推升利率因子大致一致。",
+        "WTI 或 Brent 實際上行，短期能源通膨壓力增加。",
+        "美元指數偏強，需檢查是利差支撐、避險美元，還是非美貨幣弱勢所造成。",
+        "美元兌日圓上行，符合該貨幣承壓的外溢效果。",
+        "美元兌台幣上行，符合該貨幣承壓的外溢效果。"
+      ],
+      "insufficient_evidence": [
+        "韓元逆勢升值的具體資金流或基本面原因。",
+        "中國 CPI 降溫對全球通膨預期的具體外溢影響程度。"
+      ],
+      "watch_items_from_news_context": [
+        "通膨上行與下行訊號誰會成為下一期主導因子",
+        "就業分歧訊號將由非農、初領失業金、失業率或薪資中的哪一項確認方向",
+        "Fed 是否延續高利率維持更久的訊號"
+      ]
+    }
+  },
+  "weekly_v35_diagnosis": {
+    "meta": {
+      "source": "macro_v35_diagnosis.py",
+      "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-07-09",
+      "analysis_window": {
+        "start_date": "2026-07-03",
+        "end_date": "2026-07-09",
+        "label": "2026-07-03 ～ 2026-07-09",
+        "source": "workflow_env_or_cli"
+      },
+      "input_files": {
+        "weekly_market_series_json": true,
+        "weekly_news_context_json": true,
+        "weekly_news_context_md": true,
+        "macro_background_context_json": false,
+        "macro_background_context_md": false
+      },
+      "note": "Rule-based V35 diagnosis. News evidence is segmented by record, future/watch text is excluded from directional regex, and observed market direction has precedence for oil, DXY and Gold validation."
+    },
+    "core_contradiction": "WTI 與 Brent 上行、美國10年期公債殖利率與美元指數同步偏強、黃金下跌，顯示能源通膨與高利率定價仍在；但日圓、台幣與韓元反應分化，亞洲資金流並未全面同步。",
+    "primary_macro_story": "油價上行與高利率定價並存，美元偏強但亞洲貨幣分化",
+    "expected_chain": [
+      "WTI 與 Brent 上行，能源通膨壓力增加",
+      "美國10年期公債殖利率偏上，高利率定價仍在",
+      "美元指數偏強、黃金承受利率與美元壓力",
+      "日圓、台幣與韓元需分別驗證，不預設全面同向",
+      "觀察通膨數據、Fed 路徑與油價是否延續共振"
+    ],
+    "observed_market": {
+      "US10Y": {
+        "direction": "up",
+        "text": "殖利率上行",
+        "start_value": 4.479000091552734,
+        "end_value": 4.539000034332275,
+        "change": 0.059999942779541016,
+        "start_date": "2026-07-06",
+        "end_date": "2026-07-09",
+        "points_count": 4
+      },
+      "DXY": {
+        "direction": "up",
+        "text": "美元偏強",
+        "start_value": 100.85700225830078,
+        "end_value": 100.93699645996094,
+        "change": 0.07999420166015625,
+        "start_date": "2026-07-03",
+        "end_date": "2026-07-09",
+        "points_count": 6
+      },
+      "Gold": {
+        "direction": "down",
+        "text": "黃金下行",
+        "start_value": 4187.2998046875,
+        "end_value": 4133.0,
+        "change": -54.2998046875,
+        "start_date": "2026-07-03",
+        "end_date": "2026-07-09",
+        "points_count": 6
+      },
+      "WTI": {
+        "direction": "up",
+        "text": "油價上行",
+        "start_value": 68.77999877929688,
+        "end_value": 71.80000305175781,
+        "change": 3.0200042724609375,
+        "start_date": "2026-07-03",
+        "end_date": "2026-07-09",
+        "points_count": 6
+      },
+      "Brent": {
+        "direction": "up",
+        "text": "油價上行",
+        "start_value": 72.12999725341797,
+        "end_value": 76.0,
+        "change": 3.8700027465820312,
+        "start_date": "2026-07-03",
+        "end_date": "2026-07-09",
+        "points_count": 6
+      },
+      "USDJPY": {
+        "direction": "up",
+        "text": "美元上行，當地貨幣承壓",
+        "start_value": 161.33700561523438,
+        "end_value": 162.34500122070312,
+        "change": 1.00799560546875,
+        "start_date": "2026-07-03",
+        "end_date": "2026-07-09",
+        "points_count": 6
+      },
+      "USDTWD": {
+        "direction": "up",
+        "text": "美元上行，當地貨幣承壓",
+        "start_value": 31.92300033569336,
+        "end_value": 32.10300064086914,
+        "change": 0.18000030517578125,
+        "start_date": "2026-07-03",
+        "end_date": "2026-07-09",
+        "points_count": 6
+      },
+      "USDKRW": {
+        "direction": "down",
+        "text": "美元回落，當地貨幣相對支撐",
+        "start_value": 1530.1500244140625,
+        "end_value": 1506.47998046875,
+        "change": -23.6700439453125,
+        "start_date": "2026-07-03",
+        "end_date": "2026-07-09",
+        "points_count": 6
+      }
+    },
+    "detected_news_events": {
+      "inflationPressure": true,
+      "inflationRelief": true,
+      "inflationCoolingSignal": true,
+      "inflationMixed": true,
+      "inflationExpectationShift": true,
+      "highRateExpectation": true,
+      "fedHawkish": true,
+      "fedDovish": true,
+      "laborCooling": true,
+      "laborStrength": false,
+      "laborMixed": true,
+      "laborResilience": true,
+      "laborWagePressure": false,
+      "growthCooling": false,
+      "growthStrength": false,
+      "oilInflationPressure": true,
+      "oilInflationRelief": false,
+      "dollarStrength": true,
+      "dollarWeakness": false,
+      "goldPressure": true,
+      "goldSafeHaven": false,
+      "riskOff": true,
+      "inflationHot": true,
+      "inflationCooling": true,
+      "inflationExpectationUp": true,
+      "inflationExpectationDown": true,
+      "inflationExpectationMixed": true,
+      "inflationExpectationMixedSignal": true,
+      "inflationExpectationShiftSignal": true,
+      "treasurySupplyPressure": true,
+      "treasuryDemandStrong": false,
+      "refundingPressure": false,
+      "termPremiumPressure": true,
+      "fedBalanceSheetTightening": false,
+      "fedBalanceSheetEasing": false,
+      "fedLeadershipShift": false,
+      "financialStress": false,
+      "marketExpectationShift": true,
+      "geopoliticalCooling": false,
+      "oilSupplyShock": false,
+      "oilDemandWeakness": false,
+      "factor_groups": {
+        "inflation": {
+          "detected": true,
+          "hot": true,
+          "cooling": true
+        },
+        "labor_market": {
+          "detected": true,
+          "cooling": true,
+          "strength": false,
+          "mixed": true,
+          "resilience": true,
+          "wage_pressure": false,
+          "weak_signals": {
+            "payroll_weak": true,
+            "claims_weak": false,
+            "unemployment_rise": false,
+            "wage_cooling": false,
+            "layoffs": false
+          },
+          "strong_or_resilient_signals": {
+            "payroll_strong": false,
+            "claims_down": false,
+            "unemployment_fall": true,
+            "wage_pressure": false
+          }
+        },
+        "growth_demand": {
+          "detected": false,
+          "cooling": false,
+          "strength": false
+        },
+        "oil_energy": {
+          "detected": false,
+          "supply_shock": false,
+          "demand_weakness": false,
+          "geopolitical_cooling": false,
+          "market_direction": "up",
+          "inflation_pressure": true,
+          "inflation_relief": false
+        },
+        "inflation_expectation": {
+          "detected": true,
+          "upward": true,
+          "downward": true,
+          "mixed": true,
+          "shift": true,
+          "components": {
+            "inflation_hot": true,
+            "inflation_cooling": true,
+            "oil_supply_shock": false,
+            "oil_demand_weakness": false,
+            "geopolitical_cooling": false,
+            "oil_market_up": true,
+            "oil_market_down": false,
+            "labor_strength": false,
+            "labor_cooling": true,
+            "labor_mixed": true,
+            "wage_pressure": false,
+            "growth_strength": false,
+            "growth_cooling": false,
+            "risk_off": true,
+            "market_expectation_shift": true
+          }
+        },
+        "fed_policy_path": {
+          "detected": true,
+          "hawkish": true,
+          "dovish": true,
+          "leadership_shift": false,
+          "labor_strength_effect": false,
+          "labor_cooling_effect": true,
+          "labor_mixed_effect": true
+        },
+        "treasury_market": {
+          "detected": true,
+          "supply_pressure": true,
+          "demand_strong": false,
+          "refunding_pressure": false,
+          "term_premium_pressure": true
+        },
+        "liquidity_balance_sheet": {
+          "detected": false,
+          "tightening": false,
+          "easing": false
+        },
+        "financial_conditions": {
+          "detected": false,
+          "tightening": false,
+          "easing": false,
+          "stress": false
+        },
+        "market_psychology": {
+          "detected": true,
+          "risk_off": true,
+          "expectation_shift": true,
+          "gold_safe_haven": false,
+          "dollar_weakness": false,
+          "dollar_strength": true
+        },
+        "dollar_external": {
+          "detected": true,
+          "dollar_strength": true,
+          "dollar_weakness": false
+        },
+        "gold_risk": {
+          "detected": true,
+          "pressure": true,
+          "safe_haven": false
+        }
+      }
+    },
+    "rate_factor_map": {
+      "upward_rate_factors": [
+        {
+          "label": "通膨硬數據偏熱",
+          "reason": "CPI、PPI、PCE 或價格分項偏強，代表前期物價壓力仍有黏性。"
+        },
+        {
+          "label": "綜合通膨預期上行",
+          "reason": "通膨硬數據、能源供給、勞動市場或成長需求訊號合計後，對通膨預期形成上行壓力。"
+        },
+        {
+          "label": "WTI / Brent 實際上行",
+          "reason": "本期 WTI 或 Brent 週線上漲，能源價格對短期通膨預期形成實際上行壓力。"
+        },
+        {
+          "label": "Fed 偏鷹或高利率維持更久",
+          "reason": "FOMC、會議紀要、官員談話或點陣圖若偏鷹，會推升政策利率路徑預期。"
+        },
+        {
+          "label": "公債供需 / 再融資 / 期限溢價壓力",
+          "reason": "美債供給、再融資、財政赤字或期限溢價上升，可能不經通膨直接推高長端殖利率。"
+        }
+      ],
+      "downward_rate_factors": [
+        {
+          "label": "通膨硬數據降溫",
+          "reason": "CPI、PPI、PCE 或價格分項放緩，代表前期物價壓力有所緩和。"
+        },
+        {
+          "label": "綜合通膨預期下行",
+          "reason": "通膨降溫、油價需求疲弱、勞動市場降溫、成長放緩或地緣風險降溫，可能壓低通膨預期。"
+        },
+        {
+          "label": "勞動市場降溫訊號",
+          "reason": "非農、ADP、初領失業金、失業率、薪資或裁員消息若明確轉弱，可能提高降息或成長放緩預期。"
+        },
+        {
+          "label": "Fed 偏鴿或政策轉向寬鬆",
+          "reason": "Fed 若更重視就業、金融穩定或成長風險，可能提高降息預期。"
+        }
+      ],
+      "offsetting_or_uncertain_factors": [
+        {
+          "label": "通膨預期多空拉鋸",
+          "reason": "通膨上行與下行訊號同時存在，應區分主線與修正因子，避免寫成市場無視通膨。"
+        },
+        {
+          "label": "就業訊號分歧",
+          "reason": "就業資料內部同時出現轉弱與韌性訊號，例如非農或薪資轉弱但失業率或初領失業金仍顯示韌性；不應直接寫成勞動市場強勁。"
+        },
+        {
+          "label": "市場心理與風險擔憂變化",
+          "reason": "地緣政治、停火談判、制裁、關稅或政策表態會改變市場對未來事件的主觀機率。"
+        }
+      ],
+      "policy_rate_path_expectation": [
+        {
+          "label": "降息預期下降 / 高利率維持更久",
+          "reason": "綜合通膨預期偏上行時，市場通常會降低對快速降息的期待。"
+        },
+        {
+          "label": "降息預期上升",
+          "reason": "綜合通膨預期偏下行時，市場通常會提高對利率下行的期待。"
+        },
+        {
+          "label": "Fed 路徑待確認",
+          "reason": "就業訊號分歧時，市場通常需要下一筆非農、初領失業金、薪資或勞動參與率資料確認方向。"
+        },
+        {
+          "label": "降息預期上升",
+          "reason": "勞動市場轉弱會使市場更關注 Fed 雙重使命中的就業風險。"
+        },
+        {
+          "label": "高利率維持更久 / 升息預期上升",
+          "reason": "Fed 偏鷹會降低降息期待，甚至提高升息或維持高利率的機率。"
+        },
+        {
+          "label": "降息預期上升",
+          "reason": "偏鴿訊號通常使市場上修降息機率。"
+        }
+      ],
+      "market_expectation_shift": [
+        {
+          "label": "通膨預期重新評估",
+          "reason": "市場可能正在重新評估通膨、油價、成長與政策路徑之間的相對重要性。"
+        },
+        {
+          "label": "風險擔憂重新評估",
+          "reason": "這類新聞可能直接影響油價、美元、黃金與美債避險買盤。"
+        }
+      ],
+      "observed_rate_direction": "up",
+      "observed_dollar_direction": "up",
+      "observed_gold_direction": "down",
+      "dominant_bias": "up",
+      "market_alignment": "利率方向與推升因子大致一致",
+      "confidence": "medium"
+    },
+    "matched_links": [
+      "美國10年期公債殖利率上行，與推升利率因子大致一致。",
+      "WTI 或 Brent 實際上行，短期能源通膨壓力增加。",
+      "美元指數偏強，需檢查是利差支撐、避險美元，還是非美貨幣弱勢所造成。",
+      "美元兌日圓上行，符合該貨幣承壓的外溢效果。",
+      "美元兌台幣上行，符合該貨幣承壓的外溢效果。",
+      "黃金下行通常符合高利率或強美元壓力。"
+    ],
+    "divergent_links": [],
+    "modifiers": [
+      "通膨預期呈現多空拉鋸：能源價格或偏熱物價訊號形成上行壓力，但通膨降溫、勞動轉弱或其他修正因子仍存在。",
+      "市場可能正在重新評估通膨預期，需比較油價、成長、勞動與 Fed 路徑哪個權重較高。",
+      "亞洲貨幣反應分化：日圓、台幣承壓，但韓元相對走強，不宜概括為亞洲貨幣全面走弱。",
+      "通膨預期多空拉鋸：通膨上行與下行訊號同時存在，應區分主線與修正因子，避免寫成市場無視通膨。",
+      "就業訊號分歧：就業資料內部同時出現轉弱與韌性訊號，例如非農或薪資轉弱但失業率或初領失業金仍顯示韌性；不應直接寫成勞動市場強勁。",
+      "市場心理與風險擔憂變化：地緣政治、停火談判、制裁、關稅或政策表態會改變市場對未來事件的主觀機率。"
+    ],
+    "final_judgment": "支持",
+    "weekly_v35_diagnosis": {
+      "dominant_driver": "油價上行與高利率定價並存，美元偏強但亞洲貨幣分化",
+      "correction_factors": [
+        "通膨硬數據降溫",
+        "綜合通膨預期下行",
+        "勞動市場降溫訊號",
+        "通膨預期多空拉鋸",
+        "就業訊號分歧"
+      ],
+      "divergence_signal": "WTI 與 Brent 上行、美國10年期公債殖利率與美元指數同步偏強、黃金下跌，顯示能源通膨與高利率定價仍在；但日圓、台幣與韓元反應分化，亞洲資金流並未全面同步。",
+      "asset_validation": [
+        "美國10年期公債殖利率上行，與推升利率因子大致一致。",
+        "WTI 或 Brent 實際上行，短期能源通膨壓力增加。",
+        "美元指數偏強，需檢查是利差支撐、避險美元，還是非美貨幣弱勢所造成。",
+        "美元兌日圓上行，符合該貨幣承壓的外溢效果。",
+        "美元兌台幣上行，符合該貨幣承壓的外溢效果。"
+      ],
+      "next_period_watch": [
+        "通膨上行與下行訊號誰會成為下一期主導因子",
+        "就業分歧訊號將由非農、初領失業金、失業率或薪資中的哪一項確認方向",
+        "Fed 是否延續高利率維持更久的訊號"
+      ]
+    }
+  },
+  "weekly_v35_diagnosis_note": "Rule-based V35 diagnosis. Use it as the authority for dominant driver, correction factors, divergence signal, asset validation, next-period watch, oil/inflation direction rules, and asset directions.",
+  "market_series_analysis_window": {
+    "available": true,
+    "analysis_window": {
+      "start_date": "2026-07-03",
+      "end_date": "2026-07-09",
+      "label": "2026-07-03 ～ 2026-07-09",
+      "source": "workflow_env"
+    },
+    "assets": {
+      "US10Y": {
+        "asset_key": "US10Y",
+        "asset_name": "美國10年期公債殖利率",
+        "unit": "%",
+        "points_count": 4,
+        "points": [
+          {
+            "date": "2026-07-06",
+            "value": 4.479000091552734
+          },
+          {
+            "date": "2026-07-07",
+            "value": 4.529000282287598
+          },
+          {
+            "date": "2026-07-08",
+            "value": 4.568999767303467
+          },
+          {
+            "date": "2026-07-09",
+            "value": 4.539000034332275
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-07-06",
+          "start_value": 4.479000091552734,
+          "end_date": "2026-07-09",
+          "end_value": 4.539000034332275,
+          "net_change": 0.059999942779541016,
+          "net_change_pct": 1.3395834238248663,
+          "net_direction": "up",
+          "high_date": "2026-07-08",
+          "high_value": 4.568999767303467,
+          "low_date": "2026-07-06",
+          "low_value": 4.479000091552734,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      },
+      "DXY": {
+        "asset_key": "DXY",
+        "asset_name": "美元指數",
+        "unit": "",
+        "points_count": 6,
+        "points": [
+          {
+            "date": "2026-07-03",
+            "value": 100.85700225830078
+          },
+          {
+            "date": "2026-07-05",
+            "value": 100.87200164794922
+          },
+          {
+            "date": "2026-07-06",
+            "value": 100.8550033569336
+          },
+          {
+            "date": "2026-07-07",
+            "value": 101.12200164794922
+          },
+          {
+            "date": "2026-07-08",
+            "value": 101.06600189208984
+          },
+          {
+            "date": "2026-07-09",
+            "value": 100.93699645996094
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-07-03",
+          "start_value": 100.85700225830078,
+          "end_date": "2026-07-09",
+          "end_value": 100.93699645996094,
+          "net_change": 0.07999420166015625,
+          "net_change_pct": 0.07931447481979123,
+          "net_direction": "up",
+          "high_date": "2026-07-07",
+          "high_value": 101.12200164794922,
+          "low_date": "2026-07-06",
+          "low_value": 100.8550033569336,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      },
+      "Gold": {
+        "asset_key": "Gold",
+        "asset_name": "黃金",
+        "unit": "USD/oz",
+        "points_count": 6,
+        "points": [
+          {
+            "date": "2026-07-03",
+            "value": 4187.2998046875
+          },
+          {
+            "date": "2026-07-05",
+            "value": 4191.5
+          },
+          {
+            "date": "2026-07-06",
+            "value": 4178.39990234375
+          },
+          {
+            "date": "2026-07-07",
+            "value": 4113.2998046875
+          },
+          {
+            "date": "2026-07-08",
+            "value": 4085.10009765625
+          },
+          {
+            "date": "2026-07-09",
+            "value": 4133
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-07-03",
+          "start_value": 4187.2998046875,
+          "end_date": "2026-07-09",
+          "end_value": 4133.0,
+          "net_change": -54.2998046875,
+          "net_change_pct": -1.2967737496778649,
+          "net_direction": "down",
+          "high_date": "2026-07-05",
+          "high_value": 4191.5,
+          "low_date": "2026-07-08",
+          "low_value": 4085.10009765625,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      },
+      "WTI": {
+        "asset_key": "WTI",
+        "asset_name": "西德州原油",
+        "unit": "USD/bbl",
+        "points_count": 6,
+        "points": [
+          {
+            "date": "2026-07-03",
+            "value": 68.77999877929688
+          },
+          {
+            "date": "2026-07-05",
+            "value": 68.37999725341797
+          },
+          {
+            "date": "2026-07-06",
+            "value": 68.66999816894531
+          },
+          {
+            "date": "2026-07-07",
+            "value": 72.27999877929688
+          },
+          {
+            "date": "2026-07-08",
+            "value": 74.63999938964844
+          },
+          {
+            "date": "2026-07-09",
+            "value": 71.80000305175781
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-07-03",
+          "start_value": 68.77999877929688,
+          "end_date": "2026-07-09",
+          "end_value": 71.80000305175781,
+          "net_change": 3.0200042724609375,
+          "net_change_pct": 4.390817572055517,
+          "net_direction": "up",
+          "high_date": "2026-07-08",
+          "high_value": 74.63999938964844,
+          "low_date": "2026-07-05",
+          "low_value": 68.37999725341797,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      },
+      "Brent": {
+        "asset_key": "Brent",
+        "asset_name": "布蘭特原油",
+        "unit": "USD/bbl",
+        "points_count": 6,
+        "points": [
+          {
+            "date": "2026-07-03",
+            "value": 72.12999725341797
+          },
+          {
+            "date": "2026-07-05",
+            "value": 71.76000213623047
+          },
+          {
+            "date": "2026-07-06",
+            "value": 72.12999725341797
+          },
+          {
+            "date": "2026-07-07",
+            "value": 76.08999633789062
+          },
+          {
+            "date": "2026-07-08",
+            "value": 79.16999816894531
+          },
+          {
+            "date": "2026-07-09",
+            "value": 76
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-07-03",
+          "start_value": 72.12999725341797,
+          "end_date": "2026-07-09",
+          "end_value": 76.0,
+          "net_change": 3.8700027465820312,
+          "net_change_pct": 5.365316642097399,
+          "net_direction": "up",
+          "high_date": "2026-07-08",
+          "high_value": 79.16999816894531,
+          "low_date": "2026-07-05",
+          "low_value": 71.76000213623047,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      },
+      "USDJPY": {
+        "asset_key": "USDJPY",
+        "asset_name": "美元／日圓",
+        "unit": "JPY",
+        "points_count": 6,
+        "points": [
+          {
+            "date": "2026-07-03",
+            "value": 161.33700561523438
+          },
+          {
+            "date": "2026-07-05",
+            "value": 161.38900756835938
+          },
+          {
+            "date": "2026-07-06",
+            "value": 162.0540008544922
+          },
+          {
+            "date": "2026-07-07",
+            "value": 162.13600158691406
+          },
+          {
+            "date": "2026-07-08",
+            "value": 162.58999633789062
+          },
+          {
+            "date": "2026-07-09",
+            "value": 162.34500122070312
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-07-03",
+          "start_value": 161.33700561523438,
+          "end_date": "2026-07-09",
+          "end_value": 162.34500122070312,
+          "net_change": 1.00799560546875,
+          "net_change_pct": 0.6247764433366731,
+          "net_direction": "up",
+          "high_date": "2026-07-08",
+          "high_value": 162.58999633789062,
+          "low_date": "2026-07-03",
+          "low_value": 161.33700561523438,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      },
+      "USDTWD": {
+        "asset_key": "USDTWD",
+        "asset_name": "美元／台幣",
+        "unit": "TWD",
+        "points_count": 6,
+        "points": [
+          {
+            "date": "2026-07-03",
+            "value": 31.92300033569336
+          },
+          {
+            "date": "2026-07-05",
+            "value": 31.924999237060547
+          },
+          {
+            "date": "2026-07-06",
+            "value": 32.05799865722656
+          },
+          {
+            "date": "2026-07-07",
+            "value": 32.12699890136719
+          },
+          {
+            "date": "2026-07-08",
+            "value": 32.09700012207031
+          },
+          {
+            "date": "2026-07-09",
+            "value": 32.10300064086914
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-07-03",
+          "start_value": 31.92300033569336,
+          "end_date": "2026-07-09",
+          "end_value": 32.10300064086914,
+          "net_change": 0.18000030517578125,
+          "net_change_pct": 0.5638577304230439,
+          "net_direction": "up",
+          "high_date": "2026-07-07",
+          "high_value": 32.12699890136719,
+          "low_date": "2026-07-03",
+          "low_value": 31.92300033569336,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      },
+      "USDKRW": {
+        "asset_key": "USDKRW",
+        "asset_name": "美元／韓元",
+        "unit": "KRW",
+        "points_count": 6,
+        "points": [
+          {
+            "date": "2026-07-03",
+            "value": 1530.1500244140625
+          },
+          {
+            "date": "2026-07-05",
+            "value": 1527.989990234375
+          },
+          {
+            "date": "2026-07-06",
+            "value": 1529.8199462890625
+          },
+          {
+            "date": "2026-07-07",
+            "value": 1514.8699951171875
+          },
+          {
+            "date": "2026-07-08",
+            "value": 1505.5699462890625
+          },
+          {
+            "date": "2026-07-09",
+            "value": 1506.47998046875
+          }
+        ],
+        "summary": {
+          "available": true,
+          "start_date": "2026-07-03",
+          "start_value": 1530.1500244140625,
+          "end_date": "2026-07-09",
+          "end_value": 1506.47998046875,
+          "net_change": -23.6700439453125,
+          "net_change_pct": -1.5469100132437292,
+          "net_direction": "down",
+          "high_date": "2026-07-03",
+          "high_value": 1530.1500244140625,
+          "low_date": "2026-07-08",
+          "low_value": 1505.5699462890625,
+          "instruction": "Use net_direction as the formal this-week direction. High/low and intermediate moves may be described only as intra-week episodes."
+        }
+      }
+    },
+    "direction_rule": "For every asset, the formal this-week direction is start_value -> end_value inside analysis_window. The model may discuss high/low or mid-week reversals, but must label them as intra-week episodes and must not describe them as the whole-week direction.",
+    "instruction": "Use these filtered points and the computed summary for all this-week price reactions in the dialogue. Do not use lookback-window start prices as this-week starting points."
+  },
+  "market_series_lookback_note": {
+    "available": true,
+    "meta": {
+      "source": "Google Sheets Market_Source_Test",
+      "mode": "market_history_series",
+      "generated_at": "2026-07-10T08:41:35+08:00",
+      "data_status": "complete",
+      "range": {
+        "start": "2026-07-03",
+        "end": "2026-07-09",
+        "rule": "manual"
+      },
+      "value_source": "Yahoo數字 only",
+      "default_assets": [
+        "US10Y",
+        "DXY",
+        "Gold",
+        "WTI",
+        "Brent",
+        "USDJPY",
+        "USDTWD",
+        "USDKRW"
+      ],
+      "requested_analysis_window": {
+        "start_date": "2026-07-03",
+        "end_date": "2026-07-09",
+        "source": "workflow_env_or_cli"
+      }
+    },
+    "note": "Lookback data is intentionally not provided as raw dialogue material. It may be used only as prior context already distilled in the analysis_layer."
+  },
+  "source_scope_note": "Event evidence has already been filtered and distilled in analysis_layer. Do not reconstruct a separate theme from raw weekly-news narrative, because it is intentionally excluded.",
+  "instruction_hint": "Build the story around the V35 dominant driver. Use analysis_layer only to explain, qualify, and humanize it. Use market_series_analysis_window for every price number and direction. Keep correction factors and divergences in their proper supporting roles."
+}
+
+輸入範圍說明：
+- input_bundle 只包含 Step 80 分析層、V35 診斷層、正式分析區間市場資料與 lookback 使用說明。
+- 完整 weekly_news_context.json / md、背景新聞、weekly_source_text 與 endpoint 原文均未提供。
+- 事件細節以 analysis_layer 已保留的材料為限；不得自行補回未提供的舊新聞主線或背景敘事。
+
+weekly_v35_diagnosis 使用規則：
+- input_bundle.weekly_v35_diagnosis 是 Python rule-based V35 診斷層，請優先用來對齊本集主線與網頁主線。
+- 請優先使用 weekly_v35_diagnosis.weekly_v35_diagnosis 裡的 dominant_driver、correction_factors、divergence_signal、asset_validation、next_period_watch。
+- Tom / Miranda 可以用更自然的訪談語言重組故事，但不可推翻 V35 的油價 / 通膨方向規則、資產方向與背離判斷。
+- 若 V35 診斷層與 analysis_layer 看似衝突，請在對話中表述為「分歧、修正因子、仍待觀察」，不要自行創造另一條主線。
+- meta.story_thesis 必須直接使用或語意等同 V35 dominant_driver；不得把 correction_factors 或單一事件改寫成新的主題。
+- analysis_layer.evidence.insufficient_evidence 中列出的未知原因不得被補成確定因果。
+- 對外台詞請避免「交易、定價、體制、風險溢價、傳導源」等生硬名詞；優先使用「市場更關注、主導因子、修正因子、背離訊號、資產驗證、下期觀察、市場重新評估」。
+
+硬性生成規則：
+- 你必須先讀取 input_bundle.meta.analysis_window，並將其作為本集唯一正式週期。
+- meta.week_range 必須等於 input_bundle.meta.analysis_window.label。
+- 所有「本週」價格反應必須優先使用 input_bundle.market_series_analysis_window.assets.*.summary。
+- 任何資產的整週方向必須以 summary.start_value → summary.end_value / summary.net_direction 為準。
+- 若要描述 summary.high_value / summary.low_value 或中間某一天走勢，必須明確寫成「週內一度」或「週中波動」，不得寫成本週主線方向。
+- input_bundle.market_series_lookback_note、weekly_source_text、endpoint_context_excerpt 若包含更早日期，只能用於前期背景，不可作為本週起點。
+- storyline.main_event_threads 不得把 lookback 起點價格當成本週主要事件線。
+- 第一段可簡短交代前期高利率背景，但必須快速轉入 analysis window 內的本週變化，不可整段都圍繞前期長債恐慌。
+- 嚴禁使用 analysis window 外的價格區間描述本週變化。正式區間的起點、終點與淨方向，只能使用 input_bundle.market_series_analysis_window.assets.*.summary；lookback 或 endpoint context 中的更早價格不得寫成本週走勢。
+
+請輸出 JSON，結構如下：
+
+{{
+  "meta": {{
+    "script_type": "story_only_dialogue_v8",
+    "week_range": "",
+    "estimated_duration_minutes": "10-12",
+    "story_thesis": "用一句話描述本集故事核心，但不要像投資建議"
+  }},
+  "storyline": {{
+    "opening_question": "本集一開始要打開的市場問題",
+    "main_event_threads": [
+      {{
+        "thread_name": "事件線名稱",
+        "why_it_matters": "為什麼重要",
+        "price_reaction": "價格如何反應",
+        "unresolved_question": "為什麼延伸到後面或下週"
+      }}
+    ],
+    "closing_callback": "結尾如何回扣開頭"
+  }},
+  "sections": [
+    {{
+      "section_id": "s1",
+      "section_title": "自然語意標題，不要像簡報標題",
+      "story_purpose": "這段在整支故事中的任務",
+      "event_setup": "這段先鋪陳的事件或背景",
+      "price_reaction": "這段要使用的價格反應",
+      "driver_judgment": "上游影響 / 本身驅動 / 混合",
+      "macro_interpretation": "這段真正要讓聽眾理解的洞察",
+      "micro_pain_point": "這段可落地的實體經濟痛點或資產範例，例如房貸、企業融資、原物料進口、外資流出",
+      "dilemma": "這段涉及的兩難困境，例如保匯率 vs 保外匯存底、打通膨 vs 救經濟；若無則簡短說明",
+      "tom_insight_line": "Tom 可用來幫聽眾頓悟的金句式總結",
+      "bridge_question": "自然帶到下一段的問題",
+      "speaker_turns": [
+        {{
+          "speaker": "Tom",
+          "spoken_text": "正式可進 TTS 的台詞",
+          "subtitle_text": "25字以內字幕",
+          "estimated_seconds": 20
+        }}
+      ]
+    }}
+  ],
+  "next_week_watch": [
+    {{
+      "watch_item": "下週觀察項目",
+      "callback_to_story": "它回扣前面哪條事件線",
+      "why_it_matters": "為什麼要追蹤"
+    }}
+  ],
+  "closing_handoff_turn": {
+    "speaker": "Miranda",
+    "spoken_text": "下週觀察摘要分析後，把話自然交還 Tom，例如：Tom，以上就是下週最需要追蹤的幾個關鍵訊號。",
+    "subtitle_text": "25字以內字幕",
+    "estimated_seconds": 10
+  },
+  "closing_turn": {
+    "speaker": "Tom",
+    "spoken_text": "簡短正式收尾，回扣主線、感謝 Miranda、提醒下週追蹤，並自然說我們下週見；不得再展開新分析",
+    "subtitle_text": "25字以內字幕",
+    "estimated_seconds": 12
+  },
+  "full_script_plain_text": "[Tom]: ...\n[Miranda]: ..."
+}}
+
+生成要求：
+- sections 數量由故事需要決定，建議 5 到 7 段，不要為了固定張數硬切。
+- 除結尾段外，每個 section 目標 5 到 6 個 speaker_turns；重要段落可以更多。
+- 主要事件線至少要有兩輪 Tom 追問與 Miranda 補充，不要只用一問一答或固定 4 回合公式就結束。
+- 若 Miranda 單次 spoken_text 預估超過 35 秒，優先拆成多個 turn，中間插入 Tom 的確認、頓悟式總結或追問。
+- Tom 負責打開問題與承接，不要替 Miranda 下完整結論；但 Tom 必須用頓悟式金句幫聽眾消化至少 2 個關鍵段落。
+- Miranda 負責解釋事件、價格與總經傳導；使用專業術語後，必須補一句白話翻譯。
+- Miranda 在解釋宏觀邏輯時，必須加入具體實體經濟痛點或資產範例，避免只停留在抽象概念。
+- 涉及央行或市場選擇時，必須把兩難困境講出來，讓故事有張力。
+- 價格走勢必須服務故事，不要變成數字清單。
+- 如果某個事件最後列為 next_week_watch，前面故事中必須已經鋪陳過。
+- 不得為了趕進下週觀察或正式收尾而壓縮前面 sections；每個主要事件線都要有足夠的推論、追問與補充。
+- 最後一個 section 的 speaker_turns 必須先由 Miranda 完整說明下週觀察，並自然把話交還給 Tom。
+- Miranda 的下週觀察說明不得只列清單，必須回扣前面故事已鋪陳的事件線。
+- closing_handoff_turn 必須與最後一段中 Miranda 交還主持人的 speaker_turn 內容一致。
+- closing_turn 必須與最後一個 Tom speaker_turn 內容一致。
+- full_script_plain_text 必須由 speaker_turns 重新組成，保留 [Tom] / [Miranda] 標籤，且最後一行必須是 Tom 的簡短正式收尾。
+- sections 未來會交給圖片層使用，所以每個 section 的 story_purpose、event_setup、price_reaction、macro_interpretation 要保持清楚，但不要在這版生成圖片提示詞。
