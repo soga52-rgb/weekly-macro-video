@@ -57,7 +57,7 @@ jobs:
       - name: Generate story-only dialogue
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-3.5-flash' }}
+          GEMINI_MODEL: ${{ vars.GEMINI_MODEL || 'gemini-3.1-pro-preview' }}
         run: |
           python scripts/82_test_generate_dialogue_script.py
 
