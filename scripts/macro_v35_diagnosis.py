@@ -26,6 +26,8 @@ Design principles:
   expected chain, asset validation, and a compact weekly_v35_diagnosis block.
 - Downstream Gemini prompts should read this file instead of re-inventing the macro logic.
 - Synced with current Apps Script labor direction guards, labor-mixed logic, wage-pressure rule, and directional dollar detection.
+- Current-week market direction takes precedence for oil, DXY and Gold; news is used to explain or correct, not overwrite, observed prices.
+- News regex runs on one-record-per-line factual segments and excludes watch/future/editor fields.
 - The analysis period is controlled by the formal analysis window; do not assume 7 days.
 """
 
@@ -398,29 +400,112 @@ def collect_news_text(
     macro_background_context_json: Dict[str, Any],
     macro_background_context_md: str,
 ) -> str:
-    parts: List[str] = []
-    parts.append(weekly_news_context_md)
-    parts.append(macro_background_context_md)
+    """Collect factual news evidence as one-record-per-line segments.
 
-    def walk(value: Any) -> None:
-        if value is None:
+    The old implementation flattened the entire JSON/Markdown tree into one long
+    sentence. Regex patterns such as ``非農.*強美元`` could therefore cross from
+    one article or section into another and create false opposite-direction flags.
+
+    This version intentionally:
+    - keeps each news record / signal on its own line;
+    - reads factual and correction fields only;
+    - excludes watch points, future scenarios, metadata, editor instructions, and
+      duplicated Markdown summaries from directional detection;
+    - preserves correction news as evidence, but does not let hypothetical text
+      contaminate current-period facts.
+    """
+    segments: List[str] = []
+    seen = set()
+
+    def add_segment(*values: Any) -> None:
+        parts: List[str] = []
+        for value in values:
+            if value is None:
+                continue
+            if isinstance(value, (dict, list)):
+                value = json.dumps(value, ensure_ascii=False)
+            cleaned = re.sub(r"\s+", " ", str(value)).strip()
+            if cleaned:
+                parts.append(cleaned)
+        segment = "｜".join(parts).strip("｜ ")
+        key = segment.lower()
+        if not segment or key in seen:
             return
-        if isinstance(value, dict):
-            for v in value.values():
-                walk(v)
+        seen.add(key)
+        segments.append(segment)
+
+    def add_news_item(item: Any) -> None:
+        if not isinstance(item, dict):
+            add_segment(item)
             return
-        if isinstance(value, list):
-            for v in value:
-                walk(v)
+        add_segment(
+            item.get("title") or item.get("headline"),
+            item.get("theme"),
+            item.get("why_it_matters") or item.get("summary") or item.get("impact"),
+        )
+
+    def add_context(context: Any) -> None:
+        if not isinstance(context, dict):
             return
-        parts.append(str(value))
 
-    walk(weekly_news_context_json)
-    walk(macro_background_context_json)
-    return " ".join(p for p in parts if p).lower()
+        # Current-period editorial theme is allowed, but watch/future fields are not.
+        add_segment(context.get("weekly_news_theme"))
 
+        for driver in as_list(context.get("macro_drivers")):
+            if isinstance(driver, dict):
+                add_segment(
+                    driver.get("driver") or driver.get("title") or driver.get("theme"),
+                    driver.get("impact") or driver.get("summary") or driver.get("why_it_matters"),
+                )
+            else:
+                add_segment(driver)
 
-def extract_macro_event_flags_v35(news_text: str) -> Dict[str, Any]:
+        # These are current-period evidence or explicit corrections, not future watch points.
+        for field in ("confirming_signals", "contradicting_signals", "news_based_corrections"):
+            for item in as_list(context.get(field)):
+                if isinstance(item, dict):
+                    add_segment(
+                        item.get("title") or item.get("driver") or item.get("theme"),
+                        item.get("impact") or item.get("summary") or item.get("why_it_matters"),
+                    )
+                else:
+                    add_segment(item)
+
+        categories = context.get("news_categories")
+        if isinstance(categories, dict):
+            for category_items in categories.values():
+                for item in as_list(category_items):
+                    add_news_item(item)
+
+        # top_news may duplicate category cards; add_segment() de-duplicates exact records.
+        for item in as_list(context.get("top_news")):
+            add_news_item(item)
+
+    add_context(weekly_news_context_json)
+    add_context(macro_background_context_json)
+
+    # Compatibility fallback only when structured JSON contains no usable evidence.
+    # Keep one source line per segment and drop headings that explicitly denote watch/future text.
+    if not segments:
+        for raw_text in (weekly_news_context_md, macro_background_context_md):
+            skip_section = False
+            for line in str(raw_text or "").splitlines():
+                cleaned = line.strip()
+                if not cleaned:
+                    continue
+                if re.match(r"^#{1,6}\s*", cleaned):
+                    skip_section = bool(re.search(r"下週|待觀察|watch|future|展望", cleaned, flags=re.IGNORECASE))
+                    continue
+                if skip_section:
+                    continue
+                add_segment(re.sub(r"^[-*]\s*", "", cleaned))
+
+    return "\n".join(segments).lower()
+
+def extract_macro_event_flags_v35(
+    news_text: str,
+    observed: Optional[Dict[str, Dict[str, Any]]] = None,
+) -> Dict[str, Any]:
     """Extract directional macro event flags using the current Apps Script V35/V36 rules.
 
     Important safeguards:
@@ -430,6 +515,7 @@ def extract_macro_event_flags_v35(news_text: str) -> Dict[str, Any]:
     - Oil news describes the cause; actual WTI / Brent direction is validated later from market data.
     """
     text = news_text or ""
+    observed = observed or {}
 
     inflation_hot = regex_has(
         r"\b(cpi|ppi|pce|core cpi|core pce|consumer prices|producer prices|personal consumption expenditures|import prices|prices paid|inflation)\b.*(hot|higher|above|accelerat|sticky|surpris|rise|rose|jump|increase|beat)|通膨.*(高於預期|升溫|黏性|加速|反彈)|物價.*(高於預期|上升|加速)|ppi.*高於|cpi.*高於|pce.*高於|價格分項.*上升",
@@ -581,13 +667,50 @@ def extract_macro_event_flags_v35(news_text: str) -> Dict[str, Any]:
     gold_pressure = regex_has(r"gold drops|gold falls|gold.*down|gold pressured|金價大跌|黃金.*跌|金價.*跌|黃金承壓", text)
     gold_safe_haven = regex_has(r"gold.*safe haven|gold.*risk|gold.*geopolitical|gold rises|gold gains|黃金.*避險|金價.*避險|黃金.*地緣|黃金上漲|金價上漲", text)
 
-    # Current Apps Script rule: labor strength alone affects the Fed path, not inflation expectations.
-    inflation_expectation_up = inflation_hot or oil_supply_shock or wage_pressure_signal or growth_strength
-    inflation_expectation_down = inflation_cooling or oil_demand_weakness or labor_cooling or growth_cooling or geopolitical_cooling
+    # Market-direction precedence for traded assets.
+    # News explains possible causes; observed prices decide whether the channel was
+    # actually inflationary / disinflationary during the formal analysis window.
+    wti_direction = str(observed.get("WTI", {}).get("direction") or "")
+    brent_direction = str(observed.get("Brent", {}).get("direction") or "")
+    oil_market_up = wti_direction == "up" or brent_direction == "up"
+    oil_market_down = wti_direction == "down" or brent_direction == "down"
+    oil_direction_known = bool(wti_direction or brent_direction)
+
+    dxy_direction = str(observed.get("DXY", {}).get("direction") or "")
+    gold_direction = str(observed.get("Gold", {}).get("direction") or "")
+
+    oil_inflation_pressure = oil_market_up or (
+        not oil_direction_known
+        and (oil_supply_shock or regex_has(r"oil prices.*inflation|油價.*通膨|能源.*通膨", text))
+    )
+    oil_inflation_relief = oil_market_down or (
+        not oil_direction_known and (oil_demand_weakness or geopolitical_cooling)
+    )
+
+    # Current rule: labor strength alone affects the Fed path, not inflation expectations.
+    inflation_expectation_up = inflation_hot or oil_inflation_pressure or wage_pressure_signal or growth_strength
+    inflation_expectation_down = inflation_cooling or oil_inflation_relief or labor_cooling or growth_cooling
     inflation_expectation_mixed = inflation_expectation_up and inflation_expectation_down
     inflation_expectation_shift = market_expectation_shift or inflation_expectation_mixed or (
         risk_off and (inflation_expectation_up or inflation_expectation_down)
     )
+
+    # DXY and Gold are validation assets. Once an observed direction exists, it is
+    # authoritative for the current week; opposite news wording remains contextual
+    # evidence but must not create two simultaneous market-direction flags.
+    if dxy_direction == "up":
+        dollar_strength = True
+        dollar_weakness = False
+    elif dxy_direction == "down":
+        dollar_strength = False
+        dollar_weakness = True
+
+    if gold_direction == "down":
+        gold_pressure = True
+        gold_safe_haven = False
+    elif gold_direction == "up":
+        gold_pressure = False
+        gold_safe_haven = True
 
     return {
         "inflationPressure": inflation_hot or inflation_expectation_up,
@@ -605,8 +728,8 @@ def extract_macro_event_flags_v35(news_text: str) -> Dict[str, Any]:
         "laborWagePressure": wage_pressure_signal,
         "growthCooling": growth_cooling,
         "growthStrength": growth_strength,
-        "oilInflationPressure": oil_supply_shock or regex_has(r"oil prices.*inflation|油價.*通膨|能源.*通膨", text),
-        "oilInflationRelief": oil_demand_weakness or geopolitical_cooling,
+        "oilInflationPressure": oil_inflation_pressure,
+        "oilInflationRelief": oil_inflation_relief,
         "dollarStrength": dollar_strength,
         "dollarWeakness": dollar_weakness,
         "goldPressure": gold_pressure,
@@ -668,8 +791,9 @@ def extract_macro_event_flags_v35(news_text: str) -> Dict[str, Any]:
                 "supply_shock": oil_supply_shock,
                 "demand_weakness": oil_demand_weakness,
                 "geopolitical_cooling": geopolitical_cooling,
-                "inflation_pressure": oil_supply_shock,
-                "inflation_relief": oil_demand_weakness or geopolitical_cooling,
+                "market_direction": "up" if oil_market_up else "down" if oil_market_down else "unknown",
+                "inflation_pressure": oil_inflation_pressure,
+                "inflation_relief": oil_inflation_relief,
             },
             "inflation_expectation": {
                 "detected": inflation_expectation_up or inflation_expectation_down or inflation_expectation_shift,
@@ -683,6 +807,8 @@ def extract_macro_event_flags_v35(news_text: str) -> Dict[str, Any]:
                     "oil_supply_shock": oil_supply_shock,
                     "oil_demand_weakness": oil_demand_weakness,
                     "geopolitical_cooling": geopolitical_cooling,
+                    "oil_market_up": oil_market_up,
+                    "oil_market_down": oil_market_down,
                     "labor_strength": labor_strength,
                     "labor_cooling": labor_cooling,
                     "labor_mixed": labor_mixed,
@@ -769,13 +895,33 @@ def build_rate_factor_map_v35(flags: Dict[str, Any], observed: Dict[str, Dict[st
     if flags.get("inflationExpectationShift") or flags.get("inflationExpectationShiftSignal"):
         add_factor(psychology, "通膨預期重新評估", "市場可能正在重新評估通膨、油價、成長與政策路徑之間的相對重要性。")
 
+    wti_direction = str(observed.get("WTI", {}).get("direction") or "")
+    brent_direction = str(observed.get("Brent", {}).get("direction") or "")
+    oil_market_up = wti_direction == "up" or brent_direction == "up"
+    oil_market_down = wti_direction == "down" or brent_direction == "down"
+    oil_direction_known = bool(wti_direction or brent_direction)
+
+    if oil_market_up:
+        add_factor(up, "WTI / Brent 實際上行", "本期 WTI 或 Brent 週線上漲，能源價格對短期通膨預期形成實際上行壓力。")
+    elif oil_market_down:
+        add_factor(down, "WTI / Brent 實際下行", "本期 WTI 或 Brent 週線下跌，能源價格對短期通膨預期形成實際下行修正。")
+
     if flags.get("oilSupplyShock"):
-        add_factor(up, "能源供給風險", "能源供給中斷、減產、制裁或地緣風險，是綜合通膨預期上行的來源之一。")
+        if oil_market_down:
+            add_factor(offsetting, "供給風險未獲油價驗證", "新聞出現能源供給風險，但 WTI / Brent 實際下行，需視為新聞與市場分歧。")
+        else:
+            add_factor(up, "能源供給風險", "能源供給中斷、減產、制裁或地緣風險，是綜合通膨預期上行的來源之一。")
         add_factor(psychology, "能源風險擔憂升溫", "能源相關新聞可能改變市場對未來供給中斷機率的主觀判斷。")
     if flags.get("oilDemandWeakness"):
-        add_factor(down, "油價需求面壓力", "油價下跌若來自需求疲弱或庫存增加，可能反映成長降溫與通膨壓力緩和。")
+        if oil_market_up:
+            add_factor(offsetting, "需求降溫未獲油價驗證", "新聞出現油品需求疲弱，但 WTI / Brent 實際上行，需判斷是否由供給或風險溢價因素壓過。")
+        else:
+            add_factor(down, "油價需求面壓力", "油價下跌若來自需求疲弱或庫存增加，可能反映成長降溫與通膨壓力緩和。")
     if flags.get("geopoliticalCooling"):
-        add_factor(down, "地緣風險擔憂降溫", "停火、和談或地緣風險降溫，可能壓低能源風險擔憂與通膨預期。")
+        if oil_market_up:
+            add_factor(offsetting, "地緣降溫未獲油價驗證", "新聞顯示地緣風險降溫，但 WTI / Brent 實際上行，不能直接視為能源通膨緩和。")
+        else:
+            add_factor(down, "地緣風險擔憂降溫", "停火、和談或地緣風險降溫，可能壓低能源風險擔憂與通膨預期。")
     labor_group = flags.get("factor_groups", {}).get("labor_market", {})
     if flags.get("laborMixed") or labor_group.get("mixed"):
         add_factor(
@@ -880,6 +1026,17 @@ def infer_core_contradiction_v35(flags: Dict[str, Any], observed: Dict[str, Dict
     dollar_dir = observed.get("DXY", {}).get("direction")
     gold_dir = observed.get("Gold", {}).get("direction")
 
+    asia_directions = [
+        str(observed.get(key, {}).get("direction") or "")
+        for key in ("USDJPY", "USDTWD", "USDKRW")
+        if str(observed.get(key, {}).get("direction") or "") in {"up", "down"}
+    ]
+    asia_fx_mixed = "up" in asia_directions and "down" in asia_directions
+
+    if oil_up and rate_dir == "up" and dollar_dir == "up" and gold_dir == "down":
+        if asia_fx_mixed:
+            return "WTI 與 Brent 上行、美國10年期公債殖利率與美元指數同步偏強、黃金下跌，顯示能源通膨與高利率定價仍在；但日圓、台幣與韓元反應分化，亞洲資金流並未全面同步。"
+        return "WTI 與 Brent 上行、美國10年期公債殖利率與美元指數同步偏強、黃金下跌，呈現能源通膨壓力與高利率、強美元的連貫傳導。"
     if oil_down and rate_dir == "up":
         return "油價下跌有助於修正通膨預期，但美國10年期公債殖利率仍上行，顯示市場目前更重視 Fed 路徑、利率預期或公債供需壓力。"
     if inflation_mixed and rate_dir == "up":
@@ -905,6 +1062,11 @@ def infer_core_contradiction_v35(flags: Dict[str, Any], observed: Dict[str, Dict
 
 
 def infer_primary_macro_story_v35(flags: Dict[str, Any], observed: Dict[str, Dict[str, Any]]) -> str:
+    """Choose the weekly main line with observed markets first and news as explanation.
+
+    News can add causes or correction factors, but it cannot override the direction
+    actually shown by WTI/Brent, US10Y, DXY, Gold, and Asian FX in the formal window.
+    """
     inflation_up = flags.get("inflationExpectationUp") or flags.get("inflationPressure")
     inflation_down = flags.get("inflationExpectationDown") or flags.get("inflationRelief")
     inflation_mixed = flags.get("inflationExpectationMixed") or flags.get("inflationMixed")
@@ -914,17 +1076,36 @@ def infer_primary_macro_story_v35(flags: Dict[str, Any], observed: Dict[str, Dic
     rate_up = observed.get("US10Y", {}).get("direction") == "up"
     rate_down = observed.get("US10Y", {}).get("direction") == "down"
     dollar_up = observed.get("DXY", {}).get("direction") == "up"
+    gold_down = observed.get("Gold", {}).get("direction") == "down"
 
-    if (flags.get("highRateExpectation") or flags.get("fedHawkish")) and rate_up and dollar_up:
+    asia_directions = [
+        str(observed.get(key, {}).get("direction") or "")
+        for key in ("USDJPY", "USDTWD", "USDKRW")
+        if str(observed.get(key, {}).get("direction") or "") in {"up", "down"}
+    ]
+    asia_fx_mixed = "up" in asia_directions and "down" in asia_directions
+
+    # Strongest current-week market pattern: energy, rates, dollar and gold broadly
+    # point to inflation/high-rate pressure, while Asian FX may still diverge.
+    if oil_up and rate_up and dollar_up:
+        if asia_fx_mixed:
+            return "油價上行與高利率定價並存，美元偏強但亞洲貨幣分化"
+        if gold_down:
+            return "油價上行強化通膨壓力，高利率支撐美元"
+        return "油價上行與高利率定價並存"
+
+    if rate_up and dollar_up and gold_down:
+        if inflation_mixed:
+            return "高利率與通膨拉鋸，美元偏強"
         return "高利率支撐強美元"
-    if inflation_mixed and (flags.get("highRateExpectation") or flags.get("fedHawkish")):
-        return "高利率與通膨拉鋸"
+    if inflation_mixed and rate_up:
+        return "通膨預期多空拉鋸，但利率維持偏上"
     if inflation_mixed:
         return "通膨預期多空拉鋸"
     if oil_down and inflation_up:
         return "油價修正通膨壓力"
-    if oil_up and inflation_up:
-        return "油價推升通膨預期"
+    if oil_up:
+        return "油價上行推升能源通膨壓力"
     if inflation_up and rate_up:
         return "通膨壓力推升利率"
     if inflation_down and rate_down:
@@ -939,12 +1120,13 @@ def infer_primary_macro_story_v35(flags: Dict[str, Any], observed: Dict[str, Dic
         return "美元偏強主導市場"
     return "市場等待新觸發點"
 
-
 def build_expected_chain_v35(primary_story: str, flags: Dict[str, Any]) -> List[str]:
     story = str(primary_story or "")
 
+    if "油價上行與高利率" in story or "油價上行強化通膨壓力" in story:
+        return ["WTI 與 Brent 上行，能源通膨壓力增加", "美國10年期公債殖利率偏上，高利率定價仍在", "美元指數偏強、黃金承受利率與美元壓力", "日圓、台幣與韓元需分別驗證，不預設全面同向", "觀察通膨數據、Fed 路徑與油價是否延續共振"]
     if "高利率" in story or "強美元" in story:
-        return ["Fed 路徑或高利率預期受到關注", "美國10年期公債殖利率偏上", "美元指數受利差或避險需求支撐", "亞洲貨幣承壓", "黃金、油價與風險資產依各自修正因子反應"]
+        return ["Fed 路徑或高利率預期受到關注", "美國10年期公債殖利率偏上", "美元指數受利差或避險需求支撐", "亞洲貨幣需逐一驗證，不預設全面同向", "黃金、油價與風險資產依各自修正因子反應"]
     if "通膨拉鋸" in story or "多空拉鋸" in story:
         return ["通膨上行與下行訊號並存", "市場重新評估油價、成長、勞動與 Fed 權重", "美國10年期公債殖利率方向取決於主導因子", "美元指數反映利差與避險需求", "亞洲貨幣、黃金與油價可能出現分歧"]
     if "油價修正" in story:
@@ -1004,12 +1186,12 @@ def build_transmission_diagnosis_v35(
         elif dominant_bias == "up":
             divergent_links.append("美國10年期公債殖利率下行，但新聞因子中也存在推升利率訊號，需判斷避險、金融壓力或成長風險是否占上風。")
 
-    if flags.get("inflationExpectationUp"):
-        matched_links.append("綜合通膨預期存在上行壓力，來源可能包括通膨硬數據、能源供給、勞動市場或成長需求。")
-    if flags.get("inflationExpectationDown"):
-        matched_links.append("綜合通膨預期存在下行壓力，來源可能包括通膨降溫、油價需求疲弱、勞動降溫、成長放緩或地緣風險降溫。")
     if flags.get("inflationExpectationMixed"):
-        modifiers.append("通膨預期呈現多空拉鋸，應區分主線與修正因子，避免直接寫成市場無視通膨。")
+        modifiers.append("通膨預期呈現多空拉鋸：能源價格或偏熱物價訊號形成上行壓力，但通膨降溫、勞動轉弱或其他修正因子仍存在。")
+    elif flags.get("inflationExpectationUp"):
+        matched_links.append("綜合通膨預期存在上行壓力，來源可能包括通膨硬數據、實際油價上行、能源供給、薪資或成長需求。")
+    elif flags.get("inflationExpectationDown"):
+        matched_links.append("綜合通膨預期存在下行壓力，來源可能包括通膨降溫、實際油價下行、勞動降溫或成長放緩。")
     if flags.get("inflationExpectationShift") or flags.get("inflationExpectationShiftSignal"):
         modifiers.append("市場可能正在重新評估通膨預期，需比較油價、成長、勞動與 Fed 路徑哪個權重較高。")
 
@@ -1018,10 +1200,12 @@ def build_transmission_diagnosis_v35(
     oil_up = wti_dir == "up" or brent_dir == "up"
     oil_down = wti_dir == "down" or brent_dir == "down"
 
-    if oil_up and flags.get("oilSupplyShock"):
-        matched_links.append("WTI 或 Brent 上行，且新聞出現能源供給風險，油價方向與能源通膨壓力大致一致。")
-    elif oil_up and flags.get("oilDemandWeakness"):
-        divergent_links.append("WTI 或 Brent 上行，但新聞同時出現需求疲弱訊號，需判斷是否由供給風險壓過需求降溫。")
+    if oil_up:
+        matched_links.append("WTI 或 Brent 實際上行，短期能源通膨壓力增加。")
+        if flags.get("oilDemandWeakness"):
+            divergent_links.append("WTI 或 Brent 上行，但新聞同時出現需求疲弱訊號，需判斷是否由供給、庫存或風險溢價因素壓過需求降溫。")
+        if flags.get("geopoliticalCooling"):
+            divergent_links.append("新聞顯示地緣風險降溫，但 WTI 或 Brent 實際上行，地緣降溫尚未獲油價驗證。")
 
     if oil_down and (flags.get("oilDemandWeakness") or flags.get("geopoliticalCooling")):
         matched_links.append("WTI 或 Brent 下行，且新聞出現需求疲弱或地緣風險降溫，油價方向與通膨預期降溫修正大致一致。")
@@ -1035,9 +1219,19 @@ def build_transmission_diagnosis_v35(
 
     if observed.get("DXY", {}).get("direction") == "up":
         matched_links.append("美元指數偏強，需檢查是利差支撐、避險美元，還是非美貨幣弱勢所造成。")
+        asia_up_labels: List[str] = []
+        asia_down_labels: List[str] = []
         for key, label in [("USDJPY", "日圓"), ("USDTWD", "台幣"), ("USDKRW", "韓元")]:
-            if observed.get(key, {}).get("direction") == "up":
-                matched_links.append(f"美元兌{label}上行，符合亞洲貨幣承壓的外溢效果。")
+            pair_direction = observed.get(key, {}).get("direction")
+            if pair_direction == "up":
+                asia_up_labels.append(label)
+                matched_links.append(f"美元兌{label}上行，符合該貨幣承壓的外溢效果。")
+            elif pair_direction == "down":
+                asia_down_labels.append(label)
+        if asia_up_labels and asia_down_labels:
+            modifiers.append(
+                f"亞洲貨幣反應分化：{'、'.join(asia_up_labels)}承壓，但{'、'.join(asia_down_labels)}相對走強，不宜概括為亞洲貨幣全面走弱。"
+            )
     elif observed.get("DXY", {}).get("direction") == "down":
         matched_links.append("美元指數偏弱，可能反映利差支撐下降、風險偏好改善或非美貨幣反彈。")
 
@@ -1054,6 +1248,10 @@ def build_transmission_diagnosis_v35(
     mods = unique_list(modifiers)[:9]
 
     final_judgment = infer_final_judgment(matched, divergent, mods)
+    if final_judgment == "支持" and (
+        rate_map.get("confidence") == "low" or rate_map.get("dominant_bias") == "mixed"
+    ):
+        final_judgment = "部分支持，但存在修正因子"
 
     return {
         "core_contradiction": core_contradiction,
@@ -1149,7 +1347,7 @@ def build_weekly_v35_diagnosis(
         macro_background_context_json=macro_background_context_json,
         macro_background_context_md=macro_background_context_md,
     )
-    flags = extract_macro_event_flags_v35(news_text)
+    flags = extract_macro_event_flags_v35(news_text, observed=observed)
     transmission = build_transmission_diagnosis_v35(observed, flags)
     compact = build_compact_weekly_v35_diagnosis(transmission)
 
@@ -1165,7 +1363,7 @@ def build_weekly_v35_diagnosis(
                 "macro_background_context_json": (week_dir / "macro_background_context.json").exists(),
                 "macro_background_context_md": (week_dir / "macro_background_context.md").exists(),
             },
-            "note": "Rule-based V35 diagnosis. Downstream Gemini steps should use this as structured diagnosis, not as final prose.",
+            "note": "Rule-based V35 diagnosis. News evidence is segmented by record, future/watch text is excluded from directional regex, and observed market direction has precedence for oil, DXY and Gold validation.",
         },
         **transmission,
         "weekly_v35_diagnosis": compact,
