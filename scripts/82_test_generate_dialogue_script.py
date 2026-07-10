@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Step 82 v8.11.2.1 - Story-only Dialogue Generator
+Step 82 v8.11.2.2 - Story-only Dialogue Generator (V35 authority focused)
 
 Purpose:
 - Generate a complete Tom / Miranda macro dialogue story first.
 - Do NOT use visual manifest or scene image mapping.
+- Use the V35 diagnosis as the main-theme authority.
+- Use the Step 80 analysis layer as the filtered event-evidence layer.
+- Use only analysis-window market data for price direction and numbers.
+- Do not feed raw weekly-news narrative, background-news text, source text, or endpoint excerpts into Gemini.
 - Focus on event-led macro storytelling:
   event context -> price reaction -> macro interpretation -> transmission bridge -> closing callback.
 
@@ -35,10 +39,12 @@ OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
 ANALYSIS_FILENAME = "weekly_forest_summary_analysis_layer_test.json"
 WEEKLY_V35_DIAGNOSIS_FILENAME = "weekly_v35_diagnosis.json"
 MARKET_SERIES_FILENAME = "weekly_market_series.json"
-NEWS_CONTEXT_JSON_FILENAME = "weekly_news_context.json"
-NEWS_CONTEXT_MD_FILENAME = "weekly_news_context.md"
+# Raw weekly-news narrative, background text, source text, and endpoint excerpts are
+# intentionally excluded from the Step 82 Gemini input. Step 80 has already distilled
+# the current-period event evidence, while V35 remains the main-theme authority.
+# The source-text filename remains only as a last-resort analysis-window fallback;
+# its body is never inserted into the Gemini input bundle.
 SOURCE_TEXT_FILENAME = "weekly_source_text.md"
-ENDPOINT_JSON_PATH = DATA_DIR / "weekly_video_source.json"
 
 OUT_JSON_FILENAME = "weekly_dialogue_story_only_v8.json"
 OUT_MD_FILENAME = "weekly_dialogue_story_only_v8.md"
@@ -49,7 +55,8 @@ SYSTEM_PROMPT = """
 你是機構級總經影片的 showrunner、主筆與敘事導演。
 
 你的任務不是把資料摘要改寫成對話，也不是替圖片寫旁白。
-你的任務是用本週新聞事件與市場價格變化，寫出一支 Tom 與 Miranda 的完整總經訪談故事。
+你的任務是使用已由 Step 80 篩選、並與 V35 對齊的事件證據，以及正式分析區間內的市場價格變化，寫出一支 Tom 與 Miranda 的完整總經訪談故事。
+你不會收到完整 weekly_news_context.md、舊背景新聞、weekly_source_text 或 endpoint 原文；不得自行補回未提供的新聞敘事。
 
 這一版是 Story-only：
 - 不處理圖片。
@@ -60,7 +67,7 @@ SYSTEM_PROMPT = """
 
 角色：
 Tom 是成熟的國際財經訪談主持人。他不是新聞播報員，也不是單純的問答機器。
-Tom 的工作是替聽眾打開問題：他擅長用敏銳的直覺指出市場矛盾，例如「油價跌了，為什麼利率不跌？」也擅長在聽完分析後，用生活化比喻或頓悟式短句幫聽眾提煉重點，例如「所以現在買黃金，不只是為了賺錢，而是為了買一份保險？」Tom 的語氣要自然、好奇、克制，但要能代表聽眾把反直覺的地方問清楚。
+Tom 的工作是替聽眾打開問題：他擅長用敏銳的直覺指出市場矛盾，例如「價格明明往一個方向走，為什麼市場的結論沒有跟著改變？」也擅長在聽完分析後，用生活化比喻或頓悟式短句幫聽眾提煉重點。Tom 的語氣要自然、好奇、克制，但要能代表聽眾把反直覺的地方問清楚。
 
 Miranda 是機構級總經策略師。她不是念資料的人。
 Miranda 的工作是解釋市場價格背後的市場走勢背後的判斷：事件為什麼重要、價格怎麼反應、這個反應驗證或抵銷了什麼判斷、下一步會傳導到哪個變數。她非常擅長把冷冰冰的宏觀數字落地，在解釋高利率、強美元、流動性壓力或避險需求時，會自然帶出實體經濟的微觀痛點，例如房貸凍結、企業融資成本上升、原物料進口壓力、外資撤離或央行外匯存底消耗。她也擅長指出央行、投資人或市場當下面臨的兩難困境，例如保匯率 vs 保外匯存底、打通膨 vs 救經濟、維持高利率 vs 實體經濟受傷。
@@ -76,8 +83,11 @@ Miranda 的工作是解釋市場價格背後的市場走勢背後的判斷：事
     第三順位：analysis_layer.main_theme_analysis_process.market_contradictions_and_modifiers；
     第四順位：analysis_layer.forest_summary。
     不得引用不存在的 analysis-layer 欄位，也不得繞過 V35 另建一套主線。
+0-4-1. analysis_layer 已是 Step 80 篩選後的事件證據與分析層。不得把其中的修正因子、背離訊號或單一新聞重新升格為另一條主線。
+0-4-2. meta.story_thesis、storyline.main_event_threads、各 section 的 story_purpose 與 macro_interpretation 必須共同服務 V35 dominant_driver；可以延後揭示主線，但不可在中後段改成另一套結論。
 0-5. weekly_v35_diagnosis 是 Python rule-based V35 診斷層，不是旁白文案；你可以重新組織故事語言，但不可推翻其主導因子、修正因子、背離訊號、資產驗證、油價 / 通膨方向規則與資產方向。
-0-6. 若 analysis_layer、新聞素材與 weekly_v35_diagnosis 出現張力，請寫成分歧、修正因子或待觀察，不要自行改成另一套主線。
+0-6. 若 analysis_layer 與 weekly_v35_diagnosis 出現張力，請寫成分歧、修正因子或待觀察，不要自行改成另一套主線。
+0-6-1. 對 analysis_layer.evidence.insufficient_evidence 已標示不足的原因，只能說「待確認、資料不足、可能但無法確認」，不得自行補成資金流、央行干預、政策立場或其他確定因果。
 0-7. 油價方向必須以 weekly_v35_diagnosis.observed_market 或 market_series_analysis_window 的 WTI / Brent 實際方向為準。油價上行代表能源成本與短期通膨預期上行壓力；油價下行可能緩和能源通膨，若源自需求疲弱也可能代表成長降溫。若油價不是本期主線，應描述為修正因子或並行訊號。不得把油價變動直接歸因於財政赤字、高利率或公債供需。
 0-8. 就業指標名稱不等於方向。初領失業金、非農、失業率與薪資必須有明確方向或相對預期才能判斷。失業率下降先視為韌性訊號，不可單獨改寫成全面就業強勁；非農偏弱但失業率下降時應呈現為就業訊號分歧。勞動市場韌性本身不得直接推升通膨預期，只有薪資壓力或需求偏強等訊號才可進入通膨上行敘事。
 0-9. 不得為了配合 US10Y、DXY、Gold、WTI 或亞洲貨幣方向，而把低於預期、轉弱或混合的新聞改寫成強勁，也不得創造 input_bundle 未提供的事件、數字或政策結論。
@@ -113,24 +123,24 @@ Miranda 的工作是解釋市場價格背後的市場走勢背後的判斷：事
 - 每條主要事件線至少安排一輪 Tom 追問，讓 Miranda 有機會把原因、傳導與市場含義講深一層。
 - Tom 的追問要有「解謎感」，不要只是換段落；要代表聽眾指出反直覺或未解矛盾，例如：
   「這只是短期修正，還是真的改變了市場主線？」
-  「如果油價已經回落，為什麼利率還沒放鬆？」
-  「美元強勢如果不是完全來自利率，那是不是還有避險資金的需求？」
+  「這個價格反應，究竟是在驗證主線，還是只反映短期雜訊？」
+  「如果主要資產大致同向，為什麼仍有局部市場出現背離？」
   「等一下，這聽起來有點反直覺。價格明明往一個方向走，為什麼市場結論卻沒有跟著轉向？」
 - Miranda 的回答要像在解謎：先承認表面矛盾，再揭示背後的市場市場走勢背後的判斷。
 - Miranda 使用專業術語後，必須立刻補一句白話翻譯。尤其是：期限溢價、結構性通膨、利差優勢、避險需求、上游影響、流動性壓力。
   例如：「這就是期限溢價。白話說，就是投資人覺得長期不確定性變高，所以要求更高的補償。」
 - 增加對話呼吸感：Miranda 不要連續講太久。如果單一 Miranda spoken_text 可能超過 35 秒，請拆成「Miranda 先解釋 → Tom 短句確認或追問 → Miranda 補充」。
-- Tom 可以用短句幫聽眾消化，例如：「所以不是油價沒用，而是它被 Fed 的訊號抵銷了？」、「換句話說，市場不是不看通膨，而是看得更遠了？」
+- Tom 可以用短句幫聽眾消化，例如：「所以這個訊號不是失效，而是被更強的力量暫時壓過？」、「換句話說，市場不是忽略這項資料，而是在重新比較不同因素的權重？」
 - 價格走勢要用口語描述，不要用技術分類詞當台詞主體。
 - 可以使用「先被壓下去、後來又被買盤拉回」、「前段快速回落、後段低位整理」、「先上攻、後來被成長擔憂壓回」這類說法。
 - 避免在 spoken_text 裡直接把「V 型反轉」、「倒 V 型」、「L 型整理」當成主要表述；如果需要使用，必須立刻用一句口語原因解釋。
 
 價格走勢解讀範例：
-不要寫成：「黃金呈現 V 型反轉，價格在 4480 到 4577 美元之間震盪。」
-應該寫成：「黃金前段受高利率壓抑回落，但後段又因房市疲軟與避險需求升溫重新回升。這代表市場沒有單純只看利率，也在為成長放緩與地緣政治不確定性買保護。」
+不要寫成：「某資產呈現 V 型反轉，價格在某個區間震盪。」
+應該寫成：「這項資產前段先受主要因子影響，後段又因另一股力量出現局部修正。這代表市場沒有只看單一訊號，而是在重新比較不同因素的權重。」
 
 建議故事推進方式：
-- 先從本週最重要的定價矛盾或淨方向切入，例如「油價上升但利率只小幅走高」、「美元整週走強但黃金週中反彈」、「亞幣整週承壓但台幣週內有資金流波動」。
+- 先從本週最重要的市場矛盾或淨方向切入；範例只能示範敘事方法，不可預設任何資產本週一定上漲或下跌。
 - 用整週淨方向建立主線，再用週內事件解釋中間的反覆。
 - 用價格反應解釋市場目前更關注什麼，不要把單日波動寫成整週結論。
 - 如果價格走勢和直覺不同，要把它當作故事問題。
@@ -154,11 +164,18 @@ USER_PROMPT_TEMPLATE = """
 資料：
 {input_bundle_json}
 
+輸入範圍說明：
+- input_bundle 只包含 Step 80 分析層、V35 診斷層、正式分析區間市場資料與 lookback 使用說明。
+- 完整 weekly_news_context.json / md、背景新聞、weekly_source_text 與 endpoint 原文均未提供。
+- 事件細節以 analysis_layer 已保留的材料為限；不得自行補回未提供的舊新聞主線或背景敘事。
+
 weekly_v35_diagnosis 使用規則：
 - input_bundle.weekly_v35_diagnosis 是 Python rule-based V35 診斷層，請優先用來對齊本集主線與網頁主線。
 - 請優先使用 weekly_v35_diagnosis.weekly_v35_diagnosis 裡的 dominant_driver、correction_factors、divergence_signal、asset_validation、next_period_watch。
 - Tom / Miranda 可以用更自然的訪談語言重組故事，但不可推翻 V35 的油價 / 通膨方向規則、資產方向與背離判斷。
-- 若 V35 診斷層與 analysis_layer 或新聞素材看似衝突，請在對話中表述為「分歧、修正因子、仍待觀察」，不要自行創造另一條主線。
+- 若 V35 診斷層與 analysis_layer 看似衝突，請在對話中表述為「分歧、修正因子、仍待觀察」，不要自行創造另一條主線。
+- meta.story_thesis 必須直接使用或語意等同 V35 dominant_driver；不得把 correction_factors 或單一事件改寫成新的主題。
+- analysis_layer.evidence.insufficient_evidence 中列出的未知原因不得被補成確定因果。
 - 對外台詞請避免「交易、定價、體制、風險溢價、傳導源」等生硬名詞；優先使用「市場更關注、主導因子、修正因子、背離訊號、資產驗證、下期觀察、市場重新評估」。
 
 硬性生成規則：
@@ -531,8 +548,6 @@ def build_input_bundle(week_dir: Path) -> Dict[str, Any]:
     analysis = load_json(week_dir / ANALYSIS_FILENAME, {})
     weekly_v35_diagnosis = load_json(week_dir / WEEKLY_V35_DIAGNOSIS_FILENAME, {})
     market_series_raw = load_json(week_dir / MARKET_SERIES_FILENAME, {})
-    news_context_json = load_json(week_dir / NEWS_CONTEXT_JSON_FILENAME, {})
-    endpoint_json = load_json(ENDPOINT_JSON_PATH, {})
 
     if not analysis:
         raise FileNotFoundError(
@@ -567,36 +582,38 @@ def build_input_bundle(week_dir: Path) -> Dict[str, Any]:
                 "analysis": str(week_dir / ANALYSIS_FILENAME),
                 "weekly_v35_diagnosis": str(week_dir / WEEKLY_V35_DIAGNOSIS_FILENAME),
                 "weekly_market_series": str(week_dir / MARKET_SERIES_FILENAME),
-                "weekly_news_context_json": str(week_dir / NEWS_CONTEXT_JSON_FILENAME),
-                "weekly_news_context_md": str(week_dir / NEWS_CONTEXT_MD_FILENAME),
-                "weekly_source_text": str(week_dir / SOURCE_TEXT_FILENAME),
-                "endpoint_json": str(ENDPOINT_JSON_PATH),
             },
+            "excluded_from_gemini": [
+                "weekly_news_context.json",
+                "weekly_news_context.md",
+                "macro_background_context.json",
+                "macro_background_context.md",
+                "weekly_source_text.md",
+                "data/weekly_video_source.json",
+            ],
             "hard_rule": (
                 "The dialogue must use analysis_window as the only formal week range. "
-                "Pre-analysis-window information is background only, never this-week price reaction."
+                "V35 is the main-theme authority. Step 80 is the filtered event-evidence layer. "
+                "Pre-analysis-window and raw-news narrative are not provided to Gemini."
             ),
         },
         "analysis_layer": analysis,
         "weekly_v35_diagnosis": weekly_v35_diagnosis,
         "weekly_v35_diagnosis_note": (
-            "Rule-based V35 diagnosis. Use it to align dominant driver, correction factors, divergence signal, "
-            "asset validation, next-period watch, oil/inflation direction rules, and asset directions."
+            "Rule-based V35 diagnosis. Use it as the authority for dominant driver, correction factors, "
+            "divergence signal, asset validation, next-period watch, oil/inflation direction rules, "
+            "and asset directions."
         ),
         "market_series_analysis_window": build_market_series_analysis_window(market_series_raw, analysis_window),
         "market_series_lookback_note": build_market_series_lookback_note(market_series_raw),
-        "weekly_news_context_json": news_context_json,
-        "weekly_news_context_md": read_text(week_dir / NEWS_CONTEXT_MD_FILENAME, 40000),
-        "weekly_source_text": read_text(week_dir / SOURCE_TEXT_FILENAME, 30000),
-        "endpoint_context_note": (
-            "Endpoint context may include lookback or daily source material. "
-            "Use it only if it supports the analysis-layer conclusion, and never use its older prices as this-week start."
+        "source_scope_note": (
+            "Event evidence has already been filtered and distilled in analysis_layer. "
+            "Do not reconstruct a separate theme from raw weekly-news narrative, because it is intentionally excluded."
         ),
-        "endpoint_context_excerpt": compact_json(endpoint_json, 12000),
         "instruction_hint": (
-            "Select the strongest event threads from analysis_layer. "
-            "Use market_series_analysis_window for numbers. "
-            "Do not force all background data into the script."
+            "Build the story around the V35 dominant driver. Use analysis_layer only to explain, qualify, and humanize it. "
+            "Use market_series_analysis_window for every price number and direction. "
+            "Keep correction factors and divergences in their proper supporting roles."
         ),
     }
 
@@ -620,8 +637,8 @@ def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: 
     payload = {
         "contents": [{"role": "user", "parts": [{"text": system_prompt.strip() + "\n\n" + user_prompt.strip()}]}],
         "generationConfig": {
-            "temperature": 0.65,
-            "topP": 0.95,
+            "temperature": 0.55,
+            "topP": 0.90,
             "maxOutputTokens": 24576,
             "responseMimeType": "application/json",
         },
@@ -697,6 +714,101 @@ def clean_result_texts(obj: Any) -> Any:
         return clean_text_value(obj)
     return obj
 
+
+
+
+def collect_text_fragments(obj: Any) -> List[str]:
+    fragments: List[str] = []
+    if isinstance(obj, dict):
+        for key, value in obj.items():
+            if key == "full_script_plain_text":
+                continue
+            fragments.extend(collect_text_fragments(value))
+    elif isinstance(obj, list):
+        for value in obj:
+            fragments.extend(collect_text_fragments(value))
+    elif isinstance(obj, str):
+        fragments.append(obj)
+    return fragments
+
+
+def apply_v35_authority_metadata(result: Dict[str, Any], bundle: Dict[str, Any]) -> None:
+    full_v35 = bundle.get("weekly_v35_diagnosis", {})
+    compact_v35 = (
+        full_v35.get("weekly_v35_diagnosis", {})
+        if isinstance(full_v35, dict)
+        else {}
+    )
+    dominant_driver = str(compact_v35.get("dominant_driver") or "").strip()
+
+    result.setdefault("meta", {})
+    result["meta"]["v35_authority_applied"] = bool(dominant_driver)
+    result["meta"]["v35_dominant_driver"] = dominant_driver
+    if dominant_driver:
+        # story_thesis is internal story metadata, so keep it deterministically aligned
+        # with the web/V35 main theme. The spoken opening still follows the rule of
+        # revealing the conclusion gradually rather than announcing it immediately.
+        result["meta"]["story_thesis"] = dominant_driver
+
+
+def sentence_has_qualifier(sentence: str) -> bool:
+    qualifiers = ("週內一度", "週中一度", "盤中一度", "短暫", "一度", "先", "後來", "但整週", "不代表整週")
+    return any(q in sentence for q in qualifiers)
+
+
+def sentence_is_negated(sentence: str, phrase: str) -> bool:
+    for neg in ("沒有", "並未", "未", "不是", "不再", "不能說"):
+        if f"{neg}{phrase}" in sentence or f"{neg} {phrase}" in sentence:
+            return True
+    return False
+
+
+def validate_directional_consistency(result: Dict[str, Any], bundle: Dict[str, Any]) -> None:
+    full_v35 = bundle.get("weekly_v35_diagnosis", {})
+    observed = full_v35.get("observed_market", {}) if isinstance(full_v35, dict) else {}
+    if not isinstance(observed, dict):
+        return
+
+    text = "\n".join(collect_text_fragments(result))
+    sentences = [s.strip() for s in re.split(r"[。！？!?\n]+", text) if s.strip()]
+    issues: List[str] = []
+
+    rules = []
+    if observed.get("WTI", {}).get("direction") == "up" or observed.get("Brent", {}).get("direction") == "up":
+        rules.append(("油價", ("下跌", "走低", "轉跌", "回落"), "WTI / Brent 本週淨方向為上行"))
+    if observed.get("DXY", {}).get("direction") == "up":
+        rules.append(("美元", ("走弱", "下跌", "走貶", "轉弱"), "DXY 本週淨方向為上行"))
+    if observed.get("Gold", {}).get("direction") == "down":
+        rules.append(("黃金", ("上漲", "走高", "上行", "轉強"), "Gold 本週淨方向為下行"))
+    if observed.get("USDJPY", {}).get("direction") == "up":
+        rules.append(("日圓", ("升值", "走強", "上行", "轉強"), "USD/JPY 上行代表日圓本週走弱"))
+    if observed.get("USDTWD", {}).get("direction") == "up":
+        rules.append(("台幣", ("升值", "走強", "上行", "轉強"), "USD/TWD 上行代表台幣本週走弱"))
+    if observed.get("USDKRW", {}).get("direction") == "down":
+        rules.append(("韓元", ("貶值", "走弱", "承壓", "下跌"), "USD/KRW 下行代表韓元本週相對走強"))
+
+    for sentence in sentences:
+        clauses = [c.strip() for c in re.split(r"[，,；;：:]", sentence) if c.strip()]
+        for clause in clauses:
+            for subject, bad_phrases, reason in rules:
+                if subject not in clause:
+                    continue
+                for bad in bad_phrases:
+                    if bad not in clause:
+                        continue
+                    if sentence_has_qualifier(clause) or sentence_is_negated(clause, bad):
+                        continue
+                    issues.append(f"{reason}，但輸出出現：{clause[:180]}")
+
+    if issues:
+        unique_issues = []
+        for issue in issues:
+            if issue not in unique_issues:
+                unique_issues.append(issue)
+        raise RuntimeError(
+            "Step 82 directional consistency check failed. Review the generated story before Step 83:\n- "
+            + "\n- ".join(unique_issues[:12])
+        )
 
 
 def ensure_closing_turn(result: Dict[str, Any]) -> None:
@@ -872,13 +984,15 @@ def main() -> None:
     analysis_window = bundle.get("meta", {}).get("analysis_window", {})
     print(f"[INFO] Analysis window: {analysis_window.get('label')} ({analysis_window.get('source')})")
     print(f"[INFO] weekly_v35_diagnosis.json included: {(week_dir / WEEKLY_V35_DIAGNOSIS_FILENAME).exists()}")
+    print("[INFO] Raw weekly news/background/source/endpoint text excluded from Gemini input: True")
 
-    user_prompt = USER_PROMPT_TEMPLATE.replace("{input_bundle_json}", compact_json(bundle, 170000))
+    user_prompt = USER_PROMPT_TEMPLATE.replace("{input_bundle_json}", compact_json(bundle, 120000))
     (week_dir / OUT_PROMPT_DEBUG_FILENAME).write_text(SYSTEM_PROMPT.strip() + "\n\n" + user_prompt.strip(), encoding="utf-8")
 
     print("[INFO] Generating story-only dialogue...")
     result = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
     result = clean_result_texts(result)
+    apply_v35_authority_metadata(result, bundle)
 
     result.setdefault("meta", {})
     if isinstance(analysis_window, dict):
@@ -887,6 +1001,7 @@ def main() -> None:
 
     ensure_closing_turn(result)
     rebuild_full_script(result)
+    validate_directional_consistency(result, bundle)
 
     save_json(week_dir / OUT_JSON_FILENAME, result)
     (week_dir / OUT_MD_FILENAME).write_text(build_markdown(result), encoding="utf-8")
