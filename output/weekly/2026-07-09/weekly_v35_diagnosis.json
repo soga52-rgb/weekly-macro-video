@@ -15,16 +15,16 @@
       "macro_background_context_json": false,
       "macro_background_context_md": false
     },
-    "note": "Rule-based V35 diagnosis. Downstream Gemini steps should use this as structured diagnosis, not as final prose."
+    "note": "Rule-based V35 diagnosis. News evidence is segmented by record, future/watch text is excluded from directional regex, and observed market direction has precedence for oil, DXY and Gold validation."
   },
-  "core_contradiction": "通膨上行與下行訊號並存，但美國10年期公債殖利率仍上行，顯示利率端暫時更重視通膨黏性或高利率維持更久。",
-  "primary_macro_story": "高利率支撐強美元",
+  "core_contradiction": "WTI 與 Brent 上行、美國10年期公債殖利率與美元指數同步偏強、黃金下跌，顯示能源通膨與高利率定價仍在；但日圓、台幣與韓元反應分化，亞洲資金流並未全面同步。",
+  "primary_macro_story": "油價上行與高利率定價並存，美元偏強但亞洲貨幣分化",
   "expected_chain": [
-    "Fed 路徑或高利率預期受到關注",
-    "美國10年期公債殖利率偏上",
-    "美元指數受利差或避險需求支撐",
-    "亞洲貨幣承壓",
-    "黃金、油價與風險資產依各自修正因子反應"
+    "WTI 與 Brent 上行，能源通膨壓力增加",
+    "美國10年期公債殖利率偏上，高利率定價仍在",
+    "美元指數偏強、黃金承受利率與美元壓力",
+    "日圓、台幣與韓元需分別驗證，不預設全面同向",
+    "觀察通膨數據、Fed 路徑與油價是否延續共振"
   ],
   "observed_market": {
     "US10Y": {
@@ -125,11 +125,11 @@
     "growthCooling": false,
     "growthStrength": false,
     "oilInflationPressure": true,
-    "oilInflationRelief": true,
+    "oilInflationRelief": false,
     "dollarStrength": true,
-    "dollarWeakness": true,
+    "dollarWeakness": false,
     "goldPressure": true,
-    "goldSafeHaven": true,
+    "goldSafeHaven": false,
     "riskOff": true,
     "inflationHot": true,
     "inflationCooling": true,
@@ -147,7 +147,7 @@
     "fedLeadershipShift": false,
     "financialStress": false,
     "marketExpectationShift": true,
-    "geopoliticalCooling": true,
+    "geopoliticalCooling": false,
     "oilSupplyShock": false,
     "oilDemandWeakness": false,
     "factor_groups": {
@@ -171,7 +171,7 @@
           "layoffs": false
         },
         "strong_or_resilient_signals": {
-          "payroll_strong": true,
+          "payroll_strong": false,
           "claims_down": false,
           "unemployment_fall": true,
           "wage_pressure": false
@@ -183,12 +183,13 @@
         "strength": false
       },
       "oil_energy": {
-        "detected": true,
+        "detected": false,
         "supply_shock": false,
         "demand_weakness": false,
-        "geopolitical_cooling": true,
-        "inflation_pressure": false,
-        "inflation_relief": true
+        "geopolitical_cooling": false,
+        "market_direction": "up",
+        "inflation_pressure": true,
+        "inflation_relief": false
       },
       "inflation_expectation": {
         "detected": true,
@@ -201,7 +202,9 @@
           "inflation_cooling": true,
           "oil_supply_shock": false,
           "oil_demand_weakness": false,
-          "geopolitical_cooling": true,
+          "geopolitical_cooling": false,
+          "oil_market_up": true,
+          "oil_market_down": false,
           "labor_strength": false,
           "labor_cooling": true,
           "labor_mixed": true,
@@ -243,19 +246,19 @@
         "detected": true,
         "risk_off": true,
         "expectation_shift": true,
-        "gold_safe_haven": true,
-        "dollar_weakness": true,
+        "gold_safe_haven": false,
+        "dollar_weakness": false,
         "dollar_strength": true
       },
       "dollar_external": {
         "detected": true,
         "dollar_strength": true,
-        "dollar_weakness": true
+        "dollar_weakness": false
       },
       "gold_risk": {
         "detected": true,
         "pressure": true,
-        "safe_haven": true
+        "safe_haven": false
       }
     }
   },
@@ -268,6 +271,10 @@
       {
         "label": "綜合通膨預期上行",
         "reason": "通膨硬數據、能源供給、勞動市場或成長需求訊號合計後，對通膨預期形成上行壓力。"
+      },
+      {
+        "label": "WTI / Brent 實際上行",
+        "reason": "本期 WTI 或 Brent 週線上漲，能源價格對短期通膨預期形成實際上行壓力。"
       },
       {
         "label": "Fed 偏鷹或高利率維持更久",
@@ -286,10 +293,6 @@
       {
         "label": "綜合通膨預期下行",
         "reason": "通膨降溫、油價需求疲弱、勞動市場降溫、成長放緩或地緣風險降溫，可能壓低通膨預期。"
-      },
-      {
-        "label": "地緣風險擔憂降溫",
-        "reason": "停火、和談或地緣風險降溫，可能壓低能源風險擔憂與通膨預期。"
       },
       {
         "label": "勞動市場降溫訊號",
@@ -353,46 +356,44 @@
     "observed_rate_direction": "up",
     "observed_dollar_direction": "up",
     "observed_gold_direction": "down",
-    "dominant_bias": "down",
-    "market_alignment": "利率上行與因子地圖存在張力，需檢查是否有公債供需、Fed或美元因素壓過成長/通膨降溫訊號",
+    "dominant_bias": "up",
+    "market_alignment": "利率方向與推升因子大致一致",
     "confidence": "medium"
   },
   "matched_links": [
-    "綜合通膨預期存在上行壓力，來源可能包括通膨硬數據、能源供給、勞動市場或成長需求。",
-    "綜合通膨預期存在下行壓力，來源可能包括通膨降溫、油價需求疲弱、勞動降溫、成長放緩或地緣風險降溫。",
+    "美國10年期公債殖利率上行，與推升利率因子大致一致。",
+    "WTI 或 Brent 實際上行，短期能源通膨壓力增加。",
     "美元指數偏強，需檢查是利差支撐、避險美元，還是非美貨幣弱勢所造成。",
-    "美元兌日圓上行，符合亞洲貨幣承壓的外溢效果。",
-    "美元兌台幣上行，符合亞洲貨幣承壓的外溢效果。",
+    "美元兌日圓上行，符合該貨幣承壓的外溢效果。",
+    "美元兌台幣上行，符合該貨幣承壓的外溢效果。",
     "黃金下行通常符合高利率或強美元壓力。"
   ],
-  "divergent_links": [
-    "美國10年期公債殖利率上行，但新聞因子中也存在壓低利率訊號，需判斷是否有更強反向因子。"
-  ],
+  "divergent_links": [],
   "modifiers": [
-    "通膨預期呈現多空拉鋸，應區分主線與修正因子，避免直接寫成市場無視通膨。",
+    "通膨預期呈現多空拉鋸：能源價格或偏熱物價訊號形成上行壓力，但通膨降溫、勞動轉弱或其他修正因子仍存在。",
     "市場可能正在重新評估通膨預期，需比較油價、成長、勞動與 Fed 路徑哪個權重較高。",
+    "亞洲貨幣反應分化：日圓、台幣承壓，但韓元相對走強，不宜概括為亞洲貨幣全面走弱。",
     "通膨預期多空拉鋸：通膨上行與下行訊號同時存在，應區分主線與修正因子，避免寫成市場無視通膨。",
     "就業訊號分歧：就業資料內部同時出現轉弱與韌性訊號，例如非農或薪資轉弱但失業率或初領失業金仍顯示韌性；不應直接寫成勞動市場強勁。",
     "市場心理與風險擔憂變化：地緣政治、停火談判、制裁、關稅或政策表態會改變市場對未來事件的主觀機率。"
   ],
-  "final_judgment": "部分支持，但存在分歧",
+  "final_judgment": "支持",
   "weekly_v35_diagnosis": {
-    "dominant_driver": "高利率支撐強美元",
+    "dominant_driver": "油價上行與高利率定價並存，美元偏強但亞洲貨幣分化",
     "correction_factors": [
       "通膨硬數據降溫",
       "綜合通膨預期下行",
-      "地緣風險擔憂降溫",
+      "勞動市場降溫訊號",
       "通膨預期多空拉鋸",
       "就業訊號分歧"
     ],
-    "divergence_signal": "通膨上行與下行訊號並存，但美國10年期公債殖利率仍上行，顯示利率端暫時更重視通膨黏性或高利率維持更久。",
+    "divergence_signal": "WTI 與 Brent 上行、美國10年期公債殖利率與美元指數同步偏強、黃金下跌，顯示能源通膨與高利率定價仍在；但日圓、台幣與韓元反應分化，亞洲資金流並未全面同步。",
     "asset_validation": [
-      "綜合通膨預期存在上行壓力，來源可能包括通膨硬數據、能源供給、勞動市場或成長需求。",
-      "綜合通膨預期存在下行壓力，來源可能包括通膨降溫、油價需求疲弱、勞動降溫、成長放緩或地緣風險降溫。",
+      "美國10年期公債殖利率上行，與推升利率因子大致一致。",
+      "WTI 或 Brent 實際上行，短期能源通膨壓力增加。",
       "美元指數偏強，需檢查是利差支撐、避險美元，還是非美貨幣弱勢所造成。",
-      "美元兌日圓上行，符合亞洲貨幣承壓的外溢效果。",
-      "美元兌台幣上行，符合亞洲貨幣承壓的外溢效果。",
-      "美國10年期公債殖利率上行，但新聞因子中也存在壓低利率訊號，需判斷是否有更強反向因子。"
+      "美元兌日圓上行，符合該貨幣承壓的外溢效果。",
+      "美元兌台幣上行，符合該貨幣承壓的外溢效果。"
     ],
     "next_period_watch": [
       "通膨上行與下行訊號誰會成為下一期主導因子",
