@@ -77,6 +77,13 @@ V35 對齊原則：
 - 若畫價格線或箭頭，方向必須直接來自 current_section.price_reaction 或 speaker_turn_excerpt。
 - 若畫外匯或匯率，請清楚標示是匯率報價還是本幣方向。例如：USD/TWD 下降代表台幣升值；USD/KRW 下降代表韓元升值；USD/JPY 上升代表日圓偏弱。
 
+箭頭語意硬規則：
+- 每一支上升或下降箭頭都必須有唯一、清楚的指向對象；箭頭方向必須描述它直接指向的變數，不可讓同一支箭頭同時代表原因與結果。
+- 若故事是「殖利率上升 → 企業融資成本提高 → 投資、產出或實體經濟承壓」，請畫成三段式因果：10Y ↑ → financing cost ↑ → business activity / factory under pressure ↓。
+- 當 current_section 表示融資成本上升、偏高或形成壓力時，嚴禁把大型向下箭頭直接放在「企業融資成本 / financing cost」旁邊或指向該標籤，因為那會被解讀為融資成本下降。
+- 若要表達實體經濟承壓，向下箭頭只能清楚指向投資、產出、工廠活動或企業擴張，不可指向融資成本本身。
+- 若無法用箭頭清楚區分，改用壓力計、重物、煞車或被壓住的工廠圖示，不要使用容易反向解讀的箭頭。
+
 白話化視覺語言：
 - 優先視覺化「市場更關注什麼」、「主導因子」、「修正因子」、「背離訊號」、「資產驗證」、「下期觀察」。
 - 避免把畫面做成抽象金融術語海報，例如定價、體制、風險溢價、傳導源。
@@ -96,8 +103,13 @@ Series visual language:
 - avoid pale pinks, washed-out grays, low-saturation pastels, and colors too close to the background.
 - lots of whitespace, clean composition, modern and memorable.
 - simple icons, arrows, light charts, and clean symbolic objects only when they directly support the story.
-- Avoid visible Chinese title text inside the image because image models often distort Chinese characters.
-- If text is absolutely necessary, prefer very short ticker labels such as CPI, PPI, 10Y, DXY, WTI, USD/JPY, or USD/KRW.
+- Chinese text is optional and secondary. Prefer icons, English ticker labels, and exact numeric labels first.
+- Allow at most 3 short Chinese labels in one image, and each Chinese label must contain no more than 4 Chinese characters.
+- Chinese labels may only be selected exactly from this approved list: 油價、通膨、利率、美元、黃金、就業、分歧、觀察、融資成本、實體經濟、企業投資、日圓、台幣、韓元、上行、下行、升值、貶值、壓力、韌性、待確認。
+- Never generate a Chinese title, sentence, paragraph, chart caption, explanatory phrase, or any Chinese wording outside the approved list.
+- If the model is not confident that the Chinese glyphs will be accurate and complete, omit Chinese entirely and use an icon or English ticker label instead.
+- Prefer very short English labels such as CPI, PPI, 10Y, US10Y, DXY, WTI, Brent, Gold, USD/JPY, USD/TWD, or USD/KRW.
+- The image must remain understandable even if every Chinese label is removed.
 - Numeric labels are allowed only when the exact number already appears in current_section.price_reaction or speaker_turn_excerpt; never use sample numbers, decorative numbers, or values from another week.
 - Do not draw video player UI, red progress bars, playback controls, browser chrome, subtitles, lower-third captions, watermarks, or screenshots.
 - maintain continuity across all scenes so the full video feels like one story.
@@ -288,16 +300,24 @@ Design instructions:
 - The image should help the audience immediately feel what this section is about.
 - Let the narration explain the full reasoning; the image should not become a dense infographic.
 - If useful, include a very light simple chart, a direction arrow, a forked path, a pressure gauge, or a turning-point line to reflect the section's price reaction.
+- Every arrow must have one unambiguous target. The arrow direction must describe the variable it directly points to, not a different downstream consequence.
+- When the section says yields rise and financing costs rise or remain high, use the explicit causal chain: 10Y ↑ → financing cost ↑ → business investment / factory activity under pressure ↓. Never place a large downward arrow next to, above, or pointing at a financing-cost label, because that visually means financing costs are falling.
+- If the scene needs to show real-economy pressure, point the downward arrow only at business investment, output, expansion, or factory activity. Alternatively use a weight, brake, pressure gauge, or compressed factory icon instead of an ambiguous arrow.
 - Use simple macro-finance symbols only when they directly support the current section, such as oil, bond yields, gold, currency quotes, arrows, or a clean price line.
 - Do not invent new macro conclusions. Do not add news, numbers, dates, labels, arrows, or causal links that are not present in current_section or speaker_turn_excerpt.
 - If current_section does not clearly state an asset direction, do not draw a strong up/down arrow. Use neutral symbols such as a question mark, split arrows, balance scale, or watch-style visual.
 - If current_section describes a divergence, show it as two forces pulling in different directions, not as a single confident trend.
 - If current_section describes a correction factor, show it as a secondary smaller force, not as the main driver.
 - If current_section describes asset validation, show the checked assets calmly; do not exaggerate or turn it into a crisis image.
-- Do not place a large Chinese title inside the image.
-- Keep on-screen text extremely minimal: use short ticker labels when needed, such as CPI, PPI, 10Y, DXY, WTI, USD/JPY, or USD/KRW.
+- Before rendering, perform a visual-semantic check: read each arrow literally. If an arrow could make a viewer infer the opposite direction for financing cost, yield, oil, gold, DXY, or a currency, redesign that part with separate arrows or a non-directional pressure symbol.
+- Text budget: no more than 6 text elements in the entire image, including ticker labels, Chinese labels, and numeric labels.
+- Prefer English ticker labels and icons. Chinese is optional, not required.
+- Allow at most 3 short Chinese labels, each no more than 4 Chinese characters, and only from this exact approved list: 油價、通膨、利率、美元、黃金、就業、分歧、觀察、融資成本、實體經濟、企業投資、日圓、台幣、韓元、上行、下行、升值、貶值、壓力、韌性、待確認。
+- Do not create Chinese titles, Chinese sentences, chart captions, explanatory phrases, or paraphrased Chinese text. Do not place Chinese captions underneath charts.
+- If accurate Chinese rendering is uncertain, omit the Chinese label and use a symbol or an English ticker instead.
+- Prefer short English labels such as CPI, PPI, 10Y, US10Y, DXY, WTI, Brent, Gold, USD/JPY, USD/TWD, or USD/KRW.
 - Show a numeric value only when that exact value appears in current_section.price_reaction or speaker_turn_excerpt. Do not invent, round, reuse, or decorate with any number that is absent from the current section.
-- Do not render paragraphs, tables, long subtitles, or handwritten Chinese sentences.
+- Do not render paragraphs, tables, long subtitles, handwritten Chinese sentences, or any Chinese wording outside the approved list.
 - Do not draw any video player interface, red progress bar, play button, timeline bar, YouTube controls, browser frame, screenshot frame, or lower-third caption area.
 - Use the whole frame naturally as a clean whiteboard composition; do not create blank placeholder boxes, marked layout zones, or UI-like frame elements.
 - Use only a few high-contrast accent colors so the image remains clear after video compositing.
@@ -309,12 +329,13 @@ Design instructions:
 Output target:
 - 16:9 image.
 - Whiteboard sketch explainer / marker doodle style.
-- Avoid visible Chinese title text; let the video subtitles and narration carry the wording.
-- If text appears, keep it to clean ticker labels and source-supported numeric labels only.
+- Let the video subtitles and narration carry the full wording.
+- Prefer clean English ticker labels and source-supported numeric labels.
+- Optional Chinese labels must follow the approved short-label list and text budget above; omit them whenever glyph accuracy is uncertain.
 
 Avoid:
 - video player UI, progress bars, play buttons, timeline controls, YouTube-like controls, browser screenshots, lower-third caption bars
-- malformed Chinese characters or fake Chinese text
+- malformed, incomplete, fake, or unapproved Chinese text
 - old-fashioned PPT layout
 - dense text blocks
 - photorealistic portraits
