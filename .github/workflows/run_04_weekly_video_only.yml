@@ -1,0 +1,68 @@
+name: Run 04 Weekly Video Only
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_end_date:
+        description: 'Target weekly folder end date, e.g. 2026-07-09'
+        required: true
+        default: '2026-07-09'
+
+permissions:
+  contents: write
+
+jobs:
+  run-04-weekly-video-only:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Update weekly page video section only
+        run: |
+          python scripts/04_update_weekly_page_video_only.py --week-dir "output/weekly/${{ github.event.inputs.week_end_date }}"
+
+      - name: Update latest page redirect
+        run: |
+          WEEK_END_DATE="${{ github.event.inputs.week_end_date }}"
+          TARGET_PATH="output/weekly/${WEEK_END_DATE}/index.html"
+          TARGET_URL="./${TARGET_PATH}"
+
+          cat > index.html <<EOF
+          <!DOCTYPE html>
+          <html lang="zh-Hant">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1">
+            <meta http-equiv="refresh" content="0; url=${TARGET_URL}">
+            <title>本週總經摘要</title>
+            <script>window.location.replace("${TARGET_URL}");</script>
+          </head>
+          <body>
+            <p>正在前往最新版本週總經摘要：<a href="${TARGET_URL}">${TARGET_PATH}</a></p>
+          </body>
+          </html>
+          EOF
+
+          cp index.html latest.html
+          echo "[OK] Latest page redirects to ${TARGET_PATH}"
+
+      - name: Commit weekly page video update only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add index.html latest.html
+          git add output/weekly/${{ github.event.inputs.week_end_date }}/index.html || true
+
+          git diff --cached --quiet && echo "No page changes to commit." && exit 0
+          git commit -m "build: update weekly page video only"
+          git push
