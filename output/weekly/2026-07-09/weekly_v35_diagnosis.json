@@ -60,6 +60,16 @@
     "WTI": {
       "direction": "up",
       "text": "油價上行",
+      "start_value": 68.77999877929688,
+      "end_value": 71.80000305175781,
+      "change": 3.0200042724609375,
+      "start_date": "2026-07-03",
+      "end_date": "2026-07-09",
+      "points_count": 6
+    },
+    "Brent": {
+      "direction": "up",
+      "text": "油價上行",
       "start_value": 72.12999725341797,
       "end_value": 76.0,
       "change": 3.8700027465820312,
@@ -67,45 +77,35 @@
       "end_date": "2026-07-09",
       "points_count": 6
     },
-    "Brent": {
-      "direction": "",
-      "text": "方向不足",
-      "start_value": null,
-      "end_value": null,
-      "change": null,
-      "start_date": "",
-      "end_date": "",
-      "points_count": 0
-    },
     "USDJPY": {
-      "direction": "",
-      "text": "方向不足",
-      "start_value": null,
-      "end_value": null,
-      "change": null,
-      "start_date": "",
-      "end_date": "",
-      "points_count": 0
+      "direction": "up",
+      "text": "美元上行，當地貨幣承壓",
+      "start_value": 161.33700561523438,
+      "end_value": 162.34500122070312,
+      "change": 1.00799560546875,
+      "start_date": "2026-07-03",
+      "end_date": "2026-07-09",
+      "points_count": 6
     },
     "USDTWD": {
-      "direction": "",
-      "text": "方向不足",
-      "start_value": null,
-      "end_value": null,
-      "change": null,
-      "start_date": "",
-      "end_date": "",
-      "points_count": 0
+      "direction": "up",
+      "text": "美元上行，當地貨幣承壓",
+      "start_value": 31.92300033569336,
+      "end_value": 32.10300064086914,
+      "change": 0.18000030517578125,
+      "start_date": "2026-07-03",
+      "end_date": "2026-07-09",
+      "points_count": 6
     },
     "USDKRW": {
-      "direction": "",
-      "text": "方向不足",
-      "start_value": null,
-      "end_value": null,
-      "change": null,
-      "start_date": "",
-      "end_date": "",
-      "points_count": 0
+      "direction": "down",
+      "text": "美元回落，當地貨幣相對支撐",
+      "start_value": 1530.1500244140625,
+      "end_value": 1506.47998046875,
+      "change": -23.6700439453125,
+      "start_date": "2026-07-03",
+      "end_date": "2026-07-09",
+      "points_count": 6
     }
   },
   "detected_news_events": {
@@ -123,7 +123,7 @@
     "laborResilience": true,
     "laborWagePressure": false,
     "growthCooling": false,
-    "growthStrength": true,
+    "growthStrength": false,
     "oilInflationPressure": true,
     "oilInflationRelief": true,
     "dollarStrength": true,
@@ -178,9 +178,9 @@
         }
       },
       "growth_demand": {
-        "detected": true,
+        "detected": false,
         "cooling": false,
-        "strength": true
+        "strength": false
       },
       "oil_energy": {
         "detected": true,
@@ -206,7 +206,7 @@
           "labor_cooling": true,
           "labor_mixed": true,
           "wage_pressure": false,
-          "growth_strength": true,
+          "growth_strength": false,
           "growth_cooling": false,
           "risk_off": true,
           "market_expectation_shift": true
@@ -268,10 +268,6 @@
       {
         "label": "綜合通膨預期上行",
         "reason": "通膨硬數據、能源供給、勞動市場或成長需求訊號合計後，對通膨預期形成上行壓力。"
-      },
-      {
-        "label": "成長動能仍強",
-        "reason": "GDP、PMI、零售或消費支出偏強，可能支撐高利率維持更久。"
       },
       {
         "label": "Fed 偏鷹或高利率維持更久",
@@ -357,17 +353,21 @@
     "observed_rate_direction": "up",
     "observed_dollar_direction": "up",
     "observed_gold_direction": "down",
-    "dominant_bias": "mixed",
-    "market_alignment": "待觀察",
-    "confidence": "low"
+    "dominant_bias": "down",
+    "market_alignment": "利率上行與因子地圖存在張力，需檢查是否有公債供需、Fed或美元因素壓過成長/通膨降溫訊號",
+    "confidence": "medium"
   },
   "matched_links": [
     "綜合通膨預期存在上行壓力，來源可能包括通膨硬數據、能源供給、勞動市場或成長需求。",
     "綜合通膨預期存在下行壓力，來源可能包括通膨降溫、油價需求疲弱、勞動降溫、成長放緩或地緣風險降溫。",
     "美元指數偏強，需檢查是利差支撐、避險美元，還是非美貨幣弱勢所造成。",
+    "美元兌日圓上行，符合亞洲貨幣承壓的外溢效果。",
+    "美元兌台幣上行，符合亞洲貨幣承壓的外溢效果。",
     "黃金下行通常符合高利率或強美元壓力。"
   ],
-  "divergent_links": [],
+  "divergent_links": [
+    "美國10年期公債殖利率上行，但新聞因子中也存在壓低利率訊號，需判斷是否有更強反向因子。"
+  ],
   "modifiers": [
     "通膨預期呈現多空拉鋸，應區分主線與修正因子，避免直接寫成市場無視通膨。",
     "市場可能正在重新評估通膨預期，需比較油價、成長、勞動與 Fed 路徑哪個權重較高。",
@@ -375,7 +375,7 @@
     "就業訊號分歧：就業資料內部同時出現轉弱與韌性訊號，例如非農或薪資轉弱但失業率或初領失業金仍顯示韌性；不應直接寫成勞動市場強勁。",
     "市場心理與風險擔憂變化：地緣政治、停火談判、制裁、關稅或政策表態會改變市場對未來事件的主觀機率。"
   ],
-  "final_judgment": "支持",
+  "final_judgment": "部分支持，但存在分歧",
   "weekly_v35_diagnosis": {
     "dominant_driver": "高利率支撐強美元",
     "correction_factors": [
@@ -390,7 +390,9 @@
       "綜合通膨預期存在上行壓力，來源可能包括通膨硬數據、能源供給、勞動市場或成長需求。",
       "綜合通膨預期存在下行壓力，來源可能包括通膨降溫、油價需求疲弱、勞動降溫、成長放緩或地緣風險降溫。",
       "美元指數偏強，需檢查是利差支撐、避險美元，還是非美貨幣弱勢所造成。",
-      "黃金下行通常符合高利率或強美元壓力。"
+      "美元兌日圓上行，符合亞洲貨幣承壓的外溢效果。",
+      "美元兌台幣上行，符合亞洲貨幣承壓的外溢效果。",
+      "美國10年期公債殖利率上行，但新聞因子中也存在壓低利率訊號，需判斷是否有更強反向因子。"
     ],
     "next_period_watch": [
       "通膨上行與下行訊號誰會成為下一期主導因子",

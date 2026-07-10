@@ -1,7 +1,7 @@
 # Weekly Macro Source Text
 
 資料來源：Google Sheets History_Data
-產生時間：2026-07-10T07:56:34+08:00
+產生時間：2026-07-10T08:41:19+08:00
 週期：2026-07-03 ～ 2026-07-09
 資料狀態：complete
 資料天數：6

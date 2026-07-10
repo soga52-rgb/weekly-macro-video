@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-10T07:56:34+08:00",
+  "generated_at": "2026-07-10T08:41:19+08:00",
   "source": "Google Sheets History_Data",
   "mode": "weekly_video_source",
   "data_status": "complete",
@@ -215,7 +215,7 @@
         "news_links_json": "[\n  {\n    \"rank\": 1,\n    \"theme\": \"FX｜Dollar / FX / 美元與匯率\",\n    \"source\": \"news.cnyes.com\",\n    \"title\": \"〈紐約匯市〉美元走弱 油價轉跌、市場消化比預期溫和的Fed會議紀錄 - news.cnyes.com\",\n    \"url\": \"https://news.google.com/rss/articles/CBMiT0FVX3lxTE5jXzNHanA0ZFAwcXFnc2tjc3psRHNPWkdJalg1dURNZjlCRkdGYlBMd1Y3S19aLVVhRjcyMl8xUzQ3dHNVemViOGYyUUFIMHM?oc=5\",\n    \"published_at\": \"Thu, 09 Jul 2026 21:46:34 GMT\",\n    \"score\": 118.6,\n    \"matched_keywords\": \"聯準會政策:fed | 美元與亞洲匯率:dollar | 變數:DOLLAR_FX | 類型:DATA | 來源角色:CNYES_MACRO\"\n  },\n  {\n    \"rank\": 2,\n    \"theme\": \"Rates｜Treasury Yields / 美債殖利率\",\n    \"source\": \"news.cnyes.com\",\n    \"title\": \"長債重定價才剛開始！PGIM估30年期美債殖利率上看5.5% - news.cnyes.com\",\n    \"url\": \"https://news.google.com/rss/articles/CBMiT0FVX3lxTFBGVlRkY0dQOVBhNUlXTmZUd1hyZnJSTkc3TllvZUFLUzladzZwUWdRY2NDU25PYnY2Qml6OFB4Z2lGOEJtUHc4dGlUQ0RaYjA?oc=5\",\n    \"published_at\": \"Thu, 09 Jul 2026 17:01:42 GMT\",\n    \"score\": 118,\n    \"matched_keywords\": \"美債殖利率:treasury/yield/yields | 變數:TREASURY_YIELDS | 類型:DATA | 來源角色:CNYES_MACRO\"\n  },\n  {\n    \"rank\": 3,\n    \"theme\": \"Rates｜Treasury Yields / 美債殖利率\",\n    \"source\": \"Reuters\",\n    \"title\": \"War-driven inflation fears fail to shake U.S. Treasury yield outlook: Reuters poll - Reuters\",\n    \"url\": \"https://news.google.com/rss/articles/CBMiqAFBVV95cUxPQjhUa3pVV3JMQjc0TG9ENzJldjBjZkxnV0ZwcTdyMy1YOFY0aU95c25idlRET0ItN2VQWTZIY05WZF9SclF2bFRadl91MGFkdGVnWC1sckRGWkNoamtuU0xjb1dIRVVkR1kzMlNpUUNFd01DZ1k2Qm81bXdPbUFsaVUtaEpNdmxHMEM3eV85amNxLWhsSzdTOXhEUHltUkNDVzNYMEQ5VjY?oc=5\",\n    \"published_at\": \"Thu, 09 Jul 2026 19:02:00 GMT\",\n    \"score\": 112,\n    \"matched_keywords\": \"通膨數據:inflation | 美債殖利率:treasury/yield/yields | 地緣政治:war | 變數:TREASURY_YIELDS | 類型:BACKUP | 來源角色:WIRE_CONFIRMATION\"\n  },\n  {\n    \"rank\": 4,\n    \"theme\": \"Fed Policy｜Fed / 聯準會\",\n    \"source\": \"news.cnyes.com\",\n    \"title\": \"聯準會會議紀要：少數官員支持6月升息 AI躋身三大通膨風險 - news.cnyes.com\",\n    \"url\": \"https://news.google.com/rss/articles/CBMiT0FVX3lxTE9DVTFYSHFTOGFLVDNfRmtZUmZUMzNodF9rRmV6SmpacjNtcTdiUFd4YldGajJaVWxPUHBaemJEaGNoYVdwY3NJLThqSUtiaWM?oc=5\",\n    \"published_at\": \"Thu, 09 Jul 2026 01:00:10 GMT\",\n    \"score\": 109.4,\n    \"matched_keywords\": \"聯準會政策:fed | 變數:FED | 類型:DATA | 來源角色:CNYES_MACRO\"\n  },\n  {\n    \"rank\": 5,\n    \"theme\": \"Labor｜Initial Jobless Claims / 初領失業金\",\n    \"source\": \"news.cnyes.com\",\n    \"title\": \"美國上周初領失業金人數降至21.5萬 就業市場仍維持穩定 - news.cnyes.com\",\n    \"url\": \"https://news.google.com/rss/articles/CBMiT0FVX3lxTE1JWW5NaHVjbGpNMVFBdTlwVWxaMHVVQnR2UVpseUVsZTNhdVlqYmN2ZXBaT0F5NjNMakJtWGoyN2UyaEFVSGo2UThkZHdDWUk?oc=5\",\n    \"published_at\": \"Thu, 09 Jul 2026 13:00:06 GMT\",\n    \"score\": 96,\n    \"matched_keywords\": \"變數:JOBLESS_CLAIMS | 類型:DATA | 來源角色:CNYES_MACRO\"\n  }\n]"
       },
       "raw_daily_summary_package": "日期：2026-07-09\n今日主線：溫和Fed與油價轉跌壓抑利率\n\nExecutive Summary：\n儘管市場存在戰爭引發的通膨擔憂，但油價轉跌與偏溫和的Fed會議紀錄成為關鍵修正因子，使美債殖利率不升反降。市場目前最重視通膨預期是否實質降溫，帶動美元走弱並推升黃金避險與實質利率回落的買盤，資產傳導邏輯由通膨擔憂轉向政策預期修正。\n\n今日核心訊號：\n- 油價轉跌緩和通膨\n- 美債殖利率反向回落\n- 美元走弱推升金價\n\n核心資產重點：\nWTI｜71.80｜down｜油價下行，可能緩和能源通膨壓力；若由需求疲弱造成，亦需視為成長降溫訊號。\nUS10Y｜4.539｜down｜溫和的Fed會議紀錄與油價回落壓抑通膨預期，帶動長端利率下行。\nDXY｜100.937｜down｜殖利率回落削弱利差優勢，美元承壓走弱，給予部分非美貨幣喘息空間。\nGold｜4133｜up｜殖利率與美元雙雙回落，降低持有成本並推升黃金買盤。\nUSDJPY｜162.345｜down｜美元走弱與美債利率下行，縮窄美日利差，支撐日圓偏強。\nUSDTWD｜32.103｜up｜儘管美元偏弱，台幣仍呈現分歧走貶，顯示亞洲貨幣內部存在分化壓力。\n\n矛盾 / 背離：\n今日最關鍵的背離在於「通膨擔憂與實際利率走勢的分歧」。儘管新聞面有長債重定價與戰爭引發通膨的雜音，但實際盤面由「油價下行」與「溫和Fed會議紀錄」主導。這兩個修正因子有效壓抑了通膨預期的上行壓力，促使美債殖利率與美元同步回落，並強烈共振推升黃金。台幣的逆勢走貶則為分歧訊號，顯示亞幣仍受特定資金流向干擾。\n\n總經傳導鏈：\n[溫和Fed會議紀錄與油價轉跌] -> [美國10年期公債殖利率下行] -> [美元指數走弱] -> [黃金上漲、日圓偏強，但台幣分歧走貶]\n\n新聞佐證：\n- Fed會議紀錄釋出比市場預期更為溫和的政策訊號。\n- 國際油價轉跌，WTI回落至71.8美元，緩和短期能源通膨壓力。\n- 路透調查顯示，戰爭驅動的通膨擔憂未能動搖美債殖利率的整體展望。\n- 市場雖有30年期美債上看5.5%的長債重定價呼聲，但短期盤面仍由利率下行主導。\n\n待觀察問題：\n- 觀察後續通膨硬數據是否印證能源通膨降溫的預期\n- 留意Fed官員談話是否進一步確認會議紀錄的溫和立場\n- 關注台幣等部分亞幣走貶是否演變為更廣泛的資金外流壓力",
-      "generated_at": "2026-07-10T07:56:46+08:00",
+      "generated_at": "2026-07-10T08:41:30+08:00",
       "source": "Google Sheets Today Daily Source",
       "mode": "today_daily_source",
       "data_status": "complete"
@@ -232,6 +232,6 @@
     "date": "2026-07-09",
     "included": true,
     "source_mode": "today_daily_source",
-    "source_generated_at": "2026-07-10T07:56:46+08:00"
+    "source_generated_at": "2026-07-10T08:41:30+08:00"
   }
 }
