@@ -1,0 +1,160 @@
+{
+  "meta": {
+    "source": "analysis_input_bundle",
+    "data_status_note": "分析層使用 analysis window 作為正式判斷區間；lookback / background 資料僅作前期脈絡，不作為正式區間變動起點；主導因子、修正因子、背離訊號與資產方向以 weekly_v35_diagnosis 為共同診斷基礎。",
+    "week_range": "2026-07-03 ～ 2026-07-09",
+    "analysis_window": {
+      "start_date": "2026-07-03",
+      "end_date": "2026-07-09",
+      "source": "workflow_env"
+    }
+  },
+  "main_theme_analysis_process": {
+    "material_inventory": {
+      "inflation_materials": [
+        "伊朗危機再起推升油價，增加能源通膨隱憂",
+        "中國6月CPI降溫、PPI升溫，反映內需疲弱與成本壓力並存"
+      ],
+      "rate_materials": [
+        "非農就業數據爆冷放緩，但失業率意外下降",
+        "Fed會議紀要顯示AI躋身三大通膨風險，少數官員支持加息",
+        "川普稅改引發財政赤字疑慮與長債殖利率飆升"
+      ],
+      "dollar_materials": [
+        "美元指數偏強，市場聚焦Fed政策前景"
+      ],
+      "gold_materials": [
+        "金價跌向4000美元關卡，短線承壓"
+      ],
+      "asia_fx_materials": [
+        "日圓在缺乏干預跡象下再度走貶",
+        "台幣隨強美元承壓",
+        "韓元在強美元環境下逆勢偏強"
+      ],
+      "inventory_summary": "本期市場主線圍繞在就業降溫與通膨黏性的拉鋸。儘管非農數據放緩，但地緣政治推升油價、Fed偏鷹會議紀要與財政赤字疑慮，共同推升了美債殖利率與美元指數，壓抑黃金與多數亞幣，唯韓元表現分歧。"
+    },
+    "inflation_expectation_formation": {
+      "energy": "伊朗地緣政治風險推升 WTI 與 Brent 原油價格實際上行，加劇短期能源通膨壓力。",
+      "supply_chain": "中國 PPI 升溫反映全球供應鏈局部成本壓力仍存。",
+      "price_data": "中國 CPI 降溫顯示區域性內需疲弱，為通膨提供部分下行佐證。",
+      "demand": "就業降溫與中國 CPI 數據暗示終端需求可能正在放緩。",
+      "labor_market": "非農就業數據放緩，但失業率下降，勞動市場呈現降溫與韌性並存的分歧訊號。",
+      "policy_expectation": "Fed 會議紀要揭示內部對通膨風險的持續擔憂，支撐通膨黏性預期。",
+      "upward_channels": [
+        "能源價格上漲",
+        "Fed 通膨擔憂",
+        "供應鏈成本壓力"
+      ],
+      "offsetting_channels": [
+        "非農就業降溫",
+        "中國 CPI 降溫"
+      ],
+      "direction": "mixed",
+      "strength": "medium",
+      "judgment": "通膨預期呈現多空拉鋸。能源價格上行與 Fed 的通膨擔憂形成主要上行壓力，但就業數據降溫與部分通膨硬數據放緩則作為修正因子，整體市場更傾向定價通膨黏性。"
+    },
+    "rate_pricing": {
+      "direction": "up",
+      "same_direction_as_inflation": "mixed",
+      "inflation_to_rate_transmission": "能源通膨擔憂與 Fed 對通膨的警惕，削弱了就業降溫帶來的降息期待，推升利率預期。",
+      "fed_policy_signal": "會議紀要偏鷹，少數官員支持加息，顯示高利率可能維持更久。",
+      "bond_supply_demand": "川普稅改引發的財政赤字疑慮，對長端公債殖利率形成額外推升壓力。",
+      "term_premium": "財政赤字擔憂可能推升了長債的期限溢價。",
+      "safe_haven_bond_demand": "unclear",
+      "growth_or_rate_cut_expectation": "非農爆冷一度引發降息預期，但迅速被通膨擔憂與赤字壓力壓過。",
+      "dominant_driver": "mixed",
+      "judgment": "美債殖利率上行主要受能源通膨擔憂、Fed 偏鷹指引與財政赤字疑慮共同主導，就業降溫僅作為短暫的修正因子，未能扭轉高利率定價。"
+    },
+    "dollar_pricing": {
+      "direction": "up",
+      "same_direction_as_rates": "yes",
+      "rate_differential_effect": "美債殖利率上行擴大了利差優勢，為美元指數提供核心支撐。",
+      "safe_haven_dollar": "地緣政治風險可能提供邊際避險支撐，但非主導因素。",
+      "dollar_liquidity_demand": "unclear",
+      "other_currency_weakness": "日圓等非美貨幣在缺乏干預下走貶，被動推升美元指數。",
+      "us_relative_resilience": "unclear",
+      "dominant_driver": "rate_differential",
+      "judgment": "美元指數偏強，主要由美債殖利率上行帶來的利差優勢所主導，同時非美貨幣（如日圓）的自身弱勢也形成推升力量。"
+    },
+    "gold_pricing": {
+      "direction": "down",
+      "rate_real_yield_pressure": "美債殖利率上行帶來顯著的實質利率壓力，壓抑無孳息的黃金。",
+      "dollar_effect": "強美元環境進一步削弱黃金的計價吸引力。",
+      "safe_haven_demand": "地緣政治風險雖存，但避險買盤未能抵銷利率與美元的雙重壓力。",
+      "central_bank_buying": "unclear",
+      "geopolitics": "伊朗危機未足以成為主導金價的單一力量。",
+      "dominant_driver": "rates",
+      "judgment": "黃金下行，主要受制於高利率定價與強美元的雙重壓抑，顯示市場目前更關注持有成本而非純粹的避險需求。"
+    },
+    "asia_fx_pricing": {
+      "twd": {
+        "direction": "down",
+        "same_direction_as_dollar_pressure": "yes",
+        "local_flow": "unclear",
+        "central_bank_policy": "unclear",
+        "export_or_tech_sector": "unclear",
+        "regional_risk": "unclear",
+        "judgment": "台幣隨強美元與美債殖利率上行而承壓走貶，符合基準傳導路徑。"
+      },
+      "jpy": {
+        "direction": "down",
+        "same_direction_as_dollar_pressure": "yes",
+        "japan_policy": "市場未見日本央行實質干預跡象，放任匯率走貶。",
+        "rate_differential": "美日利差因美債殖利率上行而持續擴大，構成核心貶值壓力。",
+        "safe_haven_demand": "unclear",
+        "other_factor": "unclear",
+        "judgment": "日圓在強美元環境下，因缺乏政策干預且利差劣勢擴大而持續承壓。"
+      },
+      "krw": {
+        "direction": "up",
+        "same_direction_as_dollar_pressure": "no",
+        "korea_export": "unclear",
+        "equity_flow": "新聞指出局部資金流支撐，使其在強美元下逆勢偏強。",
+        "regional_risk": "unclear",
+        "other_factor": "unclear",
+        "judgment": "韓元走勢與強美元環境背離，顯示局部資金流入或特定市場微觀結構提供了支撐，成為本期亞洲貨幣的分歧訊號。"
+      }
+    },
+    "market_contradictions_and_modifiers": {
+      "baseline_path": "通膨預期 → 利率預期 → 美元指數 → 亞洲貨幣 / 黃金",
+      "expected_baseline_script": "就業降溫應引導利率與美元下行，或能源通膨推升利率與美元並全面壓抑亞幣。",
+      "most_unintuitive_market_reaction": "在非農就業爆冷降溫的情況下，美債殖利率與美元依然強勢；且在強美元下，韓元逆勢走強。",
+      "contradiction_type": "modifier",
+      "how_it_fits_main_theme": "就業降溫被市場視為修正因子，而非主導力量，市場更關注通膨黏性與財政赤字；韓元的背離則顯示亞洲資金流並未全面同步，存在局部差異。",
+      "presenter_opening_question": "在非農就業爆冷降溫的情況下，為何美債殖利率與美元依然強勢？"
+    },
+    "main_theme_next_validation": {
+      "dominant_pricing_force": "油價上行引發的能源通膨擔憂與財政赤字疑慮支撐的高利率定價。",
+      "offsetting_or_modifying_force": "就業數據降溫與部分通膨硬數據放緩。",
+      "one_sentence_to_remember": "就業降溫難敵通膨黏性與赤字疑慮，高利率定價持續主導美元與美債走勢。",
+      "next_validation_point": "後續 CPI/PPI 通膨數據是否印證能源通膨降溫，以及就業分歧訊號將由哪一項數據確認方向。",
+      "overall_verdict": "部分成立",
+      "uncertainty_level": "medium"
+    }
+  },
+  "forest_summary": {
+    "weekly_main_theme": "就業降溫與通膨黏性的拉鋸，高利率定價支撐美元",
+    "main_question": "非農數據放緩為何未能扭轉美債殖利率與美元的上行趨勢？",
+    "one_sentence_verdict": "能源通膨擔憂與財政赤字疑慮壓過就業降溫訊號，高利率定價持續主導市場。",
+    "overall_verdict": "部分成立",
+    "narrative_arc": "本週市場在「就業降溫」與「通膨黏性」之間拉鋸。週初非農數據爆冷一度引發降息期待，但隨後地緣政治推升油價、Fed 會議紀要偏鷹以及財政赤字疑慮，迅速將市場焦點拉回通膨風險，導致美債殖利率與美元共振走強，黃金與多數亞幣承壓，唯韓元逆勢走強顯示資金流分化。",
+    "why_it_matters": "這顯示市場目前對通膨反彈與財政供給壓力的敏感度高於經濟降溫訊號，投資人需警惕高利率環境維持更久的風險，並留意資產間的傳導分歧。"
+  },
+  "evidence": {
+    "most_important_evidence": [
+      "美國10年期公債殖利率與美元指數同步上行",
+      "WTI 與 Brent 原油價格實際上行",
+      "Fed 會議紀要揭示通膨擔憂",
+      "非農就業數據放緩與失業率下降的分歧"
+    ],
+    "insufficient_evidence": [
+      "韓元逆勢走強的具體資金流向細節",
+      "亞洲央行是否準備實質干預匯市的具體動作"
+    ],
+    "watch_items_from_news_context": [
+      "後續 CPI/PPI 通膨數據",
+      "亞洲貨幣在強美元壓力下的央行干預風險",
+      "川普稅改政策的立法進度與財政赤字影響"
+    ]
+  }
+}
