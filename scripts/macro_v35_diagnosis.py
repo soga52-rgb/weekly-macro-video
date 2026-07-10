@@ -47,11 +47,11 @@ ASSET_ALIASES = {
     "US10Y": ["US10Y", "^TNX", "TNX", "10Y", "UST10Y", "美國10年期公債殖利率", "美10年期公債殖利率"],
     "DXY": ["DXY", "DX-Y.NYB", "美元指數"],
     "Gold": ["Gold", "GC=F", "XAU", "XAUUSD", "黃金", "金價"],
-    "WTI": ["WTI", "CL=F", "Crude Oil", "原油", "西德州", "西德州原油"],
-    "Brent": ["Brent", "BZ=F", "布蘭特"],
-    "USDJPY": ["USDJPY", "JPY=X", "美元兌日圓", "美元/日圓"],
-    "USDTWD": ["USDTWD", "TWD=X", "美元兌台幣", "美元/台幣"],
-    "USDKRW": ["USDKRW", "KRW=X", "美元兌韓元", "美元/韓元", "美元兌韓圜"],
+    "WTI": ["WTI", "CL=F", "Crude Oil", "西德州", "西德州原油"],
+    "Brent": ["Brent", "BZ=F", "布蘭特", "布蘭特原油"],
+    "USDJPY": ["USDJPY", "JPY=X", "美元兌日圓", "美元/日圓", "美元／日圓"],
+    "USDTWD": ["USDTWD", "USDTWD=X", "TWD=X", "美元兌台幣", "美元/台幣", "美元／台幣"],
+    "USDKRW": ["USDKRW", "KRW=X", "美元兌韓元", "美元/韓元", "美元／韓元", "美元兌韓圜"],
 }
 
 
@@ -240,21 +240,70 @@ def points_in_window(points: Any, start_date: str, end_date: str) -> List[Dict[s
 
 
 def identify_asset(item: Dict[str, Any]) -> str:
-    haystack = " ".join([
-        normalize_text(item.get("key")),
-        normalize_text(item.get("symbol")),
-        normalize_text(item.get("ticker")),
+    """Resolve a market-series item to the canonical asset key.
+
+    Priority:
+    1) ``asset_key`` from the market-history endpoint is authoritative.
+    2) key / symbol / ticker use exact alias matching.
+    3) Human-readable name fields use conservative fuzzy matching.
+
+    This prevents ``布蘭特原油`` from being captured by a generic WTI alias and
+    supports full-width slashes used by the Apps Script endpoint.
+    """
+
+    def normalize_asset_token(value: Any) -> str:
+        return normalize_text(value).strip().lower().replace("／", "/").replace(" ", "")
+
+    canonical_lookup = {normalize_asset_token(key): key for key in ASSET_ALIASES}
+
+    # The endpoint already provides a stable canonical key. Use it first.
+    asset_key = normalize_asset_token(item.get("asset_key"))
+    if asset_key in canonical_lookup:
+        return canonical_lookup[asset_key]
+
+    # Machine-readable identifiers must match exactly; do not use substring logic.
+    exact_alias_lookup: Dict[str, str] = {}
+    for canonical, aliases in ASSET_ALIASES.items():
+        exact_alias_lookup[normalize_asset_token(canonical)] = canonical
+        for alias in aliases:
+            exact_alias_lookup[normalize_asset_token(alias)] = canonical
+
+    for field in ("key", "symbol", "ticker"):
+        token = normalize_asset_token(item.get(field))
+        if token and token in exact_alias_lookup:
+            return exact_alias_lookup[token]
+
+    # Human-readable fields may contain extra descriptions. Match longer aliases
+    # first so specific names such as Brent are preferred over broad terms.
+    name_text = " ".join([
         normalize_text(item.get("asset")),
         normalize_text(item.get("name")),
         normalize_text(item.get("label")),
         normalize_text(item.get("title")),
-    ]).lower()
+    ]).lower().replace("／", "/")
 
-    for canonical, aliases in ASSET_ALIASES.items():
-        for alias in aliases:
-            if alias.lower() in haystack:
-                return canonical
-    return normalize_text(item.get("key") or item.get("symbol") or item.get("label") or item.get("name") or "unknown")
+    fuzzy_aliases = sorted(
+        (
+            (normalize_text(alias).lower().replace("／", "/"), canonical)
+            for canonical, aliases in ASSET_ALIASES.items()
+            for alias in aliases
+            if normalize_text(alias)
+        ),
+        key=lambda pair: len(pair[0]),
+        reverse=True,
+    )
+    for alias, canonical in fuzzy_aliases:
+        if alias in name_text:
+            return canonical
+
+    return normalize_text(
+        item.get("asset_key")
+        or item.get("key")
+        or item.get("symbol")
+        or item.get("label")
+        or item.get("name")
+        or "unknown"
+    )
 
 
 def direction_text(direction: str, asset: str) -> str:
