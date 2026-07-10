@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "type": "story_visual_images_v9",
+    "source": "weekly_dialogue_story_only_v8.json",
+    "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-07-09",
+    "image_model": "gemini-3.1-flash-image-preview",
+    "generated_at": "2026-07-10T02:32:20",
+    "target_scene": "s1",
+    "preview_only_first": true,
+    "style": "whiteboard sketch explainer / minimalist marker doodle / consistent video series",
+    "v35_visual_rule": "visual translation only; do not re-analyze or invent macro conclusions"
+  },
+  "images": [
+    {
+      "section_id": "s1",
+      "visual_id": "scene_01",
+      "section_title": "油價與利率的雙重壓力",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-07-09/story_visual_images/scene_01.jpg",
+      "status": "created_or_existing"
+    }
+  ],
+  "failed_images": []
+}
