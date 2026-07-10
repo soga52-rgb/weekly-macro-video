@@ -8,9 +8,10 @@ Purpose:
 - Generate the formal analysis layer used by the downstream weekly video story workflow.
 - Keep the existing output filename for workflow compatibility.
 - Read:
-  1) weekly_market_series.json
-  2) weekly_news_context.json / md
-  3) macro_background_context.json / md
+  1) weekly_v35_diagnosis.json (authoritative diagnosis)
+  2) weekly_market_series.json (formal-window price validation)
+  3) compact representative articles from weekly_news_context.json (evidence only)
+- Do not send weekly_news_context.md, background context, or news-generated narrative fields to Gemini.
 - Generate:
   output/weekly/YYYY-MM-DD/weekly_forest_summary_analysis_layer_test.json
 
@@ -36,7 +37,7 @@ DEFAULT_MODEL = "gemini-3.5-pro"
 SYSTEM_PROMPT = """
 你是一位精通全球宏觀經濟、交叉資產策略與市場心理學的資深總經分析師，也是一位能把複雜市場訊號整理成清楚影片主線的總經解說者。
 
-你的任務是根據輸入資料中的新聞、價格、市場訊號與 weekly_v35_diagnosis，產生 Step 80 / Step 91 分析層測試結果。
+你的任務是以 weekly_v35_diagnosis 為主線權威、以正式區間價格為方向驗證，並以少量代表新聞作事件佐證，產生 Step 80 / Step 91 分析層結果。
 本次任務只驗證影片分析層，不處理圖像層與語音層。
 請不要產生影片分鏡、圖片提示詞、Tom / Miranda 對話稿。
 
@@ -44,8 +45,10 @@ SYSTEM_PROMPT = """
 - 總經不是數學公式，不是 A 上升就必然 B 上升。
 - 基準檢查路徑是：通膨預期 → 利率走向 → 美元指數 → 亞洲貨幣 / 黃金。
 - 這只是基準路徑，不是鐵律；市場預期、資金流向與政策訊號會共同影響最後走勢。
-- 每一層都必須先看 analysis_input_bundle 提供的新聞、價格、市場訊號與 weekly_v35_diagnosis，再判斷 up / down / mixed / unclear，不得預設方向。
-- 若 analysis_input_bundle 提供 weekly_v35_diagnosis，請優先把它視為 rule-based 診斷層，用來統一主導因子、修正因子、背離訊號、資產驗證與下一期觀察。
+- 每一層都必須先看 analysis_input_bundle 提供的 weekly_v35_diagnosis 與正式區間市場價格，再判斷 up / down / mixed / unclear，不得預設方向。
+- weekly_v35_diagnosis 是本流程的主線權威：dominant_driver 決定本期主線，correction_factors 決定修正因子，divergence_signal 決定主要背離，asset_validation 決定資產驗證，next_period_watch 決定下期觀察。
+- representative_news_evidence 只提供原始文章標題、來源、日期與分類作事件佐證，不得取代、重排或推翻 V35 主線。
+- 不得沿用新聞檔先前生成的 weekly_news_theme、macro_drivers、confirming_signals、contradicting_signals、news_based_corrections、watch_points 或 editor_note_for_forest_summary；這些二次分析欄位已刻意排除。
 - 市場矛盾不是錯誤；若價格與基準傳導不一致，請保留矛盾，並解釋它是修正因子、抵銷力量、資料不足，或新主線早期訊號。
 - 分析語氣應採中性、客觀、機構級研究口吻。即使訊號明顯，也應使用「主導、壓過、支撐、削弱、修正、尚待驗證、可能代表」等分析語言描述，不把本期訊號直接定調為確定的新趨勢。
 - 對市場轉向、共振或異常訊號，應說明其「目前可能代表的市場看法變化」與「後續仍需驗證的條件」。若資料只支持短期判斷，請避免將其延伸為長期結論。
@@ -62,25 +65,33 @@ SYSTEM_PROMPT = """
 
 USER_PROMPT_TEMPLATE = """
 資料說明：
-本程式提供的 analysis_input_bundle 是 Step 80 由既有 weekly 資料組成的影片分析資料包，內容包含：
-1. weekly_news_context.json / md：正式分析區間內的新聞脈絡與市場關注訊號。
-2. macro_background_context.json / md：近 2～4 週仍影響正式分析區間的背景新聞。
-3. weekly_market_series.json：市場價格與資產走勢；其中 analysis_series 是正式分析區間，lookback_series 是背景參考區間。
-4. weekly_v35_diagnosis.json：Python rule-based V35 診斷層，提供主導因子、修正因子、背離訊號、資產驗證與下一期觀察。
+本程式提供的 analysis_input_bundle 是聚焦後的 Step 80 影片分析資料包，內容只包含：
+1. weekly_v35_diagnosis.json：Python rule-based V35 診斷層，也是本期主線權威。
+2. weekly_market_series.json 的 analysis_series：正式分析區間內的市場價格與資產走勢。
+3. representative_news_evidence：由 weekly_news_context.json 篩出的少量代表文章，只保留原始標題、來源、發布時間與分類，僅作事件佐證。
+
+本程式刻意不提供：
+- weekly_news_context.md。
+- macro_background_context.json / md。
+- weekly_news_context.json 中已由前一個模型生成的主線、驅動因子、修正因子、待觀察與編輯結論。
+原因是這些二次分析文字可能帶入過期事件、舊敘事或與正式市場方向不一致的判斷。
 
 重要區間原則：
 - 本次正式分析區間是：{analysis_window_label}
-- 本期主線、市場驗證、資產變化與結論，必須以 analysis_input_bundle.weekly_market_series.analysis_series 為準。
-- lookback_series / macro_background_context 只能用作前期背景與延續性脈絡，不可當成正式分析區間的變動起點。
-- 若提到 analysis window 之前的事件或價格，必須標示為「前期背景」或「延續性脈絡」。
-- 不得把 lookback window 的起點數字寫成正式分析區間的漲跌起點。
+- 本期主線先以 analysis_input_bundle.weekly_v35_diagnosis 為準；市場驗證、資產變化與方向必須以 analysis_input_bundle.weekly_market_series.analysis_series 為準。
+- 本資料包不提供 lookback / background 敘事，不得自行引入正式分析區間之外的舊事件。
+- 不得把代表新聞標題中的推測、評論或條件句改寫成已確認的市場事實。
 - 輸出的 meta.week_range 必須等於正式分析區間：{analysis_window_label}
 
 weekly_v35_diagnosis 使用規則：
-- weekly_v35_diagnosis 是 rule-based 診斷層，不是影片旁白文案。
-- 請優先使用它來對齊影片主線與網頁主線，尤其是 dominant_driver、correction_factors、divergence_signal、asset_validation、next_period_watch。
-- 影片分析可以重新組織語言，但不可忽略或推翻其油價 / 通膨方向規則與資產方向。
-- 若你的分層分析與 weekly_v35_diagnosis 出現張力，請寫成分歧、修正因子或待觀察，不要硬改成另一套主線。
+- weekly_v35_diagnosis 是 rule-based 診斷層，不是影片旁白文案，但它是本流程的主線權威。
+- forest_summary.weekly_main_theme 必須與 weekly_v35_diagnosis.weekly_v35_diagnosis.dominant_driver 語意一致，不得另立主線。
+- main_theme_next_validation.dominant_pricing_force 必須與 dominant_driver 語意一致。
+- correction_factors 只能作修正力量，不得升格成新的共同主導因子。
+- divergence_signal 必須保留在市場矛盾與背離說明中。
+- asset_validation 決定資產方向與主要驗證；next_period_watch 決定下期觀察。
+- 影片分析可以重新組織語言，但不可忽略或推翻其油價 / 通膨方向規則、資產方向與亞洲貨幣分化判斷。
+- 若分層分析與 weekly_v35_diagnosis 出現張力，請寫成分歧、修正因子或待觀察，不要硬改成另一套主線。
 
 油價方向規則：
 - 油價方向必須優先依 weekly_v35_diagnosis.observed_market 或 weekly_market_series.analysis_series 中 WTI / Brent 的實際方向，不得只憑新聞標題猜測。
@@ -99,6 +110,13 @@ weekly_v35_diagnosis 使用規則：
 美元方向規則：
 - 美元方向優先以 DXY 實際走勢判斷；新聞只用來解釋利差、避險美元、流動性需求或非美貨幣自身因素。
 - 新聞只出現「美元 / DXY」名稱但沒有明確方向時，不得自行判定美元走強或走弱。
+
+代表新聞使用規則：
+- representative_news_evidence 不是主線結論，只是事件證據。
+- 只能引用文章標題直接支持的事件，不得從標題自行延伸出財政赤字、期限溢價、資金流、央行態度或政策因果。
+- 若代表新聞中沒有明確提及某原因，該原因必須寫 unclear / 待確認。
+- 不得把單日新聞中的油價回落、美元走弱或黃金上漲，改寫成正式分析區間的週線方向；週線方向一律以 analysis_series / V35 observed_market 為準。
+- 韓元若與美元方向背離，而代表新聞沒有直接證據說明原因，請寫「具體原因待確認」，不得自行補成資金流支撐。
 
 分析順序：
 一、素材盤點
@@ -386,62 +404,133 @@ def build_market_payload_for_analysis(weekly_market_series_json: Dict[str, Any],
             analysis_series.append(filtered_item)
             lookback_series.append(dict(item))
 
-    original_meta = weekly_market_series_json.get("meta", {}) if isinstance(weekly_market_series_json.get("meta"), dict) else {}
-
     return {
         "meta": {
             "source": "weekly_market_series.json",
             "analysis_window": analysis_window,
-            "lookback_window": original_meta.get("range", {}),
-            "instruction": "Use analysis_series for this week's price validation and conclusions. Use lookback_series only as prior background/context."
+            "instruction": "Use analysis_series as the only price source for this week's validation and conclusions."
         },
         "analysis_series": analysis_series,
-        "lookback_series": lookback_series,
     }
 
 
 
 
+def normalize_article_title(value: Any) -> str:
+    text = re.sub(r"\s+", " ", str(value or "").strip().lower())
+    return re.sub(r"\W+", "", text)[:120]
+
+
+def build_representative_news_evidence(news_context: Dict[str, Any], max_items: int = 8) -> Dict[str, Any]:
+    """
+    Keep only compact article-level evidence for Step 80.
+
+    Deliberately exclude all model-generated narrative fields from weekly_news_context,
+    including weekly_news_theme, macro_drivers, confirming/contradicting signals,
+    corrections, watch points, and editor notes.
+    """
+    categories = news_context.get("news_categories", {}) if isinstance(news_context, dict) else {}
+    title_to_category: Dict[str, str] = {}
+    if isinstance(categories, dict):
+        for category, items in categories.items():
+            if not isinstance(items, list):
+                continue
+            for item in items:
+                if not isinstance(item, dict):
+                    continue
+                key = normalize_article_title(item.get("title"))
+                if key and key not in title_to_category:
+                    title_to_category[key] = str(category or "")
+
+    generic_why_prefixes = (
+        "補充本週",
+        "本週總經新聞候選",
+    )
+    generic_titles = {
+        "鉅亨網鉅亨網",
+        "news.cnyes.comnews.cnyes.com",
+    }
+
+    selected = []
+    seen = set()
+
+    def add_item(item: Any, category_hint: str = "") -> None:
+        if len(selected) >= max_items or not isinstance(item, dict):
+            return
+        title = re.sub(r"\s+", " ", str(item.get("title") or "").strip())
+        key = normalize_article_title(title)
+        if not key or key in seen or key in generic_titles:
+            return
+        why = str(item.get("why_it_matters") or "").strip()
+        if why.startswith(generic_why_prefixes):
+            return
+        seen.add(key)
+        selected.append({
+            "category": category_hint or title_to_category.get(key, ""),
+            "title": title,
+            "source": str(item.get("source") or "").strip(),
+            "published_at": str(item.get("published_at") or "").strip(),
+        })
+
+    top_news = news_context.get("top_news", []) if isinstance(news_context, dict) else []
+    if isinstance(top_news, list):
+        for item in top_news:
+            add_item(item)
+
+    # Fallback only when top_news has too little clean evidence.
+    if len(selected) < 3 and isinstance(categories, dict):
+        for category in ["通膨預期", "利率", "貨幣", "其他"]:
+            items = categories.get(category, [])
+            if not isinstance(items, list):
+                continue
+            for item in items:
+                add_item(item, category_hint=category)
+                if len(selected) >= max_items:
+                    break
+            if len(selected) >= max_items:
+                break
+
+    return {
+        "selection_rule": (
+            "Article-level evidence only. Full news narrative, markdown, background context, "
+            "watch points, corrections, and editor conclusions are excluded."
+        ),
+        "articles": selected,
+    }
+
+
+
 def build_analysis_input_bundle(
-    weekly_news_context_json: Dict[str, Any],
-    weekly_news_context_md: str,
-    macro_background_context_json: Dict[str, Any],
-    macro_background_context_md: str,
+    representative_news_evidence: Dict[str, Any],
     market_payload: Dict[str, Any],
     analysis_window: Dict[str, str],
-    weekly_v35_diagnosis: Dict[str, Any] | None = None,
+    weekly_v35_diagnosis: Dict[str, Any],
 ) -> Dict[str, Any]:
-    """
-    Step 80 still reads weekly files, but the prompt uses the generic name
-    analysis_input_bundle so the analysis logic can later be reused by daily workflows.
-    """
+    """Build a focused Step 80 package with V35 as the authoritative diagnosis."""
     return {
         "meta": {
-            "source": "Step 80 assembled analysis package",
+            "source": "Step 80 focused V35-authority package",
             "analysis_window": analysis_window,
             "input_files": [
-                "weekly_news_context.json",
+                "weekly_v35_diagnosis.json",
+                "weekly_market_series.json",
+                "weekly_news_context.json (representative article fields only)",
+            ],
+            "excluded_inputs": [
                 "weekly_news_context.md",
                 "macro_background_context.json",
                 "macro_background_context.md",
-                "weekly_market_series.json",
-                "weekly_v35_diagnosis.json",
+                "weekly_news_context generated narrative fields",
             ],
             "note": (
+                "Use weekly_v35_diagnosis as the authoritative storyline. "
                 "Use weekly_market_series.analysis_series for formal price validation. "
-                "Use macro_background_context and lookback_series only as background/context."
+                "Use representative_news_evidence only as article-level event support."
             ),
         },
-        "news_context": {
-            "json": weekly_news_context_json,
-            "markdown": weekly_news_context_md,
-        },
-        "background_context": {
-            "json": macro_background_context_json,
-            "markdown": macro_background_context_md,
-        },
+        "weekly_v35_diagnosis": weekly_v35_diagnosis,
         "weekly_market_series": market_payload,
-        "weekly_v35_diagnosis": weekly_v35_diagnosis or {},
+        "representative_news_evidence": representative_news_evidence,
     }
 
 
@@ -515,9 +604,6 @@ def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: 
 
 def build_user_prompt(week_dir: Path) -> str:
     weekly_news_context_json = load_json(week_dir / "weekly_news_context.json", {})
-    weekly_news_context_md = load_text(week_dir / "weekly_news_context.md")
-    macro_background_context_json = load_json(week_dir / "macro_background_context.json", {})
-    macro_background_context_md = load_text(week_dir / "macro_background_context.md")
     weekly_market_series_json = load_json(week_dir / "weekly_market_series.json", {})
     weekly_v35_diagnosis = load_json(week_dir / "weekly_v35_diagnosis.json", {})
     analysis_window = infer_analysis_window_from_source(week_dir)
@@ -537,17 +623,16 @@ def build_user_prompt(week_dir: Path) -> str:
         )
 
     market_payload = build_market_payload_for_analysis(weekly_market_series_json, analysis_window)
+    representative_news_evidence = build_representative_news_evidence(weekly_news_context_json)
     analysis_input_bundle = build_analysis_input_bundle(
-        weekly_news_context_json=weekly_news_context_json,
-        weekly_news_context_md=weekly_news_context_md,
-        macro_background_context_json=macro_background_context_json,
-        macro_background_context_md=macro_background_context_md,
+        representative_news_evidence=representative_news_evidence,
         market_payload=market_payload,
         analysis_window=analysis_window,
         weekly_v35_diagnosis=weekly_v35_diagnosis,
     )
 
     print(f"[INFO] Analysis window: {analysis_window.get('label')} ({analysis_window.get('source')})")
+    print(f"[INFO] Representative news articles included: {len(representative_news_evidence.get('articles', []))}")
 
     return USER_PROMPT_TEMPLATE.replace(
         "{analysis_window_label}",
@@ -558,11 +643,57 @@ def build_user_prompt(week_dir: Path) -> str:
     )
 
 
+def map_v35_verdict(value: Any) -> str:
+    text = str(value or "").strip()
+    if "部分" in text:
+        return "部分成立"
+    if "分歧" in text:
+        return "分歧待觀察"
+    if text in {"支持", "成立"}:
+        return "成立"
+    if text in {"不支持", "待觀察"}:
+        return "待觀察"
+    return ""
 
-def normalize_result_for_downstream(result: Dict[str, Any], analysis_window: Dict[str, str]) -> Dict[str, Any]:
-    """
-    Keep downstream Step 82 compatibility while using the new Step 80 analysis schema.
-    """
+
+def local_currency_direction(pair_direction: str) -> str:
+    if pair_direction == "up":
+        return "down"
+    if pair_direction == "down":
+        return "up"
+    return pair_direction or "unclear"
+
+
+def normalize_result_for_downstream(
+    result: Dict[str, Any],
+    analysis_window: Dict[str, str],
+    weekly_v35_diagnosis: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Keep Step 82 compatibility and enforce V35 authority after Gemini generation."""
+    compact_v35 = (
+        weekly_v35_diagnosis.get("weekly_v35_diagnosis", {})
+        if isinstance(weekly_v35_diagnosis, dict)
+        else {}
+    )
+    observed = (
+        weekly_v35_diagnosis.get("observed_market", {})
+        if isinstance(weekly_v35_diagnosis, dict)
+        else {}
+    )
+    dominant_driver = str(
+        compact_v35.get("dominant_driver")
+        or weekly_v35_diagnosis.get("primary_macro_story")
+        or "待確認"
+    ).strip()
+    correction_factors = compact_v35.get("correction_factors", [])
+    if not isinstance(correction_factors, list):
+        correction_factors = []
+    divergence_signal = str(compact_v35.get("divergence_signal") or "").strip()
+    next_period_watch = compact_v35.get("next_period_watch", [])
+    if not isinstance(next_period_watch, list):
+        next_period_watch = []
+    v35_verdict = map_v35_verdict(weekly_v35_diagnosis.get("final_judgment"))
+
     result.setdefault("meta", {})
     result["meta"]["week_range"] = analysis_window.get("label", "")
     result["meta"]["analysis_window"] = {
@@ -571,36 +702,69 @@ def normalize_result_for_downstream(result: Dict[str, Any], analysis_window: Dic
         "source": analysis_window.get("source", ""),
     }
     result["meta"]["data_status_note"] = (
-        "分析層使用 analysis window 作為正式判斷區間；"
-        "lookback / background 資料僅作前期脈絡，不作為正式區間變動起點；"
-        "主導因子、修正因子、背離訊號與資產方向以 weekly_v35_diagnosis 為共同診斷基礎。"
+        "分析層只使用正式 analysis window；weekly_v35_diagnosis 為主線權威；"
+        "市場價格用於方向驗證；代表新聞只作事件佐證；"
+        "weekly_news_context.md、背景新聞與新聞模型先前生成的主線文字均未送入 Gemini。"
     )
+    result["meta"]["v35_authority_applied"] = True
+    result["meta"]["v35_dominant_driver"] = dominant_driver
 
     process = result.setdefault("main_theme_analysis_process", {})
-    main_theme = process.get("main_theme_next_validation", {}) if isinstance(process.get("main_theme_next_validation"), dict) else {}
-    contradictions = process.get("market_contradictions_and_modifiers", {}) if isinstance(process.get("market_contradictions_and_modifiers"), dict) else {}
+    main_theme = process.setdefault("main_theme_next_validation", {})
+    contradictions = process.setdefault("market_contradictions_and_modifiers", {})
+
+    # Hard lock the dominant storyline and verdict to V35.
+    main_theme["dominant_pricing_force"] = dominant_driver
+    if correction_factors:
+        main_theme["offsetting_or_modifying_force"] = "；".join(str(x) for x in correction_factors[:3] if str(x).strip())
+    if next_period_watch:
+        main_theme["next_validation_point"] = "；".join(str(x) for x in next_period_watch[:3] if str(x).strip())
+    if v35_verdict:
+        main_theme["overall_verdict"] = v35_verdict
+    if divergence_signal:
+        contradictions["how_it_fits_main_theme"] = divergence_signal
+
+    # Hard lock observable asset directions to V35.
+    rate_pricing = process.setdefault("rate_pricing", {})
+    dollar_pricing = process.setdefault("dollar_pricing", {})
+    gold_pricing = process.setdefault("gold_pricing", {})
+    asia_fx = process.setdefault("asia_fx_pricing", {})
+    rate_pricing["direction"] = str(observed.get("US10Y", {}).get("direction") or "unclear")
+    dollar_pricing["direction"] = str(observed.get("DXY", {}).get("direction") or "unclear")
+    gold_pricing["direction"] = str(observed.get("Gold", {}).get("direction") or "unclear")
+    for key, asset in [("jpy", "USDJPY"), ("twd", "USDTWD"), ("krw", "USDKRW")]:
+        bucket = asia_fx.setdefault(key, {})
+        bucket["direction"] = local_currency_direction(str(observed.get(asset, {}).get("direction") or ""))
 
     forest_summary = result.setdefault("forest_summary", {})
-    if not forest_summary.get("weekly_main_theme"):
-        forest_summary["weekly_main_theme"] = main_theme.get("dominant_pricing_force", "")
+    forest_summary["weekly_main_theme"] = dominant_driver
     if not forest_summary.get("main_question"):
         forest_summary["main_question"] = contradictions.get("presenter_opening_question", "")
     if not forest_summary.get("one_sentence_verdict"):
         forest_summary["one_sentence_verdict"] = main_theme.get("one_sentence_to_remember", "")
-    if not forest_summary.get("overall_verdict"):
+    if v35_verdict:
+        forest_summary["overall_verdict"] = v35_verdict
+    elif not forest_summary.get("overall_verdict"):
         forest_summary["overall_verdict"] = main_theme.get("overall_verdict", "待觀察")
     if not forest_summary.get("narrative_arc"):
         forest_summary["narrative_arc"] = (
-            f"主導力量：{main_theme.get('dominant_pricing_force', '待確認')}；"
+            f"主導力量：{dominant_driver}；"
             f"修正力量：{main_theme.get('offsetting_or_modifying_force', '待確認')}。"
         )
     if not forest_summary.get("why_it_matters"):
         forest_summary["why_it_matters"] = main_theme.get("next_validation_point", "")
 
-    result.setdefault("evidence", {})
-    result["evidence"].setdefault("most_important_evidence", [])
-    result["evidence"].setdefault("insufficient_evidence", [])
-    result["evidence"].setdefault("watch_items_from_news_context", [])
+    evidence = result.setdefault("evidence", {})
+    asset_validation = compact_v35.get("asset_validation", [])
+    if isinstance(asset_validation, list) and asset_validation:
+        evidence["most_important_evidence"] = asset_validation[:6]
+    else:
+        evidence.setdefault("most_important_evidence", [])
+    evidence.setdefault("insufficient_evidence", [])
+    if next_period_watch:
+        evidence["watch_items_from_news_context"] = next_period_watch[:5]
+    else:
+        evidence.setdefault("watch_items_from_news_context", [])
     return result
 
 
@@ -623,18 +787,18 @@ def main() -> None:
 
     print(f"[INFO] Step 80 analysis-layer model: {model}")
     print(f"[INFO] Week dir: {week_dir}")
-    print(f"[INFO] weekly_news_context.json included: {(week_dir / 'weekly_news_context.json').exists()}")
-    print(f"[INFO] weekly_news_context.md included: {(week_dir / 'weekly_news_context.md').exists()}")
-    print(f"[INFO] macro_background_context.json included: {(week_dir / 'macro_background_context.json').exists()}")
-    print(f"[INFO] macro_background_context.md included: {(week_dir / 'macro_background_context.md').exists()}")
-    print(f"[INFO] weekly_market_series.json included: {(week_dir / 'weekly_market_series.json').exists()}")
     print(f"[INFO] weekly_v35_diagnosis.json included: {(week_dir / 'weekly_v35_diagnosis.json').exists()}")
+    print(f"[INFO] weekly_market_series.json included: {(week_dir / 'weekly_market_series.json').exists()}")
+    print(f"[INFO] weekly_news_context.json used as compact article evidence: {(week_dir / 'weekly_news_context.json').exists()}")
+    print("[INFO] weekly_news_context.md excluded from Gemini input: True")
+    print("[INFO] macro_background_context excluded from Gemini input: True")
 
     user_prompt = build_user_prompt(week_dir)
     result = call_gemini_json(SYSTEM_PROMPT, user_prompt, model, api_key)
 
     analysis_window = infer_analysis_window_from_source(week_dir)
-    result = normalize_result_for_downstream(result, analysis_window)
+    weekly_v35_diagnosis = load_json(week_dir / "weekly_v35_diagnosis.json", {})
+    result = normalize_result_for_downstream(result, analysis_window, weekly_v35_diagnosis)
 
     out_path = week_dir / "weekly_forest_summary_analysis_layer_test.json"
     save_json(out_path, result)
