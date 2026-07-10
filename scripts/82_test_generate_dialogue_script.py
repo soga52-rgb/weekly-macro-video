@@ -752,8 +752,16 @@ def apply_v35_authority_metadata(result: Dict[str, Any], bundle: Dict[str, Any])
 
 
 def sentence_has_qualifier(sentence: str) -> bool:
-    qualifiers = ("週內一度", "週中一度", "盤中一度", "短暫", "一度", "先", "後來", "但整週", "不代表整週")
+    qualifiers = (
+        "週內一度", "週中一度", "盤中一度", "短暫", "一度",
+        "先", "後來", "但整週", "不代表整週",
+    )
     return any(q in sentence for q in qualifiers)
+
+
+def sentence_is_hypothetical(sentence: str) -> bool:
+    markers = ("如果", "若", "假設", "一旦", "會不會", "是否", "可能", "預期", "能否", "假如")
+    return any(marker in sentence for marker in markers)
 
 
 def sentence_is_negated(sentence: str, phrase: str) -> bool:
@@ -761,6 +769,29 @@ def sentence_is_negated(sentence: str, phrase: str) -> bool:
         if f"{neg}{phrase}" in sentence or f"{neg} {phrase}" in sentence:
             return True
     return False
+
+
+def find_direction_conflict(
+    clause: str,
+    subjects: tuple[str, ...],
+    bad_phrases: tuple[str, ...],
+    allow_reverse_order: bool = True,
+    max_gap: int = 18,
+) -> str:
+    """Match only an explicit asset-direction statement, not nearby words."""
+    for subject in subjects:
+        subject_re = re.escape(subject)
+        for bad in bad_phrases:
+            bad_re = re.escape(bad)
+            patterns = [rf"{subject_re}.{{0,{max_gap}}}{bad_re}"]
+            if allow_reverse_order:
+                patterns.append(rf"{bad_re}.{{0,{max_gap}}}{subject_re}")
+            for pattern in patterns:
+                if re.search(pattern, clause, flags=re.I):
+                    if sentence_is_negated(clause, bad):
+                        continue
+                    return bad
+    return ""
 
 
 def validate_directional_consistency(result: Dict[str, Any], bundle: Dict[str, Any]) -> None:
@@ -772,36 +803,97 @@ def validate_directional_consistency(result: Dict[str, Any], bundle: Dict[str, A
     text = "\n".join(collect_text_fragments(result))
     sentences = [s.strip() for s in re.split(r"[。！？!?\n]+", text) if s.strip()]
     issues: List[str] = []
+    rules: List[Dict[str, Any]] = []
 
-    rules = []
     if observed.get("WTI", {}).get("direction") == "up" or observed.get("Brent", {}).get("direction") == "up":
-        rules.append(("油價", ("下跌", "走低", "轉跌", "回落"), "WTI / Brent 本週淨方向為上行"))
+        rules.append({
+            "subjects": ("油價", "WTI", "Brent", "西德州原油", "布蘭特原油"),
+            "bad": ("下跌", "走低", "轉跌", "回落"),
+            "reason": "WTI / Brent 本週淨方向為上行",
+            "reverse": True,
+        })
+
     if observed.get("DXY", {}).get("direction") == "up":
-        rules.append(("美元", ("走弱", "下跌", "走貶", "轉弱"), "DXY 本週淨方向為上行"))
+        rules.append({
+            "subjects": ("DXY", "美元指數"),
+            "bad": ("走弱", "下跌", "走貶", "轉弱", "回落"),
+            "reason": "DXY 本週淨方向為上行",
+            "reverse": True,
+        })
+
     if observed.get("Gold", {}).get("direction") == "down":
-        rules.append(("黃金", ("上漲", "走高", "上行", "轉強"), "Gold 本週淨方向為下行"))
+        rules.append({
+            "subjects": ("黃金", "金價"),
+            "bad": ("上漲", "走高", "上行", "轉強"),
+            "reason": "Gold 本週淨方向為下行",
+            "reverse": True,
+        })
+
     if observed.get("USDJPY", {}).get("direction") == "up":
-        rules.append(("日圓", ("升值", "走強", "上行", "轉強"), "USD/JPY 上行代表日圓本週走弱"))
+        rules.extend([
+            {
+                "subjects": ("USD/JPY", "USDJPY", "美元兌日圓"),
+                "bad": ("下跌", "走低", "轉跌", "回落"),
+                "reason": "USD/JPY 本週淨方向為上行",
+                "reverse": False,
+            },
+            {
+                "subjects": ("日圓",),
+                "bad": ("升值", "走強", "轉強"),
+                "reason": "USD/JPY 上行代表日圓本週走弱",
+                "reverse": True,
+            },
+        ])
+
     if observed.get("USDTWD", {}).get("direction") == "up":
-        rules.append(("台幣", ("升值", "走強", "上行", "轉強"), "USD/TWD 上行代表台幣本週走弱"))
+        rules.extend([
+            {
+                "subjects": ("USD/TWD", "USDTWD", "美元兌台幣"),
+                "bad": ("下跌", "走低", "轉跌", "回落"),
+                "reason": "USD/TWD 本週淨方向為上行",
+                "reverse": False,
+            },
+            {
+                "subjects": ("台幣",),
+                "bad": ("升值", "走強", "轉強"),
+                "reason": "USD/TWD 上行代表台幣本週走弱",
+                "reverse": True,
+            },
+        ])
+
     if observed.get("USDKRW", {}).get("direction") == "down":
-        rules.append(("韓元", ("貶值", "走弱", "承壓", "下跌"), "USD/KRW 下行代表韓元本週相對走強"))
+        rules.extend([
+            {
+                "subjects": ("USD/KRW", "USDKRW", "美元兌韓元"),
+                "bad": ("上漲", "走高", "上行", "轉強"),
+                "reason": "USD/KRW 本週淨方向為下行",
+                "reverse": False,
+            },
+            {
+                "subjects": ("韓元",),
+                "bad": ("貶值", "走弱", "承壓", "轉弱"),
+                "reason": "USD/KRW 下行代表韓元本週相對走強",
+                "reverse": True,
+            },
+        ])
 
     for sentence in sentences:
         clauses = [c.strip() for c in re.split(r"[，,；;：:]", sentence) if c.strip()]
         for clause in clauses:
-            for subject, bad_phrases, reason in rules:
-                if subject not in clause:
-                    continue
-                for bad in bad_phrases:
-                    if bad not in clause:
-                        continue
-                    if sentence_has_qualifier(clause) or sentence_is_negated(clause, bad):
-                        continue
-                    issues.append(f"{reason}，但輸出出現：{clause[:180]}")
+            if sentence_has_qualifier(clause) or sentence_is_hypothetical(clause):
+                continue
+            for rule in rules:
+                bad = find_direction_conflict(
+                    clause=clause,
+                    subjects=rule["subjects"],
+                    bad_phrases=rule["bad"],
+                    allow_reverse_order=bool(rule.get("reverse", True)),
+                )
+                if bad:
+                    issues.append(f"{rule['reason']}，但輸出出現：{clause[:180]}")
 
     if issues:
-        unique_issues = []
+        unique_issues: List[str] = []
         for issue in issues:
             if issue not in unique_issues:
                 unique_issues.append(issue)
@@ -1001,7 +1093,14 @@ def main() -> None:
 
     ensure_closing_turn(result)
     rebuild_full_script(result)
-    validate_directional_consistency(result, bundle)
+    try:
+        validate_directional_consistency(result, bundle)
+    except RuntimeError:
+        # Keep the generated candidate for diagnosis instead of discarding it.
+        failed_path = week_dir / "weekly_dialogue_story_only_v8_validation_failed.json"
+        save_json(failed_path, result)
+        print(f"[WARN] Saved validation-failed candidate: {failed_path}")
+        raise
 
     save_json(week_dir / OUT_JSON_FILENAME, result)
     (week_dir / OUT_MD_FILENAME).write_text(build_markdown(result), encoding="utf-8")
