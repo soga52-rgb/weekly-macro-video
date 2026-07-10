@@ -6,19 +6,18 @@ Weekly Macro Summary Page - Step 04
 Build weekly macro summary web page.
 
 Page order:
-1. Macro transmission diagram image
-2. 重點摘要
-3. 本週市場訊號與走勢
-4. 修正因子 / 待觀察
-5. 本週新聞佐證
+1. 週報影片
+2. Macro transmission diagram image
+3. 重點摘要
+4. 本週市場訊號與走勢
+5. 本週新聞
 6. 下週觀察
-7. 週報影片 / 圖卡草稿
 
 Design:
 - Unified Apple/iOS widget-inspired glassmorphism style.
 - Warm neutral palette: off-white, white, deep gray, amber accent.
-- News evidence grouped into: 通膨預期 / 利率 / 貨幣 / 其他.
-- Market signals and trend charts merged into one card section.
+- Weekly news grouped into: 通膨預期 / 利率 / 貨幣 / 其他.
+- Market trend charts use a fixed 2 / 3 / 3 asset order with equal card sizing.
 """
 
 import json
@@ -390,7 +389,7 @@ def get_categorized_news(news_context: Dict[str, Any]) -> Dict[str, List[Dict[st
 def render_news(news_context: Dict[str, Any]) -> str:
     categories = get_categorized_news(news_context)
     if not any(categories.values()):
-        return '<div class="muted-box">本週新聞補充資料不足，待觀察。</div>'
+        return '<div class="muted-box">本週新聞資料不足，待觀察。</div>'
 
     category_descriptions = {
         "通膨預期": "油價、能源、物價與再通膨訊號",
@@ -410,7 +409,7 @@ def render_news(news_context: Dict[str, Any]) -> str:
     ]
 
     if not non_empty:
-        return '<div class="muted-box">本週新聞補充資料不足，待觀察。</div>'
+        return '<div class="muted-box">本週新聞資料不足，待觀察。</div>'
 
     max_count = max(len(items) for _, items in non_empty)
 
@@ -511,10 +510,11 @@ def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
 
     values = [float(p["value"]) for p in points_data]
 
-    width = 280
-    height = 92
-    pad_x = 14
-    pad_y = 14
+    # Use a wider SVG coordinate system so dots do not look oversized when cards expand.
+    width = 360
+    height = 88
+    pad_x = 16
+    pad_y = 12
     chart_w = width - pad_x * 2
     chart_h = height - pad_y * 2
 
@@ -535,7 +535,7 @@ def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
         tip = f"{date}｜{fmt_number(value, unit)}"
         dots.append(
             f'<g class="spark-node">'
-            f'<circle class="spark-dot" cx="{x:.1f}" cy="{y:.1f}" r="4.2" '
+            f'<circle class="spark-dot" cx="{x:.1f}" cy="{y:.1f}" r="3.6" '
             f'data-tooltip="{esc(tip)}" tabindex="0"></circle>'
             f'<title>{esc(tip)}</title>'
             f'</g>'
@@ -544,7 +544,7 @@ def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
     return f"""
     <div class="gf-chart-wrap">
       <svg class="sparkline" viewBox="0 0 {width} {height}" preserveAspectRatio="none">
-        <polyline points="{' '.join(coords)}" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+        <polyline points="{' '.join(coords)}" fill="none" stroke="currentColor" stroke-width="2.6" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
         {''.join(dots)}
       </svg>
     </div>
@@ -553,20 +553,28 @@ def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
 
 def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_label: str = "") -> str:
     series = market.get("series") or []
-    signal_map = build_asset_signal_map(forest)
     week_start, week_end = parse_week_range_label(week_label)
     if not isinstance(series, list) or not series:
         return '<div class="muted-box">目前尚未匯入本週市場走勢資料。</div>'
 
-    preferred_order = ["US10Y", "DXY", "Gold", "WTI", "Brent", "USDJPY", "USDTWD", "USDKRW"]
+    preferred_rows = [
+        ["WTI", "Brent"],
+        ["US10Y", "DXY", "Gold"],
+        ["USDJPY", "USDTWD", "USDKRW"],
+    ]
+    preferred_order = [asset_key for row in preferred_rows for asset_key in row]
     series_sorted = sorted(
         [s for s in series if isinstance(s, dict)],
         key=lambda s: preferred_order.index(s.get("asset_key")) if s.get("asset_key") in preferred_order else 999
     )
 
-    cards = []
-    for item in series_sorted[:8]:
-        asset = first_non_empty(item.get("asset"), item.get("asset_key"), "未命名資產")
+    cards_by_key: Dict[str, str] = {}
+    for item in series_sorted:
+        asset_key = str(item.get("asset_key") or "")
+        if asset_key not in preferred_order:
+            continue
+
+        asset = first_non_empty(item.get("asset"), asset_key, "未命名資產")
         unit = first_non_empty(item.get("unit"), "")
         points = filter_points_by_week(item.get("points") or [], week_start, week_end)
         if len(points) < 2:
@@ -596,8 +604,6 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_la
         direction_text = "上行" if direction == "up" else "下行" if direction == "down" else "持平"
         change_sign = "+" if change > 0 else ""
 
-        asset_key = str(item.get("asset_key") or "")
-        signal_text = build_market_signal_text(asset_key, asset, clean_points, unit)
         asset_theme = {
             "US10Y": "rate",
             "DXY": "dollar",
@@ -609,12 +615,10 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_la
             "USDKRW": "fx",
         }.get(asset_key, "neutral")
 
-        unit_html = ""
-        if unit:
-            unit_html = f'<span class="asset-pill-unit">{esc(unit)}</span>'
+        unit_html = f'<span class="asset-pill-unit">{esc(unit)}</span>' if unit else ""
 
-        cards.append(f"""
-        <div class="chart-card chart-theme-{asset_theme}">
+        cards_by_key[asset_key] = f"""
+        <div class="chart-card chart-theme-{asset_theme}" data-asset="{esc(asset_key)}">
           <div class="chart-head">
             <div class="asset-pill">{esc(asset)}{unit_html}</div>
             <div class="chart-direction {direction}">{esc(direction_text)}</div>
@@ -627,9 +631,18 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_la
           </div>
           {sparkline_svg(clean_points, unit)}
         </div>
-        """)
+        """
 
-    return "\n".join(cards) if cards else '<div class="muted-box">市場走勢資料格式無法繪圖。</div>'
+    rows_html = []
+    for row_index, row_keys in enumerate(preferred_rows, start=1):
+        row_cards = [cards_by_key[key] for key in row_keys if key in cards_by_key]
+        if not row_cards:
+            continue
+        rows_html.append(
+            f'<div class="chart-row chart-row-{row_index}">' + "\n".join(row_cards) + "</div>"
+        )
+
+    return "\n".join(rows_html) if rows_html else '<div class="muted-box">市場走勢資料格式無法繪圖。</div>'
 
 
 def render_scene_cards(forest: Dict[str, Any]) -> str:
@@ -683,10 +696,6 @@ def build_html(week_dir: Path, forest: Dict[str, Any], news_context: Dict[str, A
     charts_html = render_market_charts(market, forest, week_label)
     video_html = render_video_section(week_dir)
 
-    revision_items = render_list([
-        first_non_empty(storyline.get("revision_or_noise"), ""),
-        *as_list(evidence.get("insufficient_evidence")),
-    ])
     next_week = render_list(video.get("next_week_questions") or evidence.get("watch_items_from_news_context"))
     evidence_items = render_list(evidence.get("most_important_evidence"))
 
@@ -781,7 +790,13 @@ body {{
   font-weight:900;
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.5);
 }}
-.charts {{ display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }}
+.charts {{ display:flex; flex-direction:column; gap:16px; }}
+.chart-row {{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  align-items:stretch;
+}}
 .chart-card,.slide-card,.news-category,.news-mini-card {{
   background:var(--glass-strong);
   border:1px solid rgba(255,255,255,.72);
@@ -792,13 +807,17 @@ body {{
 }}
 .chart-card {{
   position:relative;
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  min-height:238px;
   padding:18px;
   overflow:hidden;
   min-width:0;
   border-top:4px solid rgba(245,158,11,.78);
   background:linear-gradient(180deg,rgba(250,252,255,.90) 0%,rgba(255,255,255,.78) 38%);
 }}
-.chart-head {{ display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:8px; }}
+.chart-head {{ display:flex; justify-content:space-between; gap:12px; align-items:flex-start; min-height:42px; margin-bottom:8px; }}
 .asset-pill {{
   color:var(--navy);
   display:inline-flex;
@@ -829,7 +848,7 @@ body {{
   background:var(--accent);
   display:inline-block;
 }}
-.chart-value-row {{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; margin-top:8px; }}
+.chart-value-row {{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; min-height:48px; margin-top:8px; }}
 .chart-latest {{ color:var(--navy); line-height:1.15; letter-spacing:.01em; display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; }}
 .chart-latest-value {{ font-size:34px; font-weight:850; }}
 .chart-change {{ color:var(--muted); font-size:15px; white-space:nowrap; }}
@@ -837,10 +856,10 @@ body {{
 .chart-direction.up {{ color:#7c2d12; background:#fff3d1; border-color:#f3d28b; }}
 .chart-direction.down {{ color:#374151; background:#f3f4f6; border-color:#e5e7eb; }}
 .chart-direction.flat {{ color:#4b5563; background:#f3f4f6; border-color:#e5e7eb; }}
-.gf-chart-wrap {{ width:100%; margin:16px 0 10px; overflow:hidden; border-radius:16px; }}
-.sparkline {{ width:100%; height:96px; display:block; color:#334155; }}
+.gf-chart-wrap {{ width:100%; margin:auto 0 10px; padding-top:16px; overflow:hidden; border-radius:16px; }}
+.sparkline {{ width:100%; height:88px; display:block; color:#334155; }}
 .spark-node {{ pointer-events:auto; }}
-.spark-dot {{ fill:#fff; stroke:currentColor; stroke-width:2.6; cursor:pointer; opacity:.95; }}
+.spark-dot {{ fill:#fff; stroke:currentColor; stroke-width:2.1; vector-effect:non-scaling-stroke; cursor:pointer; opacity:.95; }}
 .spark-dot:hover,.spark-dot:focus {{ fill:var(--accent); stroke:var(--accent); outline:none; }}
 .chart-tooltip {{
   position:fixed;
@@ -990,7 +1009,8 @@ ul {{ margin:0; padding-left:22px; }}
 .slide-point {{ color:#4b5563; font-size:14px; }}
 .footer {{ color:var(--muted); font-size:13px; padding:20px 2px; }}
 @media(max-width:1000px) {{
-  .charts,.slides {{ grid-template-columns:repeat(2,minmax(0,1fr)); }}
+  .chart-row {{ grid-template-columns:repeat(2,minmax(0,1fr)); }}
+  .slides {{ grid-template-columns:repeat(2,minmax(0,1fr)); }}
   .news-category {{ grid-column:span 6 !important; }}
   .news-category-cards {{ grid-template-columns:1fr; }}
 }}
@@ -1002,7 +1022,7 @@ ul {{ margin:0; padding-left:22px; }}
     margin-top:8px;
   }}
   .week-range {{ font-size:15px; }}
-  .charts,.slides {{ grid-template-columns:1fr; }}
+  .chart-row,.slides {{ grid-template-columns:1fr; }}
   .news-masonry {{ grid-template-columns:1fr; }}
   .news-category {{ grid-column:span 1 !important; }}
   .title {{ font-size:34px; }}
@@ -1047,13 +1067,8 @@ ul {{ margin:0; padding-left:22px; }}
     <div class="section-source">來源：YAHOO財經</div>
   </section>
 
-  <section class="section section-watch">
-    <h2>修正因子 / 待觀察</h2>
-    <ul>{revision_items}</ul>
-  </section>
-
   <section class="section section-news">
-    <h2>本週新聞佐證</h2>
+    <h2>本週新聞</h2>
     <div class="news-masonry">{news_html}</div>
   </section>
 
