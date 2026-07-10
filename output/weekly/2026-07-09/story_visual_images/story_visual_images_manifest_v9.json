@@ -3,10 +3,10 @@
     "type": "story_visual_images_v9",
     "source": "weekly_dialogue_story_only_v8.json",
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-07-09",
-    "image_model": "gemini-3.1-flash-image-preview",
-    "generated_at": "2026-07-10T02:32:20",
+    "image_model": "gemini-3-pro-image",
+    "generated_at": "2026-07-10T02:37:05",
     "target_scene": "s1",
-    "preview_only_first": true,
+    "preview_only_first": false,
     "style": "whiteboard sketch explainer / minimalist marker doodle / consistent video series",
     "v35_visual_rule": "visual translation only; do not re-analyze or invent macro conclusions"
   },
