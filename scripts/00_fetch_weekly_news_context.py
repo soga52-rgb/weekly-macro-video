@@ -7,7 +7,8 @@ Weekly Macro Video Engine - Weekly News Context v3
 Purpose:
 - Build a dynamic macro news context for weekly video generation.
 - Search Google News RSS for the same analysis window used by weekly source.
-- Keep a lookback window for macro hard-data releases with continuing effects.
+- Keep a controlled lookback window for macro hard-data releases with continuing effects.
+- Preserve natural news density by supplementing Gemini-selected categories only with high-score RSS candidates.
 - Preferred sources: UDN / Cnyes / MarketWatch / Investing.
 - Reuters and CNBC are excluded in this version.
 - Output is used as a correction layer for weekly_forest_summary.
@@ -68,12 +69,12 @@ NEWS_QUERY_GROUPS = [
     {
         "theme": "us_macro_data",
         "queries": [
-            "美國 CPI 4.2 通膨 Fed",
+            "美國 最新 CPI 通膨 Fed",
             "美國 CPI 通膨 超出預期 聯準會",
             "美國 PPI 生產者物價 通膨 Fed",
             "美國 非農 就業 大增 超出預期 Fed",
             "美國 就業報告 非農 薪資 通膨",
-            "US CPI inflation 4.2 Federal Reserve",
+            "US latest CPI inflation Federal Reserve",
             "US PPI producer prices inflation Fed",
             "nonfarm payrolls jobs report stronger than expected Fed",
             "initial jobless claims labor market Fed",
@@ -184,8 +185,9 @@ B. weekly_news_candidates：
 新聞分類規則：
 - 請務必輸出 news_categories，分成「通膨預期」「利率」「貨幣」「其他」四類。
 - 不要平均分配新聞，也不要為了湊數把低相關新聞放進分類。
-- 請依本週新聞密度與重要性自然分配：新聞較少的類別可以只放 0～2 則；新聞明顯較多的類別可以放 5～8 則。
-- 每類最多 8 則，優先挑對本週主線最有佐證價值者。
+- 請依本週新聞密度與重要性自然分配，不要把 2 則當成預設上限。
+- 只有在該類確實只有 0～2 則高相關新聞時，才輸出 0～2 則；若有 3 則以上高相關候選，請自然保留 3～8 則。
+- 每類最多 8 則，優先挑對本週主線最有佐證價值者；不要為了版面整齊而截成固定 2 則。
 - 請優先保留正式分析區間內或靠近週末最新交易日的新聞；較早新聞可作為前期脈絡，尤其是 PPI、CPI、非農、Fed 指引等會延續影響本週定價的總經參數，但不要讓舊新聞取代本週主線。
 - 一則新聞只能放在一類，不要重複。
 - news_categories 每則新聞都必須保留原始候選新聞的 title、source、url、published_at，並新增 why_it_matters。
@@ -690,6 +692,116 @@ def news_card_from_item(item: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+
+NEWS_CATEGORY_ORDER = ["通膨預期", "利率", "貨幣", "其他"]
+NEWS_CATEGORY_MAX_ITEMS = 8
+NEWS_SUPPLEMENT_MIN_SCORE = 15
+NEWS_SUPPLEMENT_MAX_SCORE_GAP = 8
+
+
+def news_item_identity(item: Dict[str, Any]) -> str:
+    """
+    Build a stable cross-category identity.
+
+    Use normalized title first because Google News URLs may differ for the same article.
+    """
+    title_key = normalize_news_title(item.get("title"))
+    if title_key:
+        return title_key
+    return safe_news_text(item.get("url"))
+
+
+def default_why_it_matters(bucket: str) -> str:
+    return {
+        "通膨預期": "補充本週物價、能源或通膨預期的新聞脈絡。",
+        "利率": "補充本週美債殖利率、Fed 或利率路徑的新聞脈絡。",
+        "貨幣": "補充本週美元、亞洲貨幣或資金流向的新聞脈絡。",
+        "其他": "補充其他可能影響本週總經主線的事件。",
+    }.get(bucket, "補充本週總經新聞脈絡。")
+
+
+def supplement_news_categories(
+    categories: Dict[str, List[Dict[str, Any]]],
+    ranked_items: List[Dict[str, Any]],
+) -> Dict[str, List[Dict[str, Any]]]:
+    """
+    Keep Gemini's editorial selections, then supplement only with high-score RSS candidates.
+
+    This prevents the common 2/2/2/1 output from becoming an accidental display cap,
+    while preserving natural category density and avoiding low-relevance padding.
+    """
+    output: Dict[str, List[Dict[str, Any]]] = {key: [] for key in NEWS_CATEGORY_ORDER}
+    used = set()
+
+    # 1) Preserve Gemini-selected cards, but enforce one article in one category.
+    for bucket in NEWS_CATEGORY_ORDER:
+        for item in categories.get(bucket, []) or []:
+            if not isinstance(item, dict):
+                continue
+            identity = news_item_identity(item)
+            if not identity or identity in used:
+                continue
+            used.add(identity)
+            output[bucket].append(item)
+            if len(output[bucket]) >= NEWS_CATEGORY_MAX_ITEMS:
+                break
+
+    # 2) Build category pools from ranked RSS candidates.
+    pools: Dict[str, List[Dict[str, Any]]] = {key: [] for key in NEWS_CATEGORY_ORDER}
+    pool_seen = set()
+    for item in ranked_items or []:
+        if not isinstance(item, dict):
+            continue
+        score_raw = item.get("score", 0)
+        try:
+            score = float(score_raw)
+        except (TypeError, ValueError):
+            score = 0.0
+
+        if score < NEWS_SUPPLEMENT_MIN_SCORE:
+            continue
+
+        card = news_card_from_item(item)
+        identity = news_item_identity(card)
+        if not identity or identity in pool_seen:
+            continue
+        pool_seen.add(identity)
+
+        bucket = classify_news_bucket(item)
+        if not safe_news_text(card.get("why_it_matters")) or card.get("why_it_matters") == "本週總經新聞候選。":
+            card["why_it_matters"] = default_why_it_matters(bucket)
+        card["score"] = score
+        pools[bucket].append(card)
+
+    # 3) Supplement only candidates close to each category's strongest score.
+    for bucket in NEWS_CATEGORY_ORDER:
+        pool = pools.get(bucket, [])
+        if not pool:
+            continue
+
+        best_score = max(float(item.get("score", 0) or 0) for item in pool)
+        quality_floor = max(NEWS_SUPPLEMENT_MIN_SCORE, best_score - NEWS_SUPPLEMENT_MAX_SCORE_GAP)
+        eligible = [
+            item for item in pool
+            if float(item.get("score", 0) or 0) >= quality_floor
+        ]
+
+        # Natural weighting: dense categories can grow to 5–8 items;
+        # sparse categories remain at 0–2 without forced padding.
+        target_count = min(NEWS_CATEGORY_MAX_ITEMS, max(len(output[bucket]), len(eligible)))
+
+        for item in eligible:
+            if len(output[bucket]) >= target_count:
+                break
+            identity = news_item_identity(item)
+            if not identity or identity in used:
+                continue
+            used.add(identity)
+            output[bucket].append(item)
+
+    return output
+
+
 def build_fallback_news_categories(ranked_items: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
     categories: Dict[str, List[Dict[str, Any]]] = {
         "通膨預期": [],
@@ -718,13 +830,8 @@ def build_fallback_news_categories(ranked_items: List[Dict[str, Any]]) -> Dict[s
 def normalize_news_categories(context: Dict[str, Any], ranked_items: List[Dict[str, Any]] | None = None) -> Dict[str, Any]:
     categories = context.get("news_categories")
     if not isinstance(categories, dict):
-        context["news_categories"] = {
-            "通膨預期": [],
-            "利率": [],
-            "貨幣": [],
-            "其他": [],
-        }
-        categories = context["news_categories"]
+        categories = {key: [] for key in NEWS_CATEGORY_ORDER}
+        context["news_categories"] = categories
 
     top_news = context.get("top_news")
     if not isinstance(top_news, list):
@@ -732,16 +839,23 @@ def normalize_news_categories(context: Dict[str, Any], ranked_items: List[Dict[s
 
     url_candidates = build_url_candidates(ranked_items or [], top_news)
 
-    for key in ["通膨預期", "利率", "貨幣", "其他"]:
-        if not isinstance(categories.get(key), list):
-            categories[key] = []
-        cleaned_items = []
-        for item in categories[key]:
-            if isinstance(item, dict):
-                cleaned_items.append(enrich_news_item(item, url_candidates))
-        categories[key] = cleaned_items[:8]
+    # Clean and enrich Gemini-selected category cards first.
+    cleaned_categories: Dict[str, List[Dict[str, Any]]] = {key: [] for key in NEWS_CATEGORY_ORDER}
+    for bucket in NEWS_CATEGORY_ORDER:
+        raw_items = categories.get(bucket)
+        if not isinstance(raw_items, list):
+            raw_items = []
 
-    has_category_cards = any(categories.get(key) for key in ["通膨預期", "利率", "貨幣", "其他"])
+        for item in raw_items:
+            if not isinstance(item, dict):
+                continue
+            cleaned_categories[bucket].append(enrich_news_item(item, url_candidates))
+            if len(cleaned_categories[bucket]) >= NEWS_CATEGORY_MAX_ITEMS:
+                break
+
+    # Always allow high-score candidates to supplement sparse Gemini output.
+    # This is not a fixed minimum: low-relevance categories remain sparse.
+    categories = supplement_news_categories(cleaned_categories, ranked_items or [])
 
     normalized_top = []
     seen = set()
@@ -749,23 +863,24 @@ def normalize_news_categories(context: Dict[str, Any], ranked_items: List[Dict[s
         if not isinstance(item, dict):
             continue
         enriched = enrich_news_item(item, url_candidates)
-        key = (enriched.get("title") or "", enriched.get("url") or "")
-        if key in seen:
+        identity = news_item_identity(enriched)
+        if not identity or identity in seen:
             continue
-        seen.add(key)
+        seen.add(identity)
         normalized_top.append(enriched)
 
-    if not has_category_cards and not normalized_top and ranked_items:
-        fallback_categories = build_fallback_news_categories(ranked_items)
-        for key in ["通膨預期", "利率", "貨幣", "其他"]:
-            categories[key] = fallback_categories.get(key, [])[:8]
+    # If Gemini returned no usable categories, the supplement function already
+    # builds them from high-score ranked candidates. Keep a full fallback only
+    # for unusual low-score cases where every category is still empty.
+    if not any(categories.values()) and ranked_items:
+        categories = build_fallback_news_categories(ranked_items)
 
-    for bucket in ["通膨預期", "利率", "貨幣", "其他"]:
+    for bucket in NEWS_CATEGORY_ORDER:
         for item in categories.get(bucket, []):
-            key = (item.get("title") or "", item.get("url") or "")
-            if key in seen:
+            identity = news_item_identity(item)
+            if not identity or identity in seen:
                 continue
-            seen.add(key)
+            seen.add(identity)
             normalized_top.append(item)
 
     context["news_categories"] = categories
