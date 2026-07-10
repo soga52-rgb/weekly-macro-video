@@ -4,8 +4,8 @@
     "source": "weekly_dialogue_story_only_v8.json",
     "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-07-09",
     "image_model": "gemini-3-pro-image",
-    "generated_at": "2026-07-10T02:46:20",
-    "target_scene": "s1",
+    "generated_at": "2026-07-10T02:48:51",
+    "target_scene": "",
     "preview_only_first": false,
     "style": "whiteboard sketch explainer / minimalist marker doodle / consistent video series",
     "v35_visual_rule": "visual translation only; do not re-analyze or invent macro conclusions"
@@ -16,6 +16,34 @@
       "visual_id": "scene_01",
       "section_title": "油價與利率的雙重壓力",
       "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-07-09/story_visual_images/scene_01.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s2",
+      "visual_id": "scene_02",
+      "section_title": "就業市場的矛盾訊號",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-07-09/story_visual_images/scene_02.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s3",
+      "visual_id": "scene_03",
+      "section_title": "美元強勢與黃金的退讓",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-07-09/story_visual_images/scene_03.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s4",
+      "visual_id": "scene_04",
+      "section_title": "亞洲貨幣的背離訊號",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-07-09/story_visual_images/scene_04.jpg",
+      "status": "created_or_existing"
+    },
+    {
+      "section_id": "s5",
+      "visual_id": "scene_05",
+      "section_title": "下週觀察重點",
+      "path": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-07-09/story_visual_images/scene_05.jpg",
       "status": "created_or_existing"
     }
   ],
