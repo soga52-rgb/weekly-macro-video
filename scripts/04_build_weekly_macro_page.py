@@ -17,7 +17,7 @@ Design:
 - Unified Apple/iOS widget-inspired glassmorphism style.
 - Warm neutral palette: off-white, white, deep gray, amber accent.
 - Weekly news grouped into: 通膨預期 / 利率 / 貨幣 / 其他.
-- Market trend charts use a fixed 2 / 3 / 3 asset order with equal card sizing.
+- Market trend charts use a fixed 2 / 3 / 4 asset order with equal card sizing.
 """
 
 import json
@@ -447,8 +447,10 @@ def render_news(news_context: Dict[str, Any]) -> str:
     return "\n".join(sections)
 
 
-def fmt_number(value: float, unit: str = "") -> str:
-    if abs(value) >= 1000:
+def fmt_number(value: float, unit: str = "", decimals: int | None = None) -> str:
+    if isinstance(decimals, int) and decimals >= 0:
+        text = f"{value:,.{decimals}f}"
+    elif abs(value) >= 1000:
         text = f"{value:,.1f}"
     elif abs(value) >= 100:
         text = f"{value:.2f}"
@@ -456,7 +458,10 @@ def fmt_number(value: float, unit: str = "") -> str:
         text = f"{value:.3f}"
     return f"{text} {unit}".strip()
 
-def fmt_number_only(value: float) -> str:
+
+def fmt_number_only(value: float, decimals: int | None = None) -> str:
+    if isinstance(decimals, int) and decimals >= 0:
+        return f"{value:,.{decimals}f}"
     if abs(value) >= 1000:
         return f"{value:,.1f}"
     if abs(value) >= 100:
@@ -504,7 +509,7 @@ def build_market_signal_text(asset_key: str, asset: str, clean_points: List[Dict
     )
 
 
-def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
+def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "", decimals: int | None = None) -> str:
     if len(points_data) < 2:
         return '<div class="chart-empty">資料不足</div>'
 
@@ -532,7 +537,7 @@ def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
         y = pad_y + (1 - ((value - min_v) / span)) * chart_h
 
         coords.append(f"{x:.1f},{y:.1f}")
-        tip = f"{date}｜{fmt_number(value, unit)}"
+        tip = f"{date}｜{fmt_number(value, unit, decimals)}"
         dots.append(
             f'<g class="spark-node">'
             f'<circle class="spark-dot" cx="{x:.1f}" cy="{y:.1f}" r="3.6" '
@@ -553,18 +558,30 @@ def sparkline_svg(points_data: List[Dict[str, Any]], unit: str = "") -> str:
 
 def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_label: str = "") -> str:
     series = market.get("series") or []
+    derived_series = market.get("derived_series") or []
     week_start, week_end = parse_week_range_label(week_label)
-    if not isinstance(series, list) or not series:
+
+    if not isinstance(series, list):
+        series = []
+    if not isinstance(derived_series, list):
+        derived_series = []
+
+    all_series = [
+        item
+        for item in [*series, *derived_series]
+        if isinstance(item, dict)
+    ]
+    if not all_series:
         return '<div class="muted-box">目前尚未匯入本週市場走勢資料。</div>'
 
     preferred_rows = [
         ["WTI", "Brent"],
         ["US10Y", "DXY", "Gold"],
-        ["USDJPY", "USDTWD", "USDKRW"],
+        ["USDJPY", "USDTWD", "USDKRW", "JPYTWD"],
     ]
     preferred_order = [asset_key for row in preferred_rows for asset_key in row]
     series_sorted = sorted(
-        [s for s in series if isinstance(s, dict)],
+        all_series,
         key=lambda s: preferred_order.index(s.get("asset_key")) if s.get("asset_key") in preferred_order else 999
     )
 
@@ -576,6 +593,9 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_la
 
         asset = first_non_empty(item.get("asset"), asset_key, "未命名資產")
         unit = first_non_empty(item.get("unit"), "")
+        display_unit = "TWD/JPY" if asset_key == "JPYTWD" else unit
+        decimals_raw = item.get("decimals")
+        decimals = decimals_raw if isinstance(decimals_raw, int) and decimals_raw >= 0 else None
         points = filter_points_by_week(item.get("points") or [], week_start, week_end)
         if len(points) < 2:
             points = item.get("points") or []
@@ -613,9 +633,11 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_la
             "USDJPY": "fx",
             "USDTWD": "fx",
             "USDKRW": "fx",
+            "JPYTWD": "fx",
         }.get(asset_key, "neutral")
 
-        unit_html = f'<span class="asset-pill-unit">{esc(unit)}</span>' if unit else ""
+        unit_html = f'<span class="asset-pill-unit">{esc(display_unit)}</span>' if display_unit else ""
+        change_decimals = max(decimals or 3, 4) if asset_key == "JPYTWD" else 3
 
         cards_by_key[asset_key] = f"""
         <div class="chart-card chart-theme-{asset_theme}" data-asset="{esc(asset_key)}">
@@ -625,11 +647,11 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_la
           </div>
           <div class="chart-value-row">
             <div class="chart-latest">
-              <span class="chart-latest-value">{esc(fmt_number_only(latest_value))}</span>
+              <span class="chart-latest-value">{esc(fmt_number_only(latest_value, decimals))}</span>
             </div>
-            <div class="chart-change">{esc(change_sign)}{change:.3f}｜{change_sign}{pct:.2f}%</div>
+            <div class="chart-change">{esc(change_sign)}{change:.{change_decimals}f}｜{change_sign}{pct:.2f}%</div>
           </div>
-          {sparkline_svg(clean_points, unit)}
+          {sparkline_svg(clean_points, display_unit, decimals)}
         </div>
         """
 
@@ -796,6 +818,12 @@ body {{
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:16px;
   align-items:stretch;
+}}
+.chart-row-3 {{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  width:100%;
+  max-width:760px;
+  margin:0 auto;
 }}
 .chart-card,.slide-card,.news-category,.news-mini-card {{
   background:var(--glass-strong);
