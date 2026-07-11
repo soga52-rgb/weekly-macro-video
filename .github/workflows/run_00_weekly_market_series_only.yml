@@ -1,0 +1,99 @@
+name: Run 00 Weekly Market Series Only
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_week_end_date:
+        description: "Target output folder date, e.g. 2026-07-09"
+        required: true
+        default: "2026-07-09"
+        type: string
+      analysis_start_date:
+        description: "Formal analysis window start date, e.g. 2026-07-03"
+        required: true
+        default: "2026-07-03"
+        type: string
+      analysis_end_date:
+        description: "Formal analysis window end date, e.g. 2026-07-09"
+        required: true
+        default: "2026-07-09"
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  run-market-series-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      WEEKLY_MARKET_SERIES_URL: ${{ secrets.WEEKLY_MARKET_SERIES_URL }}
+      WEEK_DIR: output/weekly/${{ inputs.target_week_end_date }}
+      ANALYSIS_START_DATE: ${{ inputs.analysis_start_date }}
+      ANALYSIS_END_DATE: ${{ inputs.analysis_end_date }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Create target week folder
+        run: |
+          mkdir -p "${WEEK_DIR}"
+
+      - name: Fetch weekly market series and build JPY/TWD
+        run: |
+          python scripts/00_fetch_weekly_market_series.py \
+            --week-dir "${WEEK_DIR}" \
+            --start "${ANALYSIS_START_DATE}" \
+            --end "${ANALYSIS_END_DATE}"
+
+      - name: Verify market-series outputs
+        run: |
+          test -s data/weekly_market_series.json
+          test -s "${WEEK_DIR}/weekly_market_series.json"
+
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          path = Path(os.environ["WEEK_DIR"]) / "weekly_market_series.json"
+          data = json.loads(path.read_text(encoding="utf-8"))
+
+          derived = data.get("derived_series") or []
+          jpytwd = next(
+              (item for item in derived if item.get("asset_key") == "JPYTWD"),
+              None,
+          )
+
+          if not jpytwd:
+              raise SystemExit("[ERROR] JPYTWD was not created in derived_series.")
+
+          points = jpytwd.get("points") or []
+          if not points:
+              raise SystemExit("[ERROR] JPYTWD exists but has no points.")
+
+          print(f"[OK] JPYTWD created with {len(points)} common-date points.")
+          print(f"[OK] Latest JPYTWD: {points[-1]}")
+          PY
+
+      - name: Commit market-series outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data/weekly_market_series.json
+          git add "${WEEK_DIR}/weekly_market_series.json"
+
+          if git diff --cached --quiet; then
+            echo "No market-series changes to commit."
+          else
+            git commit -m "Update weekly market series with JPY/TWD"
+            git push
+          fi
