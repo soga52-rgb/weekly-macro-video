@@ -2,7 +2,7 @@
   "meta": {
     "source": "Google Sheets Market_Source_Test",
     "mode": "market_history_series",
-    "generated_at": "2026-07-10T08:41:35+08:00",
+    "generated_at": "2026-07-11T14:17:30+08:00",
     "data_status": "complete",
     "range": {
       "start": "2026-07-03",
@@ -24,6 +24,18 @@
       "start_date": "2026-07-03",
       "end_date": "2026-07-09",
       "source": "workflow_env_or_cli"
+    },
+    "derived_series": {
+      "JPYTWD": {
+        "asset_key": "JPYTWD",
+        "formula": "USDTWD / USDJPY",
+        "status": "created",
+        "usd_jpy_found": true,
+        "usd_twd_found": true,
+        "usd_jpy_points": 6,
+        "usd_twd_points": 6,
+        "common_date_points": 6
+      }
     }
   },
   "series": [
@@ -264,6 +276,50 @@
         {
           "date": "2026-07-09",
           "value": 1506.47998046875
+        }
+      ]
+    }
+  ],
+  "derived_series": [
+    {
+      "asset_key": "JPYTWD",
+      "key": "JPYTWD",
+      "asset": "日圓／台幣",
+      "name": "日圓／台幣",
+      "label": "日圓／台幣",
+      "symbol": "JPYTWD_DERIVED",
+      "unit": "TWD per JPY",
+      "decimals": 4,
+      "derived": true,
+      "display_only": true,
+      "include_in_diagnosis": false,
+      "source": "Calculated from same-date USD/TWD and USD/JPY observations",
+      "formula": "USDTWD / USDJPY",
+      "meaning": "1 Japanese yen expressed in New Taiwan dollars",
+      "points": [
+        {
+          "date": "2026-07-03",
+          "value": 0.19786533
+        },
+        {
+          "date": "2026-07-05",
+          "value": 0.19781396
+        },
+        {
+          "date": "2026-07-06",
+          "value": 0.19782294
+        },
+        {
+          "date": "2026-07-07",
+          "value": 0.19814846
+        },
+        {
+          "date": "2026-07-08",
+          "value": 0.19741067
+        },
+        {
+          "date": "2026-07-09",
+          "value": 0.19774554
         }
       ]
     }
