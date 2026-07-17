@@ -661,7 +661,7 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_la
         if not row_cards:
             continue
         rows_html.append(
-            f'<div class="chart-row chart-row-{row_index}">' + "\n".join(row_cards) + "</div>"
+            f'<div class="chart-row {"chart-row-fx" if row_index == 3 else f"chart-row-{row_index}"}">' + "\n".join(row_cards) + "</div>"
         )
 
     return "\n".join(rows_html) if rows_html else '<div class="muted-box">市場走勢資料格式無法繪圖。</div>'
@@ -819,11 +819,11 @@ body {{
   gap:16px;
   align-items:stretch;
 }}
-.chart-row-3 {{
+.chart-row-fx {{
   grid-template-columns:repeat(2,minmax(0,1fr));
-  width:100%;
-  max-width:760px;
+  width:min(100%, 860px);
   margin:0 auto;
+  justify-content:center;
 }}
 .chart-card,.slide-card,.news-category,.news-mini-card {{
   background:var(--glass-strong);
@@ -1038,6 +1038,7 @@ ul {{ margin:0; padding-left:22px; }}
 .footer {{ color:var(--muted); font-size:13px; padding:20px 2px; }}
 @media(max-width:1000px) {{
   .chart-row {{ grid-template-columns:repeat(2,minmax(0,1fr)); }}
+  .chart-row-fx {{ width:100%; }}
   .slides {{ grid-template-columns:repeat(2,minmax(0,1fr)); }}
   .news-category {{ grid-column:span 6 !important; }}
   .news-category-cards {{ grid-template-columns:1fr; }}
@@ -1050,7 +1051,7 @@ ul {{ margin:0; padding-left:22px; }}
     margin-top:8px;
   }}
   .week-range {{ font-size:15px; }}
-  .chart-row,.slides {{ grid-template-columns:1fr; }}
+  .chart-row,.chart-row-fx,.slides {{ grid-template-columns:1fr; }}
   .news-masonry {{ grid-template-columns:1fr; }}
   .news-category {{ grid-column:span 1 !important; }}
   .title {{ font-size:34px; }}
