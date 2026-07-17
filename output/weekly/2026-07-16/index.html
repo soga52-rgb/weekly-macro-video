@@ -96,11 +96,11 @@ body {
   gap:16px;
   align-items:stretch;
 }
-.chart-row-3 {
+.chart-row-fx {
   grid-template-columns:repeat(2,minmax(0,1fr));
-  width:100%;
-  max-width:760px;
+  width:min(100%, 860px);
   margin:0 auto;
+  justify-content:center;
 }
 .chart-card,.slide-card,.news-category,.news-mini-card {
   background:var(--glass-strong);
@@ -315,6 +315,7 @@ ul { margin:0; padding-left:22px; }
 .footer { color:var(--muted); font-size:13px; padding:20px 2px; }
 @media(max-width:1000px) {
   .chart-row { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .chart-row-fx { width:100%; }
   .slides { grid-template-columns:repeat(2,minmax(0,1fr)); }
   .news-category { grid-column:span 6 !important; }
   .news-category-cards { grid-template-columns:1fr; }
@@ -327,7 +328,7 @@ ul { margin:0; padding-left:22px; }
     margin-top:8px;
   }
   .week-range { font-size:15px; }
-  .chart-row,.slides { grid-template-columns:1fr; }
+  .chart-row,.chart-row-fx,.slides { grid-template-columns:1fr; }
   .news-masonry { grid-template-columns:1fr; }
   .news-category { grid-column:span 1 !important; }
   .title { font-size:34px; }
@@ -366,9 +367,9 @@ ul { margin:0; padding-left:22px; }
     <h2>重點摘要</h2>
     <div class="summary-grid">
       <div class="big-text">通膨預期多空拉鋸</div>
-      <div class="question">實體通膨數據降溫與能源價格上行同時出現，市場應如何定價聯準會的下一步？</div>
+      <div class="question">通膨降溫的硬數據與能源價格上行的壓力，誰將主導下一階段的利率定價？</div>
     </div>
-    <p>本期市場主軸圍繞在通膨預期的多空拉鋸。一方面，美國 6 月 CPI 與 PPI 數據雙雙呈現降溫跡象，帶動市場對通膨壓力的舒緩預期；另一方面，國際油價顯著上行，為短期能源通膨增添變數。聯準會官員的發言亦顯示，在就業市場維持穩健的背景下，政策轉向仍需更多證據，使得整體宏觀敘事處於拉鋸狀態，資產走勢也反映出這種謹慎情緒。</p>
+    <p>本期市場焦點在於通膨預期的多空拉鋸。一方面，美國 6 月 CPI 與 PPI 等硬數據顯示通膨降溫；另一方面，國際油價顯著上行，增添短期能源通膨壓力。在這兩股力量抵銷下，美國10年期公債殖利率呈現平盤。同時，黃金出現未伴隨強美元或高利率的顯著下跌，跨資產傳導呈現背離。</p>
   </section>
 
   <section class="section section-market market-section">
@@ -483,7 +484,7 @@ ul { margin:0; padding-left:22px; }
     
         </div>
         </div>
-<div class="chart-row chart-row-3">
+<div class="chart-row chart-row-fx">
         <div class="chart-card chart-theme-fx" data-asset="USDJPY">
           <div class="chart-head">
             <div class="asset-pill">美元／日圓<span class="asset-pill-unit">JPY</span></div>
@@ -795,15 +796,15 @@ ul { margin:0; padding-left:22px; }
     <div class="two-col">
       <div>
         <h3>關鍵問題</h3>
-        <ul><li>通膨上行與下行訊號，誰會成為下一期的主導因子？</li>
-<li>聯準會是否會釋出高利率維持更久的明確訊號？</li></ul>
+        <ul><li>通膨上行與下行訊號，誰會成為下一期主導因子？</li>
+<li>聯準會是否會釋放延續高利率維持更久的明確訊號？</li>
+<li>黃金的異常下跌是否會在本週找到明確的驅動原因？</li></ul>
       </div>
       <div>
         <h3>主要佐證</h3>
         <ul><li>WTI 與 Brent 原油價格顯著上行</li>
 <li>美國 6 月 CPI 與 PPI 數據降溫</li>
-<li>美元指數偏弱震盪</li>
-<li>黃金價格顯著回落</li></ul>
+<li>美國10年期公債殖利率維持平盤</li></ul>
       </div>
     </div>
   </section>

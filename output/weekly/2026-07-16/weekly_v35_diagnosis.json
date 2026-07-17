@@ -17,7 +17,7 @@
     },
     "note": "Rule-based V35 diagnosis. News evidence is segmented by record, future/watch text is excluded from directional regex, and observed market direction has precedence for oil, DXY and Gold validation."
   },
-  "core_contradiction": "本期市場訊號未呈現單一明顯矛盾，重點在於確認油價、利率、美元、黃金與亞洲貨幣是否形成一致傳導。",
+  "core_contradiction": "通膨降溫與能源價格上行等力量同時存在，美國10年期公債殖利率維持平盤，顯示推升與壓低利率的力量暫時互相抵銷。",
   "primary_macro_story": "通膨預期多空拉鋸",
   "expected_chain": [
     "通膨上行與下行訊號並存",
@@ -333,22 +333,23 @@
     "observed_dollar_direction": "down",
     "observed_gold_direction": "down",
     "dominant_bias": "up",
-    "market_alignment": "待觀察",
+    "market_alignment": "利率方向平盤，顯示推升與壓低利率的力量互相抵銷",
     "confidence": "high"
   },
   "matched_links": [
     "WTI 或 Brent 實際上行，短期能源通膨壓力增加。",
-    "美元指數偏弱，可能反映利差支撐下降、風險偏好改善或非美貨幣反彈。",
-    "黃金下行通常符合高利率或強美元壓力。"
+    "美元指數偏弱，但僅由現有資料尚無法確認是利差因素、非美貨幣反彈或其他資金流因素所致。"
   ],
-  "divergent_links": [],
+  "divergent_links": [
+    "黃金明顯下行，但同期美國10年期公債殖利率未上行、美元亦未走強，未形成典型利率與美元壓低黃金的傳導，原因待確認。"
+  ],
   "modifiers": [
     "通膨預期呈現多空拉鋸：能源價格或偏熱物價訊號形成上行壓力，但通膨降溫、勞動轉弱或其他修正因子仍存在。",
     "市場可能正在重新評估通膨預期，需比較油價、成長、勞動與 Fed 路徑哪個權重較高。",
     "通膨預期多空拉鋸：通膨上行與下行訊號同時存在，應區分主線與修正因子，避免寫成市場無視通膨。",
     "市場心理與風險擔憂變化：地緣政治、停火談判、制裁、關稅或政策表態會改變市場對未來事件的主觀機率。"
   ],
-  "final_judgment": "部分支持，但存在修正因子",
+  "final_judgment": "部分支持，但存在分歧",
   "weekly_v35_diagnosis": {
     "dominant_driver": "通膨預期多空拉鋸",
     "correction_factors": [
@@ -357,11 +358,11 @@
       "通膨預期多空拉鋸",
       "市場心理與風險擔憂變化"
     ],
-    "divergence_signal": "本期市場訊號未呈現單一明顯矛盾，重點在於確認油價、利率、美元、黃金與亞洲貨幣是否形成一致傳導。",
+    "divergence_signal": "通膨降溫與能源價格上行等力量同時存在，美國10年期公債殖利率維持平盤，顯示推升與壓低利率的力量暫時互相抵銷。",
     "asset_validation": [
       "WTI 或 Brent 實際上行，短期能源通膨壓力增加。",
-      "美元指數偏弱，可能反映利差支撐下降、風險偏好改善或非美貨幣反彈。",
-      "黃金下行通常符合高利率或強美元壓力。"
+      "美元指數偏弱，但僅由現有資料尚無法確認是利差因素、非美貨幣反彈或其他資金流因素所致。",
+      "黃金明顯下行，但同期美國10年期公債殖利率未上行、美元亦未走強，未形成典型利率與美元壓低黃金的傳導，原因待確認。"
     ],
     "next_period_watch": [
       "通膨上行與下行訊號誰會成為下一期主導因子",

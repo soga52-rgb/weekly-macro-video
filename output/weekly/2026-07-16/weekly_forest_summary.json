@@ -1,9 +1,9 @@
 {
   "meta": {
     "source": "weekly_v35_diagnosis.json + weekly_market_series.json + compact_news_facts",
-    "data_status_note": "以 V35 診斷為主導框架，市場數據驗證方向與幅度，新聞事實僅作背景補充。",
+    "data_status_note": "以 V35 診斷為主，市場數據驗證，新聞僅作背景補充。",
     "week_range": "2026-07-10 ～ 2026-07-16",
-    "days_observed": "7",
+    "days_observed": "5",
     "analysis_window": {
       "start_date": "2026-07-10",
       "end_date": "2026-07-16",
@@ -22,41 +22,40 @@
   },
   "forest_summary": {
     "weekly_main_theme": "通膨預期多空拉鋸",
-    "main_question": "實體通膨數據降溫與能源價格上行同時出現，市場應如何定價聯準會的下一步？",
-    "one_sentence_verdict": "本週通膨硬數據雖顯示降溫，但原油價格走高帶來隱憂，市場在通膨預期的多空拉鋸中尋找方向。",
-    "overall_verdict": "部分成立",
-    "narrative_arc": "本期市場主軸圍繞在通膨預期的多空拉鋸。一方面，美國 6 月 CPI 與 PPI 數據雙雙呈現降溫跡象，帶動市場對通膨壓力的舒緩預期；另一方面，國際油價顯著上行，為短期能源通膨增添變數。聯準會官員的發言亦顯示，在就業市場維持穩健的背景下，政策轉向仍需更多證據，使得整體宏觀敘事處於拉鋸狀態，資產走勢也反映出這種謹慎情緒。",
-    "why_it_matters": "這種拉鋸狀態決定了跨資產傳導的延續性。若能源通膨壓力蓋過核心通膨降溫，高利率環境將維持更久，這將直接影響美元、美債及非美貨幣後續的定價邏輯。"
+    "main_question": "通膨降溫的硬數據與能源價格上行的壓力，誰將主導下一階段的利率定價？",
+    "one_sentence_verdict": "本週通膨硬數據降溫與能源價格上行形成多空拉鋸，美國10年期公債殖利率維持平盤，跨資產走勢出現背離，主導因子尚待確認。",
+    "overall_verdict": "分歧待觀察",
+    "narrative_arc": "本期市場焦點在於通膨預期的多空拉鋸。一方面，美國 6 月 CPI 與 PPI 等硬數據顯示通膨降溫；另一方面，國際油價顯著上行，增添短期能源通膨壓力。在這兩股力量抵銷下，美國10年期公債殖利率呈現平盤。同時，黃金出現未伴隨強美元或高利率的顯著下跌，跨資產傳導呈現背離。",
+    "why_it_matters": "當通膨數據與能源價格釋放相反訊號時，市場對聯準會利率路徑的預期會陷入膠著。確認哪一方力量能主導後續定價，是判斷資產方向與政策預期的關鍵。"
   },
   "macro_storyline": {
-    "story_start": "本週初期，市場焦點集中在即將公布的美國通膨數據，以及能源價格近期的反彈趨勢。",
+    "story_start": "本期初，市場迎來美國 6 月 CPI 與 PPI 數據降溫的消息，帶動通膨預期下行的討論。",
     "main_drivers": [
       "通膨預期多空拉鋸",
       "通膨硬數據降溫",
-      "短期能源通膨壓力增加"
+      "能源價格上行帶來的通膨壓力"
     ],
-    "market_transmission": "隨著 CPI 與 PPI 數據公布顯示降溫，市場風險偏好有所改善，美元指數呈現偏弱震盪。然而，WTI 與布蘭特原油的實際上行限制了美債殖利率的下行空間，10年期美債殖利率本週呈現平盤震盪。同時，黃金價格顯著回落，反映出在利率未見實質轉向下的資產壓力。",
-    "revision_or_noise": "新聞面顯示初領失業金人數下降及部分科技股財報波動，但這些並未改變 V35 確認的通膨拉鋸主線，屬於短期的市場情緒與風險擔憂變化。",
-    "story_end": "週期末段，市場在「通膨數據降溫」與「油價上漲、官員表態謹慎」之間取得暫時平衡，等待下一階段的通膨走向與聯準會政策指引。"
+    "market_transmission": "通膨降溫預期本應壓低利率，但 WTI 與布蘭特原油價格本週顯著上行，推升短期通膨隱憂。推升與壓低利率的力量互相抵銷，使得美國10年期公債殖利率於區間內維持平盤。",
+    "revision_or_noise": "美元指數偏弱，但目前缺乏足夠證據確認是利差縮小或非美貨幣反彈所致。黃金顯著下行，卻未見美國10年期公債殖利率上行或美元走強的典型壓抑傳導，屬於跨資產背離，具體原因待確認。",
+    "story_end": "最終，本週在通膨預期的拉鋸與資產走勢的背離中結束，市場正等待聯準會是否延續「高利率維持更久」的進一步訊號。"
   },
   "macro_variables": {
-    "inflation_view": "呈現多空拉鋸。6月 CPI 與 PPI 等硬數據顯示降溫，但 WTI 與 Brent 原油價格顯著上行，增加短期能源通膨壓力。",
-    "rate_view": "10年期美債殖利率維持在 4.56% 附近震盪，未見明顯下行，反映市場對聯準會可能維持高利率更久的預期。",
-    "dollar_fx_view": "美元指數（DXY）偏弱震盪，從 100.97 降至 100.70，反映利差支撐下降或市場風險偏好的改善。",
-    "asia_fx_view": "亞洲貨幣走勢分歧。美元兌日圓與美元兌台幣微幅走升，而美元兌韓元則呈現回落，尚未形成一致傳導。",
-    "gold_view": "黃金價格顯著下行，從 4104 美元跌至 3979 美元，符合高利率環境或強勢美元預期下的資產壓力。",
-    "energy_view": "國際油價強勢上行，WTI 與 Brent 原油本週均呈現顯著漲幅，成為支撐短期通膨預期的核心動力。"
+    "inflation_view": "硬數據（CPI、PPI）顯示降溫，但油價上行帶來短期能源通膨壓力，整體通膨預期呈現多空拉鋸。",
+    "rate_view": "推升與壓低利率的力量互相抵銷，美國10年期公債殖利率維持平盤，方向尚未確認。",
+    "dollar_fx_view": "美元指數偏弱，但具體驅動原因（如利差因素或資金流）尚待確認。",
+    "asia_fx_view": "亞洲貨幣走勢分歧，美元兌日圓與台幣微幅走升，美元兌韓元則呈現回落，缺乏一致性方向。",
+    "gold_view": "價格明顯下行，但未伴隨美國10年期公債殖利率上行或美元走強，未形成典型傳導，下跌原因待確認。",
+    "energy_view": "WTI 與布蘭特原油於本期顯著上行，短期能源通膨壓力增加。"
   },
   "evidence": {
     "most_important_evidence": [
       "WTI 與 Brent 原油價格顯著上行",
       "美國 6 月 CPI 與 PPI 數據降溫",
-      "美元指數偏弱震盪",
-      "黃金價格顯著回落"
+      "美國10年期公債殖利率維持平盤"
     ],
     "insufficient_evidence": [
-      "亞洲貨幣（日圓、台幣、韓元）尚未形成一致的升貶趨勢，傳導方向待確認",
-      "聯準會是否實質轉向降息，目前官員表態仍偏謹慎，證據不足"
+      "美元指數偏弱的具體原因",
+      "黃金在缺乏高利率與強美元環境下顯著下跌的原因"
     ],
     "watch_items_from_daily_summaries": [],
     "watch_items_from_news_context": [
@@ -72,11 +71,11 @@
       "通膨預期多空拉鋸",
       "市場心理與風險擔憂變化"
     ],
-    "divergence_signal": "本期市場訊號未呈現單一明顯矛盾，重點在於確認油價、利率、美元、黃金與亞洲貨幣是否形成一致傳導。",
+    "divergence_signal": "通膨降溫與能源價格上行等力量同時存在，美國10年期公債殖利率維持平盤，顯示推升與壓低利率的力量暫時互相抵銷。",
     "asset_validation": [
       "WTI 或 Brent 實際上行，短期能源通膨壓力增加。",
-      "美元指數偏弱，可能反映利差支撐下降、風險偏好改善或非美貨幣反彈。",
-      "黃金下行通常符合高利率或強美元壓力。"
+      "美元指數偏弱，但僅由現有資料尚無法確認是利差因素、非美貨幣反彈或其他資金流因素所致。",
+      "黃金明顯下行，但同期美國10年期公債殖利率未上行、美元亦未走強，未形成典型利率與美元壓低黃金的傳導，原因待確認。"
     ],
     "next_period_watch": [
       "通膨上行與下行訊號誰會成為下一期主導因子",
@@ -84,149 +83,127 @@
     ]
   },
   "video_planning": {
-    "suggested_video_title": "通膨降溫 vs. 油價反彈：市場在拉鋸中等待聯準會表態",
+    "suggested_video_title": "通膨數據降溫 vs 油價急升：美債殖利率為何無動於衷？",
     "target_duration": "6-8 minutes",
-    "video_thesis": "本週美國通膨數據雖顯示降溫，但國際油價的強勢上漲讓通膨預期陷入多空拉鋸。我們將解析這股矛盾力量如何影響美債、美元與黃金的走勢，以及接下來該關注的政策訊號。",
-    "opening_hook": "美國 6 月通膨數據終於降溫，股市歡聲雷動，但為什麼美債殖利率卻跌不下去？答案可能藏在本週悄悄飆升的原油價格裡。",
+    "video_thesis": "本週市場面臨通膨硬數據降溫與能源價格上行的多空拉鋸。在兩股力量抵銷下，美債殖利率維持平盤，而黃金出現異常下跌背離。我們需要釐清這場拉鋸戰中，誰將成為下一階段的主導力量。",
+    "opening_hook": "美國最新 CPI 與 PPI 雙雙降溫，照理說殖利率應該下行，但為什麼美國10年期公債殖利率本週卻不跌反平？答案藏在急升的油價與異常的黃金走勢裡。",
     "video_segments": [
       {
-        "segment_id": "seg_01",
-        "segment_title": "通膨數據降溫與油價反彈的矛盾",
-        "segment_question": "為什麼通膨數據降溫，市場卻仍有隱憂？",
-        "narration_focus": "解析 6 月 CPI 與 PPI 數據的降溫現象，對比 WTI 與 Brent 原油價格的顯著上行，說明通膨預期為何陷入多空拉鋸。",
-        "main_point": "硬數據降溫帶來樂觀情緒，但能源價格上漲增加了短期通膨壓力。",
-        "estimated_duration": "2 minutes",
+        "segment_id": "seg_1",
+        "segment_title": "通膨預期的多空拉鋸",
+        "segment_question": "為什麼降溫的通膨數據沒有壓低美債殖利率？",
+        "narration_focus": "對比 CPI/PPI 降溫與原油價格上行的衝突。",
+        "main_point": "通膨硬數據與能源通膨壓力互相抵銷，導致利率失去明確方向。",
+        "estimated_duration": "2 mins",
         "visual_needed": true,
-        "visual_role": "對比呈現",
-        "visual_concept": "左側顯示 CPI/PPI 下降趨勢，右側顯示原油價格上漲趨勢，中間標示拉鋸狀態。"
+        "visual_role": "Data comparison",
+        "visual_concept": "Split screen showing CPI downward trend vs WTI upward trend."
       },
       {
-        "segment_id": "seg_02",
-        "segment_title": "跨資產表現：美元偏弱與黃金回落",
-        "segment_question": "在通膨拉鋸下，主要資產如何反應？",
-        "narration_focus": "說明美元指數的偏弱震盪反映了風險偏好的改善，同時解釋黃金價格顯著下行如何呼應高利率維持更久的預期。",
-        "main_point": "資產走勢反映出市場在降息預期與高利率現實之間的掙扎。",
-        "estimated_duration": "2.5 minutes",
+        "segment_id": "seg_2",
+        "segment_title": "跨資產背離訊號",
+        "segment_question": "黃金大跌，但美元和美債卻沒動，這代表什麼？",
+        "narration_focus": "解析黃金下行與平盤美債、弱勢美元之間的背離現象。",
+        "main_point": "黃金下跌並非由典型的強美元或高利率驅動，背後原因仍待確認，市場可能存在隱藏的流動性或籌碼調整。",
+        "estimated_duration": "2 mins",
         "visual_needed": true,
-        "visual_role": "趨勢驗證",
-        "visual_concept": "展示 DXY 與黃金本週的走勢圖，標註關鍵轉折點與利率預期的關聯。"
+        "visual_role": "Chart analysis",
+        "visual_concept": "Line chart overlay of Gold, US10Y, and DXY highlighting the divergence."
       },
       {
-        "segment_id": "seg_03",
-        "segment_title": "聯準會的下一步與下週觀察",
-        "segment_question": "接下來市場該關注什麼訊號？",
-        "narration_focus": "結合聯準會官員的謹慎發言與穩健的就業數據，探討高利率是否會維持更久，並點出下期觀察重點。",
-        "main_point": "政策轉向仍需更多證據，通膨多空拉鋸的勝出者將決定下一步方向。",
-        "estimated_duration": "2 minutes",
+        "segment_id": "seg_3",
+        "segment_title": "下週觀察重點",
+        "segment_question": "拉鋸戰何時會打破僵局？",
+        "narration_focus": "探討聯準會官員態度與後續通膨主導力量。",
+        "main_point": "觀察聯準會是否延續『高利率維持更久』的訊號，以及油價上行是否會轉化為更廣泛的通膨預期。",
+        "estimated_duration": "2 mins",
         "visual_needed": true,
-        "visual_role": "重點總結",
-        "visual_concept": "列出下週觀察清單：通膨主導因子確認、Fed 官員態度、亞洲貨幣傳導一致性。"
+        "visual_role": "Summary points",
+        "visual_concept": "Bullet points with Fed building icon and question marks on inflation direction."
       }
     ],
     "visual_sequence": [
       {
-        "visual_id": "vis_01",
-        "source_segment_id": "seg_01",
-        "visual_title": "通膨預期多空拉鋸圖",
-        "visual_purpose": "凸顯本週核心矛盾",
-        "visual_concept": "天平視覺：一端是下降的 CPI 數據，另一端是上升的油價。",
+        "visual_id": "vis_1",
+        "source_segment_id": "seg_1",
+        "visual_title": "通膨拉鋸戰：數據降溫 vs 油價上行",
+        "visual_purpose": "展示推升與壓低利率的兩股力量",
+        "visual_concept": "天平視覺，一端是下降的 CPI/PPI 數據，另一端是上升的油桶（WTI/Brent），中間支點是平盤的 US10Y。",
         "key_labels": [
-          "CPI降溫",
-          "油價反彈",
-          "通膨預期拉鋸"
+          "CPI/PPI 降溫",
+          "原油價格急升",
+          "US10Y 平盤"
         ],
         "is_web_hero_candidate": true
       },
       {
-        "visual_id": "vis_02",
-        "source_segment_id": "seg_02",
-        "visual_title": "美元與黃金走勢對比",
-        "visual_purpose": "展示資產對宏觀拉鋸的反應",
-        "visual_concept": "雙線圖顯示 DXY 偏弱震盪與黃金顯著下行。",
+        "visual_id": "vis_2",
+        "source_segment_id": "seg_2",
+        "visual_title": "資產背離：黃金異常下跌",
+        "visual_purpose": "突顯本週最大的跨資產背離現象",
+        "visual_concept": "三條折線圖：黃金顯著向下，US10Y 橫盤，DXY 微幅向下。用紅圈標示黃金的異常跌幅。",
         "key_labels": [
-          "DXY 偏弱",
-          "黃金下行",
-          "高利率壓力"
-        ],
-        "is_web_hero_candidate": false
-      },
-      {
-        "visual_id": "vis_03",
-        "source_segment_id": "seg_03",
-        "visual_title": "下期觀察重點清單",
-        "visual_purpose": "總結未來關注重點",
-        "visual_concept": "條列式清單搭配放大鏡圖示。",
-        "key_labels": [
-          "通膨主導因子",
-          "Fed 政策訊號",
-          "亞幣傳導"
+          "黃金大跌",
+          "US10Y 未升",
+          "DXY 偏弱"
         ],
         "is_web_hero_candidate": false
       }
     ],
     "web_hero_visual": {
-      "source_visual_id": "vis_01",
-      "purpose": "凸顯本週核心矛盾：通膨數據向下與能源價格向上的拉鋸。",
-      "reason": "最能直觀傳達 V35 診斷中的『通膨預期多空拉鋸』主線，吸引觀眾了解市場矛盾。"
+      "source_visual_id": "vis_1",
+      "purpose": "呈現本週核心宏觀主題：通膨預期的多空拉鋸。",
+      "reason": "天平的意象能最直觀地解釋為何在重大通膨數據發布後，美債殖利率卻維持平盤，完美契合本週『互相抵銷』的主敘事。"
     },
     "six_scene_outline": [
       {
         "scene_id": "scene_01",
-        "scene_title": "通膨數據降溫與油價反彈的矛盾",
-        "scene_question": "為什麼通膨數據降溫，市場卻仍有隱憂？",
-        "main_point": "硬數據降溫帶來樂觀情緒，但能源價格上漲增加了短期通膨壓力。",
-        "visual_hint": "左側顯示 CPI/PPI 下降趨勢，右側顯示原油價格上漲趨勢，中間標示拉鋸狀態。"
+        "scene_title": "通膨預期的多空拉鋸",
+        "scene_question": "為什麼降溫的通膨數據沒有壓低美債殖利率？",
+        "main_point": "通膨硬數據與能源通膨壓力互相抵銷，導致利率失去明確方向。",
+        "visual_hint": "Split screen showing CPI downward trend vs WTI upward trend."
       },
       {
         "scene_id": "scene_02",
-        "scene_title": "跨資產表現：美元偏弱與黃金回落",
-        "scene_question": "在通膨拉鋸下，主要資產如何反應？",
-        "main_point": "資產走勢反映出市場在降息預期與高利率現實之間的掙扎。",
-        "visual_hint": "展示 DXY 與黃金本週的走勢圖，標註關鍵轉折點與利率預期的關聯。"
+        "scene_title": "跨資產背離訊號",
+        "scene_question": "黃金大跌，但美元和美債卻沒動，這代表什麼？",
+        "main_point": "黃金下跌並非由典型的強美元或高利率驅動，背後原因仍待確認，市場可能存在隱藏的流動性或籌碼調整。",
+        "visual_hint": "Line chart overlay of Gold, US10Y, and DXY highlighting the divergence."
       },
       {
         "scene_id": "scene_03",
-        "scene_title": "聯準會的下一步與下週觀察",
-        "scene_question": "接下來市場該關注什麼訊號？",
-        "main_point": "政策轉向仍需更多證據，通膨多空拉鋸的勝出者將決定下一步方向。",
-        "visual_hint": "列出下週觀察清單：通膨主導因子確認、Fed 官員態度、亞洲貨幣傳導一致性。"
+        "scene_title": "下週觀察重點",
+        "scene_question": "拉鋸戰何時會打破僵局？",
+        "main_point": "觀察聯準會是否延續『高利率維持更久』的訊號，以及油價上行是否會轉化為更廣泛的通膨預期。",
+        "visual_hint": "Bullet points with Fed building icon and question marks on inflation direction."
       }
     ],
     "image_card_brief": [
       {
         "card_id": "card_01",
-        "headline": "通膨預期多空拉鋸圖",
+        "headline": "通膨拉鋸戰：數據降溫 vs 油價上行",
         "short_labels": [
-          "CPI降溫",
-          "油價反彈",
-          "通膨預期拉鋸"
+          "CPI/PPI 降溫",
+          "原油價格急升",
+          "US10Y 平盤"
         ],
-        "visual_concept": "天平視覺：一端是下降的 CPI 數據，另一端是上升的油價。"
+        "visual_concept": "天平視覺，一端是下降的 CPI/PPI 數據，另一端是上升的油桶（WTI/Brent），中間支點是平盤的 US10Y。"
       },
       {
         "card_id": "card_02",
-        "headline": "美元與黃金走勢對比",
+        "headline": "資產背離：黃金異常下跌",
         "short_labels": [
-          "DXY 偏弱",
-          "黃金下行",
-          "高利率壓力"
+          "黃金大跌",
+          "US10Y 未升",
+          "DXY 偏弱"
         ],
-        "visual_concept": "雙線圖顯示 DXY 偏弱震盪與黃金顯著下行。"
-      },
-      {
-        "card_id": "card_03",
-        "headline": "下期觀察重點清單",
-        "short_labels": [
-          "通膨主導因子",
-          "Fed 政策訊號",
-          "亞幣傳導"
-        ],
-        "visual_concept": "條列式清單搭配放大鏡圖示。"
+        "visual_concept": "三條折線圖：黃金顯著向下，US10Y 橫盤，DXY 微幅向下。用紅圈標示黃金的異常跌幅。"
       }
     ],
     "next_week_questions": [
-      "通膨上行與下行訊號，誰會成為下一期的主導因子？",
-      "聯準會是否會釋出高利率維持更久的明確訊號？"
+      "通膨上行與下行訊號，誰會成為下一期主導因子？",
+      "聯準會是否會釋放延續高利率維持更久的明確訊號？",
+      "黃金的異常下跌是否會在本週找到明確的驅動原因？"
     ]
   }
 }
