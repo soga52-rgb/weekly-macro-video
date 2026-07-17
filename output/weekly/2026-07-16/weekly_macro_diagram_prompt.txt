@@ -1,0 +1,145 @@
+Create a 16:9 NotebookLM-style whiteboard explainer image for a weekly macro summary webpage.
+
+Purpose:
+This image is the FIRST block of a weekly macro summary webpage.
+It visually summarizes the period macro conclusions from later sections:
+Executive Summary, market signals, correction factors, divergence signals, news evidence, and next-week watch.
+It is a weekly macro transmission diagram, not a dense report.
+
+V3.5 macro reasoning rules:
+- This is a periodic macro summary based on the formal analysis window.
+- Do not assume the analysis window is always exactly 7 days.
+- Use the week range / analysis window from the source content as the official period.
+- Do not over-focus on only the last trading day.
+- Use weekly_forest_summary.json as the final narrative layer. Its main theme, verdict, storyline, and revision/correction description should remain mutually consistent.
+- Use weekly_v35_diagnosis as the primary structured guardrail when available:
+  dominant_driver, correction_factors, divergence_signal, asset_validation, next_period_watch.
+- weekly_v35_diagnosis is produced by the rule-based V35 diagnosis layer; do not contradict its oil / inflation direction rules or asset directions.
+- Do not create a second, unrelated macro main line for the image. If wording differs between the final forest summary and V35 diagnosis, preserve the same economic direction and present the difference as a correction factor, divergence, or uncertainty.
+- First identify the period dominant driver.
+- Then show correction factors that challenged or softened the main driver.
+- Then show asset validation: whether US10Y, DXY, WTI / Brent, Gold, USDJPY, USDTWD, and USDKRW support or contradict the story.
+- Then show the key divergence: where news and asset prices did not move in the same direction.
+- Finally show 2–3 next-week watch questions.
+- Distinguish inflation hard data from inflation expectations.
+- Indicator names are not directions. CPI, PPI, nonfarm payrolls, initial claims, unemployment, and oil inventories require explicit direction or surprise wording before they can be called hot, cooling, strong, or weak.
+- Preserve the source direction. Never rewrite below-expectation, slowing, or weakening data as strong merely to fit asset prices; show it as a divergence, correction factor, or item to watch.
+- If labor signals are mixed, use 就業訊號分歧 / Fed 路徑待確認. Do not turn weak payrolls plus a falling unemployment rate into 非農強勁. Labor resilience alone does not raise inflation expectations unless wage pressure or demand strength is also present.
+- Determine oil direction from rule_based_observed_market.WTI / Brent and V35 asset validation first. EIA, OPEC, war, ceasefire, sanctions, inventories, and geopolitics explain the cause; they do not replace the observed oil-price direction.
+- Rising oil prices increase energy costs and upward pressure on near-term inflation expectations: 油價上行，增加能源成本與短期通膨預期的上行壓力. If rising oil is not the dominant driver, show it as a correction factor or parallel signal rather than forcing it into the main line.
+- Falling oil prices are inflation downside factors: 油價下行，可能緩和能源通膨壓力；若由需求疲弱造成，也可能是成長降溫訊號.
+- Never imply that falling oil prices raise inflation expectations.
+- If yields rise while oil falls, explain it as Fed path, high-rate expectations, Treasury supply, refinancing, or term-premium pressure outweighing the oil correction factor.
+- Explain oil's own economic meaning first, then classify it as the dominant driver, a correction factor, a parallel signal, or a divergence. Do not hard-link oil moves to fiscal deficits or a high-rate main line.
+- Risk-off or market psychology is not an inflation direction by itself.
+- Do not write that the market "ignored" inflation. Explain which factor dominated and which factor became a correction factor.
+
+Important title rule:
+- Do NOT render a large headline inside the image.
+- The webpage already has the page title「本週總經摘要」and section title「總經傳導圖解」.
+- The image should start directly with diagram nodes, icons, arrows, and short labels.
+
+Style:
+- off-white / white background
+- subtle light gray grid-paper texture
+- bold black hand-drawn line art
+- orange / warm amber accent arrows, circles, tags, pins, labels
+- clean macro-finance explainer diagram
+- airy, readable composition
+- looks like a knowledge video card, not a corporate slide
+- use icons, causal arrows, simple doodles, flow paths, question marks, magnifying glass, warning tags
+
+Visual structure rules:
+- Top-left: 本週主導因子, using short labels from the source content.
+- Main chain: 本週主導因子 → 利率 / 美元 → 亞幣 / 黃金 / 風險資產.
+- Lower secondary branch: 修正因子 → 油價 / 就業 / 成長 / 地緣 / 避險, depending on source content.
+- Center box: 背離訊號, showing the period’s most important contradiction.
+- Right-side area: 下週觀察, only 2–3 short questions.
+- Bottom evidence strip if space allows: 本週證據.
+- Main chain must be visually dominant.
+- Correction factors are secondary and must not visually compete with the main chain.
+- Do not force a fixed reflation story if the source content says otherwise.
+
+Visible text rules:
+- Use Traditional Chinese only.
+- Do NOT include a large main headline inside the image.
+- Use only short labels, nodes, tags, and very short questions.
+- Keep visible text minimal, large, and readable.
+- No long paragraphs.
+- No dense report layout.
+- No tables.
+- Do not invent numbers or directions.
+- Use the source content only as background understanding.
+- Do not render long explanations as visible paragraph text.
+
+Preferred visible wording:
+- Use: 主導因子, 修正因子, 背離訊號, 市場重新評估, 市場更關注, 利率走向, 美元偏強, 亞幣承壓, 油價下行, 通膨下修因子, 下週觀察.
+- Avoid visible labels using: 交易, 定價, 體制, 風險溢價, 傳導源, 通膨修正因子失效.
+- If labor market weakness is mentioned, write: 勞動降溫風險 / 初領失業金上升 / 就業降溫訊號.
+- Do not write: 市場交易就業降溫風險.
+
+Source content:
+- Week range: 2026-07-10 ～ 2026-07-16
+- Weekly main theme: 通膨預期多空拉鋸
+- One-sentence verdict: 本週通膨硬數據雖顯示降溫，但原油價格走高帶來隱憂，市場在通膨預期的多空拉鋸中尋找方向。
+- Main question: 實體通膨數據降溫與能源價格上行同時出現，市場應如何定價聯準會的下一步？
+- Narrative arc: 本期市場主軸圍繞在通膨預期的多空拉鋸。一方面，美國 6 月 CPI 與 PPI 數據雙雙呈現降溫跡象，帶動市場對通膨壓力的舒緩預期；另一方面，國際油價顯著上行，為短期能源通膨增添變數。聯準會官員的發言亦顯示，在就業市場維持穩健的背景下，政策轉向仍需更多證據，使得整體宏觀敘事處於拉鋸狀態，資產走勢也反映出這種謹慎情緒。
+- Story start: 本週初期，市場焦點集中在即將公布的美國通膨數據，以及能源價格近期的反彈趨勢。
+- Main drivers: ["通膨預期多空拉鋸", "通膨硬數據降溫", "短期能源通膨壓力增加"]
+- Market transmission: 隨著 CPI 與 PPI 數據公布顯示降溫，市場風險偏好有所改善，美元指數呈現偏弱震盪。然而，WTI 與布蘭特原油的實際上行限制了美債殖利率的下行空間，10年期美債殖利率本週呈現平盤震盪。同時，黃金價格顯著回落，反映出在利率未見實質轉向下的資產壓力。
+- Correction factor: 新聞面顯示初領失業金人數下降及部分科技股財報波動，但這些並未改變 V35 確認的通膨拉鋸主線，屬於短期的市場情緒與風險擔憂變化。
+- Story end: 週期末段，市場在「通膨數據降溫」與「油價上漲、官員表態謹慎」之間取得暫時平衡，等待下一階段的通膨走向與聯準會政策指引。
+- Macro variables: {"inflation": "呈現多空拉鋸。6月 CPI 與 PPI 等硬數據顯示降溫，但 WTI 與 Brent 原油價格顯著上行，增加短期能源通膨壓力。", "rate": "10年期美債殖利率維持在 4.56% 附近震盪，未見明顯下行，反映市場對聯準會可能維持高利率更久的預期。", "dollar_fx": "美元指數（DXY）偏弱震盪，從 100.97 降至 100.70，反映利差支撐下降或市場風險偏好的改善。", "asia_fx": "亞洲貨幣走勢分歧。美元兌日圓與美元兌台幣微幅走升，而美元兌韓元則呈現回落，尚未形成一致傳導。", "gold": "黃金價格顯著下行，從 4104 美元跌至 3979 美元，符合高利率環境或強勢美元預期下的資產壓力。", "energy": "國際油價強勢上行，WTI 與 Brent 原油本週均呈現顯著漲幅，成為支撐短期通膨預期的核心動力。"}
+- Evidence: ["WTI 與 Brent 原油價格顯著上行", "美國 6 月 CPI 與 PPI 數據降溫", "美元指數偏弱震盪", "黃金價格顯著回落"]
+- News theme: 通膨降溫與高利率預期的拉鋸戰
+- News confirming signals: ["CPI與PPI數據全面降溫，支持市場對降息預期的重新定價", "美債殖利率與美元指數在通膨數據公布後同步下行，符合傳導邏輯", "勞動市場數據穩健，支撐Fed維持高利率的鷹派敘事"]
+- News corrections: ["市場對Fed升息的押注在CPI/PPI公布後顯著降溫，修正了週初對高利率維持更久的極端擔憂"]
+- Next week questions: ["通膨上行與下行訊號，誰會成為下一期的主導因子？", "聯準會是否會釋出高利率維持更久的明確訊號？"]
+- Weekly V35 diagnosis: {"dominant_driver": "通膨預期多空拉鋸", "correction_factors": ["通膨硬數據降溫", "綜合通膨預期下行", "通膨預期多空拉鋸", "市場心理與風險擔憂變化"], "divergence_signal": "本期市場訊號未呈現單一明顯矛盾，重點在於確認油價、利率、美元、黃金與亞洲貨幣是否形成一致傳導。", "asset_validation": ["WTI 或 Brent 實際上行，短期能源通膨壓力增加。", "美元指數偏弱，可能反映利差支撐下降、風險偏好改善或非美貨幣反彈。", "黃金下行通常符合高利率或強美元壓力。"], "next_period_watch": ["通膨上行與下行訊號誰會成為下一期主導因子", "Fed 是否延續高利率維持更久的訊號"]}
+- Rule-based core contradiction: 本期市場訊號未呈現單一明顯矛盾，重點在於確認油價、利率、美元、黃金與亞洲貨幣是否形成一致傳導。
+- Rule-based primary macro story: 通膨預期多空拉鋸
+- Rule-based expected chain: ["通膨上行與下行訊號並存", "市場重新評估油價、成長、勞動與 Fed 權重", "美國10年期公債殖利率方向取決於主導因子", "美元指數反映利差與避險需求", "亞洲貨幣、黃金與油價可能出現分歧"]
+- Rule-based observed market: {"US10Y": {"direction": "flat", "text": "變化有限", "start_value": 4.568999767303467, "end_value": 4.568999767303467, "change": 0.0, "start_date": "2026-07-10", "end_date": "2026-07-16", "points_count": 5}, "DXY": {"direction": "down", "text": "美元偏弱", "start_value": 100.97000122070312, "end_value": 100.70800018310547, "change": -0.26200103759765625, "start_date": "2026-07-10", "end_date": "2026-07-16", "points_count": 6}, "Gold": {"direction": "down", "text": "黃金下行", "start_value": 4104.10009765625, "end_value": 3979.10009765625, "change": -125.0, "start_date": "2026-07-10", "end_date": "2026-07-16", "points_count": 6}, "WTI": {"direction": "up", "text": "油價上行", "start_value": 71.41000366210938, "end_value": 79.04000091552734, "change": 7.629997253417969, "start_date": "2026-07-10", "end_date": "2026-07-16", "points_count": 6}, "Brent": {"direction": "up", "text": "油價上行", "start_value": 76.01000213623047, "end_value": 85.05000305175781, "change": 9.040000915527344, "start_date": "2026-07-10", "end_date": "2026-07-16", "points_count": 6}, "USDJPY": {"direction": "up", "text": "美元上行，當地貨幣承壓", "start_value": 161.6719970703125, "end_value": 162.35400390625, "change": 0.6820068359375, "start_date": "2026-07-10", "end_date": "2026-07-16", "points_count": 6}, "USDTWD": {"direction": "up", "text": "美元上行，當地貨幣承壓", "start_value": 32.0989990234375, "end_value": 32.26599884033203, "change": 0.16699981689453125, "start_date": "2026-07-10", "end_date": "2026-07-16", "points_count": 6}, "USDKRW": {"direction": "down", "text": "美元回落，當地貨幣相對支撐", "start_value": 1498.8699951171875, "end_value": 1477.780029296875, "change": -21.0899658203125, "start_date": "2026-07-10", "end_date": "2026-07-16", "points_count": 6}}
+- Rule-based asset validation: ["WTI 或 Brent 實際上行，短期能源通膨壓力增加。", "美元指數偏弱，可能反映利差支撐下降、風險偏好改善或非美貨幣反彈。", "黃金下行通常符合高利率或強美元壓力。"]
+
+Suggested visible label pool:
+Use these only if supported by the source content. Do not force all labels.
+- 本週主導因子
+- Fed 路徑
+- 高利率更久
+- 通膨黏性
+- 通膨下修因子
+- 油價下行
+- 油價上行
+- 長債利率
+- 美元偏強
+- 亞幣承壓
+- 黃金壓力
+- 避險需求
+- 勞動降溫風險
+- 就業訊號分歧
+- Fed 路徑待確認
+- 能源通膨上行壓力
+- 成長擔憂
+- 修正因子
+- 背離訊號
+- 本週證據
+- 下週觀察
+
+Avoid:
+- large title text inside the image
+- dense slide layout
+- table
+- long paragraphs
+- small unreadable text
+- cluttered UI
+- stock dashboard style
+- Bloomberg terminal style
+- exact NotebookLM logo
+- Google branding
+- fake extra data
+- rewriting weak or below-expectation data as strong
+- 「油價上行，但通膨預期受財政赤字與高利率主線主導」
+- 「油價上行，因為財政赤字導致高利率」
+- 「油價變動由財政赤字主導」
+- fixed reflation-only chain when source content does not support it

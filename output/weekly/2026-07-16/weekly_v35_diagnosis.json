@@ -1,0 +1,371 @@
+{
+  "meta": {
+    "source": "macro_v35_diagnosis.py",
+    "week_dir": "/home/runner/work/weekly-macro-video/weekly-macro-video/output/weekly/2026-07-16",
+    "analysis_window": {
+      "start_date": "2026-07-10",
+      "end_date": "2026-07-16",
+      "label": "2026-07-10 ～ 2026-07-16",
+      "source": "workflow_env_or_cli"
+    },
+    "input_files": {
+      "weekly_market_series_json": true,
+      "weekly_news_context_json": true,
+      "weekly_news_context_md": true,
+      "macro_background_context_json": false,
+      "macro_background_context_md": false
+    },
+    "note": "Rule-based V35 diagnosis. News evidence is segmented by record, future/watch text is excluded from directional regex, and observed market direction has precedence for oil, DXY and Gold validation."
+  },
+  "core_contradiction": "本期市場訊號未呈現單一明顯矛盾，重點在於確認油價、利率、美元、黃金與亞洲貨幣是否形成一致傳導。",
+  "primary_macro_story": "通膨預期多空拉鋸",
+  "expected_chain": [
+    "通膨上行與下行訊號並存",
+    "市場重新評估油價、成長、勞動與 Fed 權重",
+    "美國10年期公債殖利率方向取決於主導因子",
+    "美元指數反映利差與避險需求",
+    "亞洲貨幣、黃金與油價可能出現分歧"
+  ],
+  "observed_market": {
+    "US10Y": {
+      "direction": "flat",
+      "text": "變化有限",
+      "start_value": 4.568999767303467,
+      "end_value": 4.568999767303467,
+      "change": 0.0,
+      "start_date": "2026-07-10",
+      "end_date": "2026-07-16",
+      "points_count": 5
+    },
+    "DXY": {
+      "direction": "down",
+      "text": "美元偏弱",
+      "start_value": 100.97000122070312,
+      "end_value": 100.70800018310547,
+      "change": -0.26200103759765625,
+      "start_date": "2026-07-10",
+      "end_date": "2026-07-16",
+      "points_count": 6
+    },
+    "Gold": {
+      "direction": "down",
+      "text": "黃金下行",
+      "start_value": 4104.10009765625,
+      "end_value": 3979.10009765625,
+      "change": -125.0,
+      "start_date": "2026-07-10",
+      "end_date": "2026-07-16",
+      "points_count": 6
+    },
+    "WTI": {
+      "direction": "up",
+      "text": "油價上行",
+      "start_value": 71.41000366210938,
+      "end_value": 79.04000091552734,
+      "change": 7.629997253417969,
+      "start_date": "2026-07-10",
+      "end_date": "2026-07-16",
+      "points_count": 6
+    },
+    "Brent": {
+      "direction": "up",
+      "text": "油價上行",
+      "start_value": 76.01000213623047,
+      "end_value": 85.05000305175781,
+      "change": 9.040000915527344,
+      "start_date": "2026-07-10",
+      "end_date": "2026-07-16",
+      "points_count": 6
+    },
+    "USDJPY": {
+      "direction": "up",
+      "text": "美元上行，當地貨幣承壓",
+      "start_value": 161.6719970703125,
+      "end_value": 162.35400390625,
+      "change": 0.6820068359375,
+      "start_date": "2026-07-10",
+      "end_date": "2026-07-16",
+      "points_count": 6
+    },
+    "USDTWD": {
+      "direction": "up",
+      "text": "美元上行，當地貨幣承壓",
+      "start_value": 32.0989990234375,
+      "end_value": 32.26599884033203,
+      "change": 0.16699981689453125,
+      "start_date": "2026-07-10",
+      "end_date": "2026-07-16",
+      "points_count": 6
+    },
+    "USDKRW": {
+      "direction": "down",
+      "text": "美元回落，當地貨幣相對支撐",
+      "start_value": 1498.8699951171875,
+      "end_value": 1477.780029296875,
+      "change": -21.0899658203125,
+      "start_date": "2026-07-10",
+      "end_date": "2026-07-16",
+      "points_count": 6
+    }
+  },
+  "detected_news_events": {
+    "inflationPressure": true,
+    "inflationRelief": true,
+    "inflationCoolingSignal": true,
+    "inflationMixed": true,
+    "inflationExpectationShift": true,
+    "highRateExpectation": true,
+    "fedHawkish": true,
+    "fedDovish": false,
+    "laborCooling": false,
+    "laborStrength": false,
+    "laborMixed": false,
+    "laborResilience": false,
+    "laborWagePressure": false,
+    "growthCooling": false,
+    "growthStrength": false,
+    "oilInflationPressure": true,
+    "oilInflationRelief": false,
+    "dollarStrength": false,
+    "dollarWeakness": true,
+    "goldPressure": true,
+    "goldSafeHaven": false,
+    "riskOff": true,
+    "inflationHot": true,
+    "inflationCooling": true,
+    "inflationExpectationUp": true,
+    "inflationExpectationDown": true,
+    "inflationExpectationMixed": true,
+    "inflationExpectationMixedSignal": true,
+    "inflationExpectationShiftSignal": true,
+    "treasurySupplyPressure": false,
+    "treasuryDemandStrong": false,
+    "refundingPressure": false,
+    "termPremiumPressure": true,
+    "fedBalanceSheetTightening": false,
+    "fedBalanceSheetEasing": false,
+    "fedLeadershipShift": false,
+    "financialStress": false,
+    "marketExpectationShift": true,
+    "geopoliticalCooling": false,
+    "oilSupplyShock": false,
+    "oilDemandWeakness": false,
+    "factor_groups": {
+      "inflation": {
+        "detected": true,
+        "hot": true,
+        "cooling": true
+      },
+      "labor_market": {
+        "detected": false,
+        "cooling": false,
+        "strength": false,
+        "mixed": false,
+        "resilience": false,
+        "wage_pressure": false,
+        "weak_signals": {
+          "payroll_weak": false,
+          "claims_weak": false,
+          "unemployment_rise": false,
+          "wage_cooling": false,
+          "layoffs": false
+        },
+        "strong_or_resilient_signals": {
+          "payroll_strong": false,
+          "claims_down": false,
+          "unemployment_fall": false,
+          "wage_pressure": false
+        }
+      },
+      "growth_demand": {
+        "detected": false,
+        "cooling": false,
+        "strength": false
+      },
+      "oil_energy": {
+        "detected": false,
+        "supply_shock": false,
+        "demand_weakness": false,
+        "geopolitical_cooling": false,
+        "market_direction": "up",
+        "inflation_pressure": true,
+        "inflation_relief": false
+      },
+      "inflation_expectation": {
+        "detected": true,
+        "upward": true,
+        "downward": true,
+        "mixed": true,
+        "shift": true,
+        "components": {
+          "inflation_hot": true,
+          "inflation_cooling": true,
+          "oil_supply_shock": false,
+          "oil_demand_weakness": false,
+          "geopolitical_cooling": false,
+          "oil_market_up": true,
+          "oil_market_down": false,
+          "labor_strength": false,
+          "labor_cooling": false,
+          "labor_mixed": false,
+          "wage_pressure": false,
+          "growth_strength": false,
+          "growth_cooling": false,
+          "risk_off": true,
+          "market_expectation_shift": true
+        }
+      },
+      "fed_policy_path": {
+        "detected": true,
+        "hawkish": true,
+        "dovish": false,
+        "leadership_shift": false,
+        "labor_strength_effect": false,
+        "labor_cooling_effect": false,
+        "labor_mixed_effect": false
+      },
+      "treasury_market": {
+        "detected": true,
+        "supply_pressure": false,
+        "demand_strong": false,
+        "refunding_pressure": false,
+        "term_premium_pressure": true
+      },
+      "liquidity_balance_sheet": {
+        "detected": false,
+        "tightening": false,
+        "easing": false
+      },
+      "financial_conditions": {
+        "detected": false,
+        "tightening": false,
+        "easing": false,
+        "stress": false
+      },
+      "market_psychology": {
+        "detected": true,
+        "risk_off": true,
+        "expectation_shift": true,
+        "gold_safe_haven": false,
+        "dollar_weakness": true,
+        "dollar_strength": false
+      },
+      "dollar_external": {
+        "detected": true,
+        "dollar_strength": false,
+        "dollar_weakness": true
+      },
+      "gold_risk": {
+        "detected": true,
+        "pressure": true,
+        "safe_haven": false
+      }
+    }
+  },
+  "rate_factor_map": {
+    "upward_rate_factors": [
+      {
+        "label": "通膨硬數據偏熱",
+        "reason": "CPI、PPI、PCE 或價格分項偏強，代表前期物價壓力仍有黏性。"
+      },
+      {
+        "label": "綜合通膨預期上行",
+        "reason": "通膨硬數據、能源供給、勞動市場或成長需求訊號合計後，對通膨預期形成上行壓力。"
+      },
+      {
+        "label": "WTI / Brent 實際上行",
+        "reason": "本期 WTI 或 Brent 週線上漲，能源價格對短期通膨預期形成實際上行壓力。"
+      },
+      {
+        "label": "Fed 偏鷹或高利率維持更久",
+        "reason": "FOMC、會議紀要、官員談話或點陣圖若偏鷹，會推升政策利率路徑預期。"
+      },
+      {
+        "label": "公債供需 / 再融資 / 期限溢價壓力",
+        "reason": "美債供給、再融資、財政赤字或期限溢價上升，可能不經通膨直接推高長端殖利率。"
+      }
+    ],
+    "downward_rate_factors": [
+      {
+        "label": "通膨硬數據降溫",
+        "reason": "CPI、PPI、PCE 或價格分項放緩，代表前期物價壓力有所緩和。"
+      },
+      {
+        "label": "綜合通膨預期下行",
+        "reason": "通膨降溫、油價需求疲弱、勞動市場降溫、成長放緩或地緣風險降溫，可能壓低通膨預期。"
+      }
+    ],
+    "offsetting_or_uncertain_factors": [
+      {
+        "label": "通膨預期多空拉鋸",
+        "reason": "通膨上行與下行訊號同時存在，應區分主線與修正因子，避免寫成市場無視通膨。"
+      },
+      {
+        "label": "市場心理與風險擔憂變化",
+        "reason": "地緣政治、停火談判、制裁、關稅或政策表態會改變市場對未來事件的主觀機率。"
+      }
+    ],
+    "policy_rate_path_expectation": [
+      {
+        "label": "降息預期下降 / 高利率維持更久",
+        "reason": "綜合通膨預期偏上行時，市場通常會降低對快速降息的期待。"
+      },
+      {
+        "label": "降息預期上升",
+        "reason": "綜合通膨預期偏下行時，市場通常會提高對利率下行的期待。"
+      },
+      {
+        "label": "高利率維持更久 / 升息預期上升",
+        "reason": "Fed 偏鷹會降低降息期待，甚至提高升息或維持高利率的機率。"
+      }
+    ],
+    "market_expectation_shift": [
+      {
+        "label": "通膨預期重新評估",
+        "reason": "市場可能正在重新評估通膨、油價、成長與政策路徑之間的相對重要性。"
+      },
+      {
+        "label": "風險擔憂重新評估",
+        "reason": "這類新聞可能直接影響油價、美元、黃金與美債避險買盤。"
+      }
+    ],
+    "observed_rate_direction": "flat",
+    "observed_dollar_direction": "down",
+    "observed_gold_direction": "down",
+    "dominant_bias": "up",
+    "market_alignment": "待觀察",
+    "confidence": "high"
+  },
+  "matched_links": [
+    "WTI 或 Brent 實際上行，短期能源通膨壓力增加。",
+    "美元指數偏弱，可能反映利差支撐下降、風險偏好改善或非美貨幣反彈。",
+    "黃金下行通常符合高利率或強美元壓力。"
+  ],
+  "divergent_links": [],
+  "modifiers": [
+    "通膨預期呈現多空拉鋸：能源價格或偏熱物價訊號形成上行壓力，但通膨降溫、勞動轉弱或其他修正因子仍存在。",
+    "市場可能正在重新評估通膨預期，需比較油價、成長、勞動與 Fed 路徑哪個權重較高。",
+    "通膨預期多空拉鋸：通膨上行與下行訊號同時存在，應區分主線與修正因子，避免寫成市場無視通膨。",
+    "市場心理與風險擔憂變化：地緣政治、停火談判、制裁、關稅或政策表態會改變市場對未來事件的主觀機率。"
+  ],
+  "final_judgment": "部分支持，但存在修正因子",
+  "weekly_v35_diagnosis": {
+    "dominant_driver": "通膨預期多空拉鋸",
+    "correction_factors": [
+      "通膨硬數據降溫",
+      "綜合通膨預期下行",
+      "通膨預期多空拉鋸",
+      "市場心理與風險擔憂變化"
+    ],
+    "divergence_signal": "本期市場訊號未呈現單一明顯矛盾，重點在於確認油價、利率、美元、黃金與亞洲貨幣是否形成一致傳導。",
+    "asset_validation": [
+      "WTI 或 Brent 實際上行，短期能源通膨壓力增加。",
+      "美元指數偏弱，可能反映利差支撐下降、風險偏好改善或非美貨幣反彈。",
+      "黃金下行通常符合高利率或強美元壓力。"
+    ],
+    "next_period_watch": [
+      "通膨上行與下行訊號誰會成為下一期主導因子",
+      "Fed 是否延續高利率維持更久的訊號"
+    ]
+  }
+}
