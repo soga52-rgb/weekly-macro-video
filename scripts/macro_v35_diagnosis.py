@@ -983,7 +983,11 @@ def build_rate_factor_map_v35(flags: Dict[str, Any], observed: Dict[str, Dict[st
         dominant_bias = "down"
 
     market_alignment = "待觀察"
-    if observed_rate == "up" and dominant_bias == "up":
+    if observed_rate == "flat" and up_score > 0 and down_score > 0:
+        market_alignment = "利率方向平盤，顯示推升與壓低利率的力量互相抵銷"
+    elif observed_rate == "flat":
+        market_alignment = "利率方向平盤，尚未形成明確的上行或下行確認"
+    elif observed_rate == "up" and dominant_bias == "up":
         market_alignment = "利率方向與推升因子大致一致"
     elif observed_rate == "down" and dominant_bias == "down":
         market_alignment = "利率方向與壓低因子大致一致"
@@ -1043,6 +1047,8 @@ def infer_core_contradiction_v35(flags: Dict[str, Any], observed: Dict[str, Dict
         return "通膨上行與下行訊號並存，但美國10年期公債殖利率仍上行，顯示利率端暫時更重視通膨黏性或高利率維持更久。"
     if inflation_mixed and rate_dir == "down":
         return "通膨上行與下行訊號並存，但美國10年期公債殖利率下行，顯示市場開始重視通膨修正、成長降溫或降息預期。"
+    if inflation_mixed and rate_dir == "flat":
+        return "通膨降溫與能源價格上行等力量同時存在，美國10年期公債殖利率維持平盤，顯示推升與壓低利率的力量暫時互相抵銷。"
     if flags.get("laborCooling") and rate_dir == "up":
         return "就業降溫訊號出現，但美國10年期公債殖利率仍上行，顯示就業風險目前只是修正因子，尚未扭轉利率主線。"
     if flags.get("growthCooling") and rate_dir == "up":
@@ -1233,12 +1239,21 @@ def build_transmission_diagnosis_v35(
                 f"亞洲貨幣反應分化：{'、'.join(asia_up_labels)}承壓，但{'、'.join(asia_down_labels)}相對走強，不宜概括為亞洲貨幣全面走弱。"
             )
     elif observed.get("DXY", {}).get("direction") == "down":
-        matched_links.append("美元指數偏弱，可能反映利差支撐下降、風險偏好改善或非美貨幣反彈。")
+        matched_links.append("美元指數偏弱，但僅由現有資料尚無法確認是利差因素、非美貨幣反彈或其他資金流因素所致。")
 
-    if observed.get("Gold", {}).get("direction") == "up":
+    rate_direction = str(observed.get("US10Y", {}).get("direction") or "")
+    dollar_direction = str(observed.get("DXY", {}).get("direction") or "")
+    gold_direction = str(observed.get("Gold", {}).get("direction") or "")
+
+    if gold_direction == "up":
         modifiers.append("黃金上行可能反映避險需求、實質利率下行或通膨避險，需與美元與利率方向交叉驗證。")
-    elif observed.get("Gold", {}).get("direction") == "down":
-        matched_links.append("黃金下行通常符合高利率或強美元壓力。")
+    elif gold_direction == "down":
+        if rate_direction != "up" and dollar_direction != "up":
+            divergent_links.append(
+                "黃金明顯下行，但同期美國10年期公債殖利率未上行、美元亦未走強，未形成典型利率與美元壓低黃金的傳導，原因待確認。"
+            )
+        else:
+            matched_links.append("黃金下行與利率上行或美元走強方向大致一致。")
 
     for factor in rate_map.get("offsetting_or_uncertain_factors", []):
         modifiers.append(f"{factor.get('label', '')}：{factor.get('reason', '')}")
