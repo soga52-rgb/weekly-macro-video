@@ -52,30 +52,70 @@
     </div>
   </div>
   <script>
-    async function loadLatest() {
+    let currentVersion = "";
+    let currentTargetPath = "";
+    let latestCheckInFlight = false;
+
+    async function loadLatest({ force = false } = {}) {
+      if (latestCheckInFlight) return;
+      latestCheckInFlight = true;
+
       const fallback = document.getElementById("fallback");
       const fallbackLink = document.getElementById("fallback-link");
       const frame = document.getElementById("frame");
 
       try {
+        // Always bypass cache when checking latest.json itself.
+        // This check must NOT force the iframe to reload when the published
+        // weekly version has not actually changed.
         const res = await fetch("./latest.json?ts=" + Date.now(), { cache: "no-store" });
         if (!res.ok) throw new Error("latest.json HTTP " + res.status);
 
         const latest = await res.json();
-        const target = "./" + latest.target_path + "?v=" + encodeURIComponent(latest.version) + "&ts=" + Date.now();
+        const nextVersion = String(latest.version || "");
+        const nextTargetPath = String(latest.target_path || "");
+        const versionChanged =
+          nextVersion !== currentVersion ||
+          nextTargetPath !== currentTargetPath;
 
-        frame.src = target;
+        if (force || !frame.src || versionChanged) {
+          // Keep the iframe URL stable for the same published version.
+          // Do NOT append Date.now() here; changing the URL would reload the
+          // weekly page and reset its scroll position.
+          const target =
+            "./" + nextTargetPath +
+            "?v=" + encodeURIComponent(nextVersion);
+
+          frame.src = target;
+          currentVersion = nextVersion;
+          currentTargetPath = nextTargetPath;
+        }
+
         fallback.style.display = "none";
       } catch (err) {
         fallback.style.display = "flex";
         fallbackLink.innerHTML = '<a href="./latest.html?ts=' + Date.now() + '">改用 latest.html 開啟</a>';
         console.error(err);
+      } finally {
+        latestCheckInFlight = false;
       }
     }
 
-    loadLatest();
+    // Initial page load: load the current weekly page once.
+    loadLatest({ force: true });
+
+    // When returning from another browser tab/app/news page, only CHECK
+    // whether a genuinely newer published version exists.
+    // If the version is unchanged, leave the iframe untouched so the
+    // exact reading position remains where the user left it.
     document.addEventListener("visibilitychange", function () {
       if (!document.hidden) loadLatest();
+    });
+
+    // Also handle browser back-forward cache restoration without forcing
+    // an iframe reload when the published version is unchanged.
+    window.addEventListener("pageshow", function () {
+      loadLatest();
     });
   </script>
 </body>

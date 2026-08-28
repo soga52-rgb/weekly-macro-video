@@ -373,9 +373,9 @@ ul { margin:0; padding-left:22px; }
     <h2>重點摘要</h2>
     <div class="summary-grid">
       <div class="big-text">通膨預期多空拉鋸</div>
-      <div class="question">在原油價格下跌與美債供給擔憂並存的環境下，市場究竟定價通膨降溫還是通膨重燃？</div>
+      <div class="question">在通膨多空訊號交錯下，市場為何選擇壓低長天期殖利率？</div>
     </div>
-    <p>本週市場焦點圍繞在通膨預期的多空拉鋸。一方面，原油價格顯著下行與持平的 PCE 數據為通膨降溫提供支撐；另一方面，美國國債突破40兆美元引發的長端利率擔憂與貿易戰雜音則帶來通膨重燃的隱憂。然而，從美國10年期公債殖利率最終走低來看，市場當前更傾向於反映通膨修正與成長降溫的預期，而非發債壓力。</p>
+    <p>本週市場面臨通膨預期的多空拉鋸。一方面，貿易戰擔憂與美債供給壓力提供通膨與利率上行理由；另一方面，原油價格顯著回落且 PCE 數據持平。最終，美國10年期公債殖利率選擇下行，顯示市場目前更傾向於反映通膨修正與潛在的降息預期。與此同時，美元指數維持偏強，日圓承壓，反映出市場可能存在一定程度的避險情緒或非美貨幣相對弱勢。</p>
   </section>
 
   <section class="section section-market market-section">
@@ -822,15 +822,15 @@ ul { margin:0; padding-left:22px; }
     <div class="two-col">
       <div>
         <h3>關鍵問題</h3>
-        <ul><li>通膨上行與下行訊號誰會成為下一期主導因子？</li>
-<li>油價下行是否開始實質壓低利率與通膨預期？</li>
-<li>Fed 是否延續高利率維持更久的訊號？</li></ul>
+        <ul><li>油價下行是否會持續壓低利率與通膨預期？</li>
+<li>Fed 是否會釋出延續高利率維持更久的訊號？</li>
+<li>美元偏強的背後，究竟是避險情緒還是利差支撐？</li></ul>
       </div>
       <div>
         <h3>主要佐證</h3>
-        <ul><li>WTI原油自 87.06 美元顯著跌至 83.59 美元</li>
-<li>美國10年期公債殖利率自 4.73% 下行至 4.67%</li>
-<li>美元指數自 98.8 上行至 99.1</li></ul>
+        <ul><li>WTI 原油自 87.06 跌至 83.59</li>
+<li>美國10年期公債殖利率自 4.738% 降至 4.672%</li>
+<li>美元指數自 98.80 升至 99.13</li></ul>
       </div>
     </div>
   </section>
@@ -846,7 +846,9 @@ ul { margin:0; padding-left:22px; }
   // Preserve the reading position of this weekly page within the current tab session.
   // Covers link-outs, back/forward navigation, reloads, BFCache restores,
   // browser tab switching, and browser/app backgrounding where the page is reloaded.
-  const storageKey = 'weeklyMacroViewState::' + window.location.pathname + window.location.search;
+  // Use pathname only. Query parameters such as ?v=BUILD_VERSION must not
+  // create a new storage key for the same weekly page.
+  const storageKey = 'weeklyMacroViewState::' + window.location.pathname;
   let restoringView = true;
   let saveScheduled = false;
 
