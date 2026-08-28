@@ -366,16 +366,16 @@ ul { margin:0; padding-left:22px; }
 
   <section class="section hero">
     <h2>總經傳導圖解</h2>
-    <img class="diagram-img" src="weekly_macro_diagram.png" alt="總經傳導圖解">
+    <img class="diagram-img" src="weekly_macro_diagram.png?v=548831532170" alt="總經傳導圖解" loading="eager" decoding="async">
   </section>
 
   <section class="section section-highlight">
     <h2>重點摘要</h2>
     <div class="summary-grid">
       <div class="big-text">通膨預期多空拉鋸</div>
-      <div class="question">在美債供給擔憂與通膨多空訊號並存下，油價回落是否足以確立長端利率的下行趨勢？</div>
+      <div class="question">在原油價格下跌與美債供給擔憂並存的環境下，市場究竟定價通膨降溫還是通膨重燃？</div>
     </div>
-    <p>本週宏觀環境聚焦於通膨預期的多空拉鋸。儘管新聞面存在美債規模突破40兆美元等推升利率的隱憂，但實質數據顯示 PCE 持平，且 WTI 與 Brent 原油價格顯著下行。這股通膨修正力量促使美國10年期公債殖利率在本期內震盪走低，顯示市場當前更傾向定價通膨降溫或經濟成長放緩的風險。然而，美元指數的同步走強，暗示跨資產間仍存在避險或利差預期的外溢效應。</p>
+    <p>本週市場焦點圍繞在通膨預期的多空拉鋸。一方面，原油價格顯著下行與持平的 PCE 數據為通膨降溫提供支撐；另一方面，美國國債突破40兆美元引發的長端利率擔憂與貿易戰雜音則帶來通膨重燃的隱憂。然而，從美國10年期公債殖利率最終走低來看，市場當前更傾向於反映通膨修正與成長降溫的預期，而非發債壓力。</p>
   </section>
 
   <section class="section section-market market-section">
@@ -822,15 +822,15 @@ ul { margin:0; padding-left:22px; }
     <div class="two-col">
       <div>
         <h3>關鍵問題</h3>
-        <ul><li>通膨上行與下行訊號，誰會成為下一期的絕對主導因子？</li>
-<li>油價的下行趨勢是否能延續，並進一步壓低實質利率？</li>
-<li>Fed 是否會在近期釋出延續高利率維持更久的明確訊號？</li></ul>
+        <ul><li>通膨上行與下行訊號誰會成為下一期主導因子？</li>
+<li>油價下行是否開始實質壓低利率與通膨預期？</li>
+<li>Fed 是否延續高利率維持更久的訊號？</li></ul>
       </div>
       <div>
         <h3>主要佐證</h3>
-        <ul><li>美國10年期公債殖利率由 4.73% 下行至 4.67%</li>
-<li>WTI原油由 87.06 美元顯著下跌至 83.59 美元</li>
-<li>美元指數由 98.80 上行至 99.13</li></ul>
+        <ul><li>WTI原油自 87.06 美元顯著跌至 83.59 美元</li>
+<li>美國10年期公債殖利率自 4.73% 下行至 4.67%</li>
+<li>美元指數自 98.8 上行至 99.1</li></ul>
       </div>
     </div>
   </section>
@@ -842,6 +842,110 @@ ul { margin:0; padding-left:22px; }
 
 <div id="chartTooltip" class="chart-tooltip" aria-hidden="true"></div>
 <script>
+(function() {
+  // Preserve the reading position of this weekly page within the current tab session.
+  // Covers link-outs, back/forward navigation, reloads, BFCache restores,
+  // browser tab switching, and browser/app backgrounding where the page is reloaded.
+  const storageKey = 'weeklyMacroViewState::' + window.location.pathname + window.location.search;
+  let restoringView = true;
+  let saveScheduled = false;
+
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+
+  function readViewState() {
+    try {
+      const raw = sessionStorage.getItem(storageKey);
+      if (!raw) return null;
+      const state = JSON.parse(raw);
+      if (!state || !Number.isFinite(state.y)) return null;
+      return state;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function writeViewState() {
+    if (restoringView) return;
+    try {
+      sessionStorage.setItem(storageKey, JSON.stringify({
+        x: Math.max(0, window.scrollX || 0),
+        y: Math.max(0, window.scrollY || 0),
+        savedAt: Date.now()
+      }));
+    } catch (error) {
+      // sessionStorage can be unavailable in restricted/private contexts.
+    }
+  }
+
+  function scheduleSaveViewState() {
+    if (restoringView || saveScheduled) return;
+    saveScheduled = true;
+    window.requestAnimationFrame(() => {
+      saveScheduled = false;
+      writeViewState();
+    });
+  }
+
+  function restoreViewState() {
+    const state = readViewState();
+    if (!state) {
+      restoringView = false;
+      return;
+    }
+
+    const apply = () => window.scrollTo(state.x || 0, state.y || 0);
+
+    // Re-apply after layout/media settling so the page remains at the
+    // same reading position even if images finish loading a little later.
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        apply();
+        window.setTimeout(apply, 80);
+        window.setTimeout(() => {
+          apply();
+          restoringView = false;
+          writeViewState();
+        }, 320);
+      });
+    });
+  }
+
+  function startRestore() {
+    restoreViewState();
+  }
+
+  if (document.readyState === 'complete') {
+    startRestore();
+  } else {
+    window.addEventListener('load', startRestore, { once: true });
+  }
+
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      restoringView = true;
+      restoreViewState();
+    }
+  });
+
+  window.addEventListener('scroll', scheduleSaveViewState, { passive: true });
+  window.addEventListener('pagehide', writeViewState);
+  window.addEventListener('beforeunload', writeViewState);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      writeViewState();
+    }
+  });
+
+  // Save immediately before following any link as an extra safeguard.
+  document.addEventListener('click', (event) => {
+    const target = event.target && event.target.closest ? event.target.closest('a[href]') : null;
+    if (target) writeViewState();
+  }, true);
+})();
+
 (function() {
   const tooltip = document.getElementById('chartTooltip');
   if (!tooltip) return;

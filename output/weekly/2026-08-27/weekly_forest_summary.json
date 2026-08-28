@@ -1,7 +1,7 @@
 {
   "meta": {
     "source": "weekly_v35_diagnosis.json + weekly_market_series.json + compact_news_facts",
-    "data_status_note": "本期數據完整，US10Y下行與油價回落趨勢一致，DXY偏強。",
+    "data_status_note": "整合 V35 診斷結果、2026-08-21 至 2026-08-27 市場數據與精簡新聞事實",
     "week_range": "2026-08-21 ～ 2026-08-27",
     "days_observed": "7",
     "analysis_window": {
@@ -22,40 +22,41 @@
   },
   "forest_summary": {
     "weekly_main_theme": "通膨預期多空拉鋸",
-    "main_question": "在美債供給擔憂與通膨多空訊號並存下，油價回落是否足以確立長端利率的下行趨勢？",
-    "one_sentence_verdict": "通膨多空訊號拉鋸中，油價顯著回落成為主導修正因子，帶動美債殖利率下行，但強勢美元顯示市場仍具備防禦性觀望情緒。",
-    "overall_verdict": "部分成立",
-    "narrative_arc": "本週宏觀環境聚焦於通膨預期的多空拉鋸。儘管新聞面存在美債規模突破40兆美元等推升利率的隱憂，但實質數據顯示 PCE 持平，且 WTI 與 Brent 原油價格顯著下行。這股通膨修正力量促使美國10年期公債殖利率在本期內震盪走低，顯示市場當前更傾向定價通膨降溫或經濟成長放緩的風險。然而，美元指數的同步走強，暗示跨資產間仍存在避險或利差預期的外溢效應。",
-    "why_it_matters": "美國10年期公債殖利率的下行若能延續，將有助於緩解全球金融條件的緊縮壓力；但美元指數的強勢若未見反轉，非美貨幣（如日圓）將持續承壓，並可能引發新一輪的跨資產波動。"
+    "main_question": "在原油價格下跌與美債供給擔憂並存的環境下，市場究竟定價通膨降溫還是通膨重燃？",
+    "one_sentence_verdict": "本週油價顯著回落帶動通膨預期下行，壓抑了美債供給擔憂推升殖利率的力量，使美國10年期公債殖利率震盪走低。",
+    "overall_verdict": "成立",
+    "narrative_arc": "本週市場焦點圍繞在通膨預期的多空拉鋸。一方面，原油價格顯著下行與持平的 PCE 數據為通膨降溫提供支撐；另一方面，美國國債突破40兆美元引發的長端利率擔憂與貿易戰雜音則帶來通膨重燃的隱憂。然而，從美國10年期公債殖利率最終走低來看，市場當前更傾向於反映通膨修正與成長降溫的預期，而非發債壓力。",
+    "why_it_matters": "釐清這場通膨預期拉鋸戰的勝負，將決定後續長天期美債殖利率的走向，進而牽動全球跨資產的定價基準與資金流向。"
   },
   "macro_storyline": {
-    "story_start": "本期初，市場面臨美國國債供給擴大的擔憂以及潛在的貿易戰通膨隱憂，為長端利率帶來推升的預期壓力。",
+    "story_start": "本期初，市場面臨多空交錯的通膨訊號，包含新聞層面對於美債規模擴大引發的財政擔憂，以及實際盤面上開始回落的能源價格。",
     "main_drivers": [
       "通膨預期多空拉鋸",
-      "WTI與Brent原油價格實質下行",
-      "市場心理與風險擔憂變化"
+      "WTI / Brent 實際下行",
+      "綜合通膨預期下行"
     ],
-    "market_transmission": "實質通膨降溫訊號（油價下跌與PCE持平）蓋過了債務供給擔憂，促使美國10年期公債殖利率自 4.73% 回落至 4.67%。同時，美元指數維持強勢並上行至 99.13，帶動美元兌日圓升破 159 關卡，顯示非美貨幣在強美元環境下持續承壓。",
-    "revision_or_noise": "新聞面提及的美債供給壓力與無人買債風險，在本期並未轉化為實質的利率上行，顯示短線市場定價更看重通膨預期的下行修正。",
-    "story_end": "最終，市場在通膨多空拉鋸中選擇了偏向通膨修正的定價方向，但強美元與維持高位的金價，顯示整體宏觀環境仍處於防禦與觀望狀態。"
+    "market_transmission": "油價（WTI與Brent）的顯著下跌成為壓抑通膨預期的實質力量，使得美國10年期公債殖利率在面臨財政發債擔憂的新聞聲浪下，依然震盪收低。同時，美元指數維持偏強格局，顯示在通膨預期調整之際，資金仍具備一定避險需求或青睞美元資產。",
+    "revision_or_noise": "新聞中關於美債供給壓力將推升長端利率的擔憂，在本期並未轉化為美債殖利率實質上行的動力，暫時視為情緒雜音，或已被通膨降溫預期所抵銷。",
+    "story_end": "最終，通膨預期下行的力量在本週略佔上風，帶動美債殖利率回落，但強勢美元與高檔震盪的黃金顯示市場避險情緒與不確定性依然存在，後續需觀察拉鋸戰是否延續。"
   },
   "macro_variables": {
-    "inflation_view": "多空拉鋸但短期偏向修正。PCE數據持平與國際油價顯著下行提供實質降溫訊號，暫時抵銷了貿易戰與財政擴張的潛在通膨隱憂。",
-    "rate_view": "震盪下行。美國10年期公債殖利率由 4.73% 降至 4.67%，顯示市場開始重視通膨修正或成長降溫，壓過了推升利率的隱憂。",
-    "dollar_fx_view": "偏強。美元指數由 98.80 上行至 99.13，需持續觀察此強勢是來自利差支撐、避險需求，抑或純粹非美貨幣弱勢所致。",
-    "asia_fx_view": "承壓。美元兌日圓由 158.94 上行至 159.38，符合強美元下的外溢承壓效果；台幣與韓元則呈現相對窄幅的震盪。",
-    "gold_view": "高位震盪。金價在 4624 至 4723 美元區間波動，在美債殖利率下行與強美元的雙向拉扯下，仍具備一定支撐，並未出現典型的高利率壓抑效應。",
-    "energy_view": "顯著下行。WTI 原油由 87.06 美元跌至 83.59 美元，Brent 原油由 94.39 美元跌至 88.62 美元，成為本期壓抑通膨預期的最重要實質因子。"
+    "inflation_view": "呈現多空拉鋸，但實質油價下行與 PCE 數據持平，使短期通膨預期偏向降溫。",
+    "rate_view": "美國10年期公債殖利率由 4.73% 下行至 4.67%，顯示市場暫時消化了發債擔憂，轉向關注通膨修正與成長風險。",
+    "dollar_fx_view": "美元指數偏強上行（98.8至99.1），可能反映避險需求或非美貨幣相對弱勢，需進一步觀察利差支撐力道。",
+    "asia_fx_view": "亞幣呈現分歧，美元兌日圓上行反映日圓承壓，但台幣與韓元兌美元則微幅走強，逆勢強於美元的具體驅動因素待確認。",
+    "gold_view": "黃金在強美元與美債殖利率下行的環境下維持高檔震盪（約4658美元/盎司），展現一定韌性，跨資產背離原因待確認，可能受避險需求支撐。",
+    "energy_view": "WTI與布蘭特原油雙雙顯著下跌，為本週壓抑通膨預期的最明確動能。"
   },
   "evidence": {
     "most_important_evidence": [
-      "美國10年期公債殖利率由 4.73% 下行至 4.67%",
-      "WTI原油由 87.06 美元顯著下跌至 83.59 美元",
-      "美元指數由 98.80 上行至 99.13"
+      "WTI原油自 87.06 美元顯著跌至 83.59 美元",
+      "美國10年期公債殖利率自 4.73% 下行至 4.67%",
+      "美元指數自 98.8 上行至 99.1"
     ],
     "insufficient_evidence": [
-      "美債供給擴大是否必然導致長端利率失控上行（本期殖利率實質為下行，因果尚未成立）",
-      "強勢美元的具體成因（避險情緒或利差預期）仍待進一步數據確認"
+      "新聞提及美債40兆美元將引發殖利率飆升，但實際數據顯示殖利率下行，因果關係未成立",
+      "台幣與韓元在強勢美元下微幅走強的具體原因待確認",
+      "黃金在強美元下維持高檔的具體推力待確認"
     ],
     "watch_items_from_daily_summaries": [],
     "watch_items_from_news_context": [
@@ -85,141 +86,203 @@
     ]
   },
   "video_planning": {
-    "suggested_video_title": "通膨多空拉鋸戰：油價重挫壓低美債殖利率，強美元透露什麼訊號？",
+    "suggested_video_title": "通膨預期多空拉鋸：油價重挫如何壓制美債殖利率？",
     "target_duration": "6-8 minutes",
-    "video_thesis": "本週市場在通膨上行隱憂與實質數據降溫之間拔河，最終油價大跌帶動美債殖利率下行，但強勢美元顯示市場避險情緒與觀望態度猶存。",
-    "opening_hook": "美國國債突破40兆美元，市場原本擔憂利率會因此狂飆。但為什麼本週美國10年期公債殖利率不升反降？關鍵就在原油市場與通膨預期的多空拉鋸。",
+    "video_thesis": "本週市場面臨美債供給擔憂與油價下跌的拉鋸，最終原油實質下行帶動通膨預期降溫，使美債殖利率不升反降，確立了本週的市場主線。",
+    "opening_hook": "美國國債突破40兆美元，新聞都在喊殖利率要飆升，但為什麼本週美國10年期公債殖利率反而下跌了？答案就在原油市場裡。",
     "video_segments": [
       {
         "segment_id": "seg_1",
-        "segment_title": "通膨預期的多空拉鋸",
-        "segment_question": "市場為何在通膨隱憂與降溫訊號間搖擺？",
-        "narration_focus": "說明本週新聞面充斥美債供給壓力與貿易戰通膨隱憂，但實質 PCE 數據持平，形成多空拉鋸的宏觀背景。",
-        "main_point": "通膨預期出現分歧，市場正在尋找下一個主導方向。",
-        "estimated_duration": "90 seconds",
+        "segment_title": "本週主線：通膨預期的多空拉鋸",
+        "segment_question": "市場正在擔憂通膨重燃還是通膨降溫？",
+        "narration_focus": "點出本週市場面臨的矛盾：美債發債壓力與貿易戰雜音暗示通膨上行，但實際數據卻呈現另一種面貌。",
+        "main_point": "通膨預期多空拉鋸是本週主導因子。",
+        "estimated_duration": "1-1.5 mins",
         "visual_needed": true,
-        "visual_role": "背景建立",
-        "visual_concept": "顯示通膨多空因子的天平或對比圖"
+        "visual_role": "呈現多空因素對立的意象",
+        "visual_concept": "天平兩端：一端是美債與貿易戰，一端是油價與PCE"
       },
       {
         "segment_id": "seg_2",
-        "segment_title": "油價重挫與殖利率下行",
-        "segment_question": "是什麼力量壓過了美債供給擔憂？",
-        "narration_focus": "解析 WTI 與 Brent 原油的顯著下行如何成為壓抑通膨預期的關鍵修正因子，並帶動美國10年期公債殖利率回落。",
-        "main_point": "油價下行帶動的通膨修正預期，目前勝過債務供給帶來的利率推升壓力。",
-        "estimated_duration": "120 seconds",
+        "segment_title": "關鍵修正：油價實質下行",
+        "segment_question": "是什麼力量打破了拉鋸的僵局？",
+        "narration_focus": "說明 WTI 與 Brent 原油的顯著下跌，成為壓抑通膨預期的實質力量。",
+        "main_point": "原油價格下跌帶動綜合通膨預期下行。",
+        "estimated_duration": "1.5 mins",
         "visual_needed": true,
-        "visual_role": "核心證據",
-        "visual_concept": "US10Y 與 WTI 原油走勢的疊加圖，呈現兩者同步下行的趨勢"
+        "visual_role": "數據佐證",
+        "visual_concept": "WTI 與 Brent 原油本週走勢圖，標示顯著跌幅"
       },
       {
         "segment_id": "seg_3",
-        "segment_title": "強美元與跨資產背離",
-        "segment_question": "殖利率下行，為何美元依然強勢？",
-        "narration_focus": "探討在美債殖利率下行的背景下，美元指數逆勢走強至 99.13 的現象，並觀察其對日圓等亞幣的壓抑效果。",
-        "main_point": "強美元可能反映了避險需求或非美貨幣的相對弱勢，顯示市場並未完全放鬆警惕。",
-        "estimated_duration": "120 seconds",
+        "segment_title": "資產驗證：美債殖利率不升反降",
+        "segment_question": "債券市場如何定價這場拉鋸戰？",
+        "narration_focus": "對比新聞擔憂與實際盤勢，指出美國10年期公債殖利率的下行，證明市場目前更看重通膨修正與成長降溫。",
+        "main_point": "美債殖利率下行驗證了通膨預期降溫佔上風。",
+        "estimated_duration": "1.5 mins",
         "visual_needed": true,
-        "visual_role": "延伸分析",
-        "visual_concept": "DXY 與 USDJPY 的走勢圖，標示美元轉強對日圓的壓迫"
+        "visual_role": "揭示背離與真實方向",
+        "visual_concept": "美國10年期公債殖利率走勢圖，對比新聞標題的看升情緒"
       },
       {
         "segment_id": "seg_4",
+        "segment_title": "跨資產觀察：強美元與黃金韌性",
+        "segment_question": "外匯與貴金屬市場透露了什麼訊號？",
+        "narration_focus": "分析美元指數的偏強走勢，以及黃金在強美元與殖利率下行環境中的高檔震盪，提示避險情緒的存在。",
+        "main_point": "美元偏強，黃金展現韌性，需留意避險資金流向。",
+        "estimated_duration": "1.5 mins",
+        "visual_needed": true,
+        "visual_role": "跨資產關聯",
+        "visual_concept": "DXY 與 Gold 走勢疊加圖，呈現兩者同步高檔的背離現象"
+      },
+      {
+        "segment_id": "seg_5",
         "segment_title": "下週觀察重點",
-        "segment_question": "接下來該關注哪些宏觀訊號？",
-        "narration_focus": "總結本週趨勢，並將目光轉向油價跌勢是否延續，以及 Fed 在傑克森霍爾年會的政策表態。",
-        "main_point": "確認通膨降溫是否成為長期趨勢，以及央行對高利率環境的最新定調。",
-        "estimated_duration": "60 seconds",
-        "visual_needed": false,
-        "visual_role": "總結",
-        "visual_concept": "條列式重點字卡"
+        "segment_question": "接下來總經市場要看什麼？",
+        "narration_focus": "總結本週結論，並帶出下週需觀察通膨訊號誰能延續，以及聯準會的態度。",
+        "main_point": "關注油價下行是否持續壓低利率，以及 Fed 政策訊號。",
+        "estimated_duration": "1 min",
+        "visual_needed": true,
+        "visual_role": "重點條列",
+        "visual_concept": "條列式清單：通膨訊號、油價影響、Fed 態度"
       }
     ],
     "visual_sequence": [
       {
         "visual_id": "vis_1",
-        "source_segment_id": "seg_2",
-        "visual_title": "油價與美債殖利率同步下行",
-        "visual_purpose": "證明油價回落是帶動本週長端利率下行的主因",
-        "visual_concept": "雙軸折線圖，左軸為 US10Y (%)，右軸為 WTI (USD/bbl)",
+        "source_segment_id": "seg_1",
+        "visual_title": "通膨預期多空拉鋸",
+        "visual_purpose": "建立本週核心矛盾",
+        "visual_concept": "概念圖：美債壓力 vs 油價下跌",
         "key_labels": [
-          "US10Y 下行至 4.67%",
-          "WTI 跌破 84 美元"
+          "美債供給擔憂",
+          "油價下行"
+        ],
+        "is_web_hero_candidate": false
+      },
+      {
+        "visual_id": "vis_2",
+        "source_segment_id": "seg_2",
+        "visual_title": "原油價格顯著回落",
+        "visual_purpose": "展示通膨降溫的實質驅動力",
+        "visual_concept": "WTI 原油線圖 (87.06 -> 83.59)",
+        "key_labels": [
+          "WTI",
+          "通膨預期下行"
+        ],
+        "is_web_hero_candidate": false
+      },
+      {
+        "visual_id": "vis_3",
+        "source_segment_id": "seg_3",
+        "visual_title": "美債殖利率與新聞情緒背離",
+        "visual_purpose": "證明市場實際定價方向",
+        "visual_concept": "US10Y 線圖 (4.73% -> 4.67%)",
+        "key_labels": [
+          "US10Y",
+          "殖利率下行",
+          "消化發債擔憂"
         ],
         "is_web_hero_candidate": true
       },
       {
-        "visual_id": "vis_2",
-        "source_segment_id": "seg_3",
-        "visual_title": "強勢美元壓抑日圓",
-        "visual_purpose": "展示美元指數偏強及其對非美貨幣的外溢效應",
-        "visual_concept": "雙軸折線圖，左軸為 DXY，右軸為 USDJPY",
+        "visual_id": "vis_4",
+        "source_segment_id": "seg_4",
+        "visual_title": "強美元與黃金韌性",
+        "visual_purpose": "提示市場潛在避險情緒",
+        "visual_concept": "DXY 與 Gold 雙軸線圖",
         "key_labels": [
-          "DXY 突破 99",
-          "USDJPY 逼近 159.4"
+          "DXY 走強",
+          "Gold 高檔震盪"
         ],
         "is_web_hero_candidate": false
       }
     ],
     "web_hero_visual": {
-      "source_visual_id": "vis_1",
-      "purpose": "定調本週最關鍵的宏觀動能傳導",
-      "reason": "油價下行與美債殖利率回落是本週 V35 診斷中最明確的因果聯繫，最能代表通膨預期修正的主線敘事。"
+      "source_visual_id": "vis_3",
+      "purpose": "破除市場迷思，展示真實資金流向",
+      "reason": "美債殖利率在發債擔憂下依然走低，是本週最關鍵的市場定價結果，最能代表『通膨降溫預期戰勝供給擔憂』的主線。"
     },
     "six_scene_outline": [
       {
         "scene_id": "scene_01",
-        "scene_title": "通膨預期的多空拉鋸",
-        "scene_question": "市場為何在通膨隱憂與降溫訊號間搖擺？",
-        "main_point": "通膨預期出現分歧，市場正在尋找下一個主導方向。",
-        "visual_hint": "顯示通膨多空因子的天平或對比圖"
+        "scene_title": "本週主線：通膨預期的多空拉鋸",
+        "scene_question": "市場正在擔憂通膨重燃還是通膨降溫？",
+        "main_point": "通膨預期多空拉鋸是本週主導因子。",
+        "visual_hint": "天平兩端：一端是美債與貿易戰，一端是油價與PCE"
       },
       {
         "scene_id": "scene_02",
-        "scene_title": "油價重挫與殖利率下行",
-        "scene_question": "是什麼力量壓過了美債供給擔憂？",
-        "main_point": "油價下行帶動的通膨修正預期，目前勝過債務供給帶來的利率推升壓力。",
-        "visual_hint": "US10Y 與 WTI 原油走勢的疊加圖，呈現兩者同步下行的趨勢"
+        "scene_title": "關鍵修正：油價實質下行",
+        "scene_question": "是什麼力量打破了拉鋸的僵局？",
+        "main_point": "原油價格下跌帶動綜合通膨預期下行。",
+        "visual_hint": "WTI 與 Brent 原油本週走勢圖，標示顯著跌幅"
       },
       {
         "scene_id": "scene_03",
-        "scene_title": "強美元與跨資產背離",
-        "scene_question": "殖利率下行，為何美元依然強勢？",
-        "main_point": "強美元可能反映了避險需求或非美貨幣的相對弱勢，顯示市場並未完全放鬆警惕。",
-        "visual_hint": "DXY 與 USDJPY 的走勢圖，標示美元轉強對日圓的壓迫"
+        "scene_title": "資產驗證：美債殖利率不升反降",
+        "scene_question": "債券市場如何定價這場拉鋸戰？",
+        "main_point": "美債殖利率下行驗證了通膨預期降溫佔上風。",
+        "visual_hint": "美國10年期公債殖利率走勢圖，對比新聞標題的看升情緒"
       },
       {
         "scene_id": "scene_04",
+        "scene_title": "跨資產觀察：強美元與黃金韌性",
+        "scene_question": "外匯與貴金屬市場透露了什麼訊號？",
+        "main_point": "美元偏強，黃金展現韌性，需留意避險資金流向。",
+        "visual_hint": "DXY 與 Gold 走勢疊加圖，呈現兩者同步高檔的背離現象"
+      },
+      {
+        "scene_id": "scene_05",
         "scene_title": "下週觀察重點",
-        "scene_question": "接下來該關注哪些宏觀訊號？",
-        "main_point": "確認通膨降溫是否成為長期趨勢，以及央行對高利率環境的最新定調。",
-        "visual_hint": "條列式重點字卡"
+        "scene_question": "接下來總經市場要看什麼？",
+        "main_point": "關注油價下行是否持續壓低利率，以及 Fed 政策訊號。",
+        "visual_hint": "條列式清單：通膨訊號、油價影響、Fed 態度"
       }
     ],
     "image_card_brief": [
       {
         "card_id": "card_01",
-        "headline": "油價與美債殖利率同步下行",
+        "headline": "通膨預期多空拉鋸",
         "short_labels": [
-          "US10Y 下行至 4.67%",
-          "WTI 跌破 84 美元"
+          "美債供給擔憂",
+          "油價下行"
         ],
-        "visual_concept": "雙軸折線圖，左軸為 US10Y (%)，右軸為 WTI (USD/bbl)"
+        "visual_concept": "概念圖：美債壓力 vs 油價下跌"
       },
       {
         "card_id": "card_02",
-        "headline": "強勢美元壓抑日圓",
+        "headline": "原油價格顯著回落",
         "short_labels": [
-          "DXY 突破 99",
-          "USDJPY 逼近 159.4"
+          "WTI",
+          "通膨預期下行"
         ],
-        "visual_concept": "雙軸折線圖，左軸為 DXY，右軸為 USDJPY"
+        "visual_concept": "WTI 原油線圖 (87.06 -> 83.59)"
+      },
+      {
+        "card_id": "card_03",
+        "headline": "美債殖利率與新聞情緒背離",
+        "short_labels": [
+          "US10Y",
+          "殖利率下行",
+          "消化發債擔憂"
+        ],
+        "visual_concept": "US10Y 線圖 (4.73% -> 4.67%)"
+      },
+      {
+        "card_id": "card_04",
+        "headline": "強美元與黃金韌性",
+        "short_labels": [
+          "DXY 走強",
+          "Gold 高檔震盪"
+        ],
+        "visual_concept": "DXY 與 Gold 雙軸線圖"
       }
     ],
     "next_week_questions": [
-      "通膨上行與下行訊號，誰會成為下一期的絕對主導因子？",
-      "油價的下行趨勢是否能延續，並進一步壓低實質利率？",
-      "Fed 是否會在近期釋出延續高利率維持更久的明確訊號？"
+      "通膨上行與下行訊號誰會成為下一期主導因子？",
+      "油價下行是否開始實質壓低利率與通膨預期？",
+      "Fed 是否延續高利率維持更久的訊號？"
     ]
   }
 }
