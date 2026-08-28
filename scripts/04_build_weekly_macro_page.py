@@ -17,11 +17,14 @@ Design:
 - Unified Apple/iOS widget-inspired glassmorphism style.
 - Warm neutral palette: off-white, white, deep gray, amber accent.
 - Weekly news grouped into: 通膨預期 / 利率 / 貨幣 / 其他.
-- Market trend charts use a fixed 2 / 3 / 4 asset order with equal card sizing.
+- Market trend charts use a fixed 2 / 3 / 2x2 asset layout with equal card sizing.
+- Macro diagram uses a content-hash query parameter to prevent stale browser/GitHub Pages cache.
+- Page reading position is preserved within the current tab session.
 """
 
 import json
 import html
+import hashlib
 import math
 import os
 import re
@@ -45,6 +48,14 @@ def load_json(path: Path, default: Any = None) -> Any:
 def save_text(path: Path, text: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text, encoding="utf-8")
+
+
+def file_version_token(path: Path, length: int = 12) -> str:
+    """Return a short content hash for cache-busting static assets."""
+    if not path.exists() or not path.is_file():
+        return ""
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+    return digest[:length]
 
 
 def find_latest_week_dir() -> Path:
@@ -707,9 +718,16 @@ def build_html(week_dir: Path, forest: Dict[str, Any], news_context: Dict[str, A
     verdict = first_non_empty(summary.get("one_sentence_verdict"), summary.get("narrative_arc"), "資料不足，待觀察")
     main_question = first_non_empty(summary.get("main_question"), "下週市場將驗證哪些總經訊號？")
 
-    diagram_exists = (week_dir / "weekly_macro_diagram.png").exists()
+    diagram_path = week_dir / "weekly_macro_diagram.png"
+    diagram_exists = diagram_path.exists()
+    diagram_version = file_version_token(diagram_path)
+    diagram_src = (
+        f"weekly_macro_diagram.png?v={diagram_version}"
+        if diagram_version
+        else "weekly_macro_diagram.png"
+    )
     diagram_html = (
-        '<img class="diagram-img" src="weekly_macro_diagram.png" alt="總經傳導圖解">'
+        f'<img class="diagram-img" src="{esc(diagram_src)}" alt="總經傳導圖解" loading="eager" decoding="async">'
         if diagram_exists
         else '<div class="muted-box">總經傳導圖解尚未產生。</div>'
     )
@@ -1128,6 +1146,110 @@ ul {{ margin:0; padding-left:22px; }}
 
 <div id="chartTooltip" class="chart-tooltip" aria-hidden="true"></div>
 <script>
+(function() {{
+  // Preserve the reading position of this weekly page within the current tab session.
+  // Covers link-outs, back/forward navigation, reloads, BFCache restores,
+  // browser tab switching, and browser/app backgrounding where the page is reloaded.
+  const storageKey = 'weeklyMacroViewState::' + window.location.pathname + window.location.search;
+  let restoringView = true;
+  let saveScheduled = false;
+
+  if ('scrollRestoration' in history) {{
+    history.scrollRestoration = 'manual';
+  }}
+
+  function readViewState() {{
+    try {{
+      const raw = sessionStorage.getItem(storageKey);
+      if (!raw) return null;
+      const state = JSON.parse(raw);
+      if (!state || !Number.isFinite(state.y)) return null;
+      return state;
+    }} catch (error) {{
+      return null;
+    }}
+  }}
+
+  function writeViewState() {{
+    if (restoringView) return;
+    try {{
+      sessionStorage.setItem(storageKey, JSON.stringify({{
+        x: Math.max(0, window.scrollX || 0),
+        y: Math.max(0, window.scrollY || 0),
+        savedAt: Date.now()
+      }}));
+    }} catch (error) {{
+      // sessionStorage can be unavailable in restricted/private contexts.
+    }}
+  }}
+
+  function scheduleSaveViewState() {{
+    if (restoringView || saveScheduled) return;
+    saveScheduled = true;
+    window.requestAnimationFrame(() => {{
+      saveScheduled = false;
+      writeViewState();
+    }});
+  }}
+
+  function restoreViewState() {{
+    const state = readViewState();
+    if (!state) {{
+      restoringView = false;
+      return;
+    }}
+
+    const apply = () => window.scrollTo(state.x || 0, state.y || 0);
+
+    // Re-apply after layout/media settling so the page remains at the
+    // same reading position even if images finish loading a little later.
+    window.requestAnimationFrame(() => {{
+      window.requestAnimationFrame(() => {{
+        apply();
+        window.setTimeout(apply, 80);
+        window.setTimeout(() => {{
+          apply();
+          restoringView = false;
+          writeViewState();
+        }}, 320);
+      }});
+    }});
+  }}
+
+  function startRestore() {{
+    restoreViewState();
+  }}
+
+  if (document.readyState === 'complete') {{
+    startRestore();
+  }} else {{
+    window.addEventListener('load', startRestore, {{ once: true }});
+  }}
+
+  window.addEventListener('pageshow', (event) => {{
+    if (event.persisted) {{
+      restoringView = true;
+      restoreViewState();
+    }}
+  }});
+
+  window.addEventListener('scroll', scheduleSaveViewState, {{ passive: true }});
+  window.addEventListener('pagehide', writeViewState);
+  window.addEventListener('beforeunload', writeViewState);
+
+  document.addEventListener('visibilitychange', () => {{
+    if (document.visibilityState === 'hidden') {{
+      writeViewState();
+    }}
+  }});
+
+  // Save immediately before following any link as an extra safeguard.
+  document.addEventListener('click', (event) => {{
+    const target = event.target && event.target.closest ? event.target.closest('a[href]') : null;
+    if (target) writeViewState();
+  }}, true);
+}})();
+
 (function() {{
   const tooltip = document.getElementById('chartTooltip');
   if (!tooltip) return;
