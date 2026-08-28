@@ -1,0 +1,297 @@
+{
+  "meta": {
+    "source": "Google News RSS",
+    "week_range": "2026-08-21 ～ 2026-08-27",
+    "sources_used": [
+      "鉅亨網",
+      "經濟日報",
+      "news.cnyes.com"
+    ],
+    "candidate_count": 30,
+    "data_quality_note": "新聞候選涵蓋了美債供需、Fed政策預期與匯率波動，與每日摘要的市場脈絡高度吻合。",
+    "analysis_window": {
+      "start_date": "2026-08-21",
+      "end_date": "2026-08-27",
+      "source": "workflow_env_or_weekly_video_source"
+    }
+  },
+  "weekly_news_theme": "美債供需失衡與Fed高利率預期的拉鋸，主導了本週跨資產的避險與流動性定價。",
+  "news_fit_to_daily_summaries": "支持",
+  "macro_drivers": [
+    "美國財政部債券回購與發債計畫引發的流動性預期",
+    "Fed官員對高利率維持更久的鷹派指引",
+    "地緣政治與貿易緊張帶來的避險需求",
+    "能源價格波動對通膨預期的邊際影響"
+  ],
+  "confirming_signals": [
+    "美債殖利率受財政部操作與Fed鷹派言論雙重影響，呈現高檔震盪",
+    "黃金在強美元與高利率環境下，仍受避險需求支撐，顯示市場對法幣信用與地緣風險的擔憂",
+    "經濟數據（如初領失業金）顯示就業市場穩健，強化Fed維持高利率的政策空間"
+  ],
+  "contradicting_signals": [
+    "美元指數在部分交易日與美債殖利率出現背離，顯示市場風險偏好改善或非美貨幣的自發性反彈",
+    "油價下行與通膨預期緩和的訊號，在部分時段壓抑了利率上行的動能"
+  ],
+  "news_based_corrections": [
+    "市場對美債供需失衡的擔憂，蓋過了Fed回購計畫的短期干預效果，成為推升長端利率的關鍵因子",
+    "亞幣在強美元環境下的韌性，反映了區域性資金避險或干預預期的修正因子"
+  ],
+  "watch_points": [
+    "傑克森霍爾年會後續Fed官員對利率路徑的具體表態",
+    "美國財政部後續發債與回購操作的實際規模與市場反應",
+    "日圓逼近關鍵關卡時，日本央行是否採取實質干預行動"
+  ],
+  "news_categories": {
+    "通膨預期": [
+      {
+        "title": "貿易戰使美加面臨通膨惡化 但兩國都已預留下台階",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBSTm4zSEFSZ09oZ3Y5LXQxZHlPSHV4b1Z4SnM0VGpJakJtSGtWQkszeXh4YTdOcmNITVpDd0tXREZpRHFpaU5aTDRyQjdMVzVQLVFqeE1zQ0ZjOFNMWkFxMXduRTdYMk15VVFadVZPN2drOHFkT3NZ0gFfQVVfeXFMTWZvVDRibDR6YVV2anpwU3dLalhIcGpic2M4c3JUYzRYTzNGNWxoTS1PejEwRmVSYkxERnNQTDVxZDZvM0gxV3l1ZWl0WHBIdGQ0TVNQczM0aUdyLWtyaEE?oc=5",
+        "published_at": "2026-08-26 12:57:41 UTC",
+        "why_it_matters": "貿易戰風險成為潛在通膨推升因子，與能源價格波動共同影響市場對通膨黏性的預期。"
+      },
+      {
+        "title": "聯準會最青睞通膨指標出爐，PCE與上月持平",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE50cC1JNU9rZjkzaTBpZlZqZTFrYy04a1l3dnh5TTAwRjNoNGZtcjE5ZHZPcGFnTkx6aTJwTnJRNGxIV09TUU9vc1U4aUJsSUU?oc=5",
+        "published_at": "2026-08-26 13:00:35 UTC",
+        "why_it_matters": "PCE數據持平顯示通膨壓力未顯著惡化，為Fed維持現行政策提供數據支持。"
+      },
+      {
+        "title": "🎯美債破40兆美元＝股市要崩？主力反而看到「不會倒的多頭」！ - 鉅亨號",
+        "source": "鉅亨號",
+        "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE5leUJZREJkNU5xZWlwLVV1a2F5NHRTRGxIOERBU0JvTWhiMGY3QnQyUGtkbE5tZEJ0dDdSb04xSDdESGdqSnh1YQ?oc=5",
+        "published_at": "2026-08-21 05:06:04 UTC",
+        "theme": "us_macro_data",
+        "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+        "score": 41.0
+      },
+      {
+        "title": "美元暴跌與資產拋售「接踵而至」？美銀警告：貝森特需壓住長端利率 - news.cnyes.com",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1pYlptUEJMS2s1Yk01bG5YRTVEa21LVVNta21fd1M2VGtUMXJKUWpaLUhhcXJLemtvTTA3VFBPTjRsbHRLOGl4ZkdOMTRYMzg?oc=5",
+        "published_at": "2026-08-24 22:41:27 UTC",
+        "theme": "us_macro_data",
+        "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+        "score": 38.0
+      },
+      {
+        "title": "美國國債突破40兆美元壓力浮現！Fed巴金警告「終將清算」 恐面臨沒人買債風險 - 鉅亨網",
+        "source": "鉅亨網",
+        "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE0xdkRGTVQ1aGt2RHpCdzZjelZ0V1pDTHRUZDc2VS1DVEdXazljUUpwUS1ET3hZZGgtTGxOcWV1bXJpODZtemVfWjZ4WQ?oc=5",
+        "published_at": "2026-08-26 00:40:04 UTC",
+        "theme": "us_macro_data",
+        "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+        "score": 37.0
+      },
+      {
+        "title": "高盛黃金多頭升至60％！金價目標上看5500美元、白銀三個月內或漲至90美元 - news.cnyes.com",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5ZdkRFYktkUDVWQ2tjb1ZpOFVPX25PSDdPVDAzMjVwbkNmSXhlMjFNMmN2WGxneG9RSFhtN0JPdEEtUnVpaVJnbU9VRXFLM3M?oc=5",
+        "published_at": "2026-08-22 07:10:03 UTC",
+        "theme": "us_macro_data",
+        "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+        "score": 36.0
+      },
+      {
+        "title": "貼文 | 股科大夫容逸燊的貼文 - 鉅亨號",
+        "source": "鉅亨號",
+        "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE84UGRaaWlLT192Ym1HeGROSlAxU0hsWVFLWlFjdVVFZ1ptanVCTWdMLWJrQlIxRDhvVkgzZ01OZHhkNUpPbktMUQ?oc=5",
+        "published_at": "2026-08-27 08:52:16 UTC",
+        "theme": "us_macro_data",
+        "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+        "score": 35.0
+      },
+      {
+        "title": "利多加持 光學鏡片、航運族群看俏 | 市場焦點 | 證券 - 經濟日報",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9UbHRiLXJOVGZfX1gzeW41SGRUODNtN0xuV3h5UGcxMGtuSFVWWk1pNDh5cW5ZMWdJeHVkVlVxc2ljck9Sb2ZNMURzSENpM0pvVTdOWTk5TWlrdw?oc=5",
+        "published_at": "2026-08-22 04:29:48 UTC",
+        "theme": "us_macro_data",
+        "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+        "score": 35.0
+      }
+    ],
+    "利率": [
+      {
+        "title": "美債已替Fed升息？投資人等華許在傑克森霍爾說清楚",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFAtVkNXajZ2VGpZVnlOUTZ5cl96QlpDS3g0Y09URVpzbWpSVmh6N244c0oxUC1qSlVkWHZnZkYxZ05XTHJDUHJGeENMOWpWSm8?oc=5",
+        "published_at": "2026-08-26 15:30:21 UTC",
+        "why_it_matters": "市場高度關注Fed官員對長端利率上行的看法，這將決定高利率維持更久的預期是否延續。"
+      },
+      {
+        "title": "美國國債突破40兆美元壓力浮現！Fed巴金警告「終將清算」 恐面臨沒人買債風險",
+        "source": "鉅亨網",
+        "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE0xdkRGTVQ1aGt2RHpCdzZjelZ0V1pDTHRUZDc2VS1DVEdXazljUUpwUS1ET3hZZGgtTGxOcWV1bXJpODZtemVfWjZ4WQ?oc=5",
+        "published_at": "2026-08-26 00:40:04 UTC",
+        "why_it_matters": "債務規模與買債風險的討論，直接影響市場對長天期美債的供需定價。"
+      },
+      {
+        "title": "美國上周初領失業金人數降至20.3萬 就業市場保持穩定",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5FZjlFWUtZMGk2Tm5OTmd0VjdoVFBTR2hiZllUcFBjZXJrTWxHZ0V0YWlDa2NQZ0g5dlpHeEJ5ZzZqVENzMkpkdlVpVy1PdW8?oc=5",
+        "published_at": "2026-08-27 14:00:11 UTC",
+        "why_it_matters": "穩健的就業數據支撐了Fed維持高利率的政策立場。"
+      },
+      {
+        "title": "达势股份 (1405.HK) 發布2026年中期業績 | 全球企業動態 | 商情 - 經濟日報",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiekFVX3lxTE5fMlRSSUJmLVF5a0hqNXE5MlQ2S3ZTcDlWalJFdkl0Q2wwcm9INi0wSkdDTjE0SHl3SXJXSktFVEw3UWpNc0FDYml5bUV0MmRPZFUzUW5QZlpLREpkc01MTFRLUHJaU1ZGT3BaUUR1dGV6VnI4UElhby1R?oc=5",
+        "published_at": "2026-08-26 11:01:12 UTC",
+        "theme": "us_macro_data",
+        "why_it_matters": "補充本週美債殖利率、Fed 或利率路徑的新聞脈絡。",
+        "score": 35.0
+      }
+    ],
+    "貨幣": [
+      {
+        "title": "美債殖利率回落帶動美元走弱 國銀估亞幣短期有撐",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9ZYnptY1pPT3FlSWg0cTRDZUlRcHZ2VnI1NjFTWFRKTHJ0bXp2TWVJREpyNk9LWUQyRFpTUnktNktWc0oxLWRSSWdacTFaMWFabkk5T0ZMYWhLUdIBX0FVX3lxTE82ZGpaV3VoWmplcEhXX28tbUlwaHgxdktTMFNDTjNHTWRwYTVpN2trb0NfVmxtdF91Tk5WYWsxVm1Yb1l4TTB1T0dGNXRMTk9zYThkN2F3WXpTTmxMWk44?oc=5",
+        "published_at": "2026-08-22 02:55:21 UTC",
+        "why_it_matters": "確認了美債殖利率與美元的連動關係，以及亞幣在美元走弱時的反應。"
+      },
+      {
+        "title": "日銀副總裁釋放鷹派訊號：將適時升息防止通膨超預期",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9xaGoxcFlYck9VamFubVFYTjBHUVZCQUlOeTUxZHBQd21TRjlnUG1iVU9ad2ZPMjhzR094NmVvV1BQWHNTaXBNX2hCQnVtLUk?oc=5",
+        "published_at": "2026-08-27 09:10:08 UTC",
+        "why_it_matters": "日本央行的政策動向是影響日圓匯率及亞幣走勢的關鍵修正因子。"
+      },
+      {
+        "title": "熱錢湧 台幣強升1.1角 - 經濟日報",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1CZC1QbU5QTTRES0hucjFtLUIyY1R6emh0cURZcnU2Si01SWc4YUgzR2dwcFpEYW9YUzAyYlAxQXFGZ0p1VjFhcXZSbFR3U0tfTlBLd09yMTAwSGdvVWlzdDZBaTVlRk5xREJMSno5bnNPX3Bjc0J30gFfQVVfeXFMUEdxaGVfZ1k0MFNMdHdiQlJ3S09BbnhGN2tFUlpReGdXNmpDejhDNzgxcUg3X3hnNFpOOGMxSER4TzBISnlxSjZac0MyUTlLY3JmZ1NFaHFpT2Y4S0ZaQ1E?oc=5",
+        "published_at": "2026-08-27 17:21:15 UTC",
+        "theme": "dollar_asia_fx",
+        "why_it_matters": "補充本週美元、亞洲貨幣或資金流向的新聞脈絡。",
+        "score": 31.0
+      },
+      {
+        "title": "日圓止貶仍難轉強 國泰世華：關鍵看日本央行9月決策 - 經濟日報",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFB5dXBvaC01VEUybF9YbkVpUkZWd2Joa094ZUVPWExtYUNIVVUyOFh6M1hTNXprT25tTkNZWC1samQ3a3VYTWRDTTZyTFVqaWpnU0o2eVJQYWg4Z9IBX0FVX3lxTE5WNGFiRmtkbW1iOFZ2YmlZa2tWc2FhbUNYbGVaaGxXdWpiTHJDaDBmQXd5WEVsS0duQk9zY3JTWUJCUjl0cE1XdS1yQjBuZE53cU5Id01LaFhnaVZQZlpr?oc=5",
+        "published_at": "2026-08-22 14:52:39 UTC",
+        "theme": "dollar_asia_fx",
+        "why_it_matters": "補充本週美元、亞洲貨幣或資金流向的新聞脈絡。",
+        "score": 31.0
+      }
+    ],
+    "其他": [
+      {
+        "title": "為何比特幣、黃金齊漲？美債回購難穩殖利率、美元走弱引爆「貶值交易」",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9DMG9VZ1dVRThmckhOVkNubEZGS2N6Q3BXVWxaWG9FR0hWOU4xMWppb2F4LWhSMmVab0ktRl9XZUF4ckNPNThJbHdXRlJCLTQ?oc=5",
+        "published_at": "2026-08-23 20:40:27 UTC",
+        "why_it_matters": "解釋了避險資產與流動性預期之間的複雜連動，反映市場對法幣信用的疑慮。"
+      },
+      {
+        "title": "國際金價連漲三周站上4600美元 反彈還是反轉？",
+        "source": "鉅亨網",
+        "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE1Ld3pCR2puWWg5YVBVX1E0VzBCN1JfLVk2RmRSNmxVQThoZ2doTUNJTzc0Z1V1R0JyTGpZb2ViZDNOQ2p6Mk9JUEVERQ?oc=5",
+        "published_at": "2026-08-24 00:00:03 UTC",
+        "why_it_matters": "金價走勢反映了市場對避險與利率路徑的綜合定價。"
+      }
+    ]
+  },
+  "top_news": [
+    {
+      "title": "美債已替Fed升息？投資人等華許在傑克森霍爾說清楚",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFAtVkNXajZ2VGpZVnlOUTZ5cl96QlpDS3g0Y09URVpzbWpSVmh6N244c0oxUC1qSlVkWHZnZkYxZ05XTHJDUHJGeENMOWpWSm8?oc=5",
+      "published_at": "2026-08-26 15:30:21 UTC",
+      "why_it_matters": "本週市場最核心的焦點，連結了美債殖利率與Fed政策預期的傳導。"
+    },
+    {
+      "title": "為何比特幣、黃金齊漲？美債回購難穩殖利率、美元走弱引爆「貶值交易」",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9DMG9VZ1dVRThmckhOVkNubEZGS2N6Q3BXVWxaWG9FR0hWOU4xMWppb2F4LWhSMmVab0ktRl9XZUF4ckNPNThJbHdXRlJCLTQ?oc=5",
+      "published_at": "2026-08-23 20:40:27 UTC",
+      "why_it_matters": "精準點出本週跨資產背離的核心邏輯，即流動性預期與避險情緒的交錯。"
+    },
+    {
+      "title": "貿易戰使美加面臨通膨惡化 但兩國都已預留下台階",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTFBSTm4zSEFSZ09oZ3Y5LXQxZHlPSHV4b1Z4SnM0VGpJakJtSGtWQkszeXh4YTdOcmNITVpDd0tXREZpRHFpaU5aTDRyQjdMVzVQLVFqeE1zQ0ZjOFNMWkFxMXduRTdYMk15VVFadVZPN2drOHFkT3NZ0gFfQVVfeXFMTWZvVDRibDR6YVV2anpwU3dLalhIcGpic2M4c3JUYzRYTzNGNWxoTS1PejEwRmVSYkxERnNQTDVxZDZvM0gxV3l1ZWl0WHBIdGQ0TVNQczM0aUdyLWtyaEE?oc=5",
+      "published_at": "2026-08-26 12:57:41 UTC",
+      "why_it_matters": "貿易戰風險成為潛在通膨推升因子，與能源價格波動共同影響市場對通膨黏性的預期。"
+    },
+    {
+      "title": "聯準會最青睞通膨指標出爐，PCE與上月持平",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE50cC1JNU9rZjkzaTBpZlZqZTFrYy04a1l3dnh5TTAwRjNoNGZtcjE5ZHZPcGFnTkx6aTJwTnJRNGxIV09TUU9vc1U4aUJsSUU?oc=5",
+      "published_at": "2026-08-26 13:00:35 UTC",
+      "why_it_matters": "PCE數據持平顯示通膨壓力未顯著惡化，為Fed維持現行政策提供數據支持。"
+    },
+    {
+      "title": "🎯美債破40兆美元＝股市要崩？主力反而看到「不會倒的多頭」！ - 鉅亨號",
+      "source": "鉅亨號",
+      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE5leUJZREJkNU5xZWlwLVV1a2F5NHRTRGxIOERBU0JvTWhiMGY3QnQyUGtkbE5tZEJ0dDdSb04xSDdESGdqSnh1YQ?oc=5",
+      "published_at": "2026-08-21 05:06:04 UTC",
+      "theme": "us_macro_data",
+      "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+      "score": 41.0
+    },
+    {
+      "title": "美元暴跌與資產拋售「接踵而至」？美銀警告：貝森特需壓住長端利率 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1pYlptUEJMS2s1Yk01bG5YRTVEa21LVVNta21fd1M2VGtUMXJKUWpaLUhhcXJLemtvTTA3VFBPTjRsbHRLOGl4ZkdOMTRYMzg?oc=5",
+      "published_at": "2026-08-24 22:41:27 UTC",
+      "theme": "us_macro_data",
+      "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+      "score": 38.0
+    },
+    {
+      "title": "美國國債突破40兆美元壓力浮現！Fed巴金警告「終將清算」 恐面臨沒人買債風險 - 鉅亨網",
+      "source": "鉅亨網",
+      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE0xdkRGTVQ1aGt2RHpCdzZjelZ0V1pDTHRUZDc2VS1DVEdXazljUUpwUS1ET3hZZGgtTGxOcWV1bXJpODZtemVfWjZ4WQ?oc=5",
+      "published_at": "2026-08-26 00:40:04 UTC",
+      "theme": "us_macro_data",
+      "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+      "score": 37.0
+    },
+    {
+      "title": "高盛黃金多頭升至60％！金價目標上看5500美元、白銀三個月內或漲至90美元 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5ZdkRFYktkUDVWQ2tjb1ZpOFVPX25PSDdPVDAzMjVwbkNmSXhlMjFNMmN2WGxneG9RSFhtN0JPdEEtUnVpaVJnbU9VRXFLM3M?oc=5",
+      "published_at": "2026-08-22 07:10:03 UTC",
+      "theme": "us_macro_data",
+      "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+      "score": 36.0
+    },
+    {
+      "title": "貼文 | 股科大夫容逸燊的貼文 - 鉅亨號",
+      "source": "鉅亨號",
+      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE84UGRaaWlLT192Ym1HeGROSlAxU0hsWVFLWlFjdVVFZ1ptanVCTWdMLWJrQlIxRDhvVkgzZ01OZHhkNUpPbktMUQ?oc=5",
+      "published_at": "2026-08-27 08:52:16 UTC",
+      "theme": "us_macro_data",
+      "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+      "score": 35.0
+    },
+    {
+      "title": "利多加持 光學鏡片、航運族群看俏 | 市場焦點 | 證券 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9UbHRiLXJOVGZfX1gzeW41SGRUODNtN0xuV3h5UGcxMGtuSFVWWk1pNDh5cW5ZMWdJeHVkVlVxc2ljck9Sb2ZNMURzSENpM0pvVTdOWTk5TWlrdw?oc=5",
+      "published_at": "2026-08-22 04:29:48 UTC",
+      "theme": "us_macro_data",
+      "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+      "score": 35.0
+    },
+    {
+      "title": "美國國債突破40兆美元壓力浮現！Fed巴金警告「終將清算」 恐面臨沒人買債風險",
+      "source": "鉅亨網",
+      "url": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE0xdkRGTVQ1aGt2RHpCdzZjelZ0V1pDTHRUZDc2VS1DVEdXazljUUpwUS1ET3hZZGgtTGxOcWV1bXJpODZtemVfWjZ4WQ?oc=5",
+      "published_at": "2026-08-26 00:40:04 UTC",
+      "why_it_matters": "債務規模與買債風險的討論，直接影響市場對長天期美債的供需定價。"
+    },
+    {
+      "title": "美國上周初領失業金人數降至20.3萬 就業市場保持穩定",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5FZjlFWUtZMGk2Tm5OTmd0VjdoVFBTR2hiZllUcFBjZXJrTWxHZ0V0YWlDa2NQZ0g5dlpHeEJ5ZzZqVENzMkpkdlVpVy1PdW8?oc=5",
+      "published_at": "2026-08-27 14:00:11 UTC",
+      "why_it_matters": "穩健的就業數據支撐了Fed維持高利率的政策立場。"
+    }
+  ],
+  "editor_note_for_forest_summary": "本週市場主線由「美債供需擔憂」與「Fed高利率預期」共同驅動。市場在財政部回購計畫的流動性預期與Fed鷹派言論間擺盪，導致美債殖利率與美元出現分歧。黃金與亞幣的走勢則反映了避險需求與區域性資金流動的修正。下週需重點觀察Fed官員在傑克森霍爾年會後的政策定調，以及美債殖利率是否能與美元重新對齊。"
+}
