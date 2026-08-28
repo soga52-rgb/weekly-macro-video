@@ -1150,7 +1150,9 @@ ul {{ margin:0; padding-left:22px; }}
   // Preserve the reading position of this weekly page within the current tab session.
   // Covers link-outs, back/forward navigation, reloads, BFCache restores,
   // browser tab switching, and browser/app backgrounding where the page is reloaded.
-  const storageKey = 'weeklyMacroViewState::' + window.location.pathname + window.location.search;
+  // Use pathname only. Query parameters such as ?v=BUILD_VERSION must not
+  // create a new storage key for the same weekly page.
+  const storageKey = 'weeklyMacroViewState::' + window.location.pathname;
   let restoringView = true;
   let saveScheduled = false;
 
