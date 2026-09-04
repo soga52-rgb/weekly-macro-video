@@ -41,11 +41,11 @@
       "direction": "down",
       "text": "美元偏弱",
       "start_value": 99.69999694824219,
-      "end_value": 99.65399932861328,
-      "change": -0.04599761962890625,
+      "end_value": 98.99,
+      "change": -0.7099969482421926,
       "start_date": "2026-08-28",
-      "end_date": "2026-09-01",
-      "points_count": 4
+      "end_date": "2026-09-03",
+      "points_count": 6
     },
     "Gold": {
       "direction": "up",
@@ -75,27 +75,27 @@
       "change": 7.529998779296875,
       "start_date": "2026-08-28",
       "end_date": "2026-09-03",
-      "points_count": 5
+      "points_count": 6
     },
     "USDJPY": {
       "direction": "down",
       "text": "美元回落，當地貨幣相對支撐",
       "start_value": 160.03799438476562,
-      "end_value": 158.75599670410156,
-      "change": -1.2819976806640625,
+      "end_value": 155.36,
+      "change": -4.677994384765611,
       "start_date": "2026-08-28",
-      "end_date": "2026-09-02",
-      "points_count": 5
+      "end_date": "2026-09-03",
+      "points_count": 6
     },
     "USDTWD": {
       "direction": "up",
       "text": "美元上行，當地貨幣承壓",
       "start_value": 31.628000259399414,
-      "end_value": 31.738000869750977,
-      "change": 0.1100006103515625,
+      "end_value": 31.695,
+      "change": 0.06699974060058622,
       "start_date": "2026-08-28",
-      "end_date": "2026-09-02",
-      "points_count": 5
+      "end_date": "2026-09-03",
+      "points_count": 6
     },
     "USDKRW": {
       "direction": "down",
