@@ -1,0 +1,253 @@
+{
+  "meta": {
+    "source": "weekly_v35_diagnosis.json + weekly_market_series.json + compact_news_facts",
+    "data_status_note": "以 V35 診斷為核心，市場數據與新聞事實輔助驗證。",
+    "week_range": "2026-08-28 ～ 2026-09-03",
+    "days_observed": "7",
+    "analysis_window": {
+      "start_date": "2026-08-28",
+      "end_date": "2026-09-03",
+      "source": "workflow_env_or_cli"
+    },
+    "lookback_window": {
+      "start": "2026-08-28",
+      "end": "2026-09-03",
+      "rule": "manual"
+    },
+    "weekly_v35_diagnosis_included": true,
+    "v35_authority_applied": true,
+    "raw_v35_diagnostic_maps_excluded": true,
+    "weekly_news_context_md_excluded": true,
+    "compact_news_item_count": 12
+  },
+  "forest_summary": {
+    "weekly_main_theme": "通膨預期多空拉鋸，但利率維持偏上",
+    "main_question": "在通膨數據與勞動市場出現降溫訊號的背景下，為何美國10年期公債殖利率仍持續上行？",
+    "one_sentence_verdict": "儘管面臨通膨硬數據降溫的修正因子，但受能源價格顯著上漲及市場對高利率維持更久的預期影響，利率端暫時更重視通膨黏性。",
+    "overall_verdict": "部分成立",
+    "narrative_arc": "本週宏觀環境呈現通膨預期的多空拉鋸。一方面，通膨硬數據與勞動市場釋出降溫訊號；另一方面，原油價格顯著上行，增加短期能源通膨壓力。在此背景下，美國10年期公債殖利率持續走高，反映利率端暫時更重視通膨黏性或高利率維持更久的可能。然而，美元指數並未隨利率走強，黃金亦未顯著承壓，顯示跨資產傳導存在分歧，市場仍在等待後續勞動數據與聯準會指引以確認方向。",
+    "why_it_matters": "利率市場的定價邏輯正在通膨降溫與通膨黏性之間拔河。若高利率維持更久的預期進一步確立，將對全球資產估值產生深遠影響；反之，若勞動市場顯著降溫成為主導，則可能扭轉當前利率上行的趨勢。"
+  },
+  "macro_storyline": {
+    "story_start": "本期初期，市場面臨通膨硬數據與綜合通膨預期下行的修正因子，同時勞動市場亦出現降溫跡象，理應為利率帶來下行壓力。",
+    "main_drivers": [
+      "原油價格顯著上行增加短期能源通膨壓力",
+      "市場對通膨黏性的擔憂蓋過數據降溫的影響",
+      "利率端定價高利率維持更久的預期"
+    ],
+    "market_transmission": "通膨黏性擔憂推升美國10年期公債殖利率，但此利率上行並未有效傳導至外匯市場，美元指數呈現偏弱震盪。同時，黃金在利率上行背景下仍微幅走高，呈現跨資產背離。",
+    "revision_or_noise": "通膨硬數據降溫、綜合通膨預期下行與勞動市場降溫訊號為本期的主要修正因子，與利率上行的主旋律形成多空拉鋸。",
+    "story_end": "最終，美國10年期公債殖利率在多空交戰中收高，確立了本週『利率維持偏上』的主線，但美元與黃金的走勢背離，暗示市場對未來宏觀路徑仍存分歧，需等待新一輪數據驗證。"
+  },
+  "macro_variables": {
+    "inflation_view": "多空拉鋸。通膨硬數據雖有降溫，但 WTI 與 Brent 原油價格顯著上漲，引發短期能源通膨壓力，市場對通膨黏性的擔憂升溫。",
+    "rate_view": "維持偏上。美國10年期公債殖利率由 4.719% 上行至 4.762%，顯示市場更傾向定價聯準會將維持高利率更長一段時間。",
+    "dollar_fx_view": "偏弱震盪。美元指數由 99.699 微降至 99.653，未隨美債殖利率上行而走強，具體原因（如利差因素、非美貨幣反彈或其他資金流因素）尚待確認。",
+    "asia_fx_view": "走勢分歧。日圓與韓元兌美元升值，台幣則微幅貶值，顯示亞洲貨幣受各自基本面（如南韓出口強勁）及資金流向影響，未呈現一致性方向。",
+    "gold_view": "微幅震盪走高。金價在美債殖利率上行的背景下未見顯著承壓，反而微幅上漲，呈現跨資產背離，具體驅動原因尚待確認。",
+    "energy_view": "顯著上行。WTI 與 Brent 原油雙雙大幅走高，成為支撐本週通膨預期與利率上行的重要推手。"
+  },
+  "evidence": {
+    "most_important_evidence": [
+      "美國10年期公債殖利率上行 (4.719% -> 4.762%)",
+      "WTI 原油上行 (83.44 -> 91.77)",
+      "Brent 原油上行 (88.29 -> 95.81)"
+    ],
+    "insufficient_evidence": [
+      "美元指數偏弱的具體驅動因素",
+      "黃金在利率上行背景下微幅走高且未承壓的確切原因"
+    ],
+    "watch_items_from_daily_summaries": [],
+    "watch_items_from_news_context": [
+      "通膨上行與下行訊號誰會成為下一期主導因子",
+      "勞動或成長降溫是否擴大",
+      "Fed 是否延續高利率維持更久的訊號"
+    ]
+  },
+  "weekly_v35_diagnosis": {
+    "dominant_driver": "通膨預期多空拉鋸，但利率維持偏上",
+    "correction_factors": [
+      "通膨硬數據降溫",
+      "綜合通膨預期下行",
+      "勞動市場降溫訊號",
+      "通膨預期多空拉鋸",
+      "市場心理與風險擔憂變化"
+    ],
+    "divergence_signal": "通膨上行與下行訊號並存，但美國10年期公債殖利率仍上行，顯示利率端暫時更重視通膨黏性或高利率維持更久。",
+    "asset_validation": [
+      "美國10年期公債殖利率上行，與推升利率因子大致一致。",
+      "WTI 或 Brent 實際上行，短期能源通膨壓力增加。",
+      "美元指數偏弱，但僅由現有資料尚無法確認是利差因素、非美貨幣反彈或其他資金流因素所致。"
+    ],
+    "next_period_watch": [
+      "通膨上行與下行訊號誰會成為下一期主導因子",
+      "勞動或成長降溫是否擴大",
+      "Fed 是否延續高利率維持更久的訊號"
+    ]
+  },
+  "video_planning": {
+    "suggested_video_title": "通膨多空拉鋸戰：為何美債殖利率無視降溫訊號持續攀升？",
+    "target_duration": "6-8 minutes",
+    "video_thesis": "本週宏觀市場呈現通膨預期的多空拉鋸。儘管勞動市場與通膨硬數據出現降溫跡象，但受油價大漲影響，市場更擔憂通膨黏性，推升美債殖利率。然而，美元與黃金的背離走勢，顯示跨資產傳導並不順暢，後續的勞動數據將成為破局關鍵。",
+    "opening_hook": "通膨數據明明在降溫，為什麼美國10年期公債殖利率卻還在往上走？市場到底在擔心什麼？",
+    "video_segments": [
+      {
+        "segment_id": "1",
+        "segment_title": "主線確立：通膨預期拉鋸與利率上行",
+        "segment_question": "本週宏觀市場的核心驅動力是什麼？",
+        "narration_focus": "解釋 V35 診斷中的主導因子，說明通膨預期多空拉鋸下，利率端為何選擇定價偏上。",
+        "main_point": "市場暫時更重視通膨黏性與高利率維持更久的預期。",
+        "estimated_duration": "90 seconds",
+        "visual_needed": true,
+        "visual_role": "呈現利率上行趨勢",
+        "visual_concept": "US10Y 殖利率走勢圖"
+      },
+      {
+        "segment_id": "2",
+        "segment_title": "推手與阻力：油價飆升對決數據降溫",
+        "segment_question": "是什麼因素在推升利率，又是什麼因素在拉扯？",
+        "narration_focus": "對比原油價格上漲帶來的通膨壓力，以及通膨硬數據與勞動市場降溫的修正因子。",
+        "main_point": "能源通膨壓力暫時蓋過硬數據降溫的影響。",
+        "estimated_duration": "120 seconds",
+        "visual_needed": true,
+        "visual_role": "對比上行與下行力量",
+        "visual_concept": "WTI 原油走勢圖搭配降溫數據的文字卡"
+      },
+      {
+        "segment_id": "3",
+        "segment_title": "跨資產背離：偏弱的美元與堅挺的黃金",
+        "segment_question": "利率上行是否帶動了所有資產的連鎖反應？",
+        "narration_focus": "探討美元指數未隨利率走強，以及黃金在利率上行下未承壓的背離現象。",
+        "main_point": "跨資產傳導存在分歧，具體驅動原因尚待確認。",
+        "estimated_duration": "120 seconds",
+        "visual_needed": true,
+        "visual_role": "展示資產走勢背離",
+        "visual_concept": "US10Y、DXY 與 Gold 的走勢對比圖"
+      },
+      {
+        "segment_id": "4",
+        "segment_title": "下週展望：非農就業與聯準會的下一步",
+        "segment_question": "接下來市場需要關注哪些關鍵訊號？",
+        "narration_focus": "帶出 V35 的下期觀察重點，結合即將公布的非農數據與官員態度。",
+        "main_point": "勞動降溫是否擴大將決定下一期的主導因子。",
+        "estimated_duration": "90 seconds",
+        "visual_needed": true,
+        "visual_role": "列出觀察重點",
+        "visual_concept": "條列式重點字卡"
+      }
+    ],
+    "visual_sequence": [
+      {
+        "visual_id": "v1",
+        "source_segment_id": "1",
+        "visual_title": "美國10年期公債殖利率走勢",
+        "visual_purpose": "確立本週利率偏上的主線",
+        "visual_concept": "折線圖顯示 US10Y 在分析區間內的上行趨勢",
+        "key_labels": [
+          "US10Y",
+          "4.719%",
+          "4.762%"
+        ],
+        "is_web_hero_candidate": false
+      },
+      {
+        "visual_id": "v2",
+        "source_segment_id": "2",
+        "visual_title": "原油價格與通膨預期拉鋸",
+        "visual_purpose": "解釋推升利率的動力來源",
+        "visual_concept": "雙軸折線圖顯示 WTI 與 Brent 的顯著上行",
+        "key_labels": [
+          "WTI",
+          "Brent",
+          "能源通膨壓力"
+        ],
+        "is_web_hero_candidate": true
+      },
+      {
+        "visual_id": "v3",
+        "source_segment_id": "3",
+        "visual_title": "跨資產背離檢視",
+        "visual_purpose": "呈現美元與黃金未跟隨典型利率邏輯",
+        "visual_concept": "標準化走勢圖對比 US10Y、DXY 與 Gold",
+        "key_labels": [
+          "US10Y 上行",
+          "DXY 偏弱",
+          "Gold 震盪"
+        ],
+        "is_web_hero_candidate": false
+      }
+    ],
+    "web_hero_visual": {
+      "source_visual_id": "v2",
+      "purpose": "展示本週推升利率與通膨預期的核心動力",
+      "reason": "原油價格的顯著上漲是本週打破通膨降溫預期、主導利率上行的最直觀證據。"
+    },
+    "six_scene_outline": [
+      {
+        "scene_id": "scene_01",
+        "scene_title": "主線確立：通膨預期拉鋸與利率上行",
+        "scene_question": "本週宏觀市場的核心驅動力是什麼？",
+        "main_point": "市場暫時更重視通膨黏性與高利率維持更久的預期。",
+        "visual_hint": "US10Y 殖利率走勢圖"
+      },
+      {
+        "scene_id": "scene_02",
+        "scene_title": "推手與阻力：油價飆升對決數據降溫",
+        "scene_question": "是什麼因素在推升利率，又是什麼因素在拉扯？",
+        "main_point": "能源通膨壓力暫時蓋過硬數據降溫的影響。",
+        "visual_hint": "WTI 原油走勢圖搭配降溫數據的文字卡"
+      },
+      {
+        "scene_id": "scene_03",
+        "scene_title": "跨資產背離：偏弱的美元與堅挺的黃金",
+        "scene_question": "利率上行是否帶動了所有資產的連鎖反應？",
+        "main_point": "跨資產傳導存在分歧，具體驅動原因尚待確認。",
+        "visual_hint": "US10Y、DXY 與 Gold 的走勢對比圖"
+      },
+      {
+        "scene_id": "scene_04",
+        "scene_title": "下週展望：非農就業與聯準會的下一步",
+        "scene_question": "接下來市場需要關注哪些關鍵訊號？",
+        "main_point": "勞動降溫是否擴大將決定下一期的主導因子。",
+        "visual_hint": "條列式重點字卡"
+      }
+    ],
+    "image_card_brief": [
+      {
+        "card_id": "card_01",
+        "headline": "美國10年期公債殖利率走勢",
+        "short_labels": [
+          "US10Y",
+          "4.719%",
+          "4.762%"
+        ],
+        "visual_concept": "折線圖顯示 US10Y 在分析區間內的上行趨勢"
+      },
+      {
+        "card_id": "card_02",
+        "headline": "原油價格與通膨預期拉鋸",
+        "short_labels": [
+          "WTI",
+          "Brent",
+          "能源通膨壓力"
+        ],
+        "visual_concept": "雙軸折線圖顯示 WTI 與 Brent 的顯著上行"
+      },
+      {
+        "card_id": "card_03",
+        "headline": "跨資產背離檢視",
+        "short_labels": [
+          "US10Y 上行",
+          "DXY 偏弱",
+          "Gold 震盪"
+        ],
+        "visual_concept": "標準化走勢圖對比 US10Y、DXY 與 Gold"
+      }
+    ],
+    "next_week_questions": [
+      "通膨上行與下行訊號誰會成為下一期主導因子？",
+      "勞動或成長降溫是否擴大？",
+      "Fed 是否延續高利率維持更久的訊號？"
+    ]
+  }
+}
