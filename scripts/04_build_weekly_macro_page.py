@@ -36,6 +36,7 @@ from typing import Any, Dict, List
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
+CHART_LOOKBACK_TRADING_DAYS = 15
 
 
 def load_json(path: Path, default: Any = None) -> Any:
@@ -607,12 +608,18 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_la
         display_unit = "TWD/JPY" if asset_key == "JPYTWD" else unit
         decimals_raw = item.get("decimals")
         decimals = decimals_raw if isinstance(decimals_raw, int) and decimals_raw >= 0 else None
-        points = filter_points_by_week(item.get("points") or [], week_start, week_end)
-        if len(points) < 2:
-            points = item.get("points") or []
 
-        clean_points = []
-        for point in points:
+        # Keep two separate windows:
+        # 1) chart_points: latest 15 trading days ending at the formal analysis-period end;
+        # 2) weekly_points: only the formal analysis window, used for direction/change/% metrics.
+        # This gives the reader short-term context without changing the weekly analytical definition.
+        raw_points = item.get("points") or []
+        chart_raw_points = filter_points_by_week(raw_points, "", week_end)
+        chart_raw_points = chart_raw_points[-CHART_LOOKBACK_TRADING_DAYS:]
+        weekly_raw_points = filter_points_by_week(raw_points, week_start, week_end)
+
+        chart_points = []
+        for point in chart_raw_points:
             if not isinstance(point, dict):
                 continue
             try:
@@ -620,14 +627,31 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_la
             except (TypeError, ValueError):
                 continue
             if math.isfinite(value):
-                clean_points.append({"date": str(point.get("date") or ""), "value": value})
+                chart_points.append({"date": str(point.get("date") or ""), "value": value})
 
-        if not clean_points:
+        weekly_points = []
+        for point in weekly_raw_points:
+            if not isinstance(point, dict):
+                continue
+            try:
+                value = float(point.get("value"))
+            except (TypeError, ValueError):
+                continue
+            if math.isfinite(value):
+                weekly_points.append({"date": str(point.get("date") or ""), "value": value})
+
+        if not chart_points:
             continue
 
-        values = [p["value"] for p in clean_points]
-        first_value = values[0]
-        latest_value = values[-1]
+        # Weekly metrics must remain anchored to the formal analysis window.
+        # Only if that window has fewer than 2 valid points do we fall back to the
+        # latest two chart points so the card can still render a usable direction.
+        metric_points = weekly_points if len(weekly_points) >= 2 else chart_points[-2:]
+        if not metric_points:
+            continue
+
+        first_value = metric_points[0]["value"]
+        latest_value = metric_points[-1]["value"]
         change = latest_value - first_value
         pct = (change / first_value * 100) if first_value else 0.0
 
@@ -662,7 +686,7 @@ def render_market_charts(market: Dict[str, Any], forest: Dict[str, Any], week_la
             </div>
             <div class="chart-change">{esc(change_sign)}{change:.{change_decimals}f}｜{change_sign}{pct:.2f}%</div>
           </div>
-          {sparkline_svg(clean_points, display_unit, decimals)}
+          {sparkline_svg(chart_points, display_unit, decimals)}
         </div>
         """
 
