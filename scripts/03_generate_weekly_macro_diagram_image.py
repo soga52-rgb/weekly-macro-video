@@ -15,7 +15,7 @@ Required env:
 - GEMINI_API_KEY
 
 Optional env:
-- GEMINI_IMAGE_MODEL, default: gemini-3.1-flash-image-preview
+- GEMINI_IMAGE_MODEL, default: gemini-3.1-flash-image
 - FORCE_REBUILD_DIAGRAM, default: false
 
 Skip logic:
@@ -36,7 +36,7 @@ from typing import Any, Dict, Optional
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 OUTPUT_WEEKLY_DIR = ROOT_DIR / "output" / "weekly"
-DEFAULT_IMAGE_MODEL = "gemini-3.1-flash-image-preview"
+DEFAULT_IMAGE_MODEL = "gemini-3.1-flash-image"
 
 
 def find_latest_week_dir() -> Path:
@@ -83,6 +83,22 @@ def find_inline_image(api_response: Dict[str, Any]) -> Optional[bytes]:
     return None
 
 
+def extract_candidate_text(api_response: Dict[str, Any]) -> str:
+    texts = []
+    candidates = api_response.get("candidates") or []
+
+    for candidate in candidates:
+        content = candidate.get("content") or {}
+        parts = content.get("parts") or []
+
+        for part in parts:
+            text = part.get("text")
+            if text:
+                texts.append(text)
+
+    return "\n".join(texts).strip()
+
+
 def call_gemini_image(prompt: str, model: str, api_key: str) -> bytes:
     endpoint = (
         "https://generativelanguage.googleapis.com/v1beta/models/"
@@ -100,6 +116,7 @@ def call_gemini_image(prompt: str, model: str, api_key: str) -> bytes:
         ],
         "generationConfig": {
             "temperature": 0.35,
+            "responseModalities": ["IMAGE"],
         },
     }
 
@@ -123,8 +140,12 @@ def call_gemini_image(prompt: str, model: str, api_key: str) -> bytes:
     image_bytes = find_inline_image(api_response)
 
     if not image_bytes:
-        preview = json.dumps(api_response, ensure_ascii=False)[:1500]
-        raise RuntimeError(f"No inline image found in Gemini response. Preview: {preview}")
+        text_preview = extract_candidate_text(api_response)
+        raw_preview = json.dumps(api_response, ensure_ascii=False)[:1500]
+        raise RuntimeError(
+            "No inline image found in Gemini response. "
+            f"Candidate text: {text_preview[:500]} | Preview: {raw_preview}"
+        )
 
     return image_bytes
 
