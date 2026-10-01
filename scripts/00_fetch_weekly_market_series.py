@@ -24,6 +24,11 @@ Optional env / CLI:
 - ANALYSIS_START_DATE / --start = YYYY-MM-DD
 - ANALYSIS_END_DATE   / --end   = YYYY-MM-DD
 
+Market fetch rule:
+- Formal analysis window remains ANALYSIS_START_DATE ～ ANALYSIS_END_DATE.
+- Market history fetch starts 35 calendar days before the formal analysis start,
+  so Step 04 can display the latest 15 trading days as visual context.
+
 Output:
 - data/weekly_market_series.json
 - output/weekly/YYYY-MM-DD/weekly_market_series.json
@@ -35,6 +40,7 @@ import os
 import urllib.error
 import urllib.parse
 import urllib.request
+from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -66,6 +72,7 @@ SOURCE_KEY_ALIASES = {
 
 DERIVED_KEY = "JPYTWD"
 DERIVED_FORMULA = "USDTWD / USDJPY"
+MARKET_LOOKBACK_CALENDAR_DAYS = 35
 
 
 def save_json(path: Path, data: Dict[str, Any]) -> None:
@@ -93,6 +100,41 @@ def add_query_params(url: str, params: Dict[str, str]) -> str:
             query[key] = value
 
     return urllib.parse.urlunparse(parsed._replace(query=urllib.parse.urlencode(query)))
+
+
+def shift_iso_date(date_text: str, days: int) -> str:
+    """Shift YYYY-MM-DD by calendar days. Return empty string if input is blank."""
+    date_text = (date_text or "").strip()
+    if not date_text:
+        return ""
+    try:
+        value = datetime.strptime(date_text, "%Y-%m-%d")
+    except ValueError as exc:
+        raise ValueError(f"Invalid date format: {date_text}. Expected YYYY-MM-DD.") from exc
+    return (value + timedelta(days=days)).strftime("%Y-%m-%d")
+
+
+def resolve_market_fetch_window(analysis_start: str, analysis_end: str) -> Tuple[str, str]:
+    """
+    Build a longer market-data window for chart context while keeping the formal
+    analysis window unchanged downstream.
+
+    Rule:
+    - If analysis_start exists, fetch from 35 calendar days before analysis_start.
+    - Else if only analysis_end exists, fetch from 35 calendar days before analysis_end.
+    - End date remains the formal analysis_end.
+    """
+    analysis_start = (analysis_start or "").strip()
+    analysis_end = (analysis_end or "").strip()
+
+    if analysis_start:
+        fetch_start = shift_iso_date(analysis_start, -MARKET_LOOKBACK_CALENDAR_DAYS)
+    elif analysis_end:
+        fetch_start = shift_iso_date(analysis_end, -MARKET_LOOKBACK_CALENDAR_DAYS)
+    else:
+        fetch_start = ""
+
+    return fetch_start, analysis_end
 
 
 def fetch_json(url: str) -> Dict[str, Any]:
@@ -374,14 +416,23 @@ def main() -> None:
 
     week_dir = resolve_week_dir(args.week_dir)
 
+    fetch_start, fetch_end = resolve_market_fetch_window(args.start, args.end)
+
     fetch_url = add_query_params(url, {
-        "start": args.start,
-        "end": args.end,
+        "start": fetch_start,
+        "end": fetch_end,
     })
 
     print("[INFO] Fetching weekly market series from Apps Script endpoint")
     if args.start or args.end:
-        print(f"[INFO] Requested market series window: {args.start or '(default start)'} ～ {args.end or '(default end)'}")
+        print(
+            f"[INFO] Formal analysis window: "
+            f"{args.start or '(default start)'} ～ {args.end or '(default end)'}"
+        )
+        print(
+            f"[INFO] Market fetch window for 15-day visual context: "
+            f"{fetch_start or '(endpoint default start)'} ～ {fetch_end or '(endpoint default end)'}"
+        )
     print(f"[INFO] Output week dir: {week_dir}")
 
     data = fetch_json(fetch_url)
@@ -395,6 +446,12 @@ def main() -> None:
         "start_date": args.start,
         "end_date": args.end,
         "source": "workflow_env_or_cli",
+    }
+    meta["market_fetch_window"] = {
+        "start_date": fetch_start,
+        "end_date": fetch_end,
+        "lookback_calendar_days": MARKET_LOOKBACK_CALENDAR_DAYS,
+        "purpose": "15_trading_day_visual_context",
     }
 
     # Build display-only cross-rate data before saving the market payload.
