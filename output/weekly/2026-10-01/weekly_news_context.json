@@ -1,0 +1,286 @@
+{
+  "meta": {
+    "source": "Google News RSS",
+    "week_range": "2026-09-25 ～ 2026-10-01",
+    "sources_used": [
+      "經濟日報",
+      "news.cnyes.com",
+      "鉅亨網",
+      "UDN",
+      "anuenews.cnyes.com"
+    ],
+    "candidate_count": 20,
+    "data_quality_note": "候選新聞涵蓋美國勞動市場、通膨指標、聯準會利率預期、能源價格與貴金屬動態，能有效對照並驗證本週每日總經主線與傳導機制。",
+    "analysis_window": {
+      "start_date": "2026-09-25",
+      "end_date": "2026-10-01",
+      "source": "workflow_env_or_weekly_video_source"
+    }
+  },
+  "weekly_news_theme": "高利率預期與就業韌性支撐長端殖利率，通膨放緩訊號與能源壓力交織帶來定價分歧",
+  "news_fit_to_daily_summaries": "支持",
+  "macro_drivers": [
+    "勞動市場展現韌性（職缺低裁員、小非農增長），支撐美國經濟承受力與利率維持高檔的敘事",
+    "美伊地緣局勢與能源價格走高，抵消部分整體通膨放緩效果，強化通膨黏性疑慮",
+    "美債長端殖利率升破5%關卡後引發資產重定價，強美元與實質利率對亞洲貨幣與資產配置形成壓力",
+    "聯準會內部官員談話與部分和緩的通膨指標，促使市場在升息終點定價上產生修正與分歧"
+  ],
+  "confirming_signals": [
+    "新聞報導美伊僵局推升油價與美債殖利率，呼應 daily summaries 中能源價格推升短期通膨預期與利率黏性的傳導",
+    "就業數據（小非農、職缺與低裁員）支撐高利率維持更久預期，佐證美債10年期殖利率站穩5.2%以上的基本面背景",
+    "紐約匯市報導指出油價與美債殖利率走勢牽動美元表現，呼應利差優勢對非美貨幣帶來的貶值壓力",
+    "長天期美債殖利率維持高檔壓抑風險資產與投等債市場，符合債市賣壓與期限溢價攀升的主線"
+  ],
+  "contradicting_signals": [
+    "8月通膨指標與PCE增幅較預期和緩，以及Fed官員釋出按兵不動或不急於升息訊號，與殖利率大幅攀升的走勢呈現背離",
+    "黃金在美債殖利率居高不下與強美元環境下仍展現抗跌甚至反彈，顯示避險買盤與地緣溢價蓋過純粹實質利率壓制"
+  ],
+  "news_based_corrections": [
+    "通膨數據雖有放緩跡象，但市場反應顯示焦點已轉向經濟韌性與能源二次通膨風險，使得溫和通膨未能立即扭轉美債賣壓",
+    "美債殖利率在衝高至波段高點後迎來逢低承接買盤，新聞顯示市場正等待非農報告作為殖利率升勢是否暫歇的關鍵判斷點"
+  ],
+  "watch_points": [
+    "即將公布的美國官方非農就業報告與薪資增速，是否印證勞動市場降溫並緩解長端殖利率壓力",
+    "原油與柴油等能源價格是否持續居於高位，進而實質推升後續核心通膨與消費者物價預期",
+    "聯準會官員在後續談話中對10月政策路徑的定調，以及高利率環境下國際金融流動性與亞幣干預訊號"
+  ],
+  "news_categories": {
+    "通膨預期": [
+      {
+        "title": "Fed可能忽視了柴油價格風險？美國柴油價格飆升83%恐推升核心通膨 - news.cnyes.com",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5GU2Zoc05BM1ByREYxaFNJZmwtbVlFSTkxMjlGS1B5WDI0cHF2Qk1KZTVLTGhiTXkwMFRYWU9xLUVaYlB4eGduamFiTUpuQnc?oc=5",
+        "published_at": "2026-09-26 08:10:04 UTC",
+        "why_it_matters": "顯示能源副產品成本上升可能加劇核心通膨黏性，為油價走高推升通膨預期提供實質微觀支撐。"
+      },
+      {
+        "title": "美財長貝森特籲Fed保持「開放態度」：AI生產率紅利或緩解通膨壓力 - 鉅亨網",
+        "source": "鉅亨網",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5mVnRDODduRVQxYVpVNjJ0VFV5bm1fSWxoYm81ZW1CM3ppMk16Mm9XR3MwdFhSZDNIdXcwOXhyeHJ1Z2o4RjQ2MC03aW9WeVE?oc=5",
+        "published_at": "2026-09-28 10:16:16 UTC",
+        "why_it_matters": "反映官方對於生產力提升抑制長期通膨的觀點，作為高利率環境下的潛在反向修正因子。"
+      },
+      {
+        "title": "法國義大利9月通膨率飆升 歐洲央行再度升息機率增 - 經濟日報",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9JN0h0VGQtZ0Q0eGNCcVZ2ZVNZX2dabXFUQ2x5aDJvcDBoN2FzRzRFT1BxZ09fQUJiSU8zSzdPOW9udHhmaGJBMGgyS3gwemQyb2VjaXZZRkM3Z9IBX0FVX3lxTFBhY3dEaWg4ZkZUMFpYRmlqcklvSGpMS25RQmtKV0NFWVpaYWducnpMYms0Z0NNdnhaNFlveTFhTmgtZVpETWxobWlYM1BxYlJUX0NwX2RCYzZ0Qk5laW9V?oc=5",
+        "published_at": "2026-09-30 14:30:33 UTC",
+        "why_it_matters": "歐洲通膨壓力與財政疑慮交織，加劇跨國債券市場波動與美元的相對避險地位。"
+      },
+      {
+        "title": "美通膨指標增幅 比預期和緩 Fed本月可望按兵不動 - 經濟日報",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9iOVVoOV90RWxUcmoyQVlrRno4X19odWlVUm1SV0dUeFFvLTdtdDdWUzFmc3B3TmdNX1RsUFo3Rk85clhhS2lHUEhsd01iSXRVZFJ0VzNLR0dYUdIBX0FVX3lxTE1HRUp4ckMtWUl1SV84OGFaaWNkVHB3X0lUalZHUm1vaVJvSXlWdG1VZS1iWE91OTR0OXVJc1l2RTFlZ1lFUXJTSXc0emp3aFpfeGtmbFM4OFFLYVM5MS1n?oc=5",
+        "published_at": "2026-09-30 18:56:20 UTC",
+        "why_it_matters": "提供通膨增幅趨緩的佐證，解釋市場對聯準會短期內暫停升息的預期基礎。"
+      },
+      {
+        "title": "本週操盤筆記：美國PCE物價指數、非農就業報告及美光財報 - news.cnyes.com",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1vN0gzdG5rOHhsSGFjQVktSVcybU5IVUNJYkVvMHVoSTVrQUhGdmRBUXV2Z2NrN21lUDRvUUVzaUdURXR3M2ZqR2Fjc3VhRXM?oc=5",
+        "published_at": "2026-09-27 13:50:02 UTC",
+        "theme": "us_macro_data",
+        "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+        "score": 40.0
+      },
+      {
+        "title": "股市教練 - 鉅亨號",
+        "source": "鉅亨號",
+        "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE9QMGFjWjRyWGNWZ1o4QXdYRmlheExhTGhqZEpWWVZDblk2aWxzWnAyaDBTWTdWYWRSaW5ZYWcxelBsSWFpUFZyWg?oc=5",
+        "published_at": "2026-09-29 05:52:56 UTC",
+        "theme": "us_macro_data",
+        "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+        "score": 37.0
+      },
+      {
+        "title": "10月聯準會升不升息？花旗：就業數據難改預期、關鍵看下一份CPI - news.cnyes.com",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9RRFM5NmZ6SmhoOXQ3QktCU2JOempjYTZ5Y1JONm1oRl9pdjZUMkgtWFliZWV4UFFRQTFRcXBxb3ZGcTdITlZuMDdyenMyaDA?oc=5",
+        "published_at": "2026-09-29 04:06:17 UTC",
+        "theme": "us_macro_data",
+        "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+        "score": 36.0
+      },
+      {
+        "title": "澳洲升息1碼 今年來第四度放鷹 可能有續集 - 經濟日報",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE0xSnRYbWpmZHZtQnB4LWtPVWRkaThRek9DSHdSdW01VmlZMmZVMmtJaUFKMHNHRmN4WmJUZ0xpb01pdHNaLWg4MmNZdTNUZy15NVdLM3drRm5mUdIBX0FVX3lxTE83bWdFV01WNDRJcjY1d2ZQdkkwendBc19Rd2NxTlI5RXpFdGpJVk9zZVRJWjRLT1A0TVVBQTR0MVhJWVBacUw0WW42MWhrdHRyTXFLRC0ybHN0U0tuMWpV?oc=5",
+        "published_at": "2026-09-29 18:20:28 UTC",
+        "theme": "us_macro_data",
+        "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+        "score": 35.0
+      }
+    ],
+    "利率": [
+      {
+        "title": "美國9月標普PMI超預期，為何美債拋售潮和連續升息預期依然無法降溫美國市場，「經濟過熱」有何危害？ - 鉅亨號",
+        "source": "鉅亨號",
+        "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE55QmwtODdaSW56NXNGcG14NnJyNW1oOU5tWkNQR2lfN3k1aTVhSFJoQ2RsN0tNUHhqNkJhMmZFbk1WMEstT0l1aw?oc=5",
+        "published_at": "2026-09-27 03:50:55 UTC",
+        "why_it_matters": "展現經濟景氣韌性推升美債拋售與長端殖利率走高的邏輯，呼應本週主線。"
+      },
+      {
+        "title": "高盛談升息：市場押得太狠？聯準會或只需再加一次息 - 鉅亨網",
+        "source": "鉅亨網",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE95clZrLXBJcFlYNkNZOFYzNHFpYmJOc2tISzc1VlBvUFpHRDNkcjdra0VJT2ZVWVI2MFBpR1JWdkNKS0t0Q3BNcU5rTlM2cGs?oc=5",
+        "published_at": "2026-09-27 13:45:40 UTC",
+        "why_it_matters": "顯示投行機構認為市場對緊縮終點定價過激，屬於高利率主線中的修正因子。"
+      },
+      {
+        "title": "美國8月職缺降至5個月低點！低裁員撐住就業 Fed仍有升息空間 - news.cnyes.com",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE96RDZsanpkQmZ1ZVZUQmR6b1k5R1dzRkRod2VGazNHZFFvUmtyZzlWeExiNVZkQnk3b0VJQlltNDJtLWU5bktCQXV3dkFxYVE?oc=5",
+        "published_at": "2026-09-29 15:30:06 UTC",
+        "why_it_matters": "說明就業市場結構雖見鬆動但低裁員率支撐底氣，為聯準會維持緊縮立場提供空間。"
+      },
+      {
+        "title": "小非農先報喜！9月就業新增9萬人 優於市場預期 - anuenews.cnyes.com",
+        "source": "anuenews.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE42cW9RM1ZWNFdVR1VTZGx0TThONkU0ektzUHlQdlZ3d2Z6YUNLNXEybzNXYk5aa0VYdlpXMFRHZHFRU1YtWmlxVEhYTzNBWE9wU0pTTA?oc=5",
+        "published_at": "2026-09-30 12:23:18 UTC",
+        "why_it_matters": "領先就業數據優於預期，強化市場對高利率環境維持更久的信心並支撐殖利率高檔。"
+      },
+      {
+        "title": "Fed三把手喊「不急」 美10月升息機率摔回五成 - news.cnyes.com",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBQV2xvaGRVdWt4Ym9SOV9lZ3dsckpGMEdoUHQ2VkRJclV0SUNNbkZkQVV2Qjdpd0RpQTZNdk9BQkhvUGNWMS1hVWNDMlRpOGs?oc=5",
+        "published_at": "2026-09-30 07:48:57 UTC",
+        "why_it_matters": "官員偏中性談話壓制了連續升息的極端預期，成為限制殖利率無上限推升的煞車因子。"
+      },
+      {
+        "title": "美債殖利率升勢可能踩煞車嗎？緊盯周五美國就業報告 - 經濟日報",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBIT2N2dlY4Vy1aR0tsSTVDTWN3WWNMNHRyNVJma3VDanBlVjlWblpNQlFDNFFUM2Q1RDVHcmFFeGlmQlhtSXJEYlh0by1LUlg3a3N4VWkxWXVQd9IBX0FVX3lxTE5JSkFDaDIyM2VzV2Nqbndjb1pYMHZTdkhhRE1wbXpNQkV4Mm5lTjREWjlqMWRQNHVSbTJad0dxU1NuVk9rY2drUjJuWDJiOW9TZ1U4QjZua05YMm9Lb0Fv?oc=5",
+        "published_at": "2026-10-01 15:24:39 UTC",
+        "why_it_matters": "凸顯長端利率升破5.2%後市場湧現逢低承接買盤與觀望氛圍，焦點轉向非農報告驗證。"
+      }
+    ],
+    "貨幣": [
+      {
+        "title": "〈紐約匯市〉美元持平 美伊僵局推升油價與美債殖利率 - news.cnyes.com",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBtUlJFejZhX1M3OGpKRnJaSzFQcENjRlhjdXZQdEphano1UmNRamJKODVQX2ZTMUUxcEdQaWR6V0o4UkVWcWt2dGx6bWxtenc?oc=5",
+        "published_at": "2026-09-28 21:38:21 UTC",
+        "why_it_matters": "直接佐證油價、美債殖利率與美元走勢之間的傳導互動，反映地緣局勢對外匯市場的影響。"
+      }
+    ],
+    "其他": [
+      {
+        "title": "今年來第四度放鷹澳洲升息1碼可能有續集| 全球財經| 全球 - UDN",
+        "source": "UDN",
+        "url": "https://news.google.com/rss/articles/CBMiUEFVX3lxTFBPNEdrM2tvMGowUmJpc0hKM2dsV0hxZnJWeHp0a2ItaUlpR2tlcTgta3UzYVF0VnZQQ2liWHZ1dmdfdzVOWW9VcEs2UjdVZU9Q?oc=5",
+        "published_at": "2026-09-29 18:20:28 UTC",
+        "why_it_matters": "反映非美主要央行面臨通膨黏性時維持鷹派緊縮立場，凸顯全球高利率環境的普遍性。"
+      },
+      {
+        "title": "台銀：金市第4季迎傳統旺季 若升息降溫可望挑戰4400美元 - 經濟日報",
+        "source": "經濟日報",
+        "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFBFOExzODdvVGEwOGpNRUhyeUNfZjdvQkstRzZIWUFmUDFwYnY1S2QtMllYSmFOUzhyNTRwUGVIZDhIekJaUTg3ZVZqcjNPVlBxY2d1bVEyVTFick0yR0lj0gFfQVVfeXFMUEU4THM4N29UYTA4ak1FSHJ5Q19mN29CSy1HNkhZQWZQMXBidjVLZC0yWVhKYU5TOHI1NHBQZUhkOEh6QlpRODdlVmpyM09WUHFjZ3VtUTJVMWJyTTJHSWM?oc=5",
+        "published_at": "2026-10-01 08:04:23 UTC",
+        "why_it_matters": "說明黃金在實質利率偏高環境下的定價預期，若後續緊縮降溫將釋放資產上行潛力。"
+      },
+      {
+        "title": "〈貴金屬盤後〉黃金小漲 Fed升息預期降溫但美債殖利率仍高 - news.cnyes.com",
+        "source": "news.cnyes.com",
+        "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1pVVUtVk5hV0l3d3haS0h3ejRCR1BDTFZNdlVRV3VtZzVBYmladllNNUhlLVg3VDM5bW90emlzcUFDYkotNVc4RVZiU29YOGM?oc=5",
+        "published_at": "2026-10-01 22:47:00 UTC",
+        "why_it_matters": "呈現金價在升息降溫預期與高殖利率牽制之間的拉鋸，印證週報提及的避險需求與實質利率博弈。"
+      }
+    ]
+  },
+  "top_news": [
+    {
+      "title": "美債殖利率升勢可能踩煞車嗎？緊盯周五美國就業報告 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBIT2N2dlY4Vy1aR0tsSTVDTWN3WWNMNHRyNVJma3VDanBlVjlWblpNQlFDNFFUM2Q1RDVHcmFFeGlmQlhtSXJEYlh0by1LUlg3a3N4VWkxWXVQd9IBX0FVX3lxTE5JSkFDaDIyM2VzV2Nqbndjb1pYMHZTdkhhRE1wbXpNQkV4Mm5lTjREWjlqMWRQNHVSbTJad0dxU1NuVk9rY2drUjJuWDJiOW9TZ1U4QjZua05YMm9Lb0Fv?oc=5",
+      "published_at": "2026-10-01 15:24:39 UTC",
+      "why_it_matters": "直接扣合本週美債10年期殖利率升破5.2%後的關鍵心理關卡，點出市場對後續就業數據的驗證需求。"
+    },
+    {
+      "title": "〈紐約匯市〉美元持平 美伊僵局推升油價與美債殖利率 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTFBtUlJFejZhX1M3OGpKRnJaSzFQcENjRlhjdXZQdEphano1UmNRamJKODVQX2ZTMUUxcEdQaWR6V0o4UkVWcWt2dGx6bWxtenc?oc=5",
+      "published_at": "2026-09-28 21:38:21 UTC",
+      "why_it_matters": "完整呈現「地緣政治推升油價 → 債券殖利率上行 → 美元獲支撐」的宏觀傳導路徑。"
+    },
+    {
+      "title": "美通膨指標增幅 比預期和緩 Fed本月可望按兵不動 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9iOVVoOV90RWxUcmoyQVlrRno4X19odWlVUm1SV0dUeFFvLTdtdDdWUzFmc3B3TmdNX1RsUFo3Rk85clhhS2lHUEhsd01iSXRVZFJ0VzNLR0dYUdIBX0FVX3lxTE1HRUp4ckMtWUl1SV84OGFaaWNkVHB3X0lUalZHUm1vaVJvSXlWdG1VZS1iWE91OTR0OXVJc1l2RTFlZ1lFUXJTSXc0emp3aFpfeGtmbFM4OFFLYVM5MS1n?oc=5",
+      "published_at": "2026-09-30 18:56:20 UTC",
+      "why_it_matters": "為本週高利率維持更久主線提供重要的反向修正因子，解釋為何殖利率在衝高後未持續失控上揚。"
+    },
+    {
+      "title": "小非農先報喜！9月就業新增9萬人 優於市場預期 - anuenews.cnyes.com",
+      "source": "anuenews.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE42cW9RM1ZWNFdVR1VTZGx0TThONkU0ektzUHlQdlZ3d2Z6YUNLNXEybzNXYk5aa0VYdlpXMFRHZHFRU1YtWmlxVEhYTzNBWE9wU0pTTA?oc=5",
+      "published_at": "2026-09-30 12:23:18 UTC",
+      "why_it_matters": "顯示勞動市場仍具備基本承載力，為長端利率維持高檔提供基本面依據。"
+    },
+    {
+      "title": "〈貴金屬盤後〉黃金小漲 Fed升息預期降溫但美債殖利率仍高 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1pVVUtVk5hV0l3d3haS0h3ejRCR1BDTFZNdlVRV3VtZzVBYmladllNNUhlLVg3VDM5bW90emlzcUFDYkotNVc4RVZiU29YOGM?oc=5",
+      "published_at": "2026-10-01 22:47:00 UTC",
+      "why_it_matters": "佐證黃金與美元殖利率之間的背離現象，顯示避險情緒與升息放緩預期支撐金價偏強走勢。"
+    },
+    {
+      "title": "Fed可能忽視了柴油價格風險？美國柴油價格飆升83%恐推升核心通膨 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5GU2Zoc05BM1ByREYxaFNJZmwtbVlFSTkxMjlGS1B5WDI0cHF2Qk1KZTVLTGhiTXkwMFRYWU9xLUVaYlB4eGduamFiTUpuQnc?oc=5",
+      "published_at": "2026-09-26 08:10:04 UTC",
+      "why_it_matters": "顯示能源副產品成本上升可能加劇核心通膨黏性，為油價走高推升通膨預期提供實質微觀支撐。"
+    },
+    {
+      "title": "美財長貝森特籲Fed保持「開放態度」：AI生產率紅利或緩解通膨壓力 - 鉅亨網",
+      "source": "鉅亨網",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5mVnRDODduRVQxYVpVNjJ0VFV5bm1fSWxoYm81ZW1CM3ppMk16Mm9XR3MwdFhSZDNIdXcwOXhyeHJ1Z2o4RjQ2MC03aW9WeVE?oc=5",
+      "published_at": "2026-09-28 10:16:16 UTC",
+      "why_it_matters": "反映官方對於生產力提升抑制長期通膨的觀點，作為高利率環境下的潛在反向修正因子。"
+    },
+    {
+      "title": "法國義大利9月通膨率飆升 歐洲央行再度升息機率增 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE9JN0h0VGQtZ0Q0eGNCcVZ2ZVNZX2dabXFUQ2x5aDJvcDBoN2FzRzRFT1BxZ09fQUJiSU8zSzdPOW9udHhmaGJBMGgyS3gwemQyb2VjaXZZRkM3Z9IBX0FVX3lxTFBhY3dEaWg4ZkZUMFpYRmlqcklvSGpMS25RQmtKV0NFWVpaYWducnpMYms0Z0NNdnhaNFlveTFhTmgtZVpETWxobWlYM1BxYlJUX0NwX2RCYzZ0Qk5laW9V?oc=5",
+      "published_at": "2026-09-30 14:30:33 UTC",
+      "why_it_matters": "歐洲通膨壓力與財政疑慮交織，加劇跨國債券市場波動與美元的相對避險地位。"
+    },
+    {
+      "title": "本週操盤筆記：美國PCE物價指數、非農就業報告及美光財報 - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE1vN0gzdG5rOHhsSGFjQVktSVcybU5IVUNJYkVvMHVoSTVrQUhGdmRBUXV2Z2NrN21lUDRvUUVzaUdURXR3M2ZqR2Fjc3VhRXM?oc=5",
+      "published_at": "2026-09-27 13:50:02 UTC",
+      "theme": "us_macro_data",
+      "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+      "score": 40.0
+    },
+    {
+      "title": "股市教練 - 鉅亨號",
+      "source": "鉅亨號",
+      "url": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE9QMGFjWjRyWGNWZ1o4QXdYRmlheExhTGhqZEpWWVZDblk2aWxzWnAyaDBTWTdWYWRSaW5ZYWcxelBsSWFpUFZyWg?oc=5",
+      "published_at": "2026-09-29 05:52:56 UTC",
+      "theme": "us_macro_data",
+      "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+      "score": 37.0
+    },
+    {
+      "title": "10月聯準會升不升息？花旗：就業數據難改預期、關鍵看下一份CPI - news.cnyes.com",
+      "source": "news.cnyes.com",
+      "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE9RRFM5NmZ6SmhoOXQ3QktCU2JOempjYTZ5Y1JONm1oRl9pdjZUMkgtWFliZWV4UFFRQTFRcXBxb3ZGcTdITlZuMDdyenMyaDA?oc=5",
+      "published_at": "2026-09-29 04:06:17 UTC",
+      "theme": "us_macro_data",
+      "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+      "score": 36.0
+    },
+    {
+      "title": "澳洲升息1碼 今年來第四度放鷹 可能有續集 - 經濟日報",
+      "source": "經濟日報",
+      "url": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE0xSnRYbWpmZHZtQnB4LWtPVWRkaThRek9DSHdSdW01VmlZMmZVMmtJaUFKMHNHRmN4WmJUZ0xpb01pdHNaLWg4MmNZdTNUZy15NVdLM3drRm5mUdIBX0FVX3lxTE83bWdFV01WNDRJcjY1d2ZQdkkwendBc19Rd2NxTlI5RXpFdGpJVk9zZVRJWjRLT1A0TVVBQTR0MVhJWVBacUw0WW42MWhrdHRyTXFLRC0ybHN0U0tuMWpV?oc=5",
+      "published_at": "2026-09-29 18:20:28 UTC",
+      "theme": "us_macro_data",
+      "why_it_matters": "補充本週物價、能源或通膨預期的新聞脈絡。",
+      "score": 35.0
+    }
+  ],
+  "editor_note_for_forest_summary": "本週新聞脈絡高度支持 daily summaries 的主線演進。前半週由就業韌性與地緣政治推升油價，帶動美國10年期公債殖利率衝破5%並向5.3%靠攏，強化高利率維持更久的預期，進而推升美元並對亞洲貨幣形成外溢壓力。然而，後半週新聞揭示兩大修正因子：一是通膨增幅呈現和緩跡象且Fed官員釋出按兵不動指引，二是高殖利率吸引債市逢低買盤進場，使美債升勢在週末前出現收斂。此消彼長下，黃金展現避險買盤支撐，未單純受實質利率壓制。整體傳導路徑成立，但受到通膨降溫與避險需求的局部修正，下週市場焦點將完全取決於官方非農數據是否進一步確認基本面降溫。"
+}
