@@ -32,7 +32,7 @@ jobs:
       TODAY_DAILY_SOURCE_URL: ${{ secrets.TODAY_DAILY_SOURCE_URL }}
       WEEKLY_MARKET_SERIES_URL: ${{ secrets.WEEKLY_MARKET_SERIES_URL }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      GEMINI_MODEL: gemini-3.1-flash-lite
+      GEMINI_MODEL: gemini-3.8-flash
       GEMINI_ANALYSIS_MODEL: gemini-3.1-pro-preview
       WEEKLY_NEWS_MAX_ITEMS: "30"
       TARGET_WEEK_END_DATE: ${{ inputs.target_week_end_date }}
