@@ -45,7 +45,6 @@ jobs:
           TARGET_SCENE_ID: ${{ github.event.inputs.target_scene }}
           PREVIEW_ONLY_FIRST: ${{ github.event.inputs.preview_only_first }}
           FORCE_REBUILD_VISUALS: ${{ github.event.inputs.force_rebuild }}
-          IMAGE_TEMPERATURE: "0.55"
           GEMINI_IMAGE_RETRIES: "2"
         run: |
           python scripts/83_generate_story_visual_images.py
