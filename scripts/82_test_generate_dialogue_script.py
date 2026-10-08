@@ -637,8 +637,6 @@ def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: 
     payload = {
         "contents": [{"role": "user", "parts": [{"text": system_prompt.strip() + "\n\n" + user_prompt.strip()}]}],
         "generationConfig": {
-            "temperature": 0.55,
-            "topP": 0.90,
             "maxOutputTokens": 24576,
             "responseMimeType": "application/json",
         },

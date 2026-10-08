@@ -26,7 +26,6 @@ Environment variables / CLI:
 - FORCE_REBUILD_VISUALS: true/false.
 - GEMINI_API_KEY: required.
 - GEMINI_IMAGE_MODEL: optional, default gemini-3.1-flash-image-preview.
-- IMAGE_TEMPERATURE: optional, default 0.55.
 - GEMINI_IMAGE_RETRIES: optional, default 2.
 """
 
@@ -56,7 +55,6 @@ MANIFEST_FILENAME = "story_visual_images_manifest_v9.json"
 PROMPTS_FILENAME = "story_visual_prompts_v9.json"
 
 DEFAULT_IMAGE_MODEL = "gemini-3.1-flash-image-preview"
-DEFAULT_TEMPERATURE = 0.55
 DEFAULT_RETRIES = 2
 
 
@@ -368,7 +366,7 @@ def find_inline_image_and_text(api_response: Dict[str, Any]) -> Tuple[Optional[b
     return None, mime_type, note_text
 
 
-def call_gemini_image(prompt: str, model: str, api_key: str, temperature: float) -> Tuple[bytes, str, Optional[str]]:
+def call_gemini_image(prompt: str, model: str, api_key: str) -> Tuple[bytes, str, Optional[str]]:
     endpoint = (
         "https://generativelanguage.googleapis.com/v1beta/models/"
         + urllib.parse.quote(model)
@@ -387,8 +385,6 @@ def call_gemini_image(prompt: str, model: str, api_key: str, temperature: float)
             }
         ],
         "generationConfig": {
-            "temperature": temperature,
-            "topP": 0.9,
             "responseModalities": ["TEXT", "IMAGE"],
         },
     }
@@ -423,14 +419,13 @@ def call_gemini_image_with_retry(
     model: str,
     api_key: str,
     retries: int,
-    temperature: float,
 ) -> Tuple[bytes, str, Optional[str]]:
     last_error: Optional[Exception] = None
     for attempt in range(1, retries + 1):
         try:
             if attempt > 1:
                 print(f"[INFO] Retry image generation attempt {attempt}/{retries}")
-            return call_gemini_image(prompt, model, api_key, temperature)
+            return call_gemini_image(prompt, model, api_key)
         except Exception as exc:
             last_error = exc
             print(f"[WARN] Image generation attempt {attempt}/{retries} failed: {exc}")
@@ -461,7 +456,6 @@ def main() -> None:
         raise EnvironmentError("Missing GEMINI_API_KEY.")
 
     model = os.getenv("GEMINI_IMAGE_MODEL", DEFAULT_IMAGE_MODEL).strip() or DEFAULT_IMAGE_MODEL
-    temperature = float(os.getenv("IMAGE_TEMPERATURE", str(DEFAULT_TEMPERATURE)))
     retries = int(os.getenv("GEMINI_IMAGE_RETRIES", str(DEFAULT_RETRIES)))
     force_rebuild = args.force or env_bool("FORCE_REBUILD_VISUALS", "false")
     preview_only_first = bool(args.preview_only_first)
@@ -507,7 +501,6 @@ def main() -> None:
     print(f"[INFO] Week dir: {week_dir}")
     print(f"[INFO] Dialogue input: {dialogue_path}")
     print(f"[INFO] Image model: {model}")
-    print(f"[INFO] Temperature: {temperature}")
     print(f"[INFO] Retries: {retries}")
     print(f"[INFO] Force rebuild: {force_rebuild}")
     print(f"[INFO] Preview only first: {preview_only_first}")
@@ -543,7 +536,6 @@ def main() -> None:
                     model=model,
                     api_key=api_key,
                     retries=retries,
-                    temperature=temperature,
                 )
 
                 actual_ext = extension_from_mime(mime_type)

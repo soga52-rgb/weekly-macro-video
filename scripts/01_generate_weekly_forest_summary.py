@@ -767,8 +767,6 @@ def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: 
         "systemInstruction": {"parts": [{"text": system_prompt}]},
         "contents": [{"role": "user", "parts": [{"text": user_prompt}]}],
         "generationConfig": {
-            "temperature": 0.55,
-            "topP": 0.85,
             "responseMimeType": "application/json",
         },
     }
