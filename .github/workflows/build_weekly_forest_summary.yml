@@ -33,7 +33,7 @@ jobs:
       WEEKLY_MARKET_SERIES_URL: ${{ secrets.WEEKLY_MARKET_SERIES_URL }}
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       GEMINI_MODEL: gemini-3.8-flash
-      GEMINI_ANALYSIS_MODEL: gemini-3.1-pro-preview
+      GEMINI_ANALYSIS_MODEL: gemini-4-argon
       WEEKLY_NEWS_MAX_ITEMS: "30"
       TARGET_WEEK_END_DATE: ${{ inputs.target_week_end_date }}
       ANALYSIS_START_DATE: ${{ inputs.analysis_start_date }}

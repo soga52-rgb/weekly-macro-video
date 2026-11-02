@@ -1,0 +1,130 @@
+name: Compare weekly Gemini 3.1 Pro and 4 Argon
+
+on:
+  workflow_dispatch:
+    inputs:
+      week_end:
+        description: "Existing weekly folder with V35 diagnosis (YYYY-MM-DD)"
+        required: true
+        type: string
+        default: "2026-10-01"
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      WEEK_END: ${{ inputs.week_end }}
+      GEMINI_USAGE_REPORT: "1"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Generate and compare isolated weekly summaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          SRC="output/weekly/$WEEK_END"
+          test -n "$GEMINI_API_KEY" || { echo "Missing GEMINI_API_KEY"; exit 1; }
+          for input_file in weekly_v35_diagnosis.json weekly_market_series.json weekly_news_context.json; do
+            test -s "$SRC/$input_file" || { echo "Missing or empty $SRC/$input_file"; exit 1; }
+          done
+
+          ROOT="$RUNNER_TEMP/gemini-argon-comparison"
+          for label in baseline argon; do
+            mkdir -p "$ROOT/$label"
+            for input_file in weekly_v35_diagnosis.json weekly_market_series.json weekly_news_context.json; do
+              cp "$SRC/$input_file" "$ROOT/$label/$input_file"
+            done
+            if [ -f "$SRC/weekly_source_text.md" ]; then
+              cp "$SRC/weekly_source_text.md" "$ROOT/$label/"
+            fi
+          done
+
+          start=$SECONDS
+          GEMINI_ANALYSIS_MODEL=gemini-3.1-pro-preview \
+            python scripts/01_generate_weekly_forest_summary.py --week-dir "$ROOT/baseline" \
+            2>&1 | tee "$ROOT/baseline_run.log"
+          baseline_seconds=$((SECONDS - start))
+
+          start=$SECONDS
+          GEMINI_ANALYSIS_MODEL=gemini-4-argon \
+            python scripts/01_generate_weekly_forest_summary.py --week-dir "$ROOT/argon" \
+            2>&1 | tee "$ROOT/argon_run.log"
+          argon_seconds=$((SECONDS - start))
+
+          python - "$ROOT" "$WEEK_END" "$baseline_seconds" "$argon_seconds" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          root = Path(sys.argv[1])
+          week_end = sys.argv[2]
+          runtimes = {"baseline": int(sys.argv[3]), "argon": int(sys.argv[4])}
+          outputs = {
+              name: json.loads((root / name / "weekly_forest_summary.json").read_text(encoding="utf-8"))
+              for name in ("baseline", "argon")
+          }
+
+          def usage_from_log(name):
+              prefix = "GEMINI_USAGE_METADATA="
+              log = (root / (name + "_run.log")).read_text(encoding="utf-8")
+              entries = [line.split(prefix, 1)[1] for line in log.splitlines() if prefix in line]
+              return json.loads(entries[-1]) if entries else {}
+
+          def field(name, key):
+              return (outputs[name].get("forest_summary") or {}).get(key, "")
+
+          checks = {}
+          for name, result in outputs.items():
+              diagnosis = result.get("weekly_v35_diagnosis") or {}
+              forest = result.get("forest_summary") or {}
+              checks[name] = {
+                  "v35_present": bool(diagnosis.get("dominant_driver")),
+                  "v35_applied": result.get("meta", {}).get("v35_authority_applied") is True,
+                  "dominant_driver_locked": forest.get("weekly_main_theme") == diagnosis.get("dominant_driver"),
+                  "summary_present": bool(forest.get("one_sentence_verdict")),
+              }
+
+          checks["shared_input"] = {
+              "same_v35": outputs["baseline"].get("weekly_v35_diagnosis") == outputs["argon"].get("weekly_v35_diagnosis"),
+              "same_analysis_window": outputs["baseline"].get("meta", {}).get("analysis_window")
+                  == outputs["argon"].get("meta", {}).get("analysis_window"),
+          }
+          report = {
+              "week_end": week_end,
+              "model_ids": {"baseline": "gemini-3.1-pro-preview", "argon": "gemini-4-argon"},
+              "elapsed_seconds": runtimes,
+              "usage_metadata": {name: usage_from_log(name) for name in outputs},
+              "checks": checks,
+              "side_by_side": {
+                  key: {name: field(name, key) for name in outputs}
+                  for key in ("weekly_main_theme", "main_question", "one_sentence_verdict", "overall_verdict")
+              },
+              "note": "Qualitative accuracy and billing costs need manual review; no changes to published weekly outputs.",
+          }
+          (root / "comparison.json").write_text(
+              json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8"
+          )
+          print(json.dumps(report, ensure_ascii=False, indent=2))
+          if not all(all(group.values()) for group in checks.values()):
+              raise SystemExit("A/B comparison V35 or summary validation failed")
+          PY
+
+      - name: Upload A/B comparison outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: weekly-gemini-argon-comparison
+          path: ${{ runner.temp }}/gemini-argon-comparison/
+          if-no-files-found: warn

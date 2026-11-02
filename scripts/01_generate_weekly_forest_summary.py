@@ -779,7 +779,7 @@ def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: 
     )
 
     try:
-        with urllib.request.urlopen(request, timeout=240) as response:
+        with urllib.request.urlopen(request, timeout=900 if model == "gemini-4-argon" else 240) as response:
             raw = response.read().decode("utf-8")
     except urllib.error.HTTPError as exc:
         detail = exc.read().decode("utf-8", errors="replace")
@@ -788,6 +788,8 @@ def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: 
         raise RuntimeError(f"Gemini forest summary URLError: {exc}") from exc
 
     api_response = json.loads(raw)
+    if os.getenv("GEMINI_USAGE_REPORT") == "1":
+        print("GEMINI_USAGE_METADATA=" + json.dumps(api_response.get("usageMetadata", {})))
 
     try:
         text = api_response["candidates"][0]["content"]["parts"][0]["text"]
