@@ -788,6 +788,8 @@ def call_gemini_json(system_prompt: str, user_prompt: str, model: str, api_key: 
         raise RuntimeError(f"Gemini forest summary URLError: {exc}") from exc
 
     api_response = json.loads(raw)
+    if os.getenv("GEMINI_USAGE_REPORT") == "1":
+        print("GEMINI_USAGE_METADATA=" + json.dumps(api_response.get("usageMetadata", {})))
 
     try:
         text = api_response["candidates"][0]["content"]["parts"][0]["text"]
