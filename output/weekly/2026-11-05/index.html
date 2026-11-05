@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>本週總經摘要</title>
+<style>
+:root {
+  --bg:#f7f7f4;
+  --paper:#fffdf7;
+  --glass:rgba(255,255,255,.62);
+  --glass-strong:rgba(255,255,255,.78);
+  --ink:#111827;
+  --navy:#0f2a44;
+  --navy-soft:#eaf0f7;
+  --muted:#64748b;
+  --line:rgba(209,213,219,.72);
+  --accent:#f59e0b;
+  --accent-dark:#8a4b08;
+  --accent-soft:#fff3d1;
+  --shadow:0 18px 45px rgba(31,41,55,.075);
+  --soft-shadow:0 10px 26px rgba(31,41,55,.055);
+  --radius:24px;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  background:
+    radial-gradient(circle at 50% 0%, rgba(255,216,130,.22) 0, rgba(255,216,130,0) 26%),
+    radial-gradient(circle at 90% 12%, rgba(234,240,247,.72) 0, rgba(234,240,247,0) 34%),
+    linear-gradient(180deg,#fbfaf7 0%,#eef1f5 100%);
+  color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;
+  line-height:1.65;
+}
+.wrap { max-width:1180px; margin:0 auto; padding:38px 18px 72px; }
+.header { display:block; width:100%; text-align:center; margin-bottom:24px; }
+.header-main { text-align:center; }
+.title { color:var(--navy); font-size:42px; line-height:1.2; font-weight:900; margin:0 0 8px; }
+.week-range { color:#64748b; font-size:16px; font-weight:700; text-align:center; margin-top:2px; }
+.meta { text-align:right; color:var(--muted); font-size:14px; white-space:nowrap; margin-top:8px; }
+.section {
+  background:var(--glass);
+  border:1px solid rgba(255,255,255,.68);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  padding:26px;
+  margin:20px 0;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+.section h2 {
+  color:var(--navy);
+  margin:0 0 18px;
+  font-size:28px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.section h2::before {
+  content:"";
+  width:10px;
+  height:28px;
+  border-radius:999px;
+  background:var(--accent);
+  display:inline-block;
+}
+.hero {
+  background:linear-gradient(135deg,rgba(255,247,220,.82) 0%,rgba(255,255,255,.72) 58%,rgba(248,250,252,.72) 100%);
+  border:1px solid rgba(234,214,162,.72);
+}
+.diagram-img {
+  width:100%;
+  display:block;
+  border-radius:22px;
+  border:1px solid rgba(234,223,191,.8);
+  background:#fffdf7;
+  box-shadow:var(--soft-shadow);
+}
+.summary-grid { display:grid; grid-template-columns:1.1fr .9fr; gap:16px; }
+.big-text { font-size:24px; font-weight:800; }
+.question {
+  font-size:18px;
+  background:linear-gradient(135deg,rgba(255,243,209,.88) 0%,rgba(255,250,240,.86) 100%);
+  border:1px solid rgba(243,210,139,.72);
+  border-radius:20px;
+  padding:18px;
+  color:#7c2d12;
+  font-weight:900;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.5);
+}
+.charts { display:flex; flex-direction:column; gap:16px; }
+.chart-row {
+  display:grid;
+  gap:16px;
+  align-items:stretch;
+  width:100%;
+}
+.chart-row-1 {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.chart-row-2 {
+  grid-template-columns:repeat(3,minmax(0,1fr));
+}
+.chart-row-fx {
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  width:100%;
+  margin:0;
+}
+.chart-card,.slide-card,.news-category,.news-mini-card {
+  background:var(--glass-strong);
+  border:1px solid rgba(255,255,255,.72);
+  border-radius:24px;
+  box-shadow:var(--soft-shadow);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.chart-card {
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  height:100%;
+  min-height:238px;
+  padding:18px;
+  overflow:hidden;
+  min-width:0;
+  border-top:4px solid rgba(245,158,11,.78);
+  background:linear-gradient(180deg,rgba(250,252,255,.90) 0%,rgba(255,255,255,.78) 38%);
+}
+.chart-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; min-height:42px; margin-bottom:8px; }
+.asset-pill {
+  color:var(--navy);
+  display:inline-flex;
+  align-items:baseline;
+  min-height:34px;
+  padding:5px 12px;
+  border-radius:999px;
+  font-weight:900;
+  font-size:17px;
+  border:1px solid rgba(234,223,191,.9);
+  background:rgba(255,247,237,.86);
+  color:var(--accent-dark);
+  gap:8px;
+  flex-wrap:wrap;
+}
+.asset-pill-unit {
+  font-size:11px;
+  font-weight:800;
+  color:#6b7280;
+  letter-spacing:0;
+  line-height:1;
+}
+.asset-pill::before {
+  content:"";
+  width:8px;
+  height:8px;
+  border-radius:999px;
+  background:var(--accent);
+  display:inline-block;
+}
+.chart-value-row { display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; min-height:48px; margin-top:8px; }
+.chart-latest { color:var(--navy); line-height:1.15; letter-spacing:.01em; display:flex; align-items:baseline; gap:7px; flex-wrap:wrap; }
+.chart-latest-value { font-size:34px; font-weight:850; }
+.chart-change { color:var(--muted); font-size:15px; white-space:nowrap; }
+.chart-direction { font-size:14px; font-weight:900; border-radius:999px; padding:4px 12px; background:#f3f4f6; white-space:nowrap; border:1px solid transparent; }
+.chart-direction.up { color:#7c2d12; background:#fff3d1; border-color:#f3d28b; }
+.chart-direction.down { color:#374151; background:#f3f4f6; border-color:#e5e7eb; }
+.chart-direction.flat { color:#4b5563; background:#f3f4f6; border-color:#e5e7eb; }
+.gf-chart-wrap { width:100%; margin:auto 0 10px; padding-top:16px; overflow:hidden; border-radius:16px; }
+.sparkline { width:100%; height:88px; display:block; color:#334155; }
+.spark-node { pointer-events:auto; }
+.spark-dot { fill:#fff; stroke:currentColor; stroke-width:2.1; vector-effect:non-scaling-stroke; cursor:pointer; opacity:.95; }
+.spark-dot:hover,.spark-dot:focus { fill:var(--accent); stroke:var(--accent); outline:none; }
+.chart-tooltip {
+  position:fixed;
+  z-index:9999;
+  display:none;
+  max-width:min(260px, calc(100vw - 28px));
+  padding:8px 11px;
+  border-radius:999px;
+  color:#fff;
+  background:rgba(15,42,68,.92);
+  box-shadow:0 12px 28px rgba(15,23,42,.18);
+  font-size:13px;
+  font-weight:800;
+  pointer-events:none;
+  transform:translate(-50%,-120%);
+}
+.chart-tooltip.show { display:block; }
+.market-section {
+  position:relative;
+  padding-bottom:54px;
+}
+.section-source {
+  position:absolute;
+  right:26px;
+  bottom:18px;
+  color:var(--muted);
+  font-size:14px;
+  white-space:nowrap;
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(209,213,219,.55);
+  border-radius:999px;
+  padding:5px 11px;
+}
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+ul { margin:0; padding-left:22px; }
+.section li {
+  margin:8px 0;
+  padding:9px 11px;
+  background:rgba(255,250,240,.62);
+  border:1px solid rgba(231,196,106,.35);
+  border-radius:13px;
+}
+.video-shell {
+  width:100%;
+  border-radius:24px;
+  overflow:hidden;
+  background:#0f172a;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.72);
+}
+.weekly-video {
+  width:100%;
+  display:block;
+  aspect-ratio:16/9;
+  background:#0f172a;
+}
+.video-note {
+  color:var(--muted);
+  font-size:14px;
+  margin-top:12px;
+}
+.news-masonry {
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:16px;
+  align-items:stretch;
+}
+.news-category { padding:16px; background:rgba(255,255,255,.56); min-width:0; }
+.news-category-head {
+  margin-bottom:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}
+.news-count {
+  flex:0 0 auto;
+  color:var(--accent-dark);
+  background:rgba(255,243,209,.88);
+  border:1px solid rgba(243,210,139,.72);
+  border-radius:999px;
+  padding:5px 10px;
+  font-size:13px;
+  font-weight:900;
+}
+.category-pill {
+  color:var(--navy);
+  display:inline-flex;
+  align-items:center;
+  padding:6px 13px;
+  border-radius:999px;
+  background:rgba(255,243,209,.9);
+  border:1px solid rgba(243,210,139,.75);
+  color:var(--accent-dark);
+  font-size:18px;
+  font-weight:900;
+}
+.news-category-desc { color:var(--muted); font-size:14px; margin-top:8px; }
+.news-category-cards {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:12px;
+}
+.news-mini-card {
+  display:block;
+  position:relative;
+  min-height:148px;
+  padding:14px;
+  text-decoration:none;
+  color:inherit;
+  transition:.16s ease;
+}
+.news-mini-card:hover {
+  transform:translateY(-2px);
+  box-shadow:0 14px 30px rgba(31,41,55,.10);
+}
+.news-mini-top { display:flex; justify-content:space-between; gap:8px; align-items:center; margin-bottom:8px; }
+.news-source { color:#9a6200; font-size:13px; font-weight:850; }
+.open-mark { color:#9a6200; font-size:15px; font-weight:900; opacity:.75; }
+.news-title {
+  color:var(--navy);
+  font-size:16px;
+  font-weight:900;
+  line-height:1.38;
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.news-why {
+  color:#4b5563;
+  font-size:13.5px;
+  line-height:1.45;
+  margin-top:8px;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+}
+.muted-box { background:rgba(249,250,251,.72); border:1px dashed #d1d5db; color:#6b7280; border-radius:16px; padding:16px; }
+.muted-box.compact { padding:12px; font-size:14px; }
+.slides { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.slide-card { padding:16px; text-decoration:none; color:inherit; }
+.slide-id { color:#9a6200; font-size:12px; font-weight:900; letter-spacing:.08em; text-transform:uppercase; }
+.slide-title { font-size:18px; font-weight:900; margin:4px 0; }
+.slide-question { color:#7c2d12; font-weight:800; font-size:14px; margin-bottom:8px; }
+.slide-point { color:#4b5563; font-size:14px; }
+.footer { color:var(--muted); font-size:13px; padding:20px 2px; }
+@media(max-width:1000px) {
+  .chart-row-1,.chart-row-2,.chart-row-fx {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  .slides { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .news-category { grid-column:span 6 !important; }
+  .news-category-cards { grid-template-columns:1fr; }
+}
+@media(max-width:760px) {
+  .header,.summary-grid,.two-col { display:block; }
+  .meta {
+    text-align:right !important;
+    white-space:normal;
+    margin-top:8px;
+  }
+  .week-range { font-size:15px; }
+  .chart-row-1,.chart-row-2,.chart-row-fx,.slides { grid-template-columns:1fr; }
+  .news-masonry { grid-template-columns:1fr; }
+  .news-category { grid-column:span 1 !important; }
+  .title { font-size:34px; }
+}
+
+/* V13 header/source placement overrides */
+.section-source {
+  text-align:right;
+}
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="header">
+    <div class="header-main">
+      <div class="title">本週總經摘要</div>
+      <div class="week-range">2026-10-30 ～ 2026-11-05</div>
+    </div>
+    <div class="meta">產生日期：2026-11-05</div>
+  </header>
+
+  
+  <section class="section section-video">
+    <h2>本週總經影片</h2>
+    <div class="muted-box">本週影片尚未產生，完成 86 合成後會自動顯示於此。</div>
+  </section>
+
+
+  <section class="section hero">
+    <h2>總經傳導圖解</h2>
+    <img class="diagram-img" src="weekly_macro_diagram.png?v=337953e753a1" alt="總經傳導圖解" loading="eager" decoding="async">
+  </section>
+
+  <section class="section section-highlight">
+    <h2>重點摘要</h2>
+    <div class="summary-grid">
+      <div class="big-text">通膨預期多空拉鋸</div>
+      <div class="question">當通膨上行與下行的訊號同時並存，為何美國10年期公債殖利率與國際油價雙雙回落？</div>
+    </div>
+    <p>在 2026-10-30 至 2026-11-05 的分析區間內，全球宏觀市場的核心焦點在於「通膨預期多空拉鋸」。一方面，新聞背景中出現美國職缺增加、民間就業維持穩定及部分地區物價壓力持續等訊號；但另一方面，美伊和平談判訊號帶動地緣風險降溫，使 WTI 與 Brent 原油價格顯著回落，配合通膨硬數據降溫與綜合通膨預期下行等修正因子，促使市場心理與風險擔憂出現變化。在多空訊號交錯之下，最關鍵的跨資產訊號是美國10年期公債殖利率由 4.93% 回落至 4.84%，與國際油價走低的方向一致，同時美元指數溫和偏弱、黃金走高。這反映出市場正重新評估通膨修正與成長降溫的權重，但由於推升與壓低利率的因素同時存在，下一階段的主導方向仍需進一步驗證。</p>
+  </section>
+
+  <section class="section section-market market-section">
+    <h2>本週市場訊號與走勢</h2>
+    <div class="charts"><div class="chart-row chart-row-1">
+        <div class="chart-card chart-theme-energy" data-asset="WTI">
+          <div class="chart-head">
+            <div class="asset-pill">西德州原油<span class="asset-pill-unit">USD/bbl</span></div>
+            <div class="chart-direction down">下行</div>
+          </div>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">91.200</span>
+            </div>
+            <div class="chart-change">-12.920｜-12.41%</div>
+          </div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 360 88" preserveAspectRatio="none">
+        <polyline points="16.0,35.3 39.4,36.4 62.9,36.9 86.3,32.2 109.7,15.4 133.1,21.7 156.6,23.1 180.0,28.8 203.4,20.3 226.9,17.3 250.3,12.0 273.7,43.3 297.1,41.3 320.6,76.0 344.0,63.4" fill="none" stroke="currentColor" stroke-width="2.6" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="16.0" cy="35.3" r="3.6" data-tooltip="2026-10-19｜98.270 USD/bbl" tabindex="0"></circle><title>2026-10-19｜98.270 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="39.4" cy="36.4" r="3.6" data-tooltip="2026-10-20｜97.980 USD/bbl" tabindex="0"></circle><title>2026-10-20｜97.980 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="62.9" cy="36.9" r="3.6" data-tooltip="2026-10-21｜97.870 USD/bbl" tabindex="0"></circle><title>2026-10-21｜97.870 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="86.3" cy="32.2" r="3.6" data-tooltip="2026-10-22｜99.050 USD/bbl" tabindex="0"></circle><title>2026-10-22｜99.050 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="109.7" cy="15.4" r="3.6" data-tooltip="2026-10-23｜103.27 USD/bbl" tabindex="0"></circle><title>2026-10-23｜103.27 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="133.1" cy="21.7" r="3.6" data-tooltip="2026-10-25｜101.69 USD/bbl" tabindex="0"></circle><title>2026-10-25｜101.69 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="156.6" cy="23.1" r="3.6" data-tooltip="2026-10-26｜101.34 USD/bbl" tabindex="0"></circle><title>2026-10-26｜101.34 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="180.0" cy="28.8" r="3.6" data-tooltip="2026-10-27｜99.900 USD/bbl" tabindex="0"></circle><title>2026-10-27｜99.900 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="203.4" cy="20.3" r="3.6" data-tooltip="2026-10-28｜102.03 USD/bbl" tabindex="0"></circle><title>2026-10-28｜102.03 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="226.9" cy="17.3" r="3.6" data-tooltip="2026-10-29｜102.79 USD/bbl" tabindex="0"></circle><title>2026-10-29｜102.79 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="250.3" cy="12.0" r="3.6" data-tooltip="2026-10-30｜104.12 USD/bbl" tabindex="0"></circle><title>2026-10-30｜104.12 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="273.7" cy="43.3" r="3.6" data-tooltip="2026-11-02｜96.260 USD/bbl" tabindex="0"></circle><title>2026-11-02｜96.260 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="297.1" cy="41.3" r="3.6" data-tooltip="2026-11-03｜96.760 USD/bbl" tabindex="0"></circle><title>2026-11-03｜96.760 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="320.6" cy="76.0" r="3.6" data-tooltip="2026-11-04｜88.040 USD/bbl" tabindex="0"></circle><title>2026-11-04｜88.040 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="344.0" cy="63.4" r="3.6" data-tooltip="2026-11-05｜91.200 USD/bbl" tabindex="0"></circle><title>2026-11-05｜91.200 USD/bbl</title></g>
+      </svg>
+    </div>
+    
+        </div>
+        
+
+        <div class="chart-card chart-theme-energy" data-asset="Brent">
+          <div class="chart-head">
+            <div class="asset-pill">布蘭特原油<span class="asset-pill-unit">USD/bbl</span></div>
+            <div class="chart-direction down">下行</div>
+          </div>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">99.250</span>
+            </div>
+            <div class="chart-change">-14.180｜-12.50%</div>
+          </div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 360 88" preserveAspectRatio="none">
+        <polyline points="16.0,33.6 39.4,34.7 62.9,31.8 86.3,23.0 109.7,12.0 133.1,30.7 156.6,30.8 180.0,33.1 203.4,29.6 226.9,27.2 250.3,21.5 273.7,48.2 297.1,47.6 320.6,76.0 344.0,62.6" fill="none" stroke="currentColor" stroke-width="2.6" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="16.0" cy="33.6" r="3.6" data-tooltip="2026-10-19｜109.26 USD/bbl" tabindex="0"></circle><title>2026-10-19｜109.26 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="39.4" cy="34.7" r="3.6" data-tooltip="2026-10-20｜108.90 USD/bbl" tabindex="0"></circle><title>2026-10-20｜108.90 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="62.9" cy="31.8" r="3.6" data-tooltip="2026-10-21｜109.88 USD/bbl" tabindex="0"></circle><title>2026-10-21｜109.88 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="86.3" cy="23.0" r="3.6" data-tooltip="2026-10-22｜112.92 USD/bbl" tabindex="0"></circle><title>2026-10-22｜112.92 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="109.7" cy="12.0" r="3.6" data-tooltip="2026-10-23｜116.72 USD/bbl" tabindex="0"></circle><title>2026-10-23｜116.72 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="133.1" cy="30.7" r="3.6" data-tooltip="2026-10-25｜110.28 USD/bbl" tabindex="0"></circle><title>2026-10-25｜110.28 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="156.6" cy="30.8" r="3.6" data-tooltip="2026-10-26｜110.24 USD/bbl" tabindex="0"></circle><title>2026-10-26｜110.24 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="180.0" cy="33.1" r="3.6" data-tooltip="2026-10-27｜109.44 USD/bbl" tabindex="0"></circle><title>2026-10-27｜109.44 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="203.4" cy="29.6" r="3.6" data-tooltip="2026-10-28｜110.63 USD/bbl" tabindex="0"></circle><title>2026-10-28｜110.63 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="226.9" cy="27.2" r="3.6" data-tooltip="2026-10-29｜111.46 USD/bbl" tabindex="0"></circle><title>2026-10-29｜111.46 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="250.3" cy="21.5" r="3.6" data-tooltip="2026-10-30｜113.43 USD/bbl" tabindex="0"></circle><title>2026-10-30｜113.43 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="273.7" cy="48.2" r="3.6" data-tooltip="2026-11-02｜104.23 USD/bbl" tabindex="0"></circle><title>2026-11-02｜104.23 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="297.1" cy="47.6" r="3.6" data-tooltip="2026-11-03｜104.42 USD/bbl" tabindex="0"></circle><title>2026-11-03｜104.42 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="320.6" cy="76.0" r="3.6" data-tooltip="2026-11-04｜94.630 USD/bbl" tabindex="0"></circle><title>2026-11-04｜94.630 USD/bbl</title></g><g class="spark-node"><circle class="spark-dot" cx="344.0" cy="62.6" r="3.6" data-tooltip="2026-11-05｜99.250 USD/bbl" tabindex="0"></circle><title>2026-11-05｜99.250 USD/bbl</title></g>
+      </svg>
+    </div>
+    
+        </div>
+        </div>
+<div class="chart-row chart-row-2">
+        <div class="chart-card chart-theme-rate" data-asset="US10Y">
+          <div class="chart-head">
+            <div class="asset-pill">美國10年期公債殖利率<span class="asset-pill-unit">%</span></div>
+            <div class="chart-direction down">下行</div>
+          </div>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">4.837</span>
+            </div>
+            <div class="chart-change">-0.092｜-1.87%</div>
+          </div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 360 88" preserveAspectRatio="none">
+        <polyline points="16.0,21.9 39.4,14.1 62.9,18.0 86.3,12.0 109.7,52.0 133.1,44.7 156.6,45.1 180.0,43.7 203.4,32.9 226.9,44.5 250.3,56.9 273.7,64.2 297.1,52.2 320.6,64.2 344.0,76.0" fill="none" stroke="currentColor" stroke-width="2.6" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="16.0" cy="21.9" r="3.6" data-tooltip="2026-10-16｜5.098 %" tabindex="0"></circle><title>2026-10-16｜5.098 %</title></g><g class="spark-node"><circle class="spark-dot" cx="39.4" cy="14.1" r="3.6" data-tooltip="2026-10-19｜5.136 %" tabindex="0"></circle><title>2026-10-19｜5.136 %</title></g><g class="spark-node"><circle class="spark-dot" cx="62.9" cy="18.0" r="3.6" data-tooltip="2026-10-20｜5.117 %" tabindex="0"></circle><title>2026-10-20｜5.117 %</title></g><g class="spark-node"><circle class="spark-dot" cx="86.3" cy="12.0" r="3.6" data-tooltip="2026-10-21｜5.146 %" tabindex="0"></circle><title>2026-10-21｜5.146 %</title></g><g class="spark-node"><circle class="spark-dot" cx="109.7" cy="52.0" r="3.6" data-tooltip="2026-10-22｜4.953 %" tabindex="0"></circle><title>2026-10-22｜4.953 %</title></g><g class="spark-node"><circle class="spark-dot" cx="133.1" cy="44.7" r="3.6" data-tooltip="2026-10-23｜4.988 %" tabindex="0"></circle><title>2026-10-23｜4.988 %</title></g><g class="spark-node"><circle class="spark-dot" cx="156.6" cy="45.1" r="3.6" data-tooltip="2026-10-26｜4.986 %" tabindex="0"></circle><title>2026-10-26｜4.986 %</title></g><g class="spark-node"><circle class="spark-dot" cx="180.0" cy="43.7" r="3.6" data-tooltip="2026-10-27｜4.993 %" tabindex="0"></circle><title>2026-10-27｜4.993 %</title></g><g class="spark-node"><circle class="spark-dot" cx="203.4" cy="32.9" r="3.6" data-tooltip="2026-10-28｜5.045 %" tabindex="0"></circle><title>2026-10-28｜5.045 %</title></g><g class="spark-node"><circle class="spark-dot" cx="226.9" cy="44.5" r="3.6" data-tooltip="2026-10-29｜4.989 %" tabindex="0"></circle><title>2026-10-29｜4.989 %</title></g><g class="spark-node"><circle class="spark-dot" cx="250.3" cy="56.9" r="3.6" data-tooltip="2026-10-30｜4.929 %" tabindex="0"></circle><title>2026-10-30｜4.929 %</title></g><g class="spark-node"><circle class="spark-dot" cx="273.7" cy="64.2" r="3.6" data-tooltip="2026-11-02｜4.894 %" tabindex="0"></circle><title>2026-11-02｜4.894 %</title></g><g class="spark-node"><circle class="spark-dot" cx="297.1" cy="52.2" r="3.6" data-tooltip="2026-11-03｜4.952 %" tabindex="0"></circle><title>2026-11-03｜4.952 %</title></g><g class="spark-node"><circle class="spark-dot" cx="320.6" cy="64.2" r="3.6" data-tooltip="2026-11-04｜4.894 %" tabindex="0"></circle><title>2026-11-04｜4.894 %</title></g><g class="spark-node"><circle class="spark-dot" cx="344.0" cy="76.0" r="3.6" data-tooltip="2026-11-05｜4.837 %" tabindex="0"></circle><title>2026-11-05｜4.837 %</title></g>
+      </svg>
+    </div>
+    
+        </div>
+        
+
+        <div class="chart-card chart-theme-dollar" data-asset="DXY">
+          <div class="chart-head">
+            <div class="asset-pill">美元指數</div>
+            <div class="chart-direction down">下行</div>
+          </div>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">101.59</span>
+            </div>
+            <div class="chart-change">-0.292｜-0.29%</div>
+          </div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 360 88" preserveAspectRatio="none">
+        <polyline points="16.0,52.9 39.4,41.9 62.9,60.4 86.3,63.4 109.7,69.1 133.1,54.3 156.6,37.6 180.0,12.0 203.4,28.0 226.9,51.0 250.3,49.0 273.7,56.9 297.1,49.8 320.6,76.0 344.0,71.3" fill="none" stroke="currentColor" stroke-width="2.6" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="16.0" cy="52.9" r="3.6" data-tooltip="2026-10-18｜101.83" tabindex="0"></circle><title>2026-10-18｜101.83</title></g><g class="spark-node"><circle class="spark-dot" cx="39.4" cy="41.9" r="3.6" data-tooltip="2026-10-19｜101.97" tabindex="0"></circle><title>2026-10-19｜101.97</title></g><g class="spark-node"><circle class="spark-dot" cx="62.9" cy="60.4" r="3.6" data-tooltip="2026-10-20｜101.73" tabindex="0"></circle><title>2026-10-20｜101.73</title></g><g class="spark-node"><circle class="spark-dot" cx="86.3" cy="63.4" r="3.6" data-tooltip="2026-10-21｜101.69" tabindex="0"></circle><title>2026-10-21｜101.69</title></g><g class="spark-node"><circle class="spark-dot" cx="109.7" cy="69.1" r="3.6" data-tooltip="2026-10-22｜101.62" tabindex="0"></circle><title>2026-10-22｜101.62</title></g><g class="spark-node"><circle class="spark-dot" cx="133.1" cy="54.3" r="3.6" data-tooltip="2026-10-23｜101.81" tabindex="0"></circle><title>2026-10-23｜101.81</title></g><g class="spark-node"><circle class="spark-dot" cx="156.6" cy="37.6" r="3.6" data-tooltip="2026-10-26｜102.03" tabindex="0"></circle><title>2026-10-26｜102.03</title></g><g class="spark-node"><circle class="spark-dot" cx="180.0" cy="12.0" r="3.6" data-tooltip="2026-10-27｜102.36" tabindex="0"></circle><title>2026-10-27｜102.36</title></g><g class="spark-node"><circle class="spark-dot" cx="203.4" cy="28.0" r="3.6" data-tooltip="2026-10-28｜102.15" tabindex="0"></circle><title>2026-10-28｜102.15</title></g><g class="spark-node"><circle class="spark-dot" cx="226.9" cy="51.0" r="3.6" data-tooltip="2026-10-29｜101.85" tabindex="0"></circle><title>2026-10-29｜101.85</title></g><g class="spark-node"><circle class="spark-dot" cx="250.3" cy="49.0" r="3.6" data-tooltip="2026-10-30｜101.88" tabindex="0"></circle><title>2026-10-30｜101.88</title></g><g class="spark-node"><circle class="spark-dot" cx="273.7" cy="56.9" r="3.6" data-tooltip="2026-11-02｜101.78" tabindex="0"></circle><title>2026-11-02｜101.78</title></g><g class="spark-node"><circle class="spark-dot" cx="297.1" cy="49.8" r="3.6" data-tooltip="2026-11-03｜101.87" tabindex="0"></circle><title>2026-11-03｜101.87</title></g><g class="spark-node"><circle class="spark-dot" cx="320.6" cy="76.0" r="3.6" data-tooltip="2026-11-04｜101.53" tabindex="0"></circle><title>2026-11-04｜101.53</title></g><g class="spark-node"><circle class="spark-dot" cx="344.0" cy="71.3" r="3.6" data-tooltip="2026-11-05｜101.59" tabindex="0"></circle><title>2026-11-05｜101.59</title></g>
+      </svg>
+    </div>
+    
+        </div>
+        
+
+        <div class="chart-card chart-theme-gold" data-asset="Gold">
+          <div class="chart-head">
+            <div class="asset-pill">黃金<span class="asset-pill-unit">USD/oz</span></div>
+            <div class="chart-direction up">上行</div>
+          </div>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">4,097.9</span>
+            </div>
+            <div class="chart-change">+199.000｜+5.10%</div>
+          </div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 360 88" preserveAspectRatio="none">
+        <polyline points="16.0,12.0 39.4,15.0 62.9,13.4 86.3,40.5 109.7,49.3 133.1,47.1 156.6,44.1 180.0,32.8 203.4,33.3 226.9,43.1 250.3,76.0 273.7,61.8 297.1,65.9 320.6,33.5 344.0,27.2" fill="none" stroke="currentColor" stroke-width="2.6" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="16.0" cy="12.0" r="3.6" data-tooltip="2026-10-19｜4,159.8 USD/oz" tabindex="0"></circle><title>2026-10-19｜4,159.8 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="39.4" cy="15.0" r="3.6" data-tooltip="2026-10-20｜4,147.7 USD/oz" tabindex="0"></circle><title>2026-10-20｜4,147.7 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="62.9" cy="13.4" r="3.6" data-tooltip="2026-10-21｜4,153.9 USD/oz" tabindex="0"></circle><title>2026-10-21｜4,153.9 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="86.3" cy="40.5" r="3.6" data-tooltip="2026-10-22｜4,043.7 USD/oz" tabindex="0"></circle><title>2026-10-22｜4,043.7 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="109.7" cy="49.3" r="3.6" data-tooltip="2026-10-23｜4,007.9 USD/oz" tabindex="0"></circle><title>2026-10-23｜4,007.9 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="133.1" cy="47.1" r="3.6" data-tooltip="2026-10-25｜4,016.8 USD/oz" tabindex="0"></circle><title>2026-10-25｜4,016.8 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="156.6" cy="44.1" r="3.6" data-tooltip="2026-10-26｜4,028.9 USD/oz" tabindex="0"></circle><title>2026-10-26｜4,028.9 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="180.0" cy="32.8" r="3.6" data-tooltip="2026-10-27｜4,075.0 USD/oz" tabindex="0"></circle><title>2026-10-27｜4,075.0 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="203.4" cy="33.3" r="3.6" data-tooltip="2026-10-28｜4,073.0 USD/oz" tabindex="0"></circle><title>2026-10-28｜4,073.0 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="226.9" cy="43.1" r="3.6" data-tooltip="2026-10-29｜4,033.0 USD/oz" tabindex="0"></circle><title>2026-10-29｜4,033.0 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="250.3" cy="76.0" r="3.6" data-tooltip="2026-10-30｜3,898.9 USD/oz" tabindex="0"></circle><title>2026-10-30｜3,898.9 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="273.7" cy="61.8" r="3.6" data-tooltip="2026-11-02｜3,956.6 USD/oz" tabindex="0"></circle><title>2026-11-02｜3,956.6 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="297.1" cy="65.9" r="3.6" data-tooltip="2026-11-03｜3,940.2 USD/oz" tabindex="0"></circle><title>2026-11-03｜3,940.2 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="320.6" cy="33.5" r="3.6" data-tooltip="2026-11-04｜4,072.2 USD/oz" tabindex="0"></circle><title>2026-11-04｜4,072.2 USD/oz</title></g><g class="spark-node"><circle class="spark-dot" cx="344.0" cy="27.2" r="3.6" data-tooltip="2026-11-05｜4,097.9 USD/oz" tabindex="0"></circle><title>2026-11-05｜4,097.9 USD/oz</title></g>
+      </svg>
+    </div>
+    
+        </div>
+        </div>
+<div class="chart-row chart-row-fx">
+        <div class="chart-card chart-theme-fx" data-asset="USDJPY">
+          <div class="chart-head">
+            <div class="asset-pill">美元／日圓<span class="asset-pill-unit">JPY</span></div>
+            <div class="chart-direction up">上行</div>
+          </div>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">157.65</span>
+            </div>
+            <div class="chart-change">+0.193｜+0.12%</div>
+          </div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 360 88" preserveAspectRatio="none">
+        <polyline points="16.0,38.9 39.4,16.5 62.9,25.4 86.3,30.2 109.7,76.0 133.1,72.8 156.6,49.0 180.0,35.2 203.4,39.1 226.9,44.1 250.3,40.5 273.7,51.8 297.1,12.0 320.6,21.8 344.0,45.5" fill="none" stroke="currentColor" stroke-width="2.6" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="16.0" cy="38.9" r="3.6" data-tooltip="2026-10-18｜157.85 JPY" tabindex="0"></circle><title>2026-10-18｜157.85 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="39.4" cy="16.5" r="3.6" data-tooltip="2026-10-19｜158.54 JPY" tabindex="0"></circle><title>2026-10-19｜158.54 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="62.9" cy="25.4" r="3.6" data-tooltip="2026-10-20｜158.27 JPY" tabindex="0"></circle><title>2026-10-20｜158.27 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="86.3" cy="30.2" r="3.6" data-tooltip="2026-10-21｜158.12 JPY" tabindex="0"></circle><title>2026-10-21｜158.12 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="109.7" cy="76.0" r="3.6" data-tooltip="2026-10-22｜156.72 JPY" tabindex="0"></circle><title>2026-10-22｜156.72 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="133.1" cy="72.8" r="3.6" data-tooltip="2026-10-23｜156.81 JPY" tabindex="0"></circle><title>2026-10-23｜156.81 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="156.6" cy="49.0" r="3.6" data-tooltip="2026-10-25｜157.54 JPY" tabindex="0"></circle><title>2026-10-25｜157.54 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="180.0" cy="35.2" r="3.6" data-tooltip="2026-10-26｜157.96 JPY" tabindex="0"></circle><title>2026-10-26｜157.96 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="203.4" cy="39.1" r="3.6" data-tooltip="2026-10-27｜157.85 JPY" tabindex="0"></circle><title>2026-10-27｜157.85 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="226.9" cy="44.1" r="3.6" data-tooltip="2026-10-28｜157.69 JPY" tabindex="0"></circle><title>2026-10-28｜157.69 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="250.3" cy="40.5" r="3.6" data-tooltip="2026-10-29｜157.80 JPY" tabindex="0"></circle><title>2026-10-29｜157.80 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="273.7" cy="51.8" r="3.6" data-tooltip="2026-11-01｜157.46 JPY" tabindex="0"></circle><title>2026-11-01｜157.46 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="297.1" cy="12.0" r="3.6" data-tooltip="2026-11-02｜158.68 JPY" tabindex="0"></circle><title>2026-11-02｜158.68 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="320.6" cy="21.8" r="3.6" data-tooltip="2026-11-03｜158.38 JPY" tabindex="0"></circle><title>2026-11-03｜158.38 JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="344.0" cy="45.5" r="3.6" data-tooltip="2026-11-04｜157.65 JPY" tabindex="0"></circle><title>2026-11-04｜157.65 JPY</title></g>
+      </svg>
+    </div>
+    
+        </div>
+        
+
+        <div class="chart-card chart-theme-fx" data-asset="USDTWD">
+          <div class="chart-head">
+            <div class="asset-pill">美元／台幣<span class="asset-pill-unit">TWD</span></div>
+            <div class="chart-direction up">上行</div>
+          </div>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">33.073</span>
+            </div>
+            <div class="chart-change">+0.468｜+1.44%</div>
+          </div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 360 88" preserveAspectRatio="none">
+        <polyline points="16.0,72.7 39.4,68.4 62.9,58.0 86.3,76.0 109.7,56.8 133.1,59.3 156.6,59.4 180.0,74.4 203.4,74.6 226.9,61.8 250.3,59.6 273.7,56.0 297.1,39.1 320.6,35.6 344.0,12.0" fill="none" stroke="currentColor" stroke-width="2.6" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="16.0" cy="72.7" r="3.6" data-tooltip="2026-10-18｜32.428 TWD" tabindex="0"></circle><title>2026-10-18｜32.428 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="39.4" cy="68.4" r="3.6" data-tooltip="2026-10-19｜32.474 TWD" tabindex="0"></circle><title>2026-10-19｜32.474 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="62.9" cy="58.0" r="3.6" data-tooltip="2026-10-20｜32.584 TWD" tabindex="0"></circle><title>2026-10-20｜32.584 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="86.3" cy="76.0" r="3.6" data-tooltip="2026-10-21｜32.393 TWD" tabindex="0"></circle><title>2026-10-21｜32.393 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="109.7" cy="56.8" r="3.6" data-tooltip="2026-10-22｜32.597 TWD" tabindex="0"></circle><title>2026-10-22｜32.597 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="133.1" cy="59.3" r="3.6" data-tooltip="2026-10-23｜32.570 TWD" tabindex="0"></circle><title>2026-10-23｜32.570 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="156.6" cy="59.4" r="3.6" data-tooltip="2026-10-25｜32.569 TWD" tabindex="0"></circle><title>2026-10-25｜32.569 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="180.0" cy="74.4" r="3.6" data-tooltip="2026-10-26｜32.410 TWD" tabindex="0"></circle><title>2026-10-26｜32.410 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="203.4" cy="74.6" r="3.6" data-tooltip="2026-10-27｜32.408 TWD" tabindex="0"></circle><title>2026-10-27｜32.408 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="226.9" cy="61.8" r="3.6" data-tooltip="2026-10-28｜32.544 TWD" tabindex="0"></circle><title>2026-10-28｜32.544 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="250.3" cy="59.6" r="3.6" data-tooltip="2026-10-29｜32.567 TWD" tabindex="0"></circle><title>2026-10-29｜32.567 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="273.7" cy="56.0" r="3.6" data-tooltip="2026-11-01｜32.605 TWD" tabindex="0"></circle><title>2026-11-01｜32.605 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="297.1" cy="39.1" r="3.6" data-tooltip="2026-11-02｜32.785 TWD" tabindex="0"></circle><title>2026-11-02｜32.785 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="320.6" cy="35.6" r="3.6" data-tooltip="2026-11-03｜32.822 TWD" tabindex="0"></circle><title>2026-11-03｜32.822 TWD</title></g><g class="spark-node"><circle class="spark-dot" cx="344.0" cy="12.0" r="3.6" data-tooltip="2026-11-04｜33.073 TWD" tabindex="0"></circle><title>2026-11-04｜33.073 TWD</title></g>
+      </svg>
+    </div>
+    
+        </div>
+        
+
+        <div class="chart-card chart-theme-fx" data-asset="USDKRW">
+          <div class="chart-head">
+            <div class="asset-pill">美元／韓元<span class="asset-pill-unit">KRW</span></div>
+            <div class="chart-direction up">上行</div>
+          </div>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">1,357.9</span>
+            </div>
+            <div class="chart-change">+22.780｜+1.71%</div>
+          </div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 360 88" preserveAspectRatio="none">
+        <polyline points="16.0,65.6 39.4,74.7 62.9,74.0 86.3,75.4 109.7,76.0 133.1,75.3 156.6,74.4 180.0,43.3 203.4,49.8 226.9,60.2 250.3,56.9 273.7,60.2 297.1,39.5 320.6,45.8 344.0,12.0" fill="none" stroke="currentColor" stroke-width="2.6" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="16.0" cy="65.6" r="3.6" data-tooltip="2026-10-19｜1,330.7 KRW" tabindex="0"></circle><title>2026-10-19｜1,330.7 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="39.4" cy="74.7" r="3.6" data-tooltip="2026-10-20｜1,326.1 KRW" tabindex="0"></circle><title>2026-10-20｜1,326.1 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="62.9" cy="74.0" r="3.6" data-tooltip="2026-10-21｜1,326.4 KRW" tabindex="0"></circle><title>2026-10-21｜1,326.4 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="86.3" cy="75.4" r="3.6" data-tooltip="2026-10-22｜1,325.7 KRW" tabindex="0"></circle><title>2026-10-22｜1,325.7 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="109.7" cy="76.0" r="3.6" data-tooltip="2026-10-23｜1,325.4 KRW" tabindex="0"></circle><title>2026-10-23｜1,325.4 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="133.1" cy="75.3" r="3.6" data-tooltip="2026-10-25｜1,325.8 KRW" tabindex="0"></circle><title>2026-10-25｜1,325.8 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="156.6" cy="74.4" r="3.6" data-tooltip="2026-10-26｜1,326.2 KRW" tabindex="0"></circle><title>2026-10-26｜1,326.2 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="180.0" cy="43.3" r="3.6" data-tooltip="2026-10-27｜1,342.0 KRW" tabindex="0"></circle><title>2026-10-27｜1,342.0 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="203.4" cy="49.8" r="3.6" data-tooltip="2026-10-28｜1,338.7 KRW" tabindex="0"></circle><title>2026-10-28｜1,338.7 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="226.9" cy="60.2" r="3.6" data-tooltip="2026-10-29｜1,333.4 KRW" tabindex="0"></circle><title>2026-10-29｜1,333.4 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="250.3" cy="56.9" r="3.6" data-tooltip="2026-10-30｜1,335.1 KRW" tabindex="0"></circle><title>2026-10-30｜1,335.1 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="273.7" cy="60.2" r="3.6" data-tooltip="2026-11-01｜1,333.4 KRW" tabindex="0"></circle><title>2026-11-01｜1,333.4 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="297.1" cy="39.5" r="3.6" data-tooltip="2026-11-02｜1,343.9 KRW" tabindex="0"></circle><title>2026-11-02｜1,343.9 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="320.6" cy="45.8" r="3.6" data-tooltip="2026-11-03｜1,340.7 KRW" tabindex="0"></circle><title>2026-11-03｜1,340.7 KRW</title></g><g class="spark-node"><circle class="spark-dot" cx="344.0" cy="12.0" r="3.6" data-tooltip="2026-11-04｜1,357.9 KRW" tabindex="0"></circle><title>2026-11-04｜1,357.9 KRW</title></g>
+      </svg>
+    </div>
+    
+        </div>
+        
+
+        <div class="chart-card chart-theme-fx" data-asset="JPYTWD">
+          <div class="chart-head">
+            <div class="asset-pill">日圓／台幣<span class="asset-pill-unit">TWD/JPY</span></div>
+            <div class="chart-direction up">上行</div>
+          </div>
+          <div class="chart-value-row">
+            <div class="chart-latest">
+              <span class="chart-latest-value">0.2098</span>
+            </div>
+            <div class="chart-change">+0.0027｜+1.31%</div>
+          </div>
+          
+    <div class="gf-chart-wrap">
+      <svg class="sparkline" viewBox="0 0 360 88" preserveAspectRatio="none">
+        <polyline points="16.0,68.3 39.4,76.0 62.9,62.5 86.3,75.6 109.7,35.1 133.1,39.0 156.6,51.5 180.0,71.7 203.4,69.8 226.9,56.1 250.3,56.1 273.7,47.1 297.1,53.0 320.6,44.9 344.0,12.0" fill="none" stroke="currentColor" stroke-width="2.6" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" />
+        <g class="spark-node"><circle class="spark-dot" cx="16.0" cy="68.3" r="3.6" data-tooltip="2026-10-18｜0.2054 TWD/JPY" tabindex="0"></circle><title>2026-10-18｜0.2054 TWD/JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="39.4" cy="76.0" r="3.6" data-tooltip="2026-10-19｜0.2048 TWD/JPY" tabindex="0"></circle><title>2026-10-19｜0.2048 TWD/JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="62.9" cy="62.5" r="3.6" data-tooltip="2026-10-20｜0.2059 TWD/JPY" tabindex="0"></circle><title>2026-10-20｜0.2059 TWD/JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="86.3" cy="75.6" r="3.6" data-tooltip="2026-10-21｜0.2049 TWD/JPY" tabindex="0"></circle><title>2026-10-21｜0.2049 TWD/JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="109.7" cy="35.1" r="3.6" data-tooltip="2026-10-22｜0.2080 TWD/JPY" tabindex="0"></circle><title>2026-10-22｜0.2080 TWD/JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="133.1" cy="39.0" r="3.6" data-tooltip="2026-10-23｜0.2077 TWD/JPY" tabindex="0"></circle><title>2026-10-23｜0.2077 TWD/JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="156.6" cy="51.5" r="3.6" data-tooltip="2026-10-25｜0.2067 TWD/JPY" tabindex="0"></circle><title>2026-10-25｜0.2067 TWD/JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="180.0" cy="71.7" r="3.6" data-tooltip="2026-10-26｜0.2052 TWD/JPY" tabindex="0"></circle><title>2026-10-26｜0.2052 TWD/JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="203.4" cy="69.8" r="3.6" data-tooltip="2026-10-27｜0.2053 TWD/JPY" tabindex="0"></circle><title>2026-10-27｜0.2053 TWD/JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="226.9" cy="56.1" r="3.6" data-tooltip="2026-10-28｜0.2064 TWD/JPY" tabindex="0"></circle><title>2026-10-28｜0.2064 TWD/JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="250.3" cy="56.1" r="3.6" data-tooltip="2026-10-29｜0.2064 TWD/JPY" tabindex="0"></circle><title>2026-10-29｜0.2064 TWD/JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="273.7" cy="47.1" r="3.6" data-tooltip="2026-11-01｜0.2071 TWD/JPY" tabindex="0"></circle><title>2026-11-01｜0.2071 TWD/JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="297.1" cy="53.0" r="3.6" data-tooltip="2026-11-02｜0.2066 TWD/JPY" tabindex="0"></circle><title>2026-11-02｜0.2066 TWD/JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="320.6" cy="44.9" r="3.6" data-tooltip="2026-11-03｜0.2072 TWD/JPY" tabindex="0"></circle><title>2026-11-03｜0.2072 TWD/JPY</title></g><g class="spark-node"><circle class="spark-dot" cx="344.0" cy="12.0" r="3.6" data-tooltip="2026-11-04｜0.2098 TWD/JPY" tabindex="0"></circle><title>2026-11-04｜0.2098 TWD/JPY</title></g>
+      </svg>
+    </div>
+    
+        </div>
+        </div></div>
+    <div class="section-source">來源：YAHOO財經</div>
+  </section>
+
+  <section class="section section-news">
+    <h2>本週新聞</h2>
+    <div class="news-masonry">
+        <div class="news-category news-weight-8" style="grid-column: span 8;">
+          <div class="news-category-head">
+            <div>
+              <div class="category-pill">通膨預期</div>
+              <div class="news-category-desc">油價、能源、物價與再通膨訊號</div>
+            </div>
+            <div class="news-count">8 則</div>
+          </div>
+          <div class="news-category-cards">
+            
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE9zVkU2NUM3aDNCZXNucFFVWndPYXdIYWtvc05TZDdMeURFYjdfQ1VTbGszRnRBWFg0M09WT0s1OUhFZlhmYTlPTEFaR3Z5NEE?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">美伊有望談出和平？國際油價齊跌逾6% 美油跌破100美元 - 鉅亨網</div>
+      <div class="news-why">國際油價跌破百元大關，直接削弱能源通膨推升力道，為美債殖利率自高檔回落提供實質依據。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE9udTh5R2tnMzBpbjZWSW9pak9RSDJuZXpGUzQ2SDRhdnZsdjBJV1lVQ2c1U3MzLWZTczJybFAydzZucFgySGRiR2dMaXFzc28?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">〈能源盤後〉伊朗釋出和平談判訊號 油價挫逾7% Brent跌破105美元 - 鉅亨網</div>
+      <div class="news-why">地緣政治緊張情勢邊際緩和，加劇原油跌勢，確立通膨預期向下修正的市場敘事。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE9sSE4zWi11YnBKYmM2YTZLSm05MEphUW11Y2p2cG9yTTBoeUdJV25mZ0M5T1hxM1RiUU96aVlra2tYd1RVYUtldVBmdzhaVXc?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">通膨沒解決！聯準會暗藏升息殺手鐧？為什麼降息機會徹底沒了？吳嘉隆拆解全球資金大洗牌：股市止跌「看這三大指標」！ - 鉅亨網</div>
+      <div class="news-why">市場對核心通膨黏性維持警惕，反映市場對後續貨幣寬鬆路徑的定價依然謹慎。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiWkFVX3lxTE9nTjdmcllrV3ZxVGRBR3FxX09jSTJmUWtJY0hLREJHajRPR3FuT1FfdnpvXzZ5UlZEQ2lfWnpFRFZma05YZloySl9LM3o2NnZSSmxWYnJCWk9oQQ?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">經濟日報</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">東京通膨率仍高於日本央行2%目標 凸顯價格壓力持續 | 國際焦點 | 國際 - 經濟日報</div>
+      <div class="news-why">日本通膨維持高於目標，提供日銀政策正常化背景，有助於解釋日圓與其他亞幣走勢之分歧。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE5rT2lKQzRUMno5VVdFTGVxa0NIY0VuSmdxaEhCSHBmSncwMl9KQmhsb0dyN0d6MUxvaEN3QzEtOFc3Z0d3QWNsQTBwT2NyaFE?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">非農前哨戰傳佳音！美國10月民間就業增8.6萬人 Fed抗通膨更有底氣？ - 鉅亨網</div>
+      <div class="news-why">補充本週物價、能源或通膨預期的新聞脈絡。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiWkFVX3lxTE82dTB5bFRjZnA2MFBNX3k0R2RpT1liNjMyY3U5VzJPdU1jdmxzdkx3b1RkRl9qVUxnWkZ5RHg5eVNhMWhLYVp2dHc0VFFFaGZYVi12Q2EtdUdLd9IBX0FVX3lxTFBkazJWeklpQlBULUZfSWxTLW9wdlYyakpzU3RMc0pzSGIydzFVdndhS0hlLTRrME1fS0M4TEoyS2JFN0V3clZhcWVhRnBGZ2JXQ3g3ZGZWY25HSmtycG4w?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">經濟日報</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">群益投顧：11月先蹲後跳 - 經濟日報</div>
+      <div class="news-why">補充本週物價、能源或通膨預期的新聞脈絡。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE9QVEZ2bVphR0ZaYTE0VXV5UWo5WWFiWTZzbks5S2RyZFpXajJqSldveFZudk9HVkdZLThPWkl4VjFCWGYzbjAyVzZSRHZ3M1E?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">【路博邁投信】投資長觀點－透過暫緩升息看升息進程 - 鉅亨網</div>
+      <div class="news-why">補充本週物價、能源或通膨預期的新聞脈絡。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiWkFVX3lxTE81S3ZEbGROSUl6b3BJbG5jWkhBTjNwX2QtYjBTTlBfelVYbUhLaGlDcDNZc0lUZU1VUE9TZTM1ZVg2LVlfd1BBT1pHVWJYdmtmM3gzWTJreTM0UdIBX0FVX3lxTE5sRHl4REZKbXlyOTF3ZF8tSTlQLTRZcEM4cVp1M1ZDcE85Q1AwNTJjVWdnNWNKZXd1V3FOMXg4ZGRxMXp6TFNpdTZjTmV0SC1QdVViWV9TeFZsUFpfajNv?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">經濟日報</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">美國經濟如成功軟著陸 停止升息後美股一年平均上漲23% - 經濟日報</div>
+      <div class="news-why">補充本週物價、能源或通膨預期的新聞脈絡。</div>
+    </a>
+    
+          </div>
+        </div>
+        
+
+        <div class="news-category news-weight-8" style="grid-column: span 8;">
+          <div class="news-category-head">
+            <div>
+              <div class="category-pill">利率</div>
+              <div class="news-category-desc">美債殖利率、Fed 與高利率定價</div>
+            </div>
+            <div class="news-count">8 則</div>
+          </div>
+          <div class="news-category-cards">
+            
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiX0FVX3lxTFBZWlR6Z1NvRG1IR0x5VE04MjJOLXZoWkx4M0dUMDVHa2J5YzM0YmVmSE5iS1VJT2Q3dVpWblRUbWQ2Z3hRMzNZdkM3cmtBT2hmUXhLQTFiNEJ5X05UdTZZ0gFfQVVfeXFMUFlaVHpnU29EbUhHTHlUTTgyMk4tdmhaTHgzR1QwNUdrYnljMzRiZWZITmJLVUlPZDd1WlZuVFRtZDZneFEzM1l2Qzdya0FPaGZReEtBMWI0QnlfTlR1Nlk?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">經濟日報</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">ADP小非農報告：美勞動市場大致維持穩定 - 經濟日報</div>
+      <div class="news-why">ADP顯示民間就業平穩增加，構成限制公債殖利率深幅下滑的反向修正因子。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiS0FVX3lxTFB2WTBJcHpjMUJzdExRVGlEMkI4MldsTVA3b2pwT0hnY0dWQTJjMk5CazdGZUE1WUt1Uy1vZTFCMENJZGdCd2djaWpPTQ?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">Fed能鬆口氣了？美國9月職缺意外增至752.3萬個 創四個月新高 - 鉅亨網</div>
+      <div class="news-why">職缺數據回升顯示勞動需求具底氣，支撐聯準會維持高利率更久的政策預期。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiS0FVX3lxTE81OE5GcHdtWWNnTk5OSDlfc3BpclBaaURrNDltcVZSZEI3ajVxUG50TF9NX05iTUZVeUdtX01GMkVkT2lGVklOLVBNdw?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">Fed再升息兩次就收手？非農若超預期 市場算盤得重打 - 鉅亨網</div>
+      <div class="news-why">凸顯市場在非農公布前的高度觀望，利率路徑面臨數據證實或證偽的轉折風險。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE1mZ3VscHloTUFmNVdqc0xjQ2hxOFQ0ZHZmLW95TDN4dURkMFQtYncwY1ZJMFRpTDI0VnczZERSaHpEcngwM1JMVmJJeVFVRm8?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">8390億美元！美債單週拍賣創新高 多數拿來還舊債、專家直言「絕非好事」 - 鉅亨網</div>
+      <div class="news-why">美債供給端天量發行，是壓制殖利率下行空間並影響期限溢價的關鍵潛在變數。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE52Q3g2RlBtUDc1SFFaQUk2YjhBU0o4ZUlLcHlXaklxWjZYRXJ1ekctY3NPcEpvMGMtVUswby15c3VGeEFVcTlCRDdibFpQWDA?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">美國抗通膨債券年利率升至5.51%！固定利率創近20年新高 - 鉅亨網</div>
+      <div class="news-why">實質利率水準攀升至長期高點，對整體資產評價與金融緊縮環境構成實質壓力。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiYEFVX3lxTE1udDNXb29TRWhDdHQ5VFVXOEozcVFPbkx4Q09sVE9iZ3VVOWFRdjN0VUVmdHdCXzZGRGxKQkNrd3RaZDZzMTAxTVFUdTF0enJ4T1JnanRYVjNYR21hRHFjQg?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨號</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">脈動 - 鉅亨號</div>
+      <div class="news-why">補充本週美債殖利率、Fed 或利率路徑的新聞脈絡。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE85WFExLWlIS1pQQ1c2MGtaRlduXzdVZnVmZi1jSHFXbm5tWGFCUVg0T3U3amtaRHRlTmFfMUJTSmZ4XzBYbFNveFk3eExVcVk?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">美國期中選舉牽動美股！花旗點名「兩大風險」：民主黨若拿下53席恐衝擊股市 - 鉅亨網</div>
+      <div class="news-why">補充本週美債殖利率、Fed 或利率路徑的新聞脈絡。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMihgFBVV95cUxNUTZhc0NlUk00TjhJbHV0WGNNWEVfT0xhc2V4MTFWeWtiYUNPR0VWTGFmOVZDRlVaV1RWTF9QNEZUXzk3aFJyX3VQY01FVlhOZTlhSlVqNkMweTF3U1h1UE9pWGMtNUlCT0h4SEEwT1dGYzl4M2JSSndnMlpaeGpFTmR3SVFPdw?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">AMD財報超出市場預期，資料中心業務是否能持續成長？ - 鉅亨網</div>
+      <div class="news-why">補充本週美債殖利率、Fed 或利率路徑的新聞脈絡。</div>
+    </a>
+    
+          </div>
+        </div>
+        
+
+        <div class="news-category news-weight-2" style="grid-column: span 4;">
+          <div class="news-category-head">
+            <div>
+              <div class="category-pill">貨幣</div>
+              <div class="news-category-desc">美元、亞洲貨幣與資金流向壓力</div>
+            </div>
+            <div class="news-count">2 則</div>
+          </div>
+          <div class="news-category-cards">
+            
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE1zV0F6LTJ0TDhneDViVlZUcEVzNVJiVVRkU1ZOanVlMTBCUGd0R2RVUDd3eGtDYUF4X1hCNExkcFUxcUhaM3JXM1ZFOHpBa2s?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">強通膨+鷹派央行+AI資金撐腰！美元將創近一年半最佳月度表現 分析師：美大選難改強勢邏輯 - 鉅亨網</div>
+      <div class="news-why">佐證美元指數在高利率與避險買盤支撐下的韌性，使台幣等亞洲貨幣持續承壓。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiS0FVX3lxTE90NXd0Uy1VdVMzZkFoTDRpbklCZWp4TGhDUXJ3Zy1XSnlRS2hTNW9hTFlJdTRLWTl1eVhEZkNRcXNla0ozOEg2ZUlmTQ?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">【遠東商銀】美國民主黨大勝，引發美元下挫 - 鉅亨網</div>
+      <div class="news-why">政治事件引發美元短期震盪回落，反映選舉預期對匯市利差定價帶來的短期干擾。</div>
+    </a>
+    
+          </div>
+        </div>
+        
+
+        <div class="news-category news-weight-3" style="grid-column: span 6;">
+          <div class="news-category-head">
+            <div>
+              <div class="category-pill">其他</div>
+              <div class="news-category-desc">補充其他可能影響主線的事件</div>
+            </div>
+            <div class="news-count">3 則</div>
+          </div>
+          <div class="news-category-cards">
+            
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE8xd3JLdFhvWEVPa2ZlLWVKS1FtdWpkTFVGMDhYd1BpU2Y1SmFqUjVhQkQ0QmQyaXBXbTdXZGVKZlZ6dVJhN3ZjN1Y2MjlIbTA?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">〈貴金屬盤後〉黃金從一年低點反彈逾2% 油價重挫通膨升溫疑慮 - 鉅亨網</div>
+      <div class="news-why">金價對油價下跌與實質利率調整作出正面反應，印證跨資產傳導鏈的敏銳度。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE90d2REYXc4MUdfdGhOLVc2UURiR0d2eFpvWDdCeXRLWXFwXzFWWnVyM0tYOWJrQWVMeDZxdldUWEhOb1Faa1pHZkJJQmJGLTA?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">美股慘遭血洗！10月非農就業報告能否成止跌救星？ - 鉅亨網</div>
+      <div class="news-why">美股回檔加劇市場防禦情緒，驅使資金轉入美債避險，成為壓低公債殖利率之主因。</div>
+    </a>
+    
+
+    <a class="news-mini-card" href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE9HVEp0UXpoRk9SNG15SHZYRmQ5aWREWGdpTEw2bWRuZEp5MlAtc2lKUFUwcXE0Z2YzdjJOaTFLMTJHaGpSSG56Y3pVUEVfbVE?oc=5" target="_blank" rel="noopener noreferrer">
+      <div class="news-mini-top">
+        <span class="news-source">鉅亨網</span>
+        <span class="open-mark">↗</span>
+      </div>
+      <div class="news-title">選舉與通膨數據雙重審判將至！債市巨頭罕見「按兵不動」 AI投資與財政政策面臨重新定價 - 鉅亨網</div>
+      <div class="news-why">機構投資人在重大數據與政治事件前縮減風險曝險，解釋了市場交易量與資產背離現象。</div>
+    </a>
+    
+          </div>
+        </div>
+        </div>
+  </section>
+
+  <section class="section section-next">
+    <h2>下週觀察</h2>
+    <div class="two-col">
+      <div>
+        <h3>關鍵問題</h3>
+        <ul><li>通膨上行與下行訊號誰會成為下一期主導因子？</li>
+<li>油價下行是否開始壓低利率與通膨預期？</li>
+<li>Fed 是否延續高利率維持更久的訊號？</li></ul>
+      </div>
+      <div>
+        <h3>主要佐證</h3>
+        <ul><li>WTI 原油於分析區間內由 104.12 美元下跌至 91.20 美元，Brent 原油由 113.43 美元下跌至 99.25 美元，配合美伊和平談判的新聞背景，驗證能源價格下行與通膨降溫修正一致。</li>
+<li>美國10年期公債殖利率由 4.93% 下行至 4.84%，在通膨多空訊號並存下逆勢走低，反映市場開始考量通膨修正或成長降溫。</li>
+<li>黃金由 3898.90 美元上漲至 4097.90 美元，美元指數由 101.88 降至 101.59，反映利率下行與市場心理變化下的跨資產表現。</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    本頁由 weekly_forest_summary.json、weekly_news_context.json、weekly_market_series.json 與 weekly_macro_diagram.png 自動產生。內容為總經資訊整理，不構成投資建議。
+  </div>
+</div>
+
+<div id="chartTooltip" class="chart-tooltip" aria-hidden="true"></div>
+<script>
+(function() {
+  // Preserve the reading position of this weekly page within the current tab session.
+  // Covers link-outs, back/forward navigation, reloads, BFCache restores,
+  // browser tab switching, and browser/app backgrounding where the page is reloaded.
+  // Use pathname only. Query parameters such as ?v=BUILD_VERSION must not
+  // create a new storage key for the same weekly page.
+  const storageKey = 'weeklyMacroViewState::' + window.location.pathname;
+  let restoringView = true;
+  let saveScheduled = false;
+
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+
+  function readViewState() {
+    try {
+      const raw = sessionStorage.getItem(storageKey);
+      if (!raw) return null;
+      const state = JSON.parse(raw);
+      if (!state || !Number.isFinite(state.y)) return null;
+      return state;
+    } catch (error) {
+      return null;
+    }
+  }
+
+  function writeViewState() {
+    if (restoringView) return;
+    try {
+      sessionStorage.setItem(storageKey, JSON.stringify({
+        x: Math.max(0, window.scrollX || 0),
+        y: Math.max(0, window.scrollY || 0),
+        savedAt: Date.now()
+      }));
+    } catch (error) {
+      // sessionStorage can be unavailable in restricted/private contexts.
+    }
+  }
+
+  function scheduleSaveViewState() {
+    if (restoringView || saveScheduled) return;
+    saveScheduled = true;
+    window.requestAnimationFrame(() => {
+      saveScheduled = false;
+      writeViewState();
+    });
+  }
+
+  function restoreViewState() {
+    const state = readViewState();
+    if (!state) {
+      restoringView = false;
+      return;
+    }
+
+    const apply = () => window.scrollTo(state.x || 0, state.y || 0);
+
+    // Re-apply after layout/media settling so the page remains at the
+    // same reading position even if images finish loading a little later.
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        apply();
+        window.setTimeout(apply, 80);
+        window.setTimeout(() => {
+          apply();
+          restoringView = false;
+          writeViewState();
+        }, 320);
+      });
+    });
+  }
+
+  function startRestore() {
+    restoreViewState();
+  }
+
+  if (document.readyState === 'complete') {
+    startRestore();
+  } else {
+    window.addEventListener('load', startRestore, { once: true });
+  }
+
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      restoringView = true;
+      restoreViewState();
+    }
+  });
+
+  window.addEventListener('scroll', scheduleSaveViewState, { passive: true });
+  window.addEventListener('pagehide', writeViewState);
+  window.addEventListener('beforeunload', writeViewState);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') {
+      writeViewState();
+    }
+  });
+
+  // Save immediately before following any link as an extra safeguard.
+  document.addEventListener('click', (event) => {
+    const target = event.target && event.target.closest ? event.target.closest('a[href]') : null;
+    if (target) writeViewState();
+  }, true);
+})();
+
+(function() {
+  const tooltip = document.getElementById('chartTooltip');
+  if (!tooltip) return;
+
+  function showTooltip(target, event) {
+    const text = target.getAttribute('data-tooltip');
+    if (!text) return;
+    tooltip.textContent = text;
+    tooltip.classList.add('show');
+    tooltip.setAttribute('aria-hidden', 'false');
+
+    const rect = target.getBoundingClientRect();
+    const x = event && event.clientX ? event.clientX : rect.left + rect.width / 2;
+    const y = event && event.clientY ? event.clientY : rect.top;
+    const safeX = Math.min(Math.max(x, 70), window.innerWidth - 70);
+    const safeY = Math.max(y - 10, 34);
+    tooltip.style.left = safeX + 'px';
+    tooltip.style.top = safeY + 'px';
+  }
+
+  function hideTooltip() {
+    tooltip.classList.remove('show');
+    tooltip.setAttribute('aria-hidden', 'true');
+  }
+
+  document.querySelectorAll('.spark-dot[data-tooltip]').forEach((dot) => {
+    dot.addEventListener('pointerenter', (event) => showTooltip(dot, event));
+    dot.addEventListener('pointermove', (event) => showTooltip(dot, event));
+    dot.addEventListener('pointerleave', hideTooltip);
+    dot.addEventListener('focus', (event) => showTooltip(dot, event));
+    dot.addEventListener('blur', hideTooltip);
+    dot.addEventListener('click', (event) => {
+      event.stopPropagation();
+      showTooltip(dot, event);
+    });
+    dot.addEventListener('touchstart', (event) => {
+      event.stopPropagation();
+      const touch = event.touches && event.touches[0];
+      showTooltip(dot, touch || event);
+    }, { passive: true });
+  });
+
+  document.addEventListener('click', hideTooltip);
+  document.addEventListener('touchstart', (event) => {
+    if (!event.target.closest || !event.target.closest('.spark-dot')) hideTooltip();
+  }, { passive: true });
+  window.addEventListener('scroll', hideTooltip, { passive: true });
+})();
+</script>
+</body>
+</html>
