@@ -438,39 +438,16 @@ def collect_news_text(
         if not isinstance(item, dict):
             add_segment(item)
             return
-        add_segment(
-            item.get("title") or item.get("headline"),
-            item.get("theme"),
-            item.get("why_it_matters") or item.get("summary") or item.get("impact"),
-        )
+        # News titles are source evidence. AI-written relevance/impact paragraphs
+        # are not observations and must not create directional V35 flags.
+        add_segment(item.get("title") or item.get("headline"))
 
     def add_context(context: Any) -> None:
         if not isinstance(context, dict):
             return
 
-        # Current-period editorial theme is allowed, but watch/future fields are not.
-        add_segment(context.get("weekly_news_theme"))
-
-        for driver in as_list(context.get("macro_drivers")):
-            if isinstance(driver, dict):
-                add_segment(
-                    driver.get("driver") or driver.get("title") or driver.get("theme"),
-                    driver.get("impact") or driver.get("summary") or driver.get("why_it_matters"),
-                )
-            else:
-                add_segment(driver)
-
-        # These are current-period evidence or explicit corrections, not future watch points.
-        for field in ("confirming_signals", "contradicting_signals", "news_based_corrections"):
-            for item in as_list(context.get(field)):
-                if isinstance(item, dict):
-                    add_segment(
-                        item.get("title") or item.get("driver") or item.get("theme"),
-                        item.get("impact") or item.get("summary") or item.get("why_it_matters"),
-                    )
-                else:
-                    add_segment(item)
-
+        # Ignore AI-generated themes, driver summaries and news_based_corrections.
+        # These are hypotheses, not primary article evidence.
         categories = context.get("news_categories")
         if isinstance(categories, dict):
             for category_items in categories.values():
@@ -486,7 +463,7 @@ def collect_news_text(
 
     # Compatibility fallback only when structured JSON contains no usable evidence.
     # Keep one source line per segment and drop headings that explicitly denote watch/future text.
-    if not segments:
+    if not segments and not weekly_news_context_json and not macro_background_context_json:
         for raw_text in (weekly_news_context_md, macro_background_context_md):
             skip_section = False
             for line in str(raw_text or "").splitlines():
@@ -881,14 +858,14 @@ def build_rate_factor_map_v35(flags: Dict[str, Any], observed: Dict[str, Dict[st
     policy: List[Dict[str, str]] = []
 
     if flags.get("inflationHot"):
-        add_factor(up, "通膨硬數據偏熱", "CPI、PPI、PCE 或價格分項偏強，代表前期物價壓力仍有黏性。")
+        add_factor(up, "通膨偏熱新聞訊號（官方數據未驗證）", "新聞文字提及物價偏熱；未接入可核對公布日期與數值的官方 CPI、PPI、PCE 序列，不得宣稱硬數據已確認。")
     if flags.get("inflationCooling"):
-        add_factor(down, "通膨硬數據降溫", "CPI、PPI、PCE 或價格分項放緩，代表前期物價壓力有所緩和。")
+        add_factor(down, "通膨降溫新聞訊號（官方數據未驗證）", "新聞文字提及物價降溫；未接入可核對公布日期與數值的官方 CPI、PPI、PCE 序列，不得宣稱硬數據已確認。")
     if flags.get("inflationExpectationUp"):
-        add_factor(up, "綜合通膨預期上行", "通膨硬數據、能源供給、勞動市場或成長需求訊號合計後，對通膨預期形成上行壓力。")
+        add_factor(up, "通膨預期上行壓力（模型推論）", "能源、勞動或物價新聞可能提高市場的通膨擔憂；這不是已量測的通膨預期指標。")
         add_factor(policy, "降息預期下降 / 高利率維持更久", "綜合通膨預期偏上行時，市場通常會降低對快速降息的期待。")
     if flags.get("inflationExpectationDown"):
-        add_factor(down, "綜合通膨預期下行", "通膨降溫、油價需求疲弱、勞動市場降溫、成長放緩或地緣風險降溫，可能壓低通膨預期。")
+        add_factor(down, "通膨預期下行壓力（模型推論）", "油價或成長訊號可能降低通膨擔憂；這不是已量測的通膨預期指標。")
         add_factor(policy, "降息預期上升", "綜合通膨預期偏下行時，市場通常會提高對利率下行的期待。")
     if flags.get("inflationExpectationMixed"):
         add_factor(offsetting, "通膨預期多空拉鋸", "通膨上行與下行訊號同時存在，應區分主線與修正因子，避免寫成市場無視通膨。")
@@ -1115,7 +1092,7 @@ def infer_primary_macro_story_v35(flags: Dict[str, Any], observed: Dict[str, Dic
     if inflation_up and rate_up:
         return "通膨壓力推升利率"
     if inflation_down and rate_down:
-        return "通膨降溫壓低利率"
+        return "通膨降溫線索與利率回落並存（因果待驗證）"
     if flags.get("laborCooling") or flags.get("growthCooling"):
         return "就業或成長降溫"
     if flags.get("financialStress"):
@@ -1136,7 +1113,7 @@ def build_expected_chain_v35(primary_story: str, flags: Dict[str, Any]) -> List[
     if "通膨拉鋸" in story or "多空拉鋸" in story:
         return ["通膨上行與下行訊號並存", "市場重新評估油價、成長、勞動與 Fed 權重", "美國10年期公債殖利率方向取決於主導因子", "美元指數反映利差與避險需求", "亞洲貨幣、黃金與油價可能出現分歧"]
     if "油價修正" in story:
-        return ["油價下跌修正能源通膨壓力", "通膨預期出現下行修正", "利率是否回落取決於 Fed 與公債供需", "美元方向取決於利差與避險需求", "亞洲貨幣與黃金需交叉驗證"]
+        return ["油價下跌修正能源通膨壓力", "通膨疑慮可能緩和，非已量測預期", "利率是否回落取決於 Fed 與公債供需", "美元方向取決於利差與避險需求", "亞洲貨幣與黃金需交叉驗證"]
     if "油價推升" in story:
         return ["油價上行提高能源通膨疑慮", "通膨預期可能重新升溫", "降息預期受到限制", "美國10年期公債殖利率偏上", "美元與亞洲貨幣壓力需同步觀察"]
     if "通膨壓力" in story:
@@ -1195,9 +1172,9 @@ def build_transmission_diagnosis_v35(
     if flags.get("inflationExpectationMixed"):
         modifiers.append("通膨預期呈現多空拉鋸：能源價格或偏熱物價訊號形成上行壓力，但通膨降溫、勞動轉弱或其他修正因子仍存在。")
     elif flags.get("inflationExpectationUp"):
-        matched_links.append("綜合通膨預期存在上行壓力，來源可能包括通膨硬數據、實際油價上行、能源供給、薪資或成長需求。")
+        matched_links.append("通膨預期可能承受上行壓力；油價、能源供給、薪資與成長僅是可能因素，尚非已量測的預期指標。")
     elif flags.get("inflationExpectationDown"):
-        matched_links.append("綜合通膨預期存在下行壓力，來源可能包括通膨降溫、實際油價下行、勞動降溫或成長放緩。")
+        matched_links.append("通膨預期可能承受下行壓力；油價與成長訊號為間接線索，尚非已量測的預期指標。")
     if flags.get("inflationExpectationShift") or flags.get("inflationExpectationShiftSignal"):
         modifiers.append("市場可能正在重新評估通膨預期，需比較油價、成長、勞動與 Fed 路徑哪個權重較高。")
 
@@ -1366,8 +1343,42 @@ def build_weekly_v35_diagnosis(
     transmission = build_transmission_diagnosis_v35(observed, flags)
     compact = build_compact_weekly_v35_diagnosis(transmission)
 
+    # Different markets may not have a quote on the same analysis-end date.
+    # Surface the gap to Gemini, rather than implying same-day transmission.
+    end_date = analysis_window.get("end_date", "")
+    lagging_assets = [
+        f"{asset}: {item['end_date']}"
+        for asset, item in observed.items()
+        if item.get("points_count", 0) >= 2
+        and item.get("end_date")
+        and end_date
+        and item["end_date"] < end_date
+    ]
+    if lagging_assets:
+        note = (
+            "報價日期未對齊（不可視為同日因果驗證）："
+            + "、".join(lagging_assets)
+            + f"；正式分析截止日 {end_date}。"
+        )
+        compact["asset_validation"] = unique_list(
+            [note] + compact.get("asset_validation", [])
+        )[:8]
+
     return {
         "meta": {
+            "evidence_policy": {
+                "verified_official_inflation_series_ingested": False,
+                "note": "CPI/PPI/PCE official observations are not ingested by this pipeline; news headlines are context, not verified numeric data.",
+            },
+            "market_date_coverage": {
+                "analysis_end_date": end_date,
+                "last_quote_dates": {
+                    asset: item.get("end_date", "")
+                    for asset, item in observed.items()
+                    if item.get("points_count", 0) >= 2
+                },
+                "lagging_assets": lagging_assets,
+            },
             "source": "macro_v35_diagnosis.py",
             "week_dir": str(week_dir),
             "analysis_window": analysis_window,
