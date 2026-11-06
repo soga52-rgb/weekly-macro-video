@@ -46,6 +46,7 @@ import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone, timedelta
+from zoneinfo import ZoneInfo
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
@@ -419,7 +420,7 @@ def score_item(item: Dict[str, Any], week_start: str = "", week_end: str = "") -
 
     published = pubdate_to_datetime(str(item.get("published_at") or ""))
     if published:
-        published_date = published.date()
+        published_date = published.astimezone(ZoneInfo("Asia/Taipei")).date()
         start_dt = None
         end_dt = None
         try:
@@ -436,8 +437,6 @@ def score_item(item: Dict[str, Any], week_start: str = "", week_end: str = "") -
                 score += 12
             elif start_dt - timedelta(days=7) <= published_date < start_dt:
                 score += 5
-            elif end_dt < published_date <= end_dt + timedelta(days=2):
-                score += 4
         else:
             age_days = (datetime.now(timezone.utc) - published).days
             if age_days <= 2:
@@ -455,6 +454,17 @@ def dedupe_and_rank(items: List[Dict[str, Any]], max_items: int, week_start: str
     deduped = []
 
     for item in items:
+        published = pubdate_to_datetime(str(item.get("published_at") or ""))
+        if published is None:
+            continue  # Undated headlines are not traceable evidence.
+        if week_end:
+            try:
+                cutoff = datetime.strptime(week_end, "%Y-%m-%d").date()
+                if published.astimezone(ZoneInfo("Asia/Taipei")).date() > cutoff:
+                    continue  # Exclude news appearing after the analysis window.
+            except ValueError:
+                raise ValueError(f"Invalid analysis end date: {week_end}")
+
         key = re.sub(r"\W+", "", item.get("title", "").lower())[:80]
         if not key or key in seen:
             continue
@@ -837,6 +847,23 @@ def normalize_news_categories(context: Dict[str, Any], ranked_items: List[Dict[s
 
     url_candidates = build_url_candidates(ranked_items or [], top_news)
 
+    def verified_article(item: Dict[str, Any]) -> Dict[str, Any] | None:
+        # Editorial output cannot invent a new source/title/date. Preserve its
+        # commentary only after matching the article to a fetched RSS record.
+        best = None
+        best_score = 0.0
+        for candidate in ranked_items or []:
+            score = news_title_similarity(item.get("title"), candidate.get("title"))
+            if score > best_score:
+                best = candidate
+                best_score = score
+        if best is None or best_score < 0.78:
+            return None
+        result = dict(item)
+        for key in ("title", "source", "url", "published_at"):
+            result[key] = best.get(key, "")
+        return result
+
     # Clean and enrich Gemini-selected category cards first.
     cleaned_categories: Dict[str, List[Dict[str, Any]]] = {key: [] for key in NEWS_CATEGORY_ORDER}
     for bucket in NEWS_CATEGORY_ORDER:
@@ -847,7 +874,10 @@ def normalize_news_categories(context: Dict[str, Any], ranked_items: List[Dict[s
         for item in raw_items:
             if not isinstance(item, dict):
                 continue
-            cleaned_categories[bucket].append(enrich_news_item(item, url_candidates))
+            verified = verified_article(item)
+            if verified is None:
+                continue
+            cleaned_categories[bucket].append(enrich_news_item(verified, url_candidates))
             if len(cleaned_categories[bucket]) >= NEWS_CATEGORY_MAX_ITEMS:
                 break
 
@@ -860,7 +890,10 @@ def normalize_news_categories(context: Dict[str, Any], ranked_items: List[Dict[s
     for item in top_news:
         if not isinstance(item, dict):
             continue
-        enriched = enrich_news_item(item, url_candidates)
+        verified = verified_article(item)
+        if verified is None:
+            continue
+        enriched = enrich_news_item(verified, url_candidates)
         identity = news_item_identity(enriched)
         if not identity or identity in seen:
             continue
