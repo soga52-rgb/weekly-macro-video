@@ -463,7 +463,7 @@ def collect_news_text(
 
     # Compatibility fallback only when structured JSON contains no usable evidence.
     # Keep one source line per segment and drop headings that explicitly denote watch/future text.
-    if not segments:
+    if not segments and not weekly_news_context_json and not macro_background_context_json:
         for raw_text in (weekly_news_context_md, macro_background_context_md):
             skip_section = False
             for line in str(raw_text or "").splitlines():
@@ -1092,7 +1092,7 @@ def infer_primary_macro_story_v35(flags: Dict[str, Any], observed: Dict[str, Dic
     if inflation_up and rate_up:
         return "通膨壓力推升利率"
     if inflation_down and rate_down:
-        return "通膨降溫壓低利率"
+        return "通膨降溫線索與利率回落並存（因果待驗證）"
     if flags.get("laborCooling") or flags.get("growthCooling"):
         return "就業或成長降溫"
     if flags.get("financialStress"):
@@ -1113,7 +1113,7 @@ def build_expected_chain_v35(primary_story: str, flags: Dict[str, Any]) -> List[
     if "通膨拉鋸" in story or "多空拉鋸" in story:
         return ["通膨上行與下行訊號並存", "市場重新評估油價、成長、勞動與 Fed 權重", "美國10年期公債殖利率方向取決於主導因子", "美元指數反映利差與避險需求", "亞洲貨幣、黃金與油價可能出現分歧"]
     if "油價修正" in story:
-        return ["油價下跌修正能源通膨壓力", "通膨預期出現下行修正", "利率是否回落取決於 Fed 與公債供需", "美元方向取決於利差與避險需求", "亞洲貨幣與黃金需交叉驗證"]
+        return ["油價下跌修正能源通膨壓力", "通膨疑慮可能緩和，非已量測預期", "利率是否回落取決於 Fed 與公債供需", "美元方向取決於利差與避險需求", "亞洲貨幣與黃金需交叉驗證"]
     if "油價推升" in story:
         return ["油價上行提高能源通膨疑慮", "通膨預期可能重新升溫", "降息預期受到限制", "美國10年期公債殖利率偏上", "美元與亞洲貨幣壓力需同步觀察"]
     if "通膨壓力" in story:
@@ -1172,9 +1172,9 @@ def build_transmission_diagnosis_v35(
     if flags.get("inflationExpectationMixed"):
         modifiers.append("通膨預期呈現多空拉鋸：能源價格或偏熱物價訊號形成上行壓力，但通膨降溫、勞動轉弱或其他修正因子仍存在。")
     elif flags.get("inflationExpectationUp"):
-        matched_links.append("綜合通膨預期存在上行壓力，來源可能包括通膨硬數據、實際油價上行、能源供給、薪資或成長需求。")
+        matched_links.append("通膨預期可能承受上行壓力；油價、能源供給、薪資與成長僅是可能因素，尚非已量測的預期指標。")
     elif flags.get("inflationExpectationDown"):
-        matched_links.append("綜合通膨預期存在下行壓力，來源可能包括通膨降溫、實際油價下行、勞動降溫或成長放緩。")
+        matched_links.append("通膨預期可能承受下行壓力；油價與成長訊號為間接線索，尚非已量測的預期指標。")
     if flags.get("inflationExpectationShift") or flags.get("inflationExpectationShiftSignal"):
         modifiers.append("市場可能正在重新評估通膨預期，需比較油價、成長、勞動與 Fed 路徑哪個權重較高。")
 
