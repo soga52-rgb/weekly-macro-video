@@ -111,6 +111,25 @@ class V35EvidenceGovernanceTests(unittest.TestCase):
                 result["meta"]["evidence_policy"]["verified_official_inflation_series_ingested"]
             )
 
+    def test_archived_week_replay_keeps_v35_diagnosis_and_asset_directions(self):
+        week = ROOT / "output" / "weekly" / "2026-11-05"
+        self.assertTrue((week / "weekly_market_series.json").is_file())
+        self.assertTrue((week / "weekly_news_context.json").is_file())
+        result = v35.build_weekly_v35_diagnosis(
+            week, start_override="2026-10-30", end_override="2026-11-05"
+        )
+        self.assertTrue(result["weekly_v35_diagnosis"]["dominant_driver"])
+        self.assertEqual(result["observed_market"]["WTI"]["direction"], "down")
+        self.assertEqual(result["observed_market"]["US10Y"]["direction"], "down")
+        self.assertEqual(result["observed_market"]["Gold"]["direction"], "up")
+        self.assertIn(
+            "USDTWD: 2026-11-04",
+            result["meta"]["market_date_coverage"]["lagging_assets"],
+        )
+        self.assertFalse(
+            result["meta"]["evidence_policy"]["verified_official_inflation_series_ingested"]
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
